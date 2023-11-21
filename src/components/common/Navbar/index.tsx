@@ -28,7 +28,7 @@ const Navbar = () => {
             <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white">
               <li>
                 <Button className={cn(`rounded-full`)} asChild>
-                  <Link to="/login">Register</Link>
+                  <Link to="/register">Register</Link>
                 </Button>
               </li>
               <li>
