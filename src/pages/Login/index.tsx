@@ -1,7 +1,6 @@
-import SignupForm from "./SignupForm";
+import LoginForm from "@/Auth/LoginForm";
 
-const Signup = () => {
-  
+const Login = () => {
   return (
     <section className="h-screen bg-gray-50 flex items-center justify-center">
       <div className="container">
@@ -9,9 +8,13 @@ const Signup = () => {
           <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
             <div className="bg-white rounded-lg shadow-lg p-7 md:p-10">
               <div className="flex justify-center">
-                <SignupForm/>
-                <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-1 md:order-2 ml-28 mt-14 hidden md:block">
-                  <img src="/assets/register-image.png" className="img-fluid w-96 h-96" alt="Sample image" />
+                <LoginForm />
+                <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-1 md:order-2 ml-28 hidden md:block">
+                  <img
+                    src="/assets/login-image3.webp"
+                    className="img-fluid w-96 h-76 rounded-md"
+                    alt="Sample image"
+                  />
                 </div>
               </div>
             </div>
@@ -20,6 +23,6 @@ const Signup = () => {
       </div>
     </section>
   );
-}
+};
 
-export default Signup;
+export default Login;
