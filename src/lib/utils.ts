@@ -7,26 +7,12 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
-interface UserData {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  is_staff: boolean;
-  is_owner:boolean;
-  date_joined:string;
-  is_superuser:boolean;
-  is_active:boolean;
-}
-
-
-export const fetchUserInfo = async (token: string): Promise<UserData> => {
+export const fetchUserInfo = async (token: string) => {
   try {
     if (!token) {
       throw new Error('Access token not found');
     }
 
-  // Assuming `token` is a string containing your JWT token
 const decodedToken = jwtDecode(token);
 console.log(decodedToken)
 

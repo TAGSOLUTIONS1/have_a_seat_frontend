@@ -1,4 +1,4 @@
-import ResetForm from "./ResetForm"
+import ResetForm from "../../Auth/ResetForm"
 
 const ResetPassword = () => {
   return (
