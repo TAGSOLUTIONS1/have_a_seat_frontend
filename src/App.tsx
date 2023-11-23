@@ -2,9 +2,8 @@ import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/common/Navbar";
 import Home from "./pages/Home";
-import Signup from "./Auth/Signup/Signup";
-import Login from "./Auth/Login/Login";
-import ResetPassword from "./Auth/ResetPassword";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 
 function App() {
   return (
