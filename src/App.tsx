@@ -4,6 +4,7 @@ import Navbar from "./components/common/Navbar";
 import Home from "./pages/Home";
 import Signup from "./Auth/Signup/Signup";
 import Login from "./Auth/Login/Login";
+import ResetPassword from "./Auth/ResetPassword";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/about" element={<h1>About</h1>} />
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/reset" element={<ResetPassword />} />
       </Routes>
     </>
   );

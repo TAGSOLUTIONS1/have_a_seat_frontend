@@ -3,8 +3,8 @@ import LoginForm from "./LoginForm";
 
 const Login = () => {
   return (
-    <section className="h-screen bg-gray-50 flex items-center justify-center">
-      <div className="container">
+    <section className="h-[870px]  bg-gray-50 flex items-center justify-center">
+      <div className="container mt-0">
         <div className="flex justify-center">
           <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
             <div className="bg-white rounded-lg shadow-lg p-7 md:p-10">

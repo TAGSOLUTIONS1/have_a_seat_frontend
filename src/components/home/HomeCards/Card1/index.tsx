@@ -1,61 +1,41 @@
-import { ChevronRight } from 'lucide-react';
-import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import "./scroll.css"
-
-type CardProps = React.ComponentProps<typeof Card>;
-
-export function Card1({ className, ...props }: CardProps) {
+const Card1 = () => {
   return (
-    <Card className={cn("w-[300px] h-8/9 p-2", className)} {...props}>
-      <CardHeader>
-        <CardTitle className='text-center'>Offers & Discounts</CardTitle>
-      </CardHeader>
-      <CardContent className="grid gap-4">
-      <div className="flex items-center">
-          <div className="w-full space-y-1 relative">
-            <button className="w-full flex items-center justify-between bg-purple-600 rounded-md shadow-md border border-gray-300 p-2 text-white hover:bg-gray-200 hover:text-purple-600 focus:outline-none">
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium leading-none">Hot Offers</p>
-              </div>
-              <div className="p-2 rounded-full bg-gray-200">
-                <ChevronRight size={16} />
-              </div>
-            </button>
+    <div
+      id="app"
+      className="bg-white w-full p-1 h-60 shadow-xl rounded-2xl flex card text-grey-darkest"
+    >
+      <img
+        className="w-1/2 h-full rounded-2xl"
+        src="https://s3-eu-north-1.amazonaws.com/py3.visitsweden.com/images/Tak2-CMSTemplate_IrMZHla.width-1500.jpg"
+        alt="Room Image"
+      />
+      <div className="w-full flex flex-col p-2">
+        <div className="p-4 pb-0 flex-1">
+          <h3 className="font-light mb-1 text-grey-darkest">Tower Hotel</h3>
+          <div className="text-xs flex items-center mb-4">
+            <i className="fas fa-map-marker-alt mr-1 text-grey-dark"></i>
+            Soho, London
+          </div>
+          <span className="text-3xl sm:text-5xl text-grey-darkest">
+            £63.00
+            <span className="text-base sm:text-lg">/PPPN</span>
+          </span>
+          <div className="flex items-center mt-4">
+            <div className="pr-2 text-xs">
+              <i className="fas fa-wifi text-green"></i> Free WiFi
+            </div>
+            <div className="px-2 text-xs">
+              <i className="text-grey-darker far fa-building"></i> 2mins to
+              center
+            </div>
           </div>
         </div>
-        <div className="justify-center text-center flex flex-col max-h-40 overflow-hidden ">
-  <div className="overflow-y-scroll hide-scrollbar">
-    <button className="m-4 px-2 py-1 rounded hover:bg-gray-100 focus:outline-none block text-center">
-      Japanese
-    </button>
-    <hr className="my-1" />
-    <button className="m-4 px-2 py-1 rounded hover:bg-gray-100 focus:outline-none block text-center">
-      Thai
-    </button>
-    <hr className="my-1" />
-    <button className="m-4 px-2 py-1 rounded hover:bg-gray-100 focus:outline-none block text-center">
-      Indian
-    </button>
-    <hr className="my-1" />
-    <button className="m-4 px-2 py-1 rounded hover:bg-gray-100 focus:outline-none block text-center">
-      Chinese
-    </button>
-    <hr className="my-1" />
-    <button className="m-4 px-2 py-1 rounded hover:bg-gray-100 focus:outline-none block text-center">
-      American
-    </button>
-  </div>
-</div>
-
-      </CardContent>
-    </Card>
+        <div className="bg-grey-lighter p-3 flex items-center justify-between transition hover:bg-grey-light">
+          Book Now
+          <i className="fas fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
   );
-}
-
+};
 export default Card1;

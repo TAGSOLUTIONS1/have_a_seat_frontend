@@ -3,7 +3,7 @@ import SignupForm from "./SignupForm";
 const Signup = () => {
   
   return (
-    <section className="h-screen bg-gray-50 flex items-center justify-center">
+    <section className="h-[870px] bg-gray-50 flex items-center justify-center">
       <div className="container">
         <div className="flex justify-center">
           <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
