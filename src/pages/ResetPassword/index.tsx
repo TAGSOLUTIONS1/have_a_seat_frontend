@@ -1,4 +1,4 @@
-import ResetForm from "../../Auth/ResetForm"
+import ResetForm from "@/components/auth/ResetForm";
 
 const ResetPassword = () => {
   return (
@@ -8,9 +8,13 @@ const ResetPassword = () => {
           <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
             <div className="bg-white rounded-lg shadow-lg p-7 md:p-10">
               <div className="flex justify-center">
-                <ResetForm/>
+                <ResetForm />
                 <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-1 md:order-2 ml-28 hidden md:block">
-                  <img src="/assets/forget-password.png" className="img-fluid w-96 h-76 rounded-md" alt="Sample image" />
+                  <img
+                    src="/assets/forget-password.png"
+                    className="img-fluid w-96 h-76 rounded-md"
+                    alt="Sample image"
+                  />
                 </div>
               </div>
             </div>
@@ -18,7 +22,7 @@ const ResetPassword = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ResetPassword
+export default ResetPassword;

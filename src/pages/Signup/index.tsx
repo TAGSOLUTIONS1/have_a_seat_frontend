@@ -1,5 +1,4 @@
-import SignupForm from "@/Auth/SignupForm";
-
+import SignupForm from "@/components/auth/SignupForm";
 const Signup = () => {
   return (
     <section className="h-[870px] bg-gray-50 flex items-center justify-center">
