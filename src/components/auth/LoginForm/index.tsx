@@ -1,14 +1,11 @@
 import React from "react";
-import { useAuth } from "@/contexts/AuthProvider";
-
-// import axios from "axios";
+import { useAuth } from "@/contexts/authContext/AuthProvider";
 
 const LoginForm = () => {
-  const { login, authState  } = useAuth();
+  const { login, authState } = useAuth();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  console.log(authState)
-  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -17,6 +14,7 @@ const LoginForm = () => {
       console.error("Error occurred while logging in:", error);
     }
   };
+
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
@@ -33,7 +31,7 @@ const LoginForm = () => {
                 className="border border-gray-300 rounded w-full py-2 px-3"
                 placeholder="Your Email"
                 value={email}
-                onChange={(e) =>setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
