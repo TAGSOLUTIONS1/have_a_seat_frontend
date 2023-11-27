@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,49 +7,46 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Search } from "lucide-react"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import GeoApiAuto from "../AutoComplete";
+
 
 export function SearchBar() {
+
+  const handleGetLocationData = (value: any, id: string) => {
+    console.log('Location Data:', value);
+    console.log('ID:', id);
+  };
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
-      <div>
-      <div
-        className="flex items-center justify-center rounded-lg bg-white text-gray-500 cursor-pointer p-4"
-        style={{ width: '200px', height: '70px' }}
-      >
-        <Search className="w-6 h-6 mx-2" />
-        <span className="text-lg font-semibold mx-2">Search</span>
-      </div>
-    </div>
+        <div>
+          <div className="mt-2">
+            <h1 className="mb-2">Location</h1>
+          <Input
+              id="Search"
+              className="col-span-3 text-black cursor-pointer hover:disabled"
+              placeholder="location"
+            />
+          </div>
+        </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Search Here</DialogTitle>
           <DialogDescription>
-            search what you are looking for:
+            Search what you are looking for:
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="Search" className="text-right">
-              Search
-            </Label>
-            <Input
-              id="Search"
-              defaultValue="search"
-              className="col-span-3"
-            />
-          </div>
-        </div>
+      <GeoApiAuto getLocationData={handleGetLocationData} id="your-id" />
         <DialogFooter>
           <Button type="submit">Search</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
- export default SearchBar
+
+export default SearchBar;
