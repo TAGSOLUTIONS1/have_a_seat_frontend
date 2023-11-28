@@ -7,19 +7,21 @@ import "@geoapify/geocoder-autocomplete/styles/minimal.css";
 import "@geoapify/geocoder-autocomplete/styles/round-borders.css";
 
 interface GeoApiAutoProps {
-  getLocationData: (value: any, id: string) => void;
+  getLocationData: (value: any, id: string)=> void;
   id: string;
 }
 
 const GeoApiAuto: React.FC<GeoApiAutoProps> = ({ getLocationData, id }) => {
   const onPlaceSelect = (value: any) => {
-    console.log(value)
+    debugger
+    console.log(value,'hhhhhhhhhhhhh')
     getLocationData(value, id);
     console.log(value);
   };
 
   const onSuggestionChange = (value: any) => {
-    console.log(value);
+    debugger
+    console.log(value,'fffffffffffffffff');
   };
 
   return (

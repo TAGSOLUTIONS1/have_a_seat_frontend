@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
-import Search from "./components/home/Restraunts/Search";
+import Search from "./pages/Restraunts";
 
 function App() {
   return (

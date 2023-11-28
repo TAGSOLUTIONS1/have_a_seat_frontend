@@ -13,8 +13,7 @@ import GeoApiAuto from "../AutoComplete";
 
 
 export function SearchBar() {
-
-  const handleGetLocationData = (value: any, id: string) => {
+  const getLocationData = (value: any, id: string) => {
     console.log('Location Data:', value);
     console.log('ID:', id);
   };
@@ -40,7 +39,7 @@ export function SearchBar() {
             Search what you are looking for:
           </DialogDescription>
         </DialogHeader>
-      <GeoApiAuto getLocationData={handleGetLocationData} id="your-id" />
+      <GeoApiAuto getLocationData={getLocationData} id="your-id" />
         <DialogFooter>
           <Button type="submit">Search</Button>
         </DialogFooter>
