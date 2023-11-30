@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 interface RestaurantCardsProps {
   apiData: any[];
@@ -19,6 +20,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
         <div className="loader">Loading...</div>
       ) : (
         <div>
+          <Link to="/restraunt-detail" >
           {apiData.map((data, index) => (
             <div
               key={index}
@@ -49,10 +51,17 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
                     </div>
                   </div>
                 </div>
-                
               </div>
               <div className="border-l border-gray-300 h-44 my-6"></div>
-              <div className=" w-[150px] justify-center mt-14 items-center m-6">
+              <div className=" w-[150px] justify-center items-center m-6">
+                {
+                  data.restaurant_type === "yelp" ? (
+                    <img src="/assets/yelp_logo_new.png" alt="yelp logo" width={86} height={64} className=" ml-20 mb-2"/>
+                  ): data.restaurant_type === "open_table" ? (
+                    
+                    <img src="/assets/opentable.jpg" alt="open table logo" width={86} height={64} className=" ml-20 mb-2"/>
+                  ):null
+                }
                     <div className="pr-2 text-base">
                       <h2>{data.price}</h2>
                     </div>
@@ -82,6 +91,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
                   </div>
             </div>
           ))}
+           </Link>
         </div>
       )}
     </div>

@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import Search from "./pages/Restraunts";
+import RestrauntDetail from "./pages/Restraunts/RestrauntDetailPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/restraunts" element={<Search/>}/>
+        <Route path="/restraunt-detail" element={<RestrauntDetail/>}/>
       </Routes>
     </>
   );

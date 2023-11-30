@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {ArrowDown, ArrowUp } from 'lucide-react';
-import { Shield, PlusCircle } from 'lucide-react';
+import { Shield} from 'lucide-react';
 
 const SafetyPrecautions: React.FC = () => {
   const [showFilters, setShowFilters] = useState<boolean>(false);

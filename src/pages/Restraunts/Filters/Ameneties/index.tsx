@@ -2,20 +2,19 @@ import React, { useState } from 'react';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { Home } from 'lucide-react';
 
-
-const Ameneties: React.FC = () => {
+const Amenities: React.FC = () => {
   const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [priceFilters, setPriceFilters] = useState<string[]>([]);
+  const [selectedPriceFilter, setSelectedPriceFilter] = useState<string | null>(null);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
 
   const handlePriceFilterChange = (selectedRange: string) => {
-    if (priceFilters.includes(selectedRange)) {
-      setPriceFilters(priceFilters.filter(filter => filter !== selectedRange));
+    if (selectedPriceFilter === selectedRange) {
+      setSelectedPriceFilter(null); // Uncheck if the same checkbox is clicked again
     } else {
-      setPriceFilters([...priceFilters, selectedRange]);
+      setSelectedPriceFilter(selectedRange); // Check the selected checkbox
     }
   };
 
@@ -25,11 +24,11 @@ const Ameneties: React.FC = () => {
     <div className="w-auto mt-2">
       <div className="flex items-center space-x-2 mx-4 mt-2 text-center justify-center">
         <div className="bg-white rounded-lg p-4 shadow-md flex items-center justify-between w-full">
-        <label
+          <label
             htmlFor="terms"
             className="text-sm font-medium leading-none flex items-center"
           >
-            <span>Ameneties</span>
+            <span>Amenities</span>
             <Home size={12} className="ml-2" />
           </label>
           <button
@@ -53,7 +52,7 @@ const Ameneties: React.FC = () => {
                 type="checkbox"
                 id={range}
                 value={range}
-                checked={priceFilters.includes(range)}
+                checked={selectedPriceFilter === range}
                 onChange={() => handlePriceFilterChange(range)}
                 className="h-6 w-6 mr-2 mb-1"
               />
@@ -65,4 +64,4 @@ const Ameneties: React.FC = () => {
   );
 };
 
-export default Ameneties;
+export default Amenities;

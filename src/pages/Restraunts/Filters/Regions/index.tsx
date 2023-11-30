@@ -4,27 +4,27 @@ import { Globe } from 'lucide-react';
 
 const Regions: React.FC = () => {
   const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [priceFilters, setPriceFilters] = useState<string[]>([]);
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
 
   const handlePriceFilterChange = (selectedRange: string) => {
-    if (priceFilters.includes(selectedRange)) {
-      setPriceFilters(priceFilters.filter(filter => filter !== selectedRange));
+    if (selectedRegion === selectedRange) {
+      setSelectedRegion(null); // Uncheck if the same checkbox is clicked again
     } else {
-      setPriceFilters([...priceFilters, selectedRange]);
+      setSelectedRegion(selectedRange); // Check the selected checkbox
     }
   };
 
-  const priceRanges = ['Abu Dhabi'];
+  const regions = ['Abu Dhabi'];
 
   return (
     <div className="w-auto mt-2">
       <div className="flex items-center space-x-2 mx-4 mt-2 text-center justify-center">
         <div className="bg-white rounded-lg p-4 shadow-md flex items-center justify-between w-full">
-        <label
+          <label
             htmlFor="terms"
             className="text-sm font-medium leading-none flex items-center"
           >
@@ -45,15 +45,15 @@ const Regions: React.FC = () => {
       </div>
       {showFilters && (
         <div className="mx-4 mt-2">
-          {priceRanges.map(range => (
-            <div key={range} className="flex px-4 items-center justify-between space-x-2 text-sm">
-              <label htmlFor={range} className="text-left">{range}</label>
+          {regions.map(region => (
+            <div key={region} className="flex px-4 items-center justify-between space-x-2 text-sm">
+              <label htmlFor={region} className="text-left">{region}</label>
               <input
                 type="checkbox"
-                id={range}
-                value={range}
-                checked={priceFilters.includes(range)}
-                onChange={() => handlePriceFilterChange(range)}
+                id={region}
+                value={region}
+                checked={selectedRegion === region}
+                onChange={() => handlePriceFilterChange(region)}
                 className="h-6 w-6 mr-2 mb-1"
               />
             </div>

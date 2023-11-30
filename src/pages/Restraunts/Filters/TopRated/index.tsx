@@ -1,30 +1,37 @@
 import React, { useState } from 'react';
-import {ArrowDown, ArrowUp } from 'lucide-react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 import { TrendingUpIcon } from 'lucide-react';
 
 const TopRated: React.FC = () => {
   const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [priceFilters, setPriceFilters] = useState<string[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
 
   const handlePriceFilterChange = (selectedRange: string) => {
-    if (priceFilters.includes(selectedRange)) {
-      setPriceFilters(priceFilters.filter(filter => filter !== selectedRange));
+    if (selectedFilter === selectedRange) {
+      setSelectedFilter(null); // Uncheck if the same checkbox is clicked again
     } else {
-      setPriceFilters([...priceFilters, selectedRange]);
+      setSelectedFilter(selectedRange); // Check the selected checkbox
     }
   };
 
-  const priceRanges = ['Charming', 'Fancy', 'Gluten-free-friendly', 'Good for business meals', 'Good for groups', 'Good for special occasions' , 'Great for brunch' , 'Great for craft beers' , 'Great for creative cocktails' , 'Great for fine wines' , 'Great for happy hour' , 'Great for live music' , 'Great for outdoor dining' ,'Great for scenic views' , 'Healthy' , 'Hot spot' , 'Innovative' , 'Kid-friendly' , 'Lively' , 'Neighborhood gem' , 'Romantic' , 'Vegetarian-friendly' ];
+  const topRatedFeatures = [
+    'Charming', 'Fancy', 'Gluten-free-friendly', 'Good for business meals',
+    'Good for groups', 'Good for special occasions', 'Great for brunch',
+    'Great for craft beers', 'Great for creative cocktails', 'Great for fine wines',
+    'Great for happy hour', 'Great for live music', 'Great for outdoor dining',
+    'Great for scenic views', 'Healthy', 'Hot spot', 'Innovative', 'Kid-friendly',
+    'Lively', 'Neighborhood gem', 'Romantic', 'Vegetarian-friendly'
+  ];
 
   return (
     <div className="w-auto mt-2">
       <div className="flex items-center space-x-2 mx-4 mt-2 text-center justify-center">
         <div className="bg-white rounded-lg p-4 shadow-md flex items-center justify-between w-full">
-        <label
+          <label
             htmlFor="terms"
             className="text-sm font-medium leading-none flex items-center"
           >
@@ -45,15 +52,15 @@ const TopRated: React.FC = () => {
       </div>
       {showFilters && (
         <div className="mx-4 mt-2">
-          {priceRanges.map(range => (
-            <div key={range} className="flex px-4 items-center justify-between space-x-2 text-sm">
-              <label htmlFor={range} className="text-left">{range}</label>
+          {topRatedFeatures.map(feature => (
+            <div key={feature} className="flex px-4 items-center justify-between space-x-2 text-sm">
+              <label htmlFor={feature} className="text-left">{feature}</label>
               <input
                 type="checkbox"
-                id={range}
-                value={range}
-                checked={priceFilters.includes(range)}
-                onChange={() => handlePriceFilterChange(range)}
+                id={feature}
+                value={feature}
+                checked={selectedFilter === feature}
+                onChange={() => handlePriceFilterChange(feature)}
                 className="h-6 w-6 mr-2 mb-1"
               />
             </div>

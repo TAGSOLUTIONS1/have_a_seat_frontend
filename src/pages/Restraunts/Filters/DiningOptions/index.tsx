@@ -1,26 +1,24 @@
-import React, { useState } from "react";
-import { ArrowDown, ArrowUp } from "lucide-react";
-import { Utensils } from "lucide-react";
+import React, { useState } from 'react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
+import { Utensils } from 'lucide-react';
 
 const DiningOptions: React.FC = () => {
   const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [priceFilters, setPriceFilters] = useState<string[]>([]);
+  const [selectedPriceFilter, setSelectedPriceFilter] = useState<string | null>(null);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
 
   const handlePriceFilterChange = (selectedRange: string) => {
-    if (priceFilters.includes(selectedRange)) {
-      setPriceFilters(
-        priceFilters.filter((filter) => filter !== selectedRange)
-      );
+    if (selectedPriceFilter === selectedRange) {
+      setSelectedPriceFilter(null); // Uncheck if the same checkbox is clicked again
     } else {
-      setPriceFilters([...priceFilters, selectedRange]);
+      setSelectedPriceFilter(selectedRange); // Check the selected checkbox
     }
   };
 
-  const priceRanges = ["All dining options", "Delivery only", "Takeout only"];
+  const priceRanges = ['All dining options', 'Delivery only', 'Takeout only'];
 
   return (
     <div className="w-auto mt-2">
@@ -33,7 +31,10 @@ const DiningOptions: React.FC = () => {
             <span>Dining options</span>
             <Utensils size={12} className="ml-2" />
           </label>
-          <button onClick={toggleFilters} className="focus:outline-none">
+          <button
+            onClick={toggleFilters}
+            className="focus:outline-none"
+          >
             {showFilters ? (
               <ArrowUp size={24} className="text-gray-500" />
             ) : (
@@ -44,19 +45,14 @@ const DiningOptions: React.FC = () => {
       </div>
       {showFilters && (
         <div className="mx-4 mt-2">
-          {priceRanges.map((range) => (
-            <div
-              key={range}
-              className="flex px-4 items-center justify-between space-x-2 text-sm"
-            >
-              <label htmlFor={range} className="text-left">
-                {range}
-              </label>
+          {priceRanges.map(range => (
+            <div key={range} className="flex px-4 items-center justify-between space-x-2 text-sm">
+              <label htmlFor={range} className="text-left">{range}</label>
               <input
                 type="checkbox"
                 id={range}
                 value={range}
-                checked={priceFilters.includes(range)}
+                checked={selectedPriceFilter === range}
                 onChange={() => handlePriceFilterChange(range)}
                 className="h-6 w-6 mr-2 mb-1"
               />

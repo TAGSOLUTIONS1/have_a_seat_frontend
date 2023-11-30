@@ -4,31 +4,31 @@ import { Pizza } from 'lucide-react';
 
 const Cuisine: React.FC = () => {
   const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [priceFilters, setPriceFilters] = useState<string[]>([]);
+  const [selectedPriceFilter, setSelectedPriceFilter] = useState<string | null>(null);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
 
   const handlePriceFilterChange = (selectedRange: string) => {
-    if (priceFilters.includes(selectedRange)) {
-      setPriceFilters(priceFilters.filter(filter => filter !== selectedRange));
+    if (selectedPriceFilter === selectedRange) {
+      setSelectedPriceFilter(null); 
     } else {
-      setPriceFilters([...priceFilters, selectedRange]);
+      setSelectedPriceFilter(selectedRange); 
     }
   };
 
-  const priceRanges = ['American' , 'Italian' , 'Steakhouse' , 'Seafood' , 'French' , 'Indian' , 'Japanese' , 'British' , 'German' , 'Tapas / Small Plates' , 'Grill' , 'Irish' , 'Argentinean' , 'Afternoon Tea' , 'Lebanese' , 'Persian' , 'Pork' , 'Polynesian' , 'Balkan style' , 'Asian' , 'Mediterranean' , 'Peruvian' , 'Cocktail Bar' , 'Middle Eastern' , 'Gastro Pub' , 'Lounge' , 'Bar / Lounge / Bottle Service' , 'Contemporary Asian' , 'International' , 'Thai'];
+  const priceRanges = ['American', 'Italian', 'Steakhouse', 'Seafood', 'French', 'Indian', 'Japanese', 'British', 'German', 'Tapas / Small Plates', 'Grill', 'Irish', 'Argentinean', 'Afternoon Tea', 'Lebanese', 'Persian', 'Pork', 'Polynesian', 'Balkan style', 'Asian', 'Mediterranean', 'Peruvian', 'Cocktail Bar', 'Middle Eastern', 'Gastro Pub', 'Lounge', 'Bar / Lounge / Bottle Service', 'Contemporary Asian', 'International', 'Thai'];
 
   return (
     <div className="w-auto mt-2">
       <div className="flex items-center space-x-2 mx-4 mt-2 text-center justify-center">
         <div className="bg-white rounded-lg p-4 shadow-md flex items-center justify-between w-full">
-        <label
+          <label
             htmlFor="terms"
             className="text-sm font-medium leading-none flex items-center"
           >
-            <span>Cousine</span>
+            <span>Cuisine</span>
             <Pizza size={12} className="ml-2" />
           </label>
           <button
@@ -52,7 +52,7 @@ const Cuisine: React.FC = () => {
                 type="checkbox"
                 id={range}
                 value={range}
-                checked={priceFilters.includes(range)}
+                checked={selectedPriceFilter === range}
                 onChange={() => handlePriceFilterChange(range)}
                 className="h-6 w-6 mr-2 mb-1"
               />
