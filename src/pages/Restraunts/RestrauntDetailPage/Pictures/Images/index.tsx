@@ -1,41 +1,3 @@
-
-// const Images = () => {
-//   return (
-//     <div className='border p-6 rounded-lg'>
-//       <h1 className='text-xl'>
-//         <strong>
-//         Pictures
-//         </strong>
-//       </h1>
-//     <div className="max-w-6xl mt-8 mx-auto flex flex-col lg:flex-row lg:space-x-4 lg:items-start">
-//       <div className="lg:w-2/3">
-//         <img
-//           src="/assets/restraunt-wallpaper2.jpg"
-//           alt="Big Image"
-//           className="w-full h-auto rounded-lg shadow-md"
-//         />
-//       </div>
-//       <div className="lg:w-1/3 mt-8 lg:mt-0">
-//         <div className="flex flex-col space-y-4">
-//           <img
-//             src="/assets/restraunt-wallpaper2.jpg"
-//             alt="Small Image 1"
-//             className="w-full h-auto rounded-lg shadow-md"
-//           />
-//           <img
-//             src="/assets/restraunt-wallpaper2.jpg"
-//             alt="Small Image 2"
-//             className="w-full h-auto rounded-lg shadow-md"
-//           />
-//         </div>
-//       </div>
-//     </div>
-//     </div>
-//   );
-// };
-
-// export default Images;
-
 import { useState } from 'react';
 import { ArrowLeft , ArrowRight } from 'lucide-react';
 
@@ -79,7 +41,7 @@ const Images = () => {
         <img
           src={images[getAdjacentIndex(-1)]}
           alt={`Image ${getAdjacentIndex(-1) + 1}`}
-          className="w-24 h-24 object-cover rounded-lg absolute left-0 shadow-md ml-20"
+          className="w-24 h-24 object-cover rounded-lg absolute left-0 shadow-md ml-16"
         />
         <img
           src={images[currentImageIndex]}
@@ -89,7 +51,7 @@ const Images = () => {
         <img
           src={images[getAdjacentIndex(1)]}
           alt={`Image ${getAdjacentIndex(1) + 1}`}
-          className="w-24 h-24 object-cover rounded-lg absolute right-0 shadow-md mr-20"
+          className="w-24 h-24 object-cover rounded-lg absolute right-0 shadow-md mr-16"
         />
         <ArrowLeft
           onClick={prevImage}
