@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import Search from "./pages/Restraunts";
 import RestrauntDetail from "./pages/Restraunts/RestrauntDetailPage";
+import Footer from "./components/common/Footer";
 
 function App() {
   return (
@@ -18,9 +19,10 @@ function App() {
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/reset" element={<ResetPassword />} />
-        <Route path="/restraunts" element={<Search/>}/>
-        <Route path="/restaurant-detail" element={<RestrauntDetail/>} />
+        <Route path="/restraunts" element={<Search />} />
+        <Route path="/restaurant-detail" element={<RestrauntDetail />} />
       </Routes>
+      <Footer />
     </>
   );
 }

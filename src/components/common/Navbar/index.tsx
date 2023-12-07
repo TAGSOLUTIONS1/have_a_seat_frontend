@@ -53,7 +53,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import "./nav.css"
+import "./nav.css";
 
 import { cn } from "@/lib/utils";
 import SideNav from "../SideNav";
@@ -77,7 +77,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-white border-b border-gray-200 sticky w-full z-20 top-0 start-0 ">
+      <nav className="bg-white border-b border-gray-200 sticky w-full z-20 top-0 start-0 px-4">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto ">
           <div className="flex items-center rtl:space-x-reverse">
             <img

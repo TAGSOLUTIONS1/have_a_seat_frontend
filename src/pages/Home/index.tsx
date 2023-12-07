@@ -1,40 +1,39 @@
 import HomeCards from "@/components/home/HomeCards";
-import SearchRestaurant from "@/components/home/SearchRestraunt";
-import "./style.css";
 import HomeBestSellerCards from "@/components/home/HomeBestSellerCards";
-// import DatePicker from "@/components/home/Date.tsx";
+import SearchLocation from "@/components/home/SearchLocation";
+
+import "./style.css";
 
 const Home = () => {
   return (
     <>
-      <section className="max-w-full ">
-        <div className="max-w-full relative w-100% lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[500px] bg-white">
-          <div className="banner-image"></div>
-          <SearchRestaurant />
-          <div className="absolute inset-0 left-[700px] flex items-center justify-center z-10">
-            <img
-              src="/assets/mainpage_round_image.jpg"
-              className="rounded-full h-[460px] w-[460px]"
-              alt=""
-            />
-          </div>
-          <div className="absolute inset-0 left-[700px] flex items-center justify-center z-0">
-            <img
-              src="/assets/banner_img_shapes.png"
-              className="h-[500px] w-[500px] rotating-image"
-              alt=""
-            />
-          </div>
-
-          <div className="absolute inset-0 top-28 left-[200px] items-center justify-center text-white">
-            <h1 className="text-3xl font-bold italic">Satisfy Your Cravings</h1>
-            <p className="text-5xl font-bold non-italic mt-2">
-              Delicious Foods With <br /> Wonderful Eating 
-            </p>
-                <p className="text-lg font-bold non-italic mt-4">Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit. <br /> Ipsum fugit minimaet debitis ut
-              distinctio optio.
-              </p>
+      <section className="w-full h-screen -mt-28">
+        <div className="relative w-full lg:p-0 lg:mx-auto h-full bg-[url('/assets/banner_bg.jpg')] bg-no-repeat bg-cover bg-center">
+          <div className="absolute inset-0 w-full h-full bg-primary opacity-40"></div>
+          <div className="absolute z-10 max-w-screen-xl left-0 right-0 mx-auto translate-y-1/3 md:translate-y-2/3 p-6">
+            <div className="flex flex-col md:flex-row items-center md:justify-between gap-5 md:gap-0">
+              <div className="text-white text-center md:text-left flex flex-col justify-center md:flex-grow md:basis-3/5">
+                <h1 className="title text-xl sm:text-3xl font-bold italic">
+                  Satisfy Your Cravings
+                </h1>
+                <p className="subtitle text-3xl sm:text-5xl font-bold mt-2">
+                  Delicious Foods With <br /> Wonderful Eating
+                </p>
+                <p className="description text-base sm:text-lg font-bold mt-4">
+                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.{" "}
+                  <br />
+                  Ipsum fugit minima et debitis ut distinctio optio.
+                </p>
+                <SearchLocation />
+              </div>
+              <div className="md:flex-grow md:basis-2/5">
+                <img
+                  src="/assets/mainpage_round_image.jpg"
+                  alt=""
+                  className="round-image mx-auto h-60 w-60 md:h-80 md:w-80  lg:h-96 lg:w-96 rounded-full border-8 border-white"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -49,4 +48,3 @@ const Home = () => {
 };
 
 export default Home;
- 
