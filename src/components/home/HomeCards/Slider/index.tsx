@@ -57,7 +57,6 @@ const CardsSlider = () => {
   const prevSlide = () => {
     setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides);
   };
-
   return (
     <div className="w-full flex flex-col items-center">
       <div className="flex items-center justify-between mt-20">

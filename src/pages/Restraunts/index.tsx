@@ -20,7 +20,7 @@ const Search = () => {
         const headers = {
           Authorization: `Bearer ${accessToken}`,
         };
-        const params = {
+        const formData = {
           location: 'china',
           attributes: 'reservation',
           latitude: 40.772385,
@@ -33,11 +33,11 @@ const Search = () => {
         const response = await axios.get(
           "https://tagsolutionsltd.com/restaurant/search/",
           {
-            params,
+            params:formData,
             headers,
           }
         );
-
+        
         if (response.data && response.data.data.length > 0) {
           console.log("API Response:", response.data.data);
           setApiData(response.data.data);
