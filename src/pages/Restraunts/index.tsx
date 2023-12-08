@@ -41,6 +41,7 @@ const Search = () => {
       if (!loading) {
         try {
           const accessToken = authState.accessToken;
+          console.log(accessToken)
 
           const headers = {
             Authorization: `Bearer ${accessToken}`,

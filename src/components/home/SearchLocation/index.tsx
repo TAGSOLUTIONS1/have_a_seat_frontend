@@ -7,7 +7,7 @@ const SearchLocation = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<any>({
-    location: "china",
+    location: "New York",
     attributes: "reservation",
     latitude: 40.772385,
     longitude: -73.956516,

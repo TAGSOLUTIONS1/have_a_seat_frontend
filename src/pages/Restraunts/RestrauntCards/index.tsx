@@ -8,9 +8,11 @@ interface RestaurantCardsProps {
 const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
+
   useEffect(() => {
     if (apiData && apiData.length > 0) {
       setLoading(false);
+      console.log(apiData)
     }
   }, [apiData]);
   
@@ -39,7 +41,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
                 className="bg-white w-full mb-2 p-1  h-60 shadow-xl rounded-2xl flex card text-grey-darkest"
               >
                 <img
-                  className="w-1/3 h-full rounded-2xl object-fill"
+                  className="w-1/3 h-full rounded-2xl object-cover"
                   src={data.image_url || ""}
                   alt="Restaurant"
                 />
@@ -49,18 +51,18 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
                       <strong>{data.name}</strong>
                     </h1>
                     <br />
-                    <span className="text-grey-darkest">
+                    {/* <span className="text-grey-darkest">
                       <h2>Rating</h2>
                       <i className="fas fa-map-marker-alt mr-1 text-grey-dark"></i>
                       {data.rating}
                       <span className="text-base sm:text-lg">/5</span>
-                    </span>
+                    </span> */}
                     <div className="flex items-center mt-4">
                       <div className="pr-2 text-base">
                         <h2>Address:</h2>
                         <p>
                           {" "}
-                          {data.location.address1} , {data.location.city}
+                          {/* {data.location.address1} , {data.location.city} */}
                         </p>
                       </div>
                     </div>
