@@ -93,10 +93,17 @@ const Navbar = () => {
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
             <div onClick={closeDropdown}>
               <div className="relative">
-                <User
+                <div className="relative bg-purple-600 rounded-full p-2">
+                  <User
+                    onClick={handleUserClick}
+                    className="cursor-pointer text-white w-6 h-6"
+                  />
+                  <span className="absolute rounded-full border-2 pointer-events-none"></span>
+                </div>
+                {/* <User
                   className={cn("rounded-full cursor-pointer")}
                   onClick={handleUserClick}
-                />
+                /> */}
                 {isDropdownOpen && (
                   <ul className="font-medium absolute top-full right-0 mt-4 border border-gray-100 rounded-lg bg-gray-50">
                     <li className="p-4">

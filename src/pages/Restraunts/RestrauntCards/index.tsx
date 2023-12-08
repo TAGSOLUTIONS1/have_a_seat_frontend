@@ -23,15 +23,16 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
         <div>
           {apiData.map((data, index) => (
             <Link
-            key={data.id || index}
-            to={{
-              pathname: "/restaurant-detail",
-              search: `?${
-                data.restaurant_type === "open_table" ? "map_url" : "yelp_id"
-              }=${encodeURIComponent(
-                data.restaurant_type === "open_table" ? data.url : data.id
-              )}`,
-            }}
+            to="/restaurant-detail"
+            // key={data.id || index}
+            // to={{
+            //   pathname: "/restaurant-detail",
+            //   search: `?${
+            //     data.restaurant_type === "open_table" ? "map_url" : "yelp_id"
+            //   }=${encodeURIComponent(
+            //     data.restaurant_type === "open_table" ? data.url : data.id
+            //   )}`,
+            // }}
           >          
               <div
                 key={index}

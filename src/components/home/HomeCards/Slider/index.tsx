@@ -5,24 +5,13 @@ import { ShoppingBag } from "lucide-react";
 import { Heart } from "lucide-react";
 import { Eye } from "lucide-react";
 
-// interface CardsSlider {
-//     apiData: any[];
-//   }
-  
-//   const CardsSlider: React.FC<CardsSlider> = ({ apiData }) => {
-//     const [data, setData] = useState<any>({});
-//     useEffect(() => {
-//       setData(apiData);
-//       console.log(apiData);
-//     }, [apiData]);
-
 const CardsSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides);
-    }, 5000); // Change the interval duration here (in milliseconds)
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -30,33 +19,33 @@ const CardsSlider = () => {
   const slides = [
     {
       image: "/assets/download_slider_1.jpg",
-      title: "Dall Makhni",
+      title: "New Cafe",
       intro: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      location: "China",
+      location: "Los Angles",
       phoneNumber: "(051)7860123",
     },
     {
       image: "/assets/download_slider_2.jpg",
-      title: "Beif Masala",
+      title: "Ocean's View",
       intro: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       location: "New York",
       phoneNumber: "(051)7860123",
     },
     {
       image: "/assets/download_slider_2.jpg",
-      title: "Chicken Nuggets",
+      title: "Richard's Villa",
       intro: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       location: "California",
       phoneNumber: "(051)7860123",
     },
     {
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjOxySYAhLCdR_TLtd_8h-0lq-A8tNwTVEtQ&usqp=CAU",
-      title: "Desi Tarka",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjOxySYAhLCdR_TLtd_8h-0lq-A8tNwTVEtQ&usqp=CAU",
+      title: "Bars",
       intro: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       location: "Arazona",
       phoneNumber: "(051)7860123",
     },
-    // Add more slides as needed
   ];
 
   const totalSlides = slides.length;
@@ -77,7 +66,7 @@ const CardsSlider = () => {
             <img
               src="/assets/heading_shapes_1.png"
               alt=""
-              className="absolute left-48 top-1/4 h-6 w-18"
+              className="absolute object-cover left-48 top-1/4 h-6 w-18"
             />
             Daily Offer
           </span>
@@ -86,31 +75,33 @@ const CardsSlider = () => {
           </p>
         </div>
         <div className="flex mt-12 ml-[700px]">
-          <ArrowLeft
-            onClick={prevSlide}
-            className="bg-purple-600 rounded-full h-10 text-white w-10 mr-4"
-          />
-          <ArrowRight
-            onClick={nextSlide}
-            className="bg-purple-600 rounded-full h-10 text-white w-10"
-          />
+          <div className="bg-purple-600 rounded-full h-10 w-10 mr-4 flex items-center justify-center">
+            <ArrowLeft onClick={prevSlide} className="text-white w-6 h-6" />
+          </div>
+          <div className="bg-gray-600 rounded-full h-10 w-10 flex items-center justify-center">
+            <ArrowRight onClick={nextSlide} className="text-white w-6 h-6" />
+          </div>
         </div>
       </div>
       <div className="flex items-center justify-center my-8 mx-28 relative w-full">
         <div className="flex space-x-8">
           {[currentSlide, (currentSlide + 1) % totalSlides].map((index) => (
-           <div
+            <div
               key={index}
               className={`relative p-2 bg-white rounded-lg overflow-hidden flex ${
-                index === currentSlide ? "transition-transform ease-in duration-1000" : ""
+                index === currentSlide
+                  ? "transition-transform ease-in duration-1000"
+                  : ""
               } ${
-                index === currentSlide ? "transform-none" : "transform-translate-x-full"
+                index === currentSlide
+                  ? "transform-none"
+                  : "transform-translate-x-full"
               }`}
             >
               <div>
                 <img
                   src={slides[index].image}
-                  className="h-[220px] w-[250px]"
+                  className="h-[220px] object-cover w-[250px]"
                   alt=""
                 />
               </div>
@@ -122,16 +113,19 @@ const CardsSlider = () => {
                 </div>
               </div>
               <div className="mt-8 mx-8 z-10 w-[270px]">
-                <h1 className="text-purple-600 ml-8 text-lg font-bold italic">
+                <h1 className="text-purple-600 ml-8 text-xl font-bold italic">
                   {slides[index].title}
                 </h1>
-                <p className="text-gray-800 mt-2 ml-8 text-md font-bold non-italic">
+                <p className="text-gray-600 mt-2 ml-8 text-md font-bold non-italic">
                   {slides[index].intro}
                 </p>
+                <p className="text-purple-600  mt-2 ml-8 text-md font-bold italic">
+                  {slides[index].location}
+                </p>
                 <div className="flex">
-                <ShoppingBag  className=" text-purple-600 mt-4 ml-8"/>
-                <Heart  className=" text-purple-600 mt-4 ml-4"/>
-                <Eye  className=" text-purple-600 mt-4 ml-4"/>
+                  <ShoppingBag className=" text-purple-600 mt-4 ml-8" />
+                  <Heart className=" text-purple-600 mt-4 ml-4" />
+                  <Eye className=" text-purple-600 mt-4 ml-4" />
                 </div>
               </div>
             </div>

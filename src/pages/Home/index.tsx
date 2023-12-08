@@ -3,6 +3,9 @@ import HomeBestSellerCards from "@/components/home/HomeBestSellerCards";
 import SearchLocation from "@/components/home/SearchLocation";
 
 import "./style.css";
+import HomeSlider from "@/components/home/HomeSlider";
+import Testimonials from "@/components/home/Testimonials";
+import HomeStats from "@/components/home/HomeStats";
 
 const Home = () => {
   return (
@@ -17,7 +20,7 @@ const Home = () => {
                   Satisfy Your Cravings
                 </h1>
                 <p className="subtitle text-3xl sm:text-5xl font-bold mt-2">
-                  Delicious Foods With <br /> Wonderful Eating
+                  Greats Restraunts with  <br /> Wonderful Features
                 </p>
                 <p className="description text-base sm:text-lg font-bold mt-4">
                   Lorem ipsum, dolor sit amet consectetur adipisicing elit.{" "}
@@ -40,8 +43,17 @@ const Home = () => {
       <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[500px] bg-gray-200 bg-center ">
         <HomeCards />
       </section>
-      <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[500px] bg-white bg-center ">
+      <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[400px] bg-white bg-center ">
         <HomeBestSellerCards />
+      </section>
+      <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[500px] bg-white bg-center ">
+        <HomeSlider />
+      </section>
+      <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[500px] bg-white bg-center ">
+        <Testimonials />
+      </section>
+      <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[500px] bg-white bg-center ">
+        <HomeStats />
       </section>
     </>
   );

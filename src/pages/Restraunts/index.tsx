@@ -9,65 +9,117 @@ import Filters from "./Filters";
 
 const Search = () => {
   const { authState } = useAuth();
-  const [formData, setFormData] = useState<any>({});
   const [apiData, setApiData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
 
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const data = params.get("data");
-
-  useEffect(() => {
-    let finalData: any = null;
-
-    try {
-      if (data !== null) {
-        finalData = JSON.parse(decodeURIComponent(data));
-        setFormData(finalData);
-        setLoading(false);
-        console.log(finalData);
-      } else {
-        console.error("Data parameter is null or undefined");
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error("Error parsing JSON or decoding URI:", error);
-      setLoading(false);
-    }
-  }, [data]);
-
   useEffect(() => {
     const fetchData = async () => {
-      if (!loading) {
-        try {
-          const accessToken = authState.accessToken;
+      try {
+        const accessToken = authState.accessToken;
 
-          const headers = {
-            Authorization: `Bearer ${accessToken}`,
-          };
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+        const params = {
+          location: 'china',
+          attributes: 'reservation',
+          latitude: 40.772385,
+          longitude: -73.956516,
+          reservation_covers: 2,
+          reservation_date: '2023-11-28',
+          reservation_time: '03:00',
+        }
 
-          const response = await axios.get(
-            "https://tagsolutionsltd.com/restaurant/search/",
-            {
-              params: formData,
-              headers: headers,
-            }
-          );
+        const response = await axios.get(
+          "https://tagsolutionsltd.com/restaurant/search/",
+          {
+            params,
+            headers,
+          }
+        );
 
+        if (response.data && response.data.data.length > 0) {
           console.log("API Response:", response.data.data);
           setApiData(response.data.data);
-        } catch (error) {
-          console.error("Error fetching data:", error);
+          setLoading(false); 
+        } else {
+          setLoading(true); 
         }
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(true); 
       }
     };
 
     fetchData();
-  }, [authState.accessToken, formData, loading]);
+  }, [authState.accessToken]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+
+  // const { authState } = useAuth();
+  // const [formData, setFormData] = useState<any>({});
+  // const [apiData, setApiData] = useState<any>();
+  // const [loading, setLoading] = useState<boolean>(true);
+
+  // const location = useLocation();
+  // const params = new URLSearchParams(location.search);
+  // const data = params.get("data");
+
+  // useEffect(() => {
+  //   let finalData: any = null;
+
+  //   try {
+  //     if (data !== null) {
+  //       finalData = JSON.parse(decodeURIComponent(data));
+  //       setFormData(finalData);
+  //       setLoading(false);
+  //       console.log(finalData);
+  //     } else {
+  //       console.error("Data parameter is null or undefined");
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error parsing JSON or decoding URI:", error);
+  //     setLoading(false);
+  //   }
+  // }, [data]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (!loading) {
+  //       try {
+  //         const accessToken = authState.accessToken;
+
+  //         const params ={
+
+  //         }
+
+  //         const headers = {
+  //           Authorization: `Bearer ${accessToken}`,
+  //         };
+
+  //         const response = await axios.get(
+  //           "https://tagsolutionsltd.com/restaurant/search/",
+  //           {
+  //             params: formData,
+  //             headers: headers,
+  //           }
+  //         );
+
+  //         console.log("API Response:", response.data.data);
+  //         setApiData(response.data.data);
+  //       } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //       }
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [authState.accessToken, formData, loading]);
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className="flex max-w-full relative w-[1300px] justify-center p-4 ">
@@ -80,9 +132,13 @@ const Search = () => {
         </h1>
         <Filters />
       </div>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
       <div className=" w-full">
         <RestrautCards apiData={apiData} />
       </div>
+      )}
     </div>
   );
 };
