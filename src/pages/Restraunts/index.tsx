@@ -41,7 +41,7 @@ const Search = () => {
       if (!loading) {
         try {
           const accessToken = authState.accessToken;
-          console.log(accessToken)
+          console.log(accessToken);
 
           const headers = {
             Authorization: `Bearer ${accessToken}`,
@@ -54,7 +54,7 @@ const Search = () => {
               headers: headers,
             }
           );
-          
+
           console.log("API Response:", response.data.data);
           setApiData(response.data.data);
         } catch (error) {
@@ -71,7 +71,7 @@ const Search = () => {
   }
 
   return (
-    <div className="flex max-w-full relative w-[1300px] justify-center p-4 ">
+    <div className="flex max-w-[1300px] mx-auto justify-center p-4">
       <div className="w-1/3 sticky top-0">
         <h1 className="text-xl items-center text-center justify-center">
           <strong>
@@ -84,9 +84,9 @@ const Search = () => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-      <div className=" w-full">
-        <RestrautCards apiData={apiData} />
-      </div>
+        <div className="w-full">
+          <RestrautCards apiData={apiData} />
+        </div>
       )}
     </div>
   );

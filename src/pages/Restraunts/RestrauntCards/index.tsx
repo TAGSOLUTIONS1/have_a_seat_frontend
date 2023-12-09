@@ -36,6 +36,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
             //   )}`,
             // }}
           >          
+
               <div
                 key={index}
                 className="bg-white w-full mb-2 p-1  h-60 shadow-xl rounded-2xl flex card text-grey-darkest"
