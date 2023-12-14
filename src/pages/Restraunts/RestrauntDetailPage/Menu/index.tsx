@@ -1,5 +1,3 @@
-import React from "react";
-
 const Menu = () => {
   return (
     <div className=" grid grid-cols-8 space-x-4">

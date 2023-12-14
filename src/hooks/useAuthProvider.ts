@@ -1,4 +1,6 @@
 import { useReducer, createContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import axios from "axios";
 
@@ -20,6 +22,7 @@ export const AuthContext = createContext<AuthContextProps>({
 });
 
 export const useAuthProvider = (): AuthContextProps => {
+  const navigate = useNavigate(); 
   const [authState, dispatch] = useReducer(authReducer, initialState);
 
   const login = async (email: string, password: string) => {
@@ -34,10 +37,12 @@ export const useAuthProvider = (): AuthContextProps => {
       if (response.status === 200) {
         const { access, refresh, user } = response.data;
         await fetchUserInfo(access);
+        // console.log(response,"aaahaahahahahahahah")
         dispatch({
           type: "LOGIN_SUCCESS",
           payload: { user, accessToken: access, refreshToken: refresh },
         });
+        navigate("/");
       } else {
         dispatch({ type: "LOGIN_FAILURE" });
         console.error("Login failed");
@@ -51,6 +56,35 @@ export const useAuthProvider = (): AuthContextProps => {
   const logout = () => {
     dispatch({ type: "LOGOUT" });
   };
+
+  const refreshToken = async () => {
+    try {
+      const refreshResponse = await axios.post("https://tagsolutionsltd.com/auth/refresh/", {
+        refreshToken: authState.refreshToken,
+      });
+      if (refreshResponse.status === 200) {
+        const { access } = refreshResponse.data;
+        console.log("refreshToken worked")
+        dispatch({
+          type: "REFRESH_ACCESS_TOKEN",
+          payload: { accessToken: access },
+        });
+      } else {
+        console.error("Refresh token failed");
+      }
+    } catch (error) {
+      console.error("Error occurred while refreshing token:", error);
+    }
+  };
+
+  useEffect(() => {
+    // const interval = setInterval(refreshToken, 300000);
+    const interval = setInterval(refreshToken, 30000000);
+
+    return () => clearInterval(interval); 
+  }, [authState.refreshToken]);
+
+
 
   return { authState, login, logout };
 };

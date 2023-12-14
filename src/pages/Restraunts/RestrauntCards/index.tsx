@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/authContext/AuthProvider";
 
 interface RestaurantCardsProps {
   apiData: any[];
@@ -7,12 +8,16 @@ interface RestaurantCardsProps {
 
 const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
   const [loading, setLoading] = useState<boolean>(true);
+  const { authState } = useAuth();
+  
 
 
   useEffect(() => {
     if (apiData && apiData.length > 0) {
       setLoading(false);
       console.log(apiData)
+      console.log(authState.accessToken)
+
     }
   }, [apiData]);
   
@@ -26,7 +31,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
           {apiData.map((data, index) => (
             <Link
             to="/restaurant-detail"
-            // key={data.id || index}
+            key={data.id || index}
             // to={{
             //   pathname: "/restaurant-detail",
             //   search: `?${
@@ -52,18 +57,18 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
                       <strong>{data.name}</strong>
                     </h1>
                     <br />
-                    {/* <span className="text-grey-darkest">
+                    <span className="text-grey-darkest">
                       <h2>Rating</h2>
                       <i className="fas fa-map-marker-alt mr-1 text-grey-dark"></i>
                       {data.rating}
                       <span className="text-base sm:text-lg">/5</span>
-                    </span> */}
+                    </span>
                     <div className="flex items-center mt-4">
                       <div className="pr-2 text-base">
                         <h2>Address:</h2>
                         <p>
                           {" "}
-                          {/* {data.location.address1} , {data.location.city} */}
+                          {data.location.address1} , {data.location.city}
                         </p>
                       </div>
                     </div>
@@ -87,7 +92,16 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
                       height={84}
                       className=" ml-16 mb-2"
                     />
-                  ) : null}
+                  ) : data.restaurant_type === "Google" ? (
+                    <img
+                      src="/assets/google-logo.png"
+                      alt="google Logo"
+                      width={56}
+                      height={34}
+                      className=" ml-24 mb-2"
+                    />
+                  ) :
+                   null}
                   <div className="pr-2 text-base">
                     <h2>{data.price}</h2>
                   </div>

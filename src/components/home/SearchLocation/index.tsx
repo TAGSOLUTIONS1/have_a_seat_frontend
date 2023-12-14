@@ -22,6 +22,7 @@ const SearchLocation = () => {
     )}`;
     navigate(route);
     console.log(formData);
+    setFormData("")
   };
   const getLocationData = (value: any, id: string) => {
     console.log("Location Data:", value);
@@ -40,7 +41,7 @@ const SearchLocation = () => {
           <GeoApiAuto getLocationData={getLocationData} id="your-id" />
         </div>
         <Button
-          className="absolute text-xl py-7 px-12 right-0 top-4  mr-4 rounded-full"
+          className="absolute sm:text-sm md:text-xl sm:py-4 sm:px-6 md:py-7 md:px-12 right-0 top-5  mr-4 rounded-full"
           variant="default"
           size="lg"
           onClick={handleSearch}

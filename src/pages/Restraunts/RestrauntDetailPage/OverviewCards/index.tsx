@@ -1,4 +1,3 @@
-import React from "react";
 import OverviewCard1 from "./OverviewCard1";
 import OverviewCard2 from "./OverviewCard2";
 

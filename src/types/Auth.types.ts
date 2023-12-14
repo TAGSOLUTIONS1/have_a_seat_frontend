@@ -15,6 +15,7 @@ export enum AuthActionTypes {
   LOGIN_SUCCESS = "LOGIN_SUCCESS",
   LOGIN_FAILURE = "LOGIN_FAILURE",
   LOGOUT = "LOGOUT",
+  REFRESH_ACCESS_TOKEN = "REFRESH_ACCESS_TOKEN", 
 }
 
 export interface AuthState {
@@ -29,4 +30,5 @@ export type AuthAction =
       payload: { user: UserType; accessToken: string; refreshToken: string };
     }
   | { type: "LOGIN_FAILURE" }
-  | { type: "LOGOUT" };
+  | { type: "LOGOUT" }
+  | { type: "REFRESH_ACCESS_TOKEN"; payload: { accessToken: string } };

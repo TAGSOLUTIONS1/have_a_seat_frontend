@@ -168,7 +168,6 @@ const Testimonials = () => {
       location: "California",
       phoneNumber: "(051)7860123",
     },
-    // Add more slides here as needed
   ];
 
   const totalSlides = slides.length;
@@ -183,22 +182,22 @@ const Testimonials = () => {
 
   return (
     <div className="w-full flex flex-col items-center mb-44">
-      <div className="flex items-center justify-between mt-20 mb-24">
+      <div className="flex items-center justify-between mt-20">
         <div>
-          <span className="relative text-purple-600 text-3xl font-bold italic">
+          <span className="relative text-purple-600 sm:text-lg md:text-3xl lg:text-3xl  font-bold italic">
             <img
               src="/assets/heading_shapes_1.png"
               alt=""
-              className="absolute left-48 top-1/4 h-6 w-18"
+              className="absolute object-cover left-28  md:left-48 md:top-1/4 sm:h-4 sm:w-10 md:h-6 md:w-16"
             />
             Testimonials
           </span>
-          <p className="text-black mt-4 text-4xl font-bold non-italic">
+          <p className="text-black mt-4 sm:text-lg md:text-4xl font-bold non-italic">
             Our Customer Feedback
           </p>
         </div>
-        <div className="flex mt-12 ml-[700px]">
-          <div className="bg-purple-600 rounded-full h-10 w-10 mr-4 flex items-center justify-center">
+        <div className="flex  mt-12 sm:ml-[300px]  md:ml-[500px]">
+          <div className="bg-purple-600 rounded-full h-10 w-10  flex items-center justify-center">
             <ArrowLeft onClick={prevSlide} className="text-white w-6 h-6" />
           </div>
           <div className="bg-gray-600 rounded-full h-10 w-10 flex items-center justify-center">

@@ -65,18 +65,18 @@
 
 const HomeSlider = () => {
   return (
-    <div className="grid grid-cols-5 gap-4">
+    <div className=" grid grid-cols-5 gap-4">
       <div className="col-span-2 relative">
         <img
           src="/assets/slider_img_3.png"
-          className="h-[460px] w-[500px] object-cover opacity-50 lg:w-[600px]"
+          className="md:h-[460px] w-[500px] object-cover opacity-50 lg:w-[600px]"
           alt=""
         />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-black text-center">
-          <h1 className="font-bold text-purple-600 text-5xl italic">
+        <div className="absolute sm:top md:top-1/2  left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-black text-center">
+          <h1 className="font-bold text-purple-600 sm:text-lg md:text-5xl lg:text-5xl italic">
             $5.00 Cashback
           </h1>
-          <p className="text-6xl font-bold">Easy To Book A Reservation</p>
+          <p className=" sm:text-lg md:text-6xl lg:text-6xl font-bold">Easy To Book A Reservation</p>
         </div>
       </div>
       <img

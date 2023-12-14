@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/authContext/AuthProvider";
+// import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { useLocation } from "react-router-dom";
 import { Sliders } from "lucide-react";
 
@@ -8,7 +8,7 @@ import RestrautCards from "./RestrauntCards";
 import Filters from "./Filters";
 
 const Search = () => {
-  const { authState } = useAuth();
+  // const { authState } = useAuth();
   const [formData, setFormData] = useState<any>({});
   const [apiData, setApiData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,18 +40,18 @@ const Search = () => {
     const fetchData = async () => {
       if (!loading) {
         try {
-          const accessToken = authState.accessToken;
-          console.log(accessToken);
+          // const accessToken = authState.accessToken;
+          // console.log(accessToken);
 
-          const headers = {
-            Authorization: `Bearer ${accessToken}`,
-          };
+          // const headers = {
+          //   Authorization: `Bearer ${accessToken}`,
+          // };
 
           const response = await axios.get(
             "https://tagsolutionsltd.com/restaurant/search/",
             {
               params: formData,
-              headers: headers,
+              // headers: headers,
             }
           );
 
@@ -64,7 +64,7 @@ const Search = () => {
     };
 
     fetchData();
-  }, [authState.accessToken, formData, loading]);
+  }, [ formData, loading]);
 
   if (loading) {
     return <div>Loading...</div>;
