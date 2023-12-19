@@ -1,4 +1,18 @@
-const Menu = () => {
+import { useEffect , useState } from "react";
+
+interface MenuProps {
+  restrauntDetail: any; 
+}
+
+const Menu: React.FC<MenuProps> = ({ restrauntDetail }) => {
+
+  const [menuData , setMenuData]= useState<any>()
+  useEffect(() => {
+    if (Object.keys(restrauntDetail).length !== 0) {
+      setMenuData(restrauntDetail?.menus?.menuInfo?.url)
+    }
+  }, [restrauntDetail]);
+
   return (
     <div className=" grid grid-cols-8 space-x-4">
       <div className="col-span-1"></div>
@@ -7,7 +21,9 @@ const Menu = () => {
           <strong>Menu</strong>
         </h1>
         <hr className="mb-4 mt-4" />
-        <a href="">https://www.menu.com</a>
+        {menuData?.restaurant_flag === "yelp"
+          ? <a href="">https://www.menu.com</a>
+          : <a href={menuData} target="blank">{menuData}</a>}
       </div>
     </div>
   );

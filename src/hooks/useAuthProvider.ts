@@ -36,8 +36,9 @@ export const useAuthProvider = (): AuthContextProps => {
       );
       if (response.status === 200) {
         const { access, refresh, user } = response.data;
+        localStorage.setItem('accessToken', access);
+        localStorage.setItem('refreshToken', refresh);
         await fetchUserInfo(access);
-        // console.log(response,"aaahaahahahahahahah")
         dispatch({
           type: "LOGIN_SUCCESS",
           payload: { user, accessToken: access, refreshToken: refresh },
@@ -53,22 +54,52 @@ export const useAuthProvider = (): AuthContextProps => {
     }
   };
 
-  const logout = () => {
-    dispatch({ type: "LOGOUT" });
+  const logout = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken  = localStorage.getItem('refreshToken');
+
+    console.log(accessToken);
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+      const response = await axios.post(
+        "https://tagsolutionsltd.com/auth/logout/",{
+          refresh_token:refreshToken
+        },
+        config
+      );
+      if (response.status === 200) {
+        authState.accessToken=null;
+        authState.refreshToken=null;
+        authState.user=null;
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        dispatch({ type: "LOGOUT" });
+        navigate("/login");
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Error occurred while logging out:", error);
+    }
   };
 
   const refreshToken = async () => {
     try {
-      const refreshResponse = await axios.post("https://tagsolutionsltd.com/auth/refresh/", {
-        refreshToken: authState.refreshToken,
+      const refreshResponse = await axios.post("https://tagsolutionsltd.com/auth/token/refresh/", {
+        refresh: localStorage.getItem('refreshToken'),
       });
       if (refreshResponse.status === 200) {
         const { access } = refreshResponse.data;
-        console.log("refreshToken worked")
         dispatch({
           type: "REFRESH_ACCESS_TOKEN",
           payload: { accessToken: access },
         });
+        console.log("refreshToken worked")
+        console.log(authState.accessToken)
       } else {
         console.error("Refresh token failed");
       }
@@ -78,13 +109,9 @@ export const useAuthProvider = (): AuthContextProps => {
   };
 
   useEffect(() => {
-    // const interval = setInterval(refreshToken, 300000);
-    const interval = setInterval(refreshToken, 30000000);
-
+    const interval = setInterval(refreshToken, 60000);
     return () => clearInterval(interval); 
   }, [authState.refreshToken]);
-
-
 
   return { authState, login, logout };
 };

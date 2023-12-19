@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/contexts/authContext/AuthProvider";
+// import { useAuth } from "@/contexts/authContext/AuthProvider";
+import Loader from "@/components/Loader";
 
 interface RestaurantCardsProps {
   apiData: any[];
@@ -8,40 +9,36 @@ interface RestaurantCardsProps {
 
 const RestaurantCards: React.FC<RestaurantCardsProps> = ({ apiData }) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const { authState } = useAuth();
+  // const { authState } = useAuth();
   
-
-
   useEffect(() => {
     if (apiData && apiData.length > 0) {
       setLoading(false);
       console.log(apiData)
-      console.log(authState.accessToken)
+      // console.log(authState.accessToken)
 
     }
   }, [apiData]);
   
-
   return (
     <div>
       {loading ? (
-        <div className="loader">Loading...</div>
+        <Loader/>
       ) : (
         <div>
           {apiData.map((data, index) => (
             <Link
-            to="/restaurant-detail"
+            // to="/restaurant-detail"
             key={data.id || index}
-            // to={{
-            //   pathname: "/restaurant-detail",
-            //   search: `?${
-            //     data.restaurant_type === "open_table" ? "map_url" : "yelp_id"
-            //   }=${encodeURIComponent(
-            //     data.restaurant_type === "open_table" ? data.url : data.id
-            //   )}`,
-            // }}
+            to={{
+              pathname: "/restaurant-detail",
+              search: `?${
+                data.restaurant_type === "open_table" ? "map_url" : "yelp_id"
+              }=${encodeURIComponent(
+                data.restaurant_type === "open_table" ? data.url : data.id
+              )}`,
+            }}
           >          
-
               <div
                 key={index}
                 className="bg-white w-full mb-2 p-1  h-60 shadow-xl rounded-2xl flex card text-grey-darkest"

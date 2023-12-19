@@ -21,7 +21,12 @@ export const authReducer = (
     case "LOGIN_FAILURE":
     case "LOGOUT":
       return initialState;
-    default:
+      case "REFRESH_ACCESS_TOKEN":
+        return {
+          ...state,
+          accessToken: action.payload.accessToken,
+        };
+      default:
       return state;
   }
 };

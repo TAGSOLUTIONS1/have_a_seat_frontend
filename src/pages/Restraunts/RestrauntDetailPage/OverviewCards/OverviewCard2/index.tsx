@@ -2,8 +2,12 @@ import Date from "./Date";
 import PersonCard from "./Person";
 import Time from "./Time";
 
+interface OverviewCardProps {
+  overviewCardsData: any; 
+}
 
-const OverviewCard2 = () => {
+const OverviewCard2: React.FC<OverviewCardProps> = ({overviewCardsData}) => {
+  console.log(overviewCardsData)
   return (
     <div className="p-6 border rounded-lg shadow-lg">
       <h1 className="m-2 text-center text-lg">

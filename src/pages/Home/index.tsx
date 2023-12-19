@@ -40,19 +40,19 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[500px] bg-gray-200 bg-center ">
+      <section className="max-w-full relative  w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[400px] bg-gray-200 bg-center ">
         <HomeCards />
       </section>
-      <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[400px] bg-white bg-center ">
+      <section className="max-w-full relative   w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[400px] bg-white bg-center ">
         <HomeBestSellerCards />
       </section>
-      <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[500px] bg-white bg-center ">
+      <section className="max-w-full relative   w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[400px] bg-white bg-center ">
         <HomeSlider />
       </section>
-      <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[500px] bg-white bg-center ">
+      <section className="max-w-full relative   w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[400px] bg-white bg-center ">
         <Testimonials />
       </section>
-      <section className="max-w-full relative w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[500px] bg-white bg-center ">
+      <section className="max-w-full relative   w-full lg:p-0 lg:mx-auto h-[220px] sm:h-[320px] md:h-[400px] bg-white bg-center ">
         <HomeStats />
       </section>
     </>

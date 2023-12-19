@@ -1,14 +1,23 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { Star, MessageSquare, DollarSign, Utensils } from "lucide-react";
 
-const OverviewCard1 = () => {
-  const [selectedTab, setSelectedTab] = useState(1);
+interface OverviewCardProps {
+  overviewCardsData: any;
+}
 
-  const tabs = ["Overview ", "Pictures", "Reviews", "Option 4"];
+const OverviewCard1: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
+  // const [selectedTab, setSelectedTab] = useState(1);
+
+  // const tabs = ["Overview ", "Pictures", "Reviews", "Option 4"];
+
+  const removeHtmlTags = (htmlString: string) => {
+    const regex = /(<([^>]+)>)/gi;
+    return htmlString.replace(regex, "");
+  };
 
   return (
     <div className="border rounded-lg p-8 mb-4 shadow-lg ">
-      <div className="flex justify-between text-sm mb-4">
+      {/* <div className="flex justify-between text-sm mb-4">
         {tabs.map((tab, index) => (
           <p
             key={index}
@@ -23,52 +32,67 @@ const OverviewCard1 = () => {
           </p>
         ))}
       </div>
-      <hr className="mb-4" />
-      <h2 className="text-6xl mb-8 mt-8">Restaurant Name</h2>
+      <hr className="mb-4" /> */}
+      <h2 className="text-5xl  text-purple-600 mb-4 mt-1">
+        {overviewCardsData?.restaurant_flag === "yelp"
+          ? overviewCardsData?.name
+          : overviewCardsData?.restaurant.name}
+      </h2>
       <hr className="mb-4" />
       <div className="flex justify-between text-sm items-center">
         <div className="flex items-center">
           <Star className="mr-1  text-purple-600" />
-          <span>4.4</span>
+          <span>
+          {overviewCardsData?.restaurant_flag === "yelp"
+          ? overviewCardsData?.rating
+          :  overviewCardsData?.restaurant.statistics.reviews.ratings.overall
+          .rating}
+          </span>
         </div>
         <div className="flex items-center">
           <MessageSquare className="mr-1  text-purple-600" />
-          <span>25 Reviews</span>
+          <span>
+          {overviewCardsData?.restaurant_flag === "yelp"
+          ? overviewCardsData?.review_count
+          :  overviewCardsData?.reviewSearchResults.totalCount}</span>
         </div>
         <div className="flex items-center">
           <DollarSign className="mr-1  text-purple-600" />
-          <span>AED 110 to AED 185</span>
+          <span>
+          {overviewCardsData?.restaurant_flag === "yelp"
+          ? overviewCardsData?.review_count
+          :  overviewCardsData?.restaurant.priceBand.name}
+          </span>
         </div>
         <div className="flex items-center">
           <Utensils className="mr-1 text-purple-600" />
-          <span>Thai</span>
+          <span>
+          {overviewCardsData?.restaurant_flag === "yelp"
+          ? 'thai'
+          :  overviewCardsData?.restaurant.primaryCuisine.name}
+            </span>
         </div>
       </div>
       <hr className="mb-4 mt-4" />
       <p className="text-sm mt-4 mb-4">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quibusdam
-        itaque architecto animi similique, minus veniam enim dolorem deleniti
-        repudiandae omnis deserunt! Architecto natus qui nobis ad molestiae
-        aperiam repudiandae veritatis eum doloribus quisquam optio enim atque
-        pariatur esse nihil impedit, fugiat ut nam sequi necessitatibus
-        distinctio rem mollitia sit iste! Quis commodi ducimus sit suscipit.
+      {overviewCardsData?.restaurant_flag === "yelp"
+          ? 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae iusto voluptatibus architecto, voluptate fugiat hic atque tempora placeat possimus commodi culpa quia molestiae dolore fuga blanditiis ipsum consectetur odio quo asperiores corrupti saepe. Totam!'
+          : removeHtmlTags(overviewCardsData?.restaurant.description)}
       </p>
-      <hr className="mb-4 mt-4" />
+      {/* <hr className="mb-4 mt-4" />
       <div>
-        <span className="mb-2 mx-6">Top Tags:</span>
-        <span className="rounded-full text-white bg-purple-600 px-3 py-1 m-1">
-          Tags
-        </span>
-        <span className="rounded-full text-white bg-purple-600 px-3 py-1 m-1">
-          Tags
-        </span>
-        <span className="rounded-full text-white bg-purple-600 px-3 py-1 m-1">
-          Tags
-        </span>
-        <span className="rounded-full text-white bg-purple-600 px-3 py-1 m-1">
-          Tags
-        </span>
-      </div>
+        {overviewCardsData?.restaurant.cuisines.map((data: any, index: any) => {
+          <div>
+            <span className="mb-2 mx-6">Top Tags:</span>
+            <span
+              tabIndex={index}
+              className="rounded-full text-white bg-purple-600 px-3 py-1 m-1"
+            >
+              {data.name}
+            </span>
+          </div>;
+        })}
+      </div> */}
     </div>
   );
 };
