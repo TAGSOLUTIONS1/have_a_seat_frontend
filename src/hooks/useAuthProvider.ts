@@ -98,8 +98,8 @@ export const useAuthProvider = (): AuthContextProps => {
           type: "REFRESH_ACCESS_TOKEN",
           payload: { accessToken: access },
         });
-        console.log("refreshToken worked")
-        console.log(authState.accessToken)
+        // console.log("refreshToken worked")
+        // console.log(authState.accessToken)
       } else {
         console.error("Refresh token failed");
       }

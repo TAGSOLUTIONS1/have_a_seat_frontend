@@ -7,26 +7,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// interface PersonProps{
-//   setFormData: React.Dispatch<React.SetStateAction<any>>
-// }
+interface PersonProps{
+  setFormData: React.Dispatch<React.SetStateAction<any>>
+}
 
-const PersonCard=() => {
+const PersonCard:React.FC<PersonProps> = ({setFormData}) => {
 
-//   const handleSelectChange = (persons: any) => {
-//     const selectedPersons = parseInt(persons, 10);
+  const handleSelectChange = (persons: any) => {
+    const selectedPersons = parseInt(persons, 10);
   
-//     console.log(selectedPersons);
-//     setFormData((prev:any)=>{
-//       return {
-//         ...prev,
-//         reservation_covers: selectedPersons
-//       }
-//     })
-//   };
+    // console.log(selectedPersons);
+    setFormData((prev:any)=>{
+      return {
+        ...prev,
+        reservation_covers: selectedPersons
+      }
+    })
+  };
 
   return (
-    <Select>
+    <Select onValueChange={handleSelectChange}>
       {/* <h1 className="my-2">Person</h1> */}
       <div className="text-black">
         <SelectTrigger className="w-[275px]">

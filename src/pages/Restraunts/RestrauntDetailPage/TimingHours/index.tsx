@@ -9,7 +9,6 @@ const TimingHours: React.FC<MenuProps> = ({ restrauntDetail }) => {
 
   useEffect(() => {
     if (Object.keys(restrauntDetail).length !== 0) {
-      // console.log(restrauntDetail, "atTime");
       setTimingData(restrauntDetail);
     }
   }, [restrauntDetail]);
@@ -22,13 +21,13 @@ const TimingHours: React.FC<MenuProps> = ({ restrauntDetail }) => {
     return `${hour}:${minutes} ${period}`;
   };
 
-const formatHoursOfOperation = (hoursOfOperation: string | undefined) => {
-  if (hoursOfOperation) {
-    const lines = hoursOfOperation.split("<br />");
-    return lines.map((line, index) => <p key={index}>{line.trim()}</p>);
-  }
-  return <p>No timing data available</p>;
-};
+  const formatHoursOfOperation = (hoursOfOperation: string | undefined) => {
+    if (hoursOfOperation) {
+      const lines = hoursOfOperation.split("<br />");
+      return lines.map((line, index) => <p key={index}>{line.trim()}</p>);
+    }
+    return <p>No timing data available</p>;
+  };
 
   return (
     <div className="grid grid-cols-8 space-x-4">

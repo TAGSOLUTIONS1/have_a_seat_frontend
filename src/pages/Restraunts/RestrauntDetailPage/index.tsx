@@ -74,7 +74,7 @@ const RestrauntDetail = () => {
               style={{
                 backgroundImage:
                   restrauntDetail?.restaurant_flag === "opentable"
-                    ? `url(${restrauntDetail?.restaurant?.photos?.profile?.large.url})`
+                    ? `url(${restrauntDetail?.restaurant?.photos?.profile?.large?.url})`
                     : restrauntDetail?.restaurant_flag === "yelp"
                     ? `url(${restrauntDetail?.image_url})`
                     : "",
