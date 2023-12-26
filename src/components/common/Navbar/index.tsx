@@ -14,7 +14,6 @@ import { useAuth } from "@/contexts/authContext/AuthProvider";
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { logout } = useAuth();
-  // const {authState}=useAuth();
   const [user, setUser] = useState<any>();
 
 
@@ -22,12 +21,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    console.log('Token from localStorage:', token);
   
     const fetchUserInformation = async (userToken:any) => {
       try {
         const userInfo = await fetchUserInfo(userToken);
-        console.log('User Info:', userInfo);
         setUser(JSON.parse(userInfo));
       } catch (error) {
         console.error('Error fetching user info:', error);
@@ -56,16 +53,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logout(); 
-      setUser(null); 
-      // console.log(user)
-      // console.log(authState)
-      // authState.accessToken=null;
-      // authState.refreshToken=null;
-      // authState.user=null;
-      // sessionStorage.removeItem('accessToken')
-      // sessionStorage.removeItem('refreshToken')
-      // console.log(authState)
-
+      setUser(null);
     } catch (error) {
       console.error("Error occurred while logging out:", error);
     }
@@ -86,11 +74,11 @@ const Navbar = () => {
             <span className="self-center italic text-4xl text-purple-600 font-semibold whitespace-nowrap custom-font">
               Have a Seat
             </span>
-            <div className="relative left-[750px]">
+            {/* <div className="relative left-[750px]">
               <p className="text-purple-600 text-lg float-left">
                 {user && user.email}
               </p>
-            </div>
+            </div> */}
           </div>
           <SideNav />
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">

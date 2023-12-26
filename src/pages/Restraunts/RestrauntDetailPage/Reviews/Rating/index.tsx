@@ -34,7 +34,7 @@ const DetailRating: React.FC<ReviewsDataProps> = ({ reviewsData }) => {
         {" "}   Overall rating
         </span>
       </div>
-      <div className="flex mt-4 p-2">
+      <div className="flex flex-col md:flex-row lg:flex-row mt-4 p-2">
         <div>
           <p className="text-center">
             {reviewsData?.restaurant_flag === "yelp"

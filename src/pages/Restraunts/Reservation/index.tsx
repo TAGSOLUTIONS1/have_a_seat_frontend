@@ -13,7 +13,6 @@ const Reservation = () => {
 
   useEffect(() => {
     let finalData: any = null;
-
     try {
       // console.log("Data received:", data);
       if (data !== null) {

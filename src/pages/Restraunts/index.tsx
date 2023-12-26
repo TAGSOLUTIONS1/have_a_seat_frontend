@@ -71,8 +71,8 @@ const Search = () => {
   }
 
   return (
-    <div className="flex max-w-[1300px] mx-auto justify-center p-4">
-      <div className="w-1/3 sticky top-0">
+    <div className="flex flex-col md:flex-row lg:flex-row max-w-[1300px] mx-auto justify-center p-4">
+      <div className="w-full md:w-1/3 lg:w-1/3 md:sticky lg:sticky top-0 h-[800px]">
         <h1 className="text-xl items-center text-center justify-center">
           <strong>
             <Sliders size={24} className="inline-block mr-2" />

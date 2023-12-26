@@ -58,77 +58,91 @@ const CardsSlider = () => {
     setCurrentSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides);
   };
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="flex items-center justify-between mt-20">
-        <div>
-          <span className="relative text-purple-600 sm:text-lg md:text-3xl lg:text-3xl  font-bold italic">
-            <img
-              src="/assets/heading_shapes_1.png"
-              alt=""
-              className="absolute object-cover left-28  md:left-48 md:top-1/4 sm:h-4 sm:w-10 md:h-6 md:w-16"
-            />
-            Daily Offer
-          </span>
-          <p className="text-black mt-4 sm:text-lg md:text-4xl font-bold non-italic">
-            Upto 75% off for today
-          </p>
-        </div>
-        <div className="flex  mt-12 sm:ml-[300px]  md:ml-[500px]">
-          <div className="bg-purple-600 rounded-full h-10 w-10 mr-4 flex items-center justify-center">
-            <ArrowLeft onClick={prevSlide} className="text-white w-6 h-6" />
-          </div>
-          <div className="bg-gray-600 rounded-full h-10 w-10 flex items-center justify-center">
-            <ArrowRight onClick={nextSlide} className="text-white w-6 h-6" />
-          </div>
-        </div>
-      </div>
-      <div className="flex items-center justify-center my-8 mx-28 relative w-full">
-        <div className="flex space-x-8">
-          {[currentSlide, (currentSlide + 1) % totalSlides].map((index) => (
-            <div
-              key={index}
-              className={`relative p-2 bg-white rounded-lg overflow-hidden flex ${
-                index === currentSlide
-                  ? "transition-transform ease-in duration-1000"
-                  : ""
-              } ${
-                index === currentSlide
-                  ? "transform-none"
-                  : "transform-translate-x-full"
-              }`}
-            >
-              <div>
-                <img
-                  src={slides[index].image}
-                  className="h-[220px] object-cover w-[250px]"
-                  alt=""
-                />
+    <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col items-center mt-20">
+        <div className="text-center">
+          <div className="md:flex md:items-center md:justify-between">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight text-purple-600 sm:text-4xl">
+                <span className="relative">
+                  <img
+                    src="/assets/heading_shapes_1.png"
+                    alt=""
+                    className="absolute left-0 bottom-0 h-6 w-16 ml-40 mb-2 md:ml-56 lg:ml-56"
+                  />
+                  Daily Offer
+                </span>
+              </h2>
+              <p className="mt-3 text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Upto 75% off for today
+              </p>
+            </div>
+            <div className="flex ml-24 mt-8 sm:mt-12">
+              <div
+                className="flex items-center justify-center p-2 rounded-full bg-purple-600 mr-4 sm:mr-8 cursor-pointer"
+                onClick={prevSlide}
+              >
+                <ArrowLeft className="h-6 w-6 text-white" />
               </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-purple-600 text-white border-2 border-white rounded-full p-2 absolute top-1/2 left-[258px] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16">
-                  <span className="text-center font-bold ml-2">
-                    45% <p>off</p>
-                  </span>
-                </div>
-              </div>
-              <div className="mt-8 mx-8 z-10 w-[270px]">
-                <h1 className="text-purple-600 ml-8 text-xl font-bold italic">
-                  {slides[index].title}
-                </h1>
-                <p className="text-gray-600 mt-2 ml-8 text-md font-bold non-italic">
-                  {slides[index].intro}
-                </p>
-                <p className="text-purple-600  mt-2 ml-8 text-md font-bold italic">
-                  {slides[index].location}
-                </p>
-                <div className="flex">
-                  <ShoppingBag className=" text-purple-600 mt-4 ml-8" />
-                  <Heart className=" text-purple-600 mt-4 ml-4" />
-                  <Eye className=" text-purple-600 mt-4 ml-4" />
-                </div>
+              <div
+                className="flex items-center justify-center p-2 rounded-full bg-gray-600 cursor-pointer"
+                onClick={nextSlide}
+              >
+                <ArrowRight className="h-6 w-6 text-white" />
               </div>
             </div>
-          ))}
+          </div>
+        </div>
+        <div className="relative my-8 w-full">
+          <div className="flex justify-center space-x-6 sm:space-x-8">
+            <div className="sm:flex sm:space-x-4">
+              {[currentSlide, (currentSlide + 1) % totalSlides].map((index) => (
+                <div
+                  key={index}
+                  className={`flex flex-col bg-white rounded-lg shadow-lg h-[430px] overflow-hidden ${
+                    index === currentSlide
+                      ? "transition-transform duration-500"
+                      : ""
+                  } ${
+                    index === currentSlide
+                      ? "transform-none"
+                      : "-translate-x-full sm:translate-x-0"
+                  }`}
+                >
+                  <div>
+                    <img
+                      src={slides[index].image}
+                      className="h-[220px] object-cover w-[340px]"
+                      alt=""
+                    />
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-purple-600 text-white border-2 border-white rounded-full p-2 absolute top-1/2 left-[258px] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16">
+                      <span className="text-center font-bold ml-2">
+                        45% <p>off</p>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-8 mx-8 z-10 w-[270px]">
+                    <h1 className="text-purple-600 ml-8 text-xl font-bold italic">
+                      {slides[index].title}
+                    </h1>
+                    <p className="text-gray-600 mt-2 ml-8 text-md font-bold non-italic">
+                      {slides[index].intro}
+                    </p>
+                    <p className="text-purple-600 mt-2 ml-8 text-md font-bold italic">
+                      {slides[index].location}
+                    </p>
+                    <div className="flex">
+                      <ShoppingBag className="text-purple-600 mt-4 ml-8" />
+                      <Heart className="text-purple-600 mt-4 ml-4" />
+                      <Eye className="text-purple-600 mt-4 ml-4" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

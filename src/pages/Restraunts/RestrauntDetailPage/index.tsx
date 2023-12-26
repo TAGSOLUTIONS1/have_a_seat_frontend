@@ -81,9 +81,10 @@ const RestrauntDetail = () => {
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                width: "90%",
+                width: "95%",
                 height: "500px",
                 borderRadius: "10px",
+                marginLeft:"30px"
               }}
             ></div>
           </section>
@@ -93,9 +94,14 @@ const RestrauntDetail = () => {
           <section>
             <Pictures restrauntDetail={restrauntDetail} />
           </section>
+          {
+            restrauntDetail?.restaurant_flag === 'yelp'
+            ? null
+            :
           <section>
             <Menu restrauntDetail={restrauntDetail} />
           </section>
+          }
           <section>
             <TimingHours restrauntDetail={restrauntDetail} />
           </section>

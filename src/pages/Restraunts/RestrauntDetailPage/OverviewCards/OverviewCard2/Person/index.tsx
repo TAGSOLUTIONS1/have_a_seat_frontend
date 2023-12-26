@@ -29,7 +29,7 @@ const PersonCard:React.FC<PersonProps> = ({setFormData}) => {
     <Select onValueChange={handleSelectChange}>
       {/* <h1 className="my-2">Person</h1> */}
       <div className="text-black">
-        <SelectTrigger className="w-[275px]">
+        <SelectTrigger className="w-full ">
           <SelectValue
             placeholder="Select Person"
             // onSelect={handleSelectChange}

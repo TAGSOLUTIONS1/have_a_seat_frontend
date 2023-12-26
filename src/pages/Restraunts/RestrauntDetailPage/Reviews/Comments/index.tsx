@@ -49,10 +49,10 @@ const Comments: React.FC<ReviewsDataProps> = ({ reviewsData, yelpReviews }) => {
           onClick={handlePrev}
         />
       </div>
-      <div className="flex">
-        {reviewsData?.restaurant_flag === "opentable" &&
+      <div className="flex flex-col md:flex-row lg:flex-row">
+        {reviewsData?.restaurant_flag !== "yelp" &&
           displayedReviews.map((data: any, index: any) => (
-            <div style={{ width: "200px" }} key={index}>
+            <div className="w-[180px] md:w-1/3 lg:w-1/3" key={index}>
               <h1 className="text-center mb-2">User</h1>
               <div className="flex justify-center">
                 {[...Array(5)].map((_, starIndex) => (
@@ -72,7 +72,7 @@ const Comments: React.FC<ReviewsDataProps> = ({ reviewsData, yelpReviews }) => {
         {!reviewsData?.restaurant_flag ||
           (reviewsData?.restaurant_flag === "yelp" &&
             yelpReviews?.data?.reviews.map((data: any, index: any) => (
-              <div style={{ width: "200px" }} key={index}>
+              <div className="w-[180px] md:w-1/3 lg:w-1/3" key={index}>
                 <h1 className="text-center mb-2">User</h1>
                 <div className="flex justify-center">
                   {[...Array(5)].map((_, starIndex) => (

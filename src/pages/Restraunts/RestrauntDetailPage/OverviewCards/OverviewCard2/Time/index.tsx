@@ -117,7 +117,7 @@ import {
       <Select onValueChange={handleTimeSelection}>
         {/* <h1 className="my-2">Time</h1> */}
         <div className="text-black">
-          <SelectTrigger className="w-[275px]">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Select time" />
           </SelectTrigger>
           <SelectContent>

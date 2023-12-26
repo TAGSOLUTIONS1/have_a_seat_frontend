@@ -36,7 +36,7 @@ const Date: React.FC<DateProps> = ({setFormData}) => {
             <Button
               variant={"outline"}
               className={cn(
-                "w-[275px] justify-start text-left font-normal",
+                "w-full  justify-start text-left font-normal",
                 !date && "text-muted-foreground"
               )}
             >

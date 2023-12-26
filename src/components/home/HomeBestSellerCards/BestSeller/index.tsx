@@ -2,11 +2,11 @@ import { ArrowRight } from "lucide-react";
 
 const BestSeller = () => {
   return (
-    <div className="w-full flex flex-col sm:flex-row items-center mt-28 justify-center space-x-8">
+    <div className="w-full flex flex-col sm:flex-row items-center mt-8 justify-center md:space-x-8 lg:space-x-8">
       <div className="relative mb-8 sm:mb-0">
         <img
           src="/assets/offer_slider_1.png"
-          className="rounded h-[280px] sm:h-auto"
+          className="rounded h-[280px] md:h-[300px] lg:h-[300px] w-[700px] sm:h-auto"
           alt=""
         />
         <div className="ml-8 absolute inset-0 flex flex-col mt-8 justify-left items-left text-white">
@@ -29,7 +29,7 @@ const BestSeller = () => {
       <div className="relative">
         <img
           src="/assets/offer_slider_2.png"
-          className="rounded h-[280px] sm:h-auto"
+          className="h-[280px] md:h-[300px] lg:h-[300px] w-[700px] sm:h-auto"
           alt=""
         />
         <div className="ml-8 absolute inset-0 flex flex-col mt-8 justify-left items-left text-white">
