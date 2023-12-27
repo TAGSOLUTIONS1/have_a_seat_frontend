@@ -26,3 +26,12 @@
     background-position: center;
     filter: brightness(30%); /* Adjust the values to your preference */
   }
+
+  .bg-banner-image {
+    background-image: url('/assets/banner_bg.jpg');
+  }
+  
+  .brightness-30 {
+    filter: brightness(30%);
+  }
+  

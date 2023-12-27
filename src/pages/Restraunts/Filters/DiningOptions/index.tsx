@@ -12,9 +12,9 @@ const DiningOptions: React.FC = () => {
 
   const handlePriceFilterChange = (selectedRange: string) => {
     if (selectedPriceFilter === selectedRange) {
-      setSelectedPriceFilter(null); // Uncheck if the same checkbox is clicked again
+      setSelectedPriceFilter(null); 
     } else {
-      setSelectedPriceFilter(selectedRange); // Check the selected checkbox
+      setSelectedPriceFilter(selectedRange); 
     }
   };
 

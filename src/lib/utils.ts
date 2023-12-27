@@ -1,9 +1,10 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import axios, { AxiosError} from "axios";
+import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 export function cn(...inputs: ClassValue[]): string {
+  // console.log(twMerge(clsx(inputs)))
   return twMerge(clsx(inputs));
 }
 
@@ -13,10 +14,14 @@ export const fetchUserInfo = async (token: string) => {
       throw new Error('Access token not found');
     }
 
-const decodedToken = jwtDecode(token);
-console.log(decodedToken)
+    type JwtPayload = {
+      user_id: string;
+    };
 
-let userId: string | null = null;
+  const decodedToken = jwtDecode(token) as JwtPayload;
+  console.log(decodedToken)
+
+  let userId: string | null = null;
 
 if (decodedToken && decodedToken?.user_id) {
   userId = decodedToken.user_id;
@@ -36,7 +41,7 @@ if (decodedToken && decodedToken?.user_id) {
       config
     );
 
-    console.log(data?.data )
+    // console.log(data?.data )
 
     return  data.data ;
   } catch (error) {

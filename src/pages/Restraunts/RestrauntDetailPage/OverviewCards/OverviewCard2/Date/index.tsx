@@ -10,22 +10,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-// interface DatePickerProps {
-//   setFormData: React.Dispatch<React.SetStateAction<any>>
-// }
+interface DateProps {
+  setFormData: React.Dispatch<React.SetStateAction<any>> 
+}
 
-const Date = () => {
+const Date: React.FC<DateProps> = ({setFormData}) => {
   const [date, setDate] = React.useState<Date>()
 
-//   React.useEffect(() => {
-//     if (date) {
-//       const formattedDate = format(date, 'yyyy-MM-dd');
-//       setFormData((prev: any) => ({
-//         ...prev,
-//         reservation_date: formattedDate,
-//       }))
-//     }
-//   }, [date, setFormData])
+  React.useEffect(() => {
+    if (date) {
+      const formattedDate = format(date, 'yyyy-MM-dd');
+      setFormData((prev: any) => ({
+        ...prev,
+        reservation_date: formattedDate,
+      }))
+    }
+  }, [date, setFormData])
 
   return (
     <div>
@@ -36,7 +36,7 @@ const Date = () => {
             <Button
               variant={"outline"}
               className={cn(
-                "w-[275px] justify-start text-left font-normal",
+                "w-full  justify-start text-left font-normal",
                 !date && "text-muted-foreground"
               )}
             >

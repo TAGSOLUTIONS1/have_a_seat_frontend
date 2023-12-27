@@ -20,6 +20,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ setFormData }) => {
   React.useEffect(() => {
     if (date) {
       const formattedDate = format(date, 'yyyy-MM-dd');
+      console.log(formattedDate)
       setFormData((prev: any) => ({
         ...prev,
         reservation_date: formattedDate,

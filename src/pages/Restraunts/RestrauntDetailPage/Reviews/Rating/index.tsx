@@ -2,7 +2,12 @@ import { Star } from "lucide-react";
 
 import { Volume2 } from "lucide-react";
 
-const DetailRating = () => {
+interface ReviewsDataProps {
+  reviewsData: any;
+}
+
+const DetailRating: React.FC<ReviewsDataProps> = ({ reviewsData }) => {
+ 
   return (
     <div className=" mt-4">
       <div>
@@ -21,33 +26,59 @@ const DetailRating = () => {
         <Star className="mx-1" fill="#FFD60A" size={20} />
         <Star className="mx-1" fill="#FFD60A" size={20} />
         <Star className="mx-1" fill="#FFD60A" size={20} />
-        <span className="mx-4"> 5 Overall rating</span>
+        <span className="mx-4">
+          {reviewsData?.restaurant_flag === "yelp"
+            ? 5
+            : reviewsData?.restaurant?.statistics?.reviews?.ratings?.food
+                ?.rating}
+        {" "}   Overall rating
+        </span>
       </div>
-      <div className="flex mt-4 p-2">
+      <div className="flex flex-col md:flex-row lg:flex-row mt-4 p-2">
         <div>
-            <p className="text-center">5</p>
-            <p className="text-center mt-3">Food</p>
+          <p className="text-center">
+            {reviewsData?.restaurant_flag === "yelp"
+              ? 5
+              : reviewsData?.restaurant?.statistics?.reviews?.ratings?.food
+                  ?.rating}
+          </p>
+          <p className="text-center mt-3">Food</p>
         </div>
         <div className="border-l border-gray-300 h-16 mx-4"></div>
         <div>
-            <p className="text-center">5</p>
-            <p className="text-center mt-3">Service</p>
+          <p className="text-center">
+            {reviewsData?.restaurant_flag === "yelp"
+              ? 5
+              : reviewsData?.restaurant?.statistics?.reviews?.ratings?.service
+                  ?.rating}
+          </p>
+          <p className="text-center mt-3">Service</p>
         </div>
         <div className="border-l border-gray-300 h-16 mx-4"></div>
         <div>
-            <p className="text-center">5</p>
-            <p className="text-center mt-3">Ambiance</p>
+          <p className="text-center">
+            {reviewsData?.restaurant_flag === "yelp"
+              ? 5
+              : reviewsData?.restaurant?.statistics?.reviews?.ratings?.ambience
+                  ?.rating}
+          </p>
+          <p className="text-center mt-3">Ambience</p>
         </div>
         <div className="border-l border-gray-300 h-16 mx-4"></div>
         <div>
-            <p className="text-center">5</p>
-            <p className="text-center mt-3">Value</p>
+          <p className="text-center">
+            {reviewsData?.restaurant_flag === "yelp"
+              ? 5
+              : reviewsData?.restaurant?.statistics?.reviews?.ratings?.value
+                  ?.rating}
+          </p>
+          <p className="text-center mt-3">Value</p>
         </div>
         <div className="border-l border-gray-300 h-16 mx-4"></div>
       </div>
       <div className=" flex p-2 mt-2">
-        <Volume2 size={18} className="mt-1"/>
-        <span className="mx-2">Moderate</span>   
+        <Volume2 size={18} className="mt-1" />
+        <span className="mx-2">Moderate</span>
       </div>
     </div>
   );

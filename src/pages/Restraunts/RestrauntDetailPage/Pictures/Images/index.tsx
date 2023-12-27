@@ -1,13 +1,25 @@
 import { useState } from 'react';
 import { ArrowLeft , ArrowRight } from 'lucide-react';
 
-const Images = () => {
+interface OverviewCardProps {
+  pictures: any;
+}
+
+const Images: React.FC<OverviewCardProps> = ({ pictures }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const images = [
-    '/assets/restraunt-wallpaper2.jpg',
-    '/assets/main-page.jpg',
-    '/assets/reserved-header.jpg',
-  ];
+
+  let images: string[] = [];
+  
+  if (pictures?.restaurant_flag === 'yelp') {
+    images = pictures?.photos || [];
+  } else {
+    const galleryPhotos = pictures?.restaurant?.photos?.gallery?.photos;
+    if (galleryPhotos && galleryPhotos.length > 0) {
+      images = galleryPhotos[0]?.thumbnails?.map((data: any) => data.url) || [];
+    } else {
+      images = [];
+    }
+  }
 
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -21,8 +33,7 @@ const Images = () => {
     );
   };
 
-  const getAdjacentIndex = (offset:any) => {
-    // Calculate adjacent image indexes
+  const getAdjacentIndex = (offset: number) => {
     let index = currentImageIndex + offset;
     if (index < 0) {
       index = images.length - 1;

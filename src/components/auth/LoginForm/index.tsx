@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 
 const LoginForm = () => {
-  const { login, authState } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
