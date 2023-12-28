@@ -47,12 +47,12 @@ const Reviews: React.FC<MenuProps> = ({ restrauntDetail }) => {
     }
   }, [restrauntDetail]);
 
-  const fetchReviews = async (id: string) => {
+  const fetchReviews = async (alias: string) => {
     try {
       const response = await axios.get(
-        `https://tagsolutionsltd.com/restaurant/reviews/${id}`
+        `http://54.144.139.172/api/v1/yelp/get_restaurant_reviews${alias}`
       );
-      // console.log('Reviews Data:', response.data);
+      console.log('Reviews Data:', response.data);
       setYelpReviews(response.data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -60,8 +60,8 @@ const Reviews: React.FC<MenuProps> = ({ restrauntDetail }) => {
   };
 
   useEffect(() => {
-    if (restrauntDetail?.restaurant_flag === "yelp") {
-      fetchReviews(restrauntDetail?.id);
+    if (restrauntDetail?.alias ) {
+      fetchReviews(restrauntDetail?.alias);
     } else {
       null;
     }
@@ -71,7 +71,7 @@ const Reviews: React.FC<MenuProps> = ({ restrauntDetail }) => {
     <div className=" w-[full] ml-10 mt-8 md:ml-0 lg:ml-0 md:grid lg:grid md:grid-cols-8 lg:grid-cols-8 md:space-x-4 lg:space-x-4">
       <div className="col-span-1"></div>
       <div className="border rounded-lg shadow-lg mt-4 p-4 col-span-4 mr-4">
-        {restrauntDetail?.restaurant_flag === "yelp" ? null : (
+        {restrauntDetail?.alias  ? null : (
           <DetailRating reviewsData={reviewsData} />
         )}
         <hr className="mb-4 mt-4" />

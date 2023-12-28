@@ -9,58 +9,55 @@ import TimingHours from "./TimingHours";
 import Reviews from "./Reviews";
 import Loader from "@/components/Loader";
 
+
 const RestrauntDetail = () => {
   const [restrauntDetail, setRestrauntDetail] = useState<any>({});
   const [prevId, setPrevId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [key, setKey] = useState<any>();
+  const [endpoint, setEndPoint] = useState<any>();
+  // const [key, setKey] = useState<any>();
+
+  // console.log(key)
 
   const location = useLocation();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const map_url = params.get("map_url");
-    const yelp_id = params.get("yelp_id");
+    const yelp_alias = params.get("yelp_alias");
 
-    if (yelp_id === null) {
+    if (yelp_alias === null) {
       setPrevId(map_url);
-      setKey("map_url");
+      // setKey("map_url");
+      setEndPoint(`http://35.172.220.172/api/v1/opentable/get_restaurant_details?map_url=${map_url}`);
     } else {
-      setPrevId(yelp_id);
-      setKey("yelp_id");
+      setPrevId(yelp_alias);
+      // setKey("yelp_alias");
+      setEndPoint(`http://35.172.220.172/api/v1/yelp/get_restaurant_details?yelp_alias=${yelp_alias}`);
     }
   }, [location.search, prevId]);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (prevId && !loading) {
+      if (prevId) {
         try {
-          const response = await axios.get(
-            `https://tagsolutionsltd.com/restaurant/detail/?${key}=${prevId}`
-          );
-          console.log("Single Restaurant Detail:", response.data.data);
-          setRestrauntDetail(response.data.data);
+          const response = await axios.get(endpoint);
+          console.log("Single Restaurant Detail:", response.data);
+          setRestrauntDetail(response.data);
+          setLoading(false); 
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       }
     };
     fetchData();
-  }, [location.search, prevId]);
-
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+  }, [endpoint, prevId]);
 
   return (
     <div>
-      {loading ? (
-        <Loader />
-      ) : Object.keys(restrauntDetail).length !== 0 ? (
+       {loading ? (
+      <Loader />
+    ) :  (
         <>
           <section
             className="max-w-full p-4"
@@ -70,12 +67,12 @@ const RestrauntDetail = () => {
               alignItems: "center",
             }}
           >
-            <div
+            <div 
               style={{
                 backgroundImage:
-                  restrauntDetail?.restaurant_flag === "opentable"
+                  !restrauntDetail?.alias 
                     ? `url(${restrauntDetail?.restaurant?.photos?.profile?.large?.url})`
-                    : restrauntDetail?.restaurant_flag === "yelp"
+                    : restrauntDetail?.alias === restrauntDetail?.alias
                     ? `url(${restrauntDetail?.image_url})`
                     : "",
                 backgroundRepeat: "no-repeat",
@@ -95,7 +92,7 @@ const RestrauntDetail = () => {
             <Pictures restrauntDetail={restrauntDetail} />
           </section>
           {
-            restrauntDetail?.restaurant_flag === 'yelp'
+            restrauntDetail?.alias 
             ? null
             :
           <section>
@@ -109,9 +106,7 @@ const RestrauntDetail = () => {
             <Reviews restrauntDetail={restrauntDetail} />
           </section>
         </>
-      ) : (
-        <Loader />
-      )}
+       )} 
     </div>
   );
 };

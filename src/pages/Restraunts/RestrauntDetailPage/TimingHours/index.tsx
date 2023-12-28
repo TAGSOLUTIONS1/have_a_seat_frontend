@@ -39,14 +39,14 @@ const TimingHours: React.FC<MenuProps> = ({ restrauntDetail }) => {
         <hr className="mb-4 mt-4" />
         <p className="text-purple-600">Dialog Timings</p>
 
-        {timingData?.restaurant_flag === "yelp" ? (
+        {timingData?.alias  ? (
           timingData?.hours ? (
             timingData.hours[0].open.map((data: any, index: number) => {
               const startTime = formatTime(data.start);
               const endTime = formatTime(data.end);
               return (
                 <p key={index} className="mt-2">
-                  Everyday from {startTime} to {endTime}
+                  From {startTime} to {endTime} at Day {data.day}
                 </p>
               );
             })

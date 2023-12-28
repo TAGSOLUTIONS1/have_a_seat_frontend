@@ -10,7 +10,7 @@ const Images: React.FC<OverviewCardProps> = ({ pictures }) => {
 
   let images: string[] = [];
   
-  if (pictures?.restaurant_flag === 'yelp') {
+  if (pictures?.alias) {
     images = pictures?.photos || [];
   } else {
     const galleryPhotos = pictures?.restaurant?.photos?.gallery?.photos;

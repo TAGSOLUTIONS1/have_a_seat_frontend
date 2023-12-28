@@ -9,11 +9,11 @@ const SearchLocation = () => {
   const [formData, setFormData] = useState<any>({
     location: "New York",
     attributes: "reservation",
-    latitude: 40.772385,
-    longitude: -73.956516,
+    // latitude: 40.772385,
+    // longitude: -73.956516,
     reservation_covers: 2,
-    reservation_date: "2023-12-28",
-    reservation_time: "02:00",
+    reservation_date: "2023-12-29",
+    reservation_time: "19:00",
   });
 
   const handleSearch = () => {

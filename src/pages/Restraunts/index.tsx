@@ -10,7 +10,9 @@ import Filters from "./Filters";
 const Search = () => {
   // const { authState } = useAuth();
   const [formData, setFormData] = useState<any>({});
-  const [apiData, setApiData] = useState<any>();
+  const [yelpData , setYelpData] = useState<any>();
+  // const [apiData , setApiData] = useState<any>()
+  const [openTableData , setOpenTableData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
 
   const location = useLocation();
@@ -26,6 +28,7 @@ const Search = () => {
         setFormData(finalData);
         setLoading(false);
         console.log(finalData);
+        console.log(formData , "updated Form Data")
       } else {
         console.error("Data parameter is null or undefined");
         setLoading(false);
@@ -37,38 +40,57 @@ const Search = () => {
   }, [data]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchYelpData = async () => {
       if (!loading) {
         try {
-          // const accessToken = authState.accessToken;
-          // console.log(accessToken);
-
-          // const headers = {
-          //   Authorization: `Bearer ${accessToken}`,
-          // };
-
           const response = await axios.get(
-            "https://tagsolutionsltd.com/restaurant/search/",
+            "http://35.172.220.172/api/v1/yelp/get_restaurants",
             {
               params: formData,
-              // headers: headers,
+              headers: {
+                accept: 'application/json'
+              }
             }
           );
-
-          console.log("API Response:", response.data.data);
-          setApiData(response.data.data);
+          console.log("API Response:", response.data);
+          setYelpData(response.data);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       }
     };
 
-    fetchData();
+    fetchYelpData();
   }, [ formData, loading]);
+
+  useEffect(() => {
+    const fetchOpenTableData = async () => {
+      if (!loading) {
+        try {
+          const response = await axios.get(
+            "http://35.172.220.172/api/v1/opentable/get_restaurants",
+            {
+              params: formData,
+              headers: {
+                accept: 'application/json'
+              }
+            }
+          );
+          console.log("API Response:", response.data);
+          setOpenTableData(response.data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+    fetchOpenTableData();
+  }, [ formData, loading]);
+
+  
 
   if (loading) {
     return <div>Loading...</div>;
-  }
+  }  
 
   return (
     <div className="flex flex-col md:flex-row lg:flex-row max-w-[1300px] mx-auto justify-center p-4">
@@ -81,13 +103,13 @@ const Search = () => {
         </h1>
         <Filters />
       </div>
-      {loading ? (
+        <div className="w-full">
+          <RestrautCards yelpData={yelpData} openTableData={openTableData}/>
+        </div> 
+       {/* {loading ? (
         <div>Loading...</div>
       ) : (
-        <div className="w-full">
-          <RestrautCards apiData={apiData} />
-        </div>
-      )}
+      )} */}
     </div>
   );
 };

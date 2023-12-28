@@ -18,7 +18,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ formData }) => {
 
   useEffect(() => {
     if (Array.isArray(formData) && formData.length > 0) {
-      if (formData[0]?.restaurant_flag === "yelp") {
+      if (formData[0]?.alias === "osaka-fusion-sushi-brooklyn-2") {
+        console.log(formData)
         setId(0);
       } else {
         setId(formData[0]?.diningAreas[0]?.diningAreaId);
@@ -31,16 +32,16 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ formData }) => {
     setReservationFormData((prevData) => ({
       ...prevData,
       [name]: value,
-      diningAreaId: id,
     }));
   };
 
   const handleSubmit = () => {
+    const updatedNextData = [reservationFormData , formData];
     const route = `/reservation-status?data=${encodeURIComponent(
-      JSON.stringify(reservationFormData)
+      JSON.stringify(updatedNextData)
     )}`;
     navigate(route);
-    console.log(reservationFormData);
+    console.log(updatedNextData);
     setReservationFormData({
       first_name: "",
       last_name: "",
@@ -109,24 +110,26 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ formData }) => {
             className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
             onChange={handleChange}
           />
-
-          <button
-            type="submit"
-            className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-800"
-          >
-            Make a Reservation
-          </button>
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white w-1/2 align-center bg-purple-600 hover:bg-purple-800"
+              style={{ minWidth: "200px" }}
+            >
+              Make a Reservation
+            </button>
+          </div>
         </form>
       </div>
-        <div className="w-1/3 ml-10">
-          <img
-            src="https://www.scaler.com/topics/stories/how-to-create-a-registration-form-in-html/assets/3.png"
-            className="mt-24"
-            width={"200px"}
-            height={"300px"}
-            alt=""
-          />
-        </div>
+      <div className="w-2/5 px-24">
+        <img
+          src="https://www.scaler.com/topics/stories/how-to-create-a-registration-form-in-html/assets/3.png"
+          className="mt-32"
+          width={"200px"}
+          height={"300px"}
+          alt=""
+        />
+      </div>
     </div>
   );
 };
