@@ -10,6 +10,7 @@ const Menu: React.FC<MenuProps> = ({ restrauntDetail }) => {
   useEffect(() => {
     if (Object.keys(restrauntDetail).length !== 0) {
       setMenuData(restrauntDetail?.menus?.menuInfo?.url)
+    return
     }
   }, [restrauntDetail]);
 

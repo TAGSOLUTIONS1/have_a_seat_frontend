@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 
 import ReservationForm from "./ReservationForm";
 import PreviousData from "./PreviousData";
+import axios from "axios";
 
 const Reservation = () => {
   const [formData, setFormData] = useState<any>();
@@ -29,13 +30,54 @@ const Reservation = () => {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (formData) {
+      fetchBookingInfo();
+    }
+  }, [formData]);
+
+  const fetchBookingInfo = async () => {
+    const separator = formData[1]?.form_action;
+    const parts = separator?.split("/");
+    const alias = parts[2];
+    const date = parts[4];
+    const time = parts[5];
+    const persons = parseInt(parts[6]);
+
+    const bookingInfoParams = {
+      csrf_token: formData.csrf_token,
+      alias: alias,
+      date: date,
+      time: time,
+      persons: persons,
+    };
+
+    try {
+      const response = await axios.get(
+        "/api/v1/yelp/get_restaurant_booking_info",
+        {
+          params: bookingInfoParams,
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Request successful");
+        console.log("Response data:", response.data);
+      } else {
+        console.error("Request failed with status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching booking info:", error);
+    }
+  };
+
   return (
     <>
-      <div className="flex justify-center">
-        <div className="w-2/4 mt-12">
+      <div className="flex flex-col justify-center items-center ">
+        <div className="w-3/4 mt-12">
           <ReservationForm formData={formData} />
         </div>
-        <div className="w-1/4 mx-2 mt-28 ml-12">
+        <div className="w-3/4  mt-28">
           <PreviousData formData={formData} />
         </div>
       </div>

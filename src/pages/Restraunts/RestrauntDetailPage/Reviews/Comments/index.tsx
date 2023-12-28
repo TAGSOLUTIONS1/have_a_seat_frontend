@@ -1,6 +1,6 @@
 import { Star, ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-
+// import { yelpReviewsMock } from "@/mockData";
 interface ReviewsDataProps {
   reviewsData: any;
   yelpReviews: any;
@@ -43,14 +43,10 @@ const Comments: React.FC<ReviewsDataProps> = ({ reviewsData, yelpReviews }) => {
   return (
     <div className="flex items-center">
       <div className="flex items-center">
-        <ArrowLeft
-          className="cursor-pointer"
-          size={30}
-          onClick={handlePrev}
-        />
+        <ArrowLeft className="cursor-pointer" size={30} onClick={handlePrev} />
       </div>
       <div className="flex flex-col md:flex-row lg:flex-row">
-        {reviewsData?.restaurant_flag !== "yelp" &&
+        {reviewsData?.restaurant  &&
           displayedReviews.map((data: any, index: any) => (
             <div className="w-[180px] md:w-1/3 lg:w-1/3" key={index}>
               <h1 className="text-center mb-2">User</h1>
@@ -70,10 +66,10 @@ const Comments: React.FC<ReviewsDataProps> = ({ reviewsData, yelpReviews }) => {
             </div>
           ))}
         {!reviewsData?.restaurant_flag ||
-          (reviewsData?.restaurant_flag === "yelp" &&
-            yelpReviews?.data?.reviews.map((data: any, index: any) => (
+          (reviewsData?.alias  &&
+            yelpReviews?.reviews?.map((data: any, index: any) => (
               <div className="w-[180px] md:w-1/3 lg:w-1/3" key={index}>
-                <h1 className="text-center mb-2">User</h1>
+                <h1 className="text-center mb-2">{data.user.name}</h1>
                 <div className="flex justify-center">
                   {[...Array(5)].map((_, starIndex) => (
                     <Star
@@ -91,11 +87,7 @@ const Comments: React.FC<ReviewsDataProps> = ({ reviewsData, yelpReviews }) => {
             )))}
       </div>
       <div className="flex items-center">
-        <ArrowRight
-          className="cursor-pointer"
-          size={30}
-          onClick={handleNext}
-        />
+        <ArrowRight className="cursor-pointer" size={30} onClick={handleNext} />
       </div>
     </div>
   );

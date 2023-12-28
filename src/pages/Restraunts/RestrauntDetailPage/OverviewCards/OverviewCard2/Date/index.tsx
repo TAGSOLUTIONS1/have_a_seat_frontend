@@ -14,7 +14,7 @@ interface DateProps {
   setFormData: React.Dispatch<React.SetStateAction<any>> 
 }
 
-const Date: React.FC<DateProps> = ({setFormData}) => {
+const DatePicker: React.FC<DateProps> = ({setFormData}) => {
   const [date, setDate] = React.useState<Date>()
 
   React.useEffect(() => {
@@ -53,4 +53,4 @@ const Date: React.FC<DateProps> = ({setFormData}) => {
   )
 }
 
-export default Date
+export default DatePicker

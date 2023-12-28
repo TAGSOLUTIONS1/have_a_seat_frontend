@@ -109,7 +109,7 @@ export const useAuthProvider = (): AuthContextProps => {
   };
 
   useEffect(() => {
-    const interval = setInterval(refreshToken, 60000);
+    const interval = setInterval(refreshToken, 60000000);
     return () => clearInterval(interval); 
   }, [authState.refreshToken]);
 
