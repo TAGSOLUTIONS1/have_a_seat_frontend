@@ -4,9 +4,11 @@ import { useLocation } from "react-router-dom";
 import ReservationForm from "./ReservationForm";
 import PreviousData from "./PreviousData";
 import axios from "axios";
+import { Base_Url } from "@/baseUrl";
 
 const Reservation = () => {
   const [formData, setFormData] = useState<any>();
+  const [bookingInfo , setBookingInfo] = useState<any>()
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -45,16 +47,18 @@ const Reservation = () => {
     const persons = parseInt(parts[6]);
 
     const bookingInfoParams = {
-      csrf_token: formData.csrf_token,
-      alias: alias,
+      csrf_token: formData[1].csrf_token,
+      restaurant_alias: alias,
       date: date,
       time: time,
       persons: persons,
     };
 
+    console.log(bookingInfoParams)
+
     try {
       const response = await axios.get(
-        "/api/v1/yelp/get_restaurant_booking_info",
+        `${Base_Url}/api/v1/yelp/get_restaurant_booking_info`,
         {
           params: bookingInfoParams,
         }
@@ -63,6 +67,7 @@ const Reservation = () => {
       if (response.status === 200) {
         console.log("Request successful");
         console.log("Response data:", response.data);
+        setBookingInfo(response.data)
       } else {
         console.error("Request failed with status:", response.status);
       }
@@ -75,7 +80,7 @@ const Reservation = () => {
     <>
       <div className="flex flex-col justify-center items-center ">
         <div className="w-3/4 mt-12">
-          <ReservationForm formData={formData} />
+          <ReservationForm formData={formData} bookingInfo={bookingInfo} />
         </div>
         <div className="w-3/4  mt-28">
           <PreviousData formData={formData} />

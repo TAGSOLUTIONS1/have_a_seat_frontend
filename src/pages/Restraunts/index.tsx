@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 // import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { useLocation } from "react-router-dom";
+import { Base_Url } from "@/baseUrl";
 import { Sliders } from "lucide-react";
 
 import RestrautCards from "./RestrauntCards";
@@ -44,7 +45,7 @@ const Search = () => {
       if (!loading) {
         try {
           const response = await axios.get(
-            "http://35.172.220.172/api/v1/yelp/get_restaurants",
+            `${Base_Url}/api/v1/yelp/get_restaurants`,
             {
               params: formData,
               headers: {
@@ -68,7 +69,7 @@ const Search = () => {
       if (!loading) {
         try {
           const response = await axios.get(
-            "http://35.172.220.172/api/v1/opentable/get_restaurants",
+            `${Base_Url}/api/v1/opentable/get_restaurants`,
             {
               params: formData,
               headers: {

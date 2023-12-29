@@ -32,6 +32,7 @@ import axios from "axios";
 import Comments from "./Comments";
 import DetailRating from "./Rating";
 import { useEffect, useState } from "react";
+import { Base_Url } from "@/baseUrl";
 
 interface MenuProps {
   restrauntDetail: any;
@@ -50,7 +51,7 @@ const Reviews: React.FC<MenuProps> = ({ restrauntDetail }) => {
   const fetchReviews = async (alias: string) => {
     try {
       const response = await axios.get(
-        `http://54.144.139.172/api/v1/yelp/get_restaurant_reviews${alias}`
+        `${Base_Url}/api/v1/yelp/get_restaurant_reviews/${alias}`
       );
       console.log('Reviews Data:', response.data);
       setYelpReviews(response.data);

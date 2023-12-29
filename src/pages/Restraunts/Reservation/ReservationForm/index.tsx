@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 interface ReservationFormProps {
   formData: any;
+  bookingInfo:any;
 }
 
-const ReservationForm: React.FC<ReservationFormProps> = ({ formData }) => {
+const ReservationForm: React.FC<ReservationFormProps> = ({ formData , bookingInfo }) => {
   const [id, setId] = useState<any>();
   const navigate = useNavigate();
 
@@ -18,7 +19,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ formData }) => {
 
   useEffect(() => {
     if (Array.isArray(formData) && formData.length > 0) {
-      if (formData[0]?.alias === "osaka-fusion-sushi-brooklyn-2") {
+      if (formData[0]?.alias) {
         console.log(formData)
         setId(0);
       } else {
@@ -34,9 +35,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ formData }) => {
       [name]: value,
     }));
   };
-
+  
   const handleSubmit = () => {
-    const updatedNextData = [reservationFormData , formData];
+    const updatedNextData = {
+      reservationFormData :reservationFormData , 
+      bookingInfo: bookingInfo, 
+      formData:formData};
     const route = `/reservation-status?data=${encodeURIComponent(
       JSON.stringify(updatedNextData)
     )}`;

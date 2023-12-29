@@ -8,6 +8,7 @@ import Menu from "./Menu";
 import TimingHours from "./TimingHours";
 import Reviews from "./Reviews";
 import Loader from "@/components/Loader";
+import { Base_Url } from "@/baseUrl";
 
 
 const RestrauntDetail = () => {
@@ -29,11 +30,11 @@ const RestrauntDetail = () => {
     if (yelp_alias === null) {
       setPrevId(map_url);
       // setKey("map_url");
-      setEndPoint(`http://35.172.220.172/api/v1/opentable/get_restaurant_details?map_url=${map_url}`);
+      setEndPoint(`${Base_Url}/api/v1/opentable/get_restaurant_details?map_url=${map_url}`);
     } else {
       setPrevId(yelp_alias);
       // setKey("yelp_alias");
-      setEndPoint(`http://35.172.220.172/api/v1/yelp/get_restaurant_details?yelp_alias=${yelp_alias}`);
+      setEndPoint(`${Base_Url}/api/v1/yelp/get_restaurant_details/${yelp_alias}`);
     }
   }, [location.search, prevId]);
 

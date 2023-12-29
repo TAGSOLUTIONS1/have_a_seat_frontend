@@ -38,7 +38,6 @@ const TimingHours: React.FC<MenuProps> = ({ restrauntDetail }) => {
         </h1>
         <hr className="mb-4 mt-4" />
         <p className="text-purple-600">Dialog Timings</p>
-
         {timingData?.alias  ? (
           timingData?.hours ? (
             timingData.hours[0].open.map((data: any, index: number) => {
