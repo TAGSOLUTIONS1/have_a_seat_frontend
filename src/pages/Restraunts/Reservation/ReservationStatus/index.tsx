@@ -3,11 +3,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ReservationSuccessFul from "./ReservationSuccess";
 import ReservationFailed from "./ReservationFailed";
+// import { Base_Url } from "@/baseUrl";
 import { bookingInfo } from "@/mockData";
+import { Base_Url } from "@/baseUrl";
 
 const ReservationStatus = () => {
-  
   const [formData, setFormData] = useState<any>();
+  // const [formData2, setFormData2] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<boolean | null>(null);
 
@@ -21,43 +23,48 @@ const ReservationStatus = () => {
         let finalData: any = null;
         if (data !== null) {
           finalData = JSON.parse(decodeURIComponent(data));
-          console.log(finalData);
           setFormData(finalData);
-          setLoading(true);
-  
-          if (finalData) {
-            const endpoint = "https://tagsolutionsltd.com/api/v1/yelp/do_reservation";
-            const config = {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            };
+          console.log(finalData?.bookingInfo?.formSubmitPath);
+          const separator = finalData?.bookingInfo?.formSubmitPath;
+          const parts = separator?.split("/");
+          const date = parts[4];
+          const time = parts[5];
 
-            const apiParams = {
-              // diningAreaId: formData[1].[0]?.diningAreaId,
-              first_name: finalData.first_name,
-              last_name: finalData.last_name,
-              phone: finalData.phone,
-              email: finalData.email,
-            };
-  
-            const response = await axios.post(endpoint, apiParams, config);
-  
-            console.log("API Response:", response.data);
-            setStatus(true);
-            setLoading(false);
-          }
+          setLoading(true);
+          const apiParams = {
+            first_name: finalData?.reservationFormData?.first_name,
+            last_name: finalData?.reservationFormData?.last_name,
+            mobile_number: 3613043530,
+            email: finalData?.reservationFormData?.email,
+            csrf_token: finalData?.bookingInfo?.csrfToken,
+            user_token: finalData?.bookingInfo?.userToken,
+            hold_id: finalData?.bookingInfo?.holdId,
+            persons: finalData?.bookingInfo?.covers,
+            restaurant_alias: finalData?.formData[0]?.alias,
+            date: date,
+            time: time,
+          };
+          const response = await axios.post(
+            `${Base_Url}/api/v1/yelp/do_reservation`,
+            null,
+            {
+              params: apiParams,
+            }
+          );
+          console.log("API Response:", response.data);
+          setStatus(true);
+          setLoading(false);
         } else {
           console.error("Data parameter is null or undefined");
           setLoading(false);
         }
       } catch (error) {
-        console.error("Error parsing JSON or decoding URI:", error);
+        console.error("Error :", error);
         setStatus(false);
         setLoading(false);
       }
     };
-  
+
     if (data !== null) {
       fetchData();
     }
