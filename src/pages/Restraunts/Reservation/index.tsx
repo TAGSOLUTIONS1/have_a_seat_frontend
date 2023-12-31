@@ -12,15 +12,32 @@ const Reservation = () => {
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const data = params.get("data");
+  const data:any = params.get("data");
+
+  console.log(data)
+
+
+  // useEffect(() => {
+  //   let finalData: any = null;
+  //   try {
+  //     if (data !== null) {
+  //       const decodedData = decodeURIComponent(data);
+  //       finalData = JSON.parse(decodedData);
+  //       setFormData(finalData);
+  //       console.log("Parsed data:", finalData);
+  //     } else {
+  //       console.error("Data parameter is null or undefined");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error parsing JSON or decoding URI:", error);
+  //   }
+  // }, [data]);
 
   useEffect(() => {
-    let finalData: any = null;
+    let finalData = null;
     try {
-      // console.log("Data received:", data);
       if (data !== null) {
         const decodedData = decodeURIComponent(data);
-        // console.log("Decoded data:", decodedData);
         finalData = JSON.parse(decodedData);
         setFormData(finalData);
         console.log("Parsed data:", finalData);
@@ -29,11 +46,12 @@ const Reservation = () => {
       }
     } catch (error) {
       console.error("Error parsing JSON or decoding URI:", error);
+      console.log("Malformed data:", data); // Log the malformed data
     }
   }, [data]);
 
   useEffect(() => {
-    if (formData) {
+    if (formData && formData[0]?.alias) {
       fetchBookingInfo();
     }
   }, [formData]);
@@ -66,8 +84,8 @@ const Reservation = () => {
 
       if (response.status === 200) {
         console.log("Request successful");
-        console.log("Response data:", response.data);
-        setBookingInfo(response.data)
+        console.log("Response data:", response?.data?.data);
+        setBookingInfo(response?.data?.data)
       } else {
         console.error("Request failed with status:", response.status);
       }
@@ -83,7 +101,7 @@ const Reservation = () => {
           <ReservationForm formData={formData} bookingInfo={bookingInfo} />
         </div>
         <div className="w-3/4  mt-28">
-          <PreviousData formData={formData} />
+          <PreviousData formData={formData} bookingInfo={bookingInfo} />
         </div>
       </div>
     </>

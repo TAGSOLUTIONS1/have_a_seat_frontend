@@ -1,5 +1,3 @@
-
-
 import { ChefHatIcon, Trophy, User, Users } from "lucide-react";
 
 const HomeStats = () => {

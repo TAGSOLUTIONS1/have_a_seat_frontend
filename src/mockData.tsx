@@ -6008,3 +6008,98 @@ export const openTableRestrauntDetail = {
     __typename: "ReviewSearchResults",
   },
 };
+
+// const openTableReservation = async () => {
+//   try {
+//     let finalData: any = null;
+//     if (data !== null) {
+//       finalData = JSON.parse(decodeURIComponent(data));
+//       setFormData(finalData);
+//       console.log(formData?.formData[1].reservation_time);
+//       const formatedtime = formData?.formData[1].reservation_time
+//       const time = formatedtime.replace(":", ""); 
+//       setLoading(true);
+//       const apiParams = {
+//         first_name: formData?.reservationFormData?.first_name,
+//         last_name: formData?.reservationFormData?.last_name,
+//         mobile_number: 3613043530,
+//         mobile_country_id: "US",
+//         email: formData?.reservationFormData?.email,
+//         persons: formData?.formData[1]?.reservation_covers,
+//         restaurant_id: formData?.id,
+//         seating_option: "default",
+//         dining_area_id: 1,
+//         slot_hash: formData?.formData[2]?.slotHash,
+//         slot_availability_token: formData?.formData[2]?.slotAvailabilityToken,
+//         country_id: "US",
+//         date: formData?.formData[1]?.reservation_date,
+//         time: time,
+//       };
+//       const response = await axios.post(
+//         `${Base_Url}/api/v1/opentable/do_reservation`,
+//         null,
+//         {
+//           params: apiParams,
+//         }
+//       );
+//       console.log("API Response:", response.data);
+//       setStatus(true);
+//       setLoading(false);
+//     } else {
+//       console.error("Data parameter is null or undefined");
+//       setLoading(false);
+//     }
+//   } catch (error) {
+//     console.error("Error :", error);
+//     setStatus(false);
+//     setLoading(false);
+//   }
+// };
+
+// const openTableReservation = async () => {
+//   try {
+//     if (data !== null) {
+//       const finalData = JSON.parse(decodeURIComponent(data));
+//       setFormData(finalData);
+//       const reservationTime = formData?.formData[1]?.reservation_time;
+//       const timeDifference = formData?.formData[2]?.timeDifference;
+//       const [hours, minutes] = reservationTime.split(":");
+//       const formattedTimeMinutes = parseInt(hours, 10) * 60 + parseInt(minutes, 10);
+//       const calculatedTime = formattedTimeMinutes + parseInt(timeDifference, 10);
+//       setLoading(true);
+//       const apiParams = {
+//         first_name: formData?.reservationFormData?.first_name,
+//         last_name: formData?.reservationFormData?.last_name,
+//         mobile_number: 3613043530,
+//         mobile_country_id: "US",
+//         email: formData?.reservationFormData?.email,
+//         persons: formData?.formData[1]?.reservation_covers,
+//         restaurant_id: formData?.id,
+//         seating_option: "default",
+//         dining_area_id: 1,
+//         slot_hash: formData?.formData[2]?.slotHash,
+//         slot_availability_token: formData?.formData[2]?.slotAvailabilityToken,
+//         country_id: "US",
+//         date: formData?.formData[1]?.reservation_date,
+//         time: calculatedTime, // Use the calculated time here
+//       };
+//       const response = await axios.post(
+//         `${Base_Url}/api/v1/opentable/do_reservation`,
+//         null,
+//         {
+//           params: apiParams,
+//         }
+//       );
+//       console.log("API Response:", response.data);
+//       setStatus(true);
+//       setLoading(false);
+//     } else {
+//       console.error("Data parameter is null or undefined");
+//       setLoading(false);
+//     }
+//   } catch (error) {
+//     console.error("Error :", error);
+//     setStatus(false);
+//     setLoading(false);
+//   }
+// };

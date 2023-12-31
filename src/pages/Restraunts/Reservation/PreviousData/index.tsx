@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
 
-import { bookingInfo } from "@/mockData";
-import axios from "axios";
+// import { bookingInfo } from "@/mockData";
+// import axios from "axios";
 
 interface PreviousProps {
   formData: any;
+  bookingInfo:any;
 }
 
-const PreviousData: React.FC<PreviousProps> = ({ formData }) => {
+const PreviousData: React.FC<PreviousProps> = ({ formData , bookingInfo }) => {
   const [prePopulatedData, setPrePopulatedData] = useState<any>();
   useEffect(() => {
     if (Array.isArray(formData) && formData.length > 0) {
-      console.log(formData[1]);
-      setPrePopulatedData(formData[1]);
+      console.log(formData[0]);
+      setPrePopulatedData(formData[0]);
       return;
     }
   }, [formData]);
-
-
 
   return (
     <>
@@ -38,7 +37,11 @@ const PreviousData: React.FC<PreviousProps> = ({ formData }) => {
                 disabled
                 // type="date"
                 id="date"
-                value={bookingInfo.formattedDate || ""}
+                value={
+                  prePopulatedData?.reservation_date 
+                ? prePopulatedData?.reservation_date
+                : bookingInfo?.formattedDate
+                }
                 name="date"
                 className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
               />
@@ -52,10 +55,13 @@ const PreviousData: React.FC<PreviousProps> = ({ formData }) => {
               </label>
               <input
                 disabled
-                type="number"
                 id="persons"
                 name="persons"
-                value={bookingInfo.covers || ""}
+                value={
+                  prePopulatedData?.reservation_covers 
+                ? prePopulatedData?.reservation_covers 
+                : bookingInfo?.formattedCovers
+                }
                 className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
               />
             </div>
@@ -74,7 +80,11 @@ const PreviousData: React.FC<PreviousProps> = ({ formData }) => {
               >
                 <option value="" disabled></option>
                 <option value="12PM-1PM">
-                  {bookingInfo.formattedTime || ""}
+                {
+                  prePopulatedData?.reservation_time 
+                ? prePopulatedData?.reservation_time
+                : bookingInfo?.formattedTime
+                }
                 </option>
               </select>
             </div>
