@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import GeoApiAuto from "../HomeAutoComplete";
 
 const SearchLocation = () => {
@@ -22,18 +22,18 @@ const SearchLocation = () => {
     )}`;
     navigate(route);
     console.log(formData);
-    setFormData("")
+    setFormData("");
   };
-  const getLocationData = (value: any, id: string) => {
-    console.log("Location Data:", value);
-    console.log("ID:", id);
+
+  const getLocationData = (value: string) => {
+    setFormData({ ...formData, location: value });
   };
 
   return (
     <>
       <div className="mt-2 relative w-full bg-white rounded-full p-2">
         <div className=" w-full p-5 text-base md:text-lg text-black rounded-full border-2 border-gray-200 focus:border-gray-200 focus:outline-none">
-          <GeoApiAuto getLocationData={getLocationData} id="your-id" />
+          <GeoApiAuto getLocationData={getLocationData} />
         </div>
         <Button
           className="absolute sm:text-sm md:text-xl sm:py-4 sm:px-6 md:py-7 md:px-12 right-0 top-7 md:top-5 lg:top-5  mr-4 rounded-full"
