@@ -12,6 +12,7 @@ const Search = () => {
   // const { authState } = useAuth();
   const [formData, setFormData] = useState<any>({});
   const [yelpData , setYelpData] = useState<any>();
+  const [resyData , setResyData] = useState<any>();
   // const [apiData , setApiData] = useState<any>()
   const [openTableData , setOpenTableData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -53,8 +54,8 @@ const Search = () => {
               }
             }
           );
-          console.log("API Response:", response.data);
-          setYelpData(response.data);
+          console.log("YELP API Response:", response.data.data.businesses);
+          setYelpData(response.data.data.businesses);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -63,6 +64,34 @@ const Search = () => {
 
     fetchYelpData();
   }, [ formData, loading]);
+
+  useEffect(() => {
+    const fetchResyData = async () => {
+      if (!loading) {
+        try {
+          const response = await axios.get(
+            `${Base_Url}/api/v1/resy/get_restaurants`,
+            {
+              params: {
+                location: 'New York',
+                date: '2024-01-05',
+                persons: 2
+              },
+              headers: {
+                accept: 'application/json'
+              }
+            }
+          );
+          console.log("RESY API Response:", response.data.data.search.hits);
+          setResyData(response.data.data.search.hits);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+
+    fetchResyData();
+  }, [loading]);
 
   useEffect(() => {
     const fetchOpenTableData = async () => {
@@ -77,8 +106,8 @@ const Search = () => {
               }
             }
           );
-          console.log("API Response:", response.data);
-          setOpenTableData(response.data);
+          console.log("OPEN TABLE API Response:", response.data.data);
+          setOpenTableData(response.data.data);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -105,7 +134,7 @@ const Search = () => {
         <Filters />
       </div>
         <div className="w-full">
-          <RestrautCards yelpData={yelpData} openTableData={openTableData}/>
+          <RestrautCards yelpData={yelpData} resyData={resyData} openTableData={openTableData}/>
         </div> 
        {/* {loading ? (
         <div>Loading...</div>

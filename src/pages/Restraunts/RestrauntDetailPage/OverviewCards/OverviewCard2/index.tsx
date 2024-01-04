@@ -98,7 +98,7 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
 
   const fetchOpenTableTimeSlots = async () => {
     const openTableTimeParams = {
-      restaurant_id: reservationCard?.restaurant?.resturantId,
+      restaurant_id: reservationCard?.restaurant?.restaurantId,
       date: formData?.reservation_date,
       time: formData?.reservation_time,
       persons: formData?.reservation_covers,
@@ -143,7 +143,7 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
       <hr className="mt-4 mb-4" />
       <DatePicker setFormData={setFormData} />
       <hr className="mt-4 mb-4" />
-      <Time setFormData={setFormData} reservationCard={reservationCard} />
+      <Time setFormData={setFormData} />
       <hr className="mt-4 mb-4" />
       <PersonCard setFormData={setFormData} />
       <button

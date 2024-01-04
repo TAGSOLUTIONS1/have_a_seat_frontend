@@ -7,6 +7,7 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ restrauntDetail }) => {
 
   const [menuData , setMenuData]= useState<any>()
+  console.log(restrauntDetail)
   useEffect(() => {
     if (Object.keys(restrauntDetail).length !== 0) {
       setMenuData(restrauntDetail?.menus?.menuInfo?.url)

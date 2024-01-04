@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 
 import ReservationForm from "./ReservationForm";
 import PreviousData from "./PreviousData";
+import YelpBookingInfo from "./YelpBookingInfo";
 import axios from "axios";
 import { Base_Url } from "@/baseUrl";
 
@@ -14,7 +15,7 @@ const Reservation = () => {
   const params = new URLSearchParams(location.search);
   const data:any = params.get("data");
 
-  console.log(data)
+  // console.log(data)
 
 
   // useEffect(() => {
@@ -102,6 +103,9 @@ const Reservation = () => {
         </div>
         <div className="w-3/4  mt-28">
           <PreviousData formData={formData} bookingInfo={bookingInfo} />
+        </div>
+        <div className="w-3/4  mt-28">
+          <YelpBookingInfo bookingInfo={bookingInfo} />
         </div>
       </div>
     </>

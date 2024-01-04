@@ -12,7 +12,7 @@ const SearchLocation = () => {
     // latitude: 40.772385,
     // longitude: -73.956516,
     reservation_covers: 2,
-    reservation_date: "2023-12-29",
+    reservation_date: "2024-01-05",
     reservation_time: "19:00",
   });
 

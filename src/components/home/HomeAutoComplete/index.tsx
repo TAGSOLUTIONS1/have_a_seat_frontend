@@ -5,7 +5,7 @@ import {
 } from "@geoapify/react-geocoder-autocomplete";
 import "@geoapify/geocoder-autocomplete/styles/minimal.css";
 import "@geoapify/geocoder-autocomplete/styles/round-borders.css";
-import "./autocomplete.css"; // Import custom CSS styles
+import "./autocomplete.css";  
 
 interface GeoApiAutoProps {
   getLocationData: (value: any, id: string) => void;

@@ -16,7 +16,7 @@ const RestrauntDetail = () => {
   const [prevId, setPrevId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [endpoint, setEndPoint] = useState<any>();
-  // const [key, setKey] = useState<any>();
+  const [key, setKey] = useState<any>();
 
   // console.log(key)
 
@@ -26,15 +26,19 @@ const RestrauntDetail = () => {
     const params = new URLSearchParams(location.search);
     const map_url = params.get("map_url");
     const yelp_alias = params.get("yelp_alias");
+    const venue_id = params.get("venue_id");
 
-    if (yelp_alias === null) {
+    if ((yelp_alias === null) && (venue_id === null)) {
       setPrevId(map_url);
-      // setKey("map_url");
+      setKey("open_table");
       setEndPoint(`${Base_Url}/api/v1/opentable/get_restaurant_details?map_url=${map_url}`);
-    } else {
+    } else if ((map_url === null) && (venue_id === null)) {
       setPrevId(yelp_alias);
-      // setKey("yelp_alias");
+      setKey("yelp");
       setEndPoint(`${Base_Url}/api/v1/yelp/get_restaurant_details/${yelp_alias}`);
+    } else if ((map_url === null) && (yelp_alias === null)){
+       setKey("resy");
+       setEndPoint(`${Base_Url}/api/v1/resy/get_restaurant_details/${venue_id}`);
     }
   }, [location.search, prevId]);
 
@@ -43,8 +47,14 @@ const RestrauntDetail = () => {
       if (prevId) {
         try {
           const response = await axios.get(endpoint);
-          console.log("Single Restaurant Detail:", response.data);
-          setRestrauntDetail(response.data);
+          // console.log("Single Restaurant Detail:", response.data.data.restaurantProfile);
+          if (key === "open_table"){
+            setRestrauntDetail(response.data.data.restaurantProfile)
+          } else if (key === "yelp"){
+            setRestrauntDetail(response.data.data);
+          } else if (key === "resy"){
+            setRestrauntDetail(response.data);
+          }
           setLoading(false); 
         } catch (error) {
           console.error("Error fetching data:", error);

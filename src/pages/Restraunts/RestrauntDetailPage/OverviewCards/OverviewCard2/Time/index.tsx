@@ -16,10 +16,9 @@ import {
   
   interface TimePickerProps{
     setFormData: React.Dispatch<React.SetStateAction<any>>;
-    reservationCard:any;
   }
   
-  const Time :React.FC<TimePickerProps> = ({setFormData , reservationCard}) =>  {
+  const Time :React.FC<TimePickerProps> = ({setFormData}) =>  {
   
     const handleTimeSelection = (selectedTime: any) => {
       const formattedTime = selectedTime.replace(/\b(?:AM|PM)\b/g, '').trim();
@@ -31,88 +30,8 @@ import {
       }); 
     };
 
-    console.log(reservationCard?.name)
+    // console.log(reservationCard?.name)
 
-      //   const extractTimeSlots = (hoursOfOperation:any) => {
-  //     const dayTimeSlots = hoursOfOperation?.split('\n<br />');
-    
-  //     if (!dayTimeSlots) {
-  //       console.error('Invalid hoursOfOperation:', hoursOfOperation);
-  //       return [];
-  //     }
-    
-  //     let timeSlots:any = [];
-    
-  //     dayTimeSlots.forEach(dayTime => {
-  //       if (!dayTime) {
-  //         console.error('Invalid dayTime:', dayTime);
-  //         return;
-  //       }
-    
-  //       const [days, timeRange] = dayTime.split(': ');
-  //       if (!timeRange) {
-  //         console.error('Invalid time range:', dayTime);
-  //         return;
-  //       }
-    
-  //       const [timeStart, timeEnd] = timeRange.split('–');
-  //       if (!timeStart || !timeEnd) {
-  //         console.error('Invalid time range:', timeStart, timeEnd);
-  //         return;
-  //       }
-    
-  //       const getTimeFromDate = (timeString:any) => {
-  //         const [hours, minutes] = timeString?.split(':');
-  //         const date = new Date();
-  //         date.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-  //         return date;
-  //       };
-    
-  //       const startTime = getTimeFromDate(timeStart.trim());
-  //       const endTime = getTimeFromDate(timeEnd.trim());
-    
-  //       const timeDiff = endTime.getTime() - startTime.getTime();
-    
-  //       for (let i = 0; i <= timeDiff / (1000 * 60 * 30); i++) {
-  //         const time = new Date(startTime.getTime() + i * 30 * 60 * 1000);
-  //         const formattedTime = time.toLocaleTimeString('en-US', {
-  //           hour: 'numeric',
-  //           minute: '2-digit',
-  //           hour12: true
-  //         });
-  //         timeSlots.push(formattedTime);
-  //       }
-  //     });
-    
-  //     return timeSlots;
-  //   };
-    
-  //   const hoursOfOperation = "Wed, Thu 6:00 pm–12:00 am\nFri, Sat 6:00 pm–2:00 am\nSat, Sun 12:00 pm–4:00 pm";
-
-  // const generatedTimeSlots = extractTimeSlots(hoursOfOperation);
-  // console.log('Generated time slots:', generatedTimeSlots);
-
-    // useEffect(() => {
-    //   if (reservationCard?.name) {
-    //     const fetchTimeSlots = async () => {
-    //       try {
-    //         const response = await fetch(`https://tagsolutionsltd.com/restaurant/${reservationCard.name}/timeslots/2023-12-26/`);
-    //         if (response.ok) {
-    //           const data = await response.json();
-    //           console.log(data);
-    //         } else {
-    //           throw new Error('Network response was not ok.');
-    //         }
-    //       } catch (error) {
-    //         console.error('Error fetching data:', error);
-    //       }
-    //     };
-  
-    //     fetchTimeSlots();
-    //   }
-    // }, [reservationCard?.name]);
-    
-  
     return (
       <Select onValueChange={handleTimeSelection}>
         {/* <h1 className="my-2">Time</h1> */}

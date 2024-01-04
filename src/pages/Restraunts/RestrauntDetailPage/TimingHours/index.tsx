@@ -13,6 +13,8 @@ const TimingHours: React.FC<MenuProps> = ({ restrauntDetail }) => {
     }
   }, [restrauntDetail]);
 
+  
+
   const formatTime = (time: string) => {
     const hours = time.slice(0, 2);
     const minutes = time.slice(2);
