@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 
 interface PreviousProps {
   formData: any;
-  bookingInfo:any;
+  bookingInfo: any;
 }
 
-const PreviousData: React.FC<PreviousProps> = ({ formData , bookingInfo }) => {
+const PreviousData: React.FC<PreviousProps> = ({ formData, bookingInfo }) => {
   const [prePopulatedData, setPrePopulatedData] = useState<any>();
   useEffect(() => {
     if (Array.isArray(formData) && formData.length > 0) {
@@ -38,9 +38,9 @@ const PreviousData: React.FC<PreviousProps> = ({ formData , bookingInfo }) => {
                 // type="date"
                 id="date"
                 value={
-                  prePopulatedData?.reservation_date 
-                ? prePopulatedData?.reservation_date
-                : bookingInfo?.formattedDate
+                  prePopulatedData?.reservation_date
+                    ? prePopulatedData?.reservation_date
+                    : bookingInfo?.formattedDate
                 }
                 name="date"
                 className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
@@ -58,9 +58,9 @@ const PreviousData: React.FC<PreviousProps> = ({ formData , bookingInfo }) => {
                 id="persons"
                 name="persons"
                 value={
-                  prePopulatedData?.reservation_covers 
-                ? prePopulatedData?.reservation_covers 
-                : bookingInfo?.formattedCovers
+                  prePopulatedData?.reservation_covers
+                    ? prePopulatedData?.reservation_covers
+                    : bookingInfo?.formattedCovers
                 }
                 className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
               />
@@ -80,11 +80,9 @@ const PreviousData: React.FC<PreviousProps> = ({ formData , bookingInfo }) => {
               >
                 <option value="" disabled></option>
                 <option value="12PM-1PM">
-                {
-                  prePopulatedData?.reservation_time 
-                ? prePopulatedData?.reservation_time
-                : bookingInfo?.formattedTime
-                }
+                  {prePopulatedData?.reservation_time
+                    ? prePopulatedData?.reservation_time
+                    : bookingInfo?.formattedTime}
                 </option>
               </select>
             </div>

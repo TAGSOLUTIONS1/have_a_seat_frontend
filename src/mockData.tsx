@@ -6009,97 +6009,8419 @@ export const openTableRestrauntDetail = {
   },
 };
 
-// const openTableReservation = async () => {
-//   try {
-//     let finalData: any = null;
-//     if (data !== null) {
-//       finalData = JSON.parse(decodeURIComponent(data));
-//       setFormData(finalData);
-//       console.log(formData?.formData[1].reservation_time);
-//       const formatedtime = formData?.formData[1].reservation_time
-//       const time = formatedtime.replace(":", ""); 
-//       setLoading(true);
-//       const apiParams = {
-//         first_name: formData?.reservationFormData?.first_name,
-//         last_name: formData?.reservationFormData?.last_name,
-//         mobile_number: 3613043530,
-//         mobile_country_id: "US",
-//         email: formData?.reservationFormData?.email,
-//         persons: formData?.formData[1]?.reservation_covers,
-//         restaurant_id: formData?.id,
-//         seating_option: "default",
-//         dining_area_id: 1,
-//         slot_hash: formData?.formData[2]?.slotHash,
-//         slot_availability_token: formData?.formData[2]?.slotAvailabilityToken,
-//         country_id: "US",
-//         date: formData?.formData[1]?.reservation_date,
-//         time: time,
-//       };
-//       const response = await axios.post(
-//         `${Base_Url}/api/v1/opentable/do_reservation`,
-//         null,
-//         {
-//           params: apiParams,
-//         }
-//       );
-//       console.log("API Response:", response.data);
-//       setStatus(true);
-//       setLoading(false);
-//     } else {
-//       console.error("Data parameter is null or undefined");
-//       setLoading(false);
-//     }
-//   } catch (error) {
-//     console.error("Error :", error);
-//     setStatus(false);
-//     setLoading(false);
-//   }
-// };
-
-// const openTableReservation = async () => {
-//   try {
-//     if (data !== null) {
-//       const finalData = JSON.parse(decodeURIComponent(data));
-//       setFormData(finalData);
-//       const reservationTime = formData?.formData[1]?.reservation_time;
-//       const timeDifference = formData?.formData[2]?.timeDifference;
-//       const [hours, minutes] = reservationTime.split(":");
-//       const formattedTimeMinutes = parseInt(hours, 10) * 60 + parseInt(minutes, 10);
-//       const calculatedTime = formattedTimeMinutes + parseInt(timeDifference, 10);
-//       setLoading(true);
-//       const apiParams = {
-//         first_name: formData?.reservationFormData?.first_name,
-//         last_name: formData?.reservationFormData?.last_name,
-//         mobile_number: 3613043530,
-//         mobile_country_id: "US",
-//         email: formData?.reservationFormData?.email,
-//         persons: formData?.formData[1]?.reservation_covers,
-//         restaurant_id: formData?.id,
-//         seating_option: "default",
-//         dining_area_id: 1,
-//         slot_hash: formData?.formData[2]?.slotHash,
-//         slot_availability_token: formData?.formData[2]?.slotAvailabilityToken,
-//         country_id: "US",
-//         date: formData?.formData[1]?.reservation_date,
-//         time: calculatedTime, // Use the calculated time here
-//       };
-//       const response = await axios.post(
-//         `${Base_Url}/api/v1/opentable/do_reservation`,
-//         null,
-//         {
-//           params: apiParams,
-//         }
-//       );
-//       console.log("API Response:", response.data);
-//       setStatus(true);
-//       setLoading(false);
-//     } else {
-//       console.error("Data parameter is null or undefined");
-//       setLoading(false);
-//     }
-//   } catch (error) {
-//     console.error("Error :", error);
-//     setStatus(false);
-//     setLoading(false);
-//   }
-// };
+export const ResyRestrauntDetail = {
+  success: true,
+  data: {
+    query: {
+      day: "2024-01-07",
+      party_size: 2,
+      time_filter: null,
+    },
+    bookmark: null,
+    results: {
+      venues: [
+        {
+          venue: {
+            id: {
+              resy: 36899,
+            },
+            venue_group: {
+              id: 195957,
+              name: "Blossom Restaurants",
+              venues: [36898],
+            },
+            name: "Blossom on Columbus",
+            type: "Vegan",
+            url_slug: "blossom-on-columbus",
+            price_range: 2,
+            average_bill_size: 40,
+            currency_symbol: "$",
+            hospitality_included: 0,
+            resy_select: 0,
+            is_gdc: 0,
+            is_global_dining_access: false,
+            is_global_dining_access_only: false,
+            requires_reservation_transfers: 0,
+            is_gns: 0,
+            transaction_processor: "stripe",
+            hide_allergy_question: false,
+            hide_occasion_question: false,
+            hide_special_request_question: false,
+            gda_concierge_booking: false,
+            tax_included: false,
+            feature_recaptcha: false,
+            rating: 4.59652,
+            total_ratings: 1896,
+            inventory: {
+              type: {
+                id: 2,
+              },
+            },
+            reopen: {
+              date: "2020-09-30",
+            },
+            location: {
+              time_zone: "EST5EDT",
+              neighborhood: "Upper West Side",
+              geo: {
+                lat: 40.785381,
+                lon: 73.972763,
+              },
+              code: "ny",
+              name: "New York",
+              url_slug: "new-york",
+            },
+            travel_time: {
+              distance: 5390.452567269825,
+            },
+            source: {
+              name: null,
+              logo: null,
+              terms_of_service: null,
+              privacy_policy: null,
+            },
+            service_types: {
+              "1": {},
+              "2": {},
+            },
+            top: false,
+            ticket: {
+              average: 40,
+              average_str: "$40",
+            },
+            currency: {
+              symbol: "$",
+              code: "USD",
+            },
+            is_rga: false,
+            is_rga_only: false,
+            default_template: "897389",
+            responsive_images: {
+              originals: {
+                "60d71046996774cb9354a30b19f38abeb2b13102": {
+                  url: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg",
+                },
+                "1647d0c219d56a7eb0bb02d518670f997cc95938": {
+                  url: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg",
+                },
+                "950ed5d619d35bbc9aea7dfe447976420076d3d9": {
+                  url: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg",
+                },
+                "04baa62abd991dcfc307afe38de6e3333c90bfd1": {
+                  url: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg",
+                },
+                f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0: {
+                  url: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg",
+                },
+                fe268560dd3b55140953749693ebf315458fe86c: {
+                  url: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg",
+                },
+              },
+              urls: {
+                "60d71046996774cb9354a30b19f38abeb2b13102": {
+                  "1:1": {
+                    "200":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/200",
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/1600",
+                  },
+                  "4:3": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/1600",
+                  },
+                  "16:9": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/1600",
+                  },
+                },
+                "1647d0c219d56a7eb0bb02d518670f997cc95938": {
+                  "1:1": {
+                    "200":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/200",
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/1600",
+                  },
+                  "4:3": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/1600",
+                  },
+                  "16:9": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/1600",
+                  },
+                },
+                "950ed5d619d35bbc9aea7dfe447976420076d3d9": {
+                  "1:1": {
+                    "200":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/200",
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/1600",
+                  },
+                  "4:3": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/1600",
+                  },
+                  "16:9": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/1600",
+                  },
+                },
+                "04baa62abd991dcfc307afe38de6e3333c90bfd1": {
+                  "1:1": {
+                    "200":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/200",
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/1600",
+                  },
+                  "4:3": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/1600",
+                  },
+                  "16:9": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/1600",
+                  },
+                },
+                f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0: {
+                  "1:1": {
+                    "200":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/200",
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/1600",
+                  },
+                  "4:3": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/1600",
+                  },
+                  "16:9": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/1600",
+                  },
+                },
+                fe268560dd3b55140953749693ebf315458fe86c: {
+                  "1:1": {
+                    "200":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/200",
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/1600",
+                  },
+                  "4:3": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/1600",
+                  },
+                  "16:9": {
+                    "400":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/400",
+                    "800":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/800",
+                    "1600":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/1600",
+                  },
+                },
+              },
+              urls_by_resolution: {
+                "60d71046996774cb9354a30b19f38abeb2b13102": {
+                  "200": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/200",
+                  },
+                  "400": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/400",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/400",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/400",
+                  },
+                  "800": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/800",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/800",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/800",
+                  },
+                  "1600": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/1600",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/1600",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/1600",
+                  },
+                },
+                "1647d0c219d56a7eb0bb02d518670f997cc95938": {
+                  "200": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/200",
+                  },
+                  "400": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/400",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/400",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/400",
+                  },
+                  "800": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/800",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/800",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/800",
+                  },
+                  "1600": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/1600",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/1600",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/1600",
+                  },
+                },
+                "950ed5d619d35bbc9aea7dfe447976420076d3d9": {
+                  "200": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/200",
+                  },
+                  "400": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/400",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/400",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/400",
+                  },
+                  "800": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/800",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/800",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/800",
+                  },
+                  "1600": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/1600",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/1600",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/1600",
+                  },
+                },
+                "04baa62abd991dcfc307afe38de6e3333c90bfd1": {
+                  "200": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/200",
+                  },
+                  "400": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/400",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/400",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/400",
+                  },
+                  "800": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/800",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/800",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/800",
+                  },
+                  "1600": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/1600",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/1600",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/1600",
+                  },
+                },
+                f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0: {
+                  "200": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/200",
+                  },
+                  "400": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/400",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/400",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/400",
+                  },
+                  "800": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/800",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/800",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/800",
+                  },
+                  "1600": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/1600",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/1600",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/1600",
+                  },
+                },
+                fe268560dd3b55140953749693ebf315458fe86c: {
+                  "200": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/200",
+                  },
+                  "400": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/400",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/400",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/400",
+                  },
+                  "800": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/800",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/800",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/800",
+                  },
+                  "1600": {
+                    "1:1":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/1600",
+                    "4:3":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/1600",
+                    "16:9":
+                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/1600",
+                  },
+                },
+              },
+              file_names: [
+                "60d71046996774cb9354a30b19f38abeb2b13102",
+                "1647d0c219d56a7eb0bb02d518670f997cc95938",
+                "950ed5d619d35bbc9aea7dfe447976420076d3d9",
+                "04baa62abd991dcfc307afe38de6e3333c90bfd1",
+                "f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0",
+                "fe268560dd3b55140953749693ebf315458fe86c",
+              ],
+              aspect_ratios: {
+                "1:1": {
+                  "200": "200x200",
+                  "400": "400x400",
+                  "800": "800x800",
+                  "1600": "1600x1600",
+                },
+                "4:3": {
+                  "400": "400x300",
+                  "800": "800x600",
+                  "1600": "1600x1200",
+                },
+                "16:9": {
+                  "400": "400x225",
+                  "800": "800x450",
+                  "1600": "1600x900",
+                },
+              },
+            },
+            notify_options: [
+              {
+                service_type_id: 1,
+                min_request_datetime: "2024-01-07 11:00:00",
+                max_request_datetime: "2024-01-07 17:00:00",
+                step_minutes: 30,
+              },
+              {
+                service_type_id: 2,
+                min_request_datetime: "2024-01-07 17:00:00",
+                max_request_datetime: "2024-01-07 21:30:00",
+                step_minutes: 30,
+              },
+            ],
+            favorite: null,
+            waitlist: {
+              available: 0,
+              label: "Join Wait List",
+              current: null,
+            },
+            supports_pickups: 0,
+            collections: [
+              {
+                id: 1085,
+                type_id: 1,
+                file_name: "fall",
+                image:
+                  "https://s3.amazonaws.com/resy.com/images/lists/fall.svg",
+                name: "Dining While (or With a) Vegan in New York",
+                short_name: "Vegan Gems",
+                description:
+                  "Whether you’re seeking out plant-based dining or just want to have an incredible meal, period, here are the New York restaurants offering outstanding vegan dishes and menus.",
+                collection_slug:
+                  "dining-while-%28or-with-a%29-vegan-in-new-york",
+              },
+            ],
+            content: [
+              {
+                attribution: null,
+                body: "",
+                display: {
+                  type: "text",
+                },
+                icon: {
+                  url: "https://s3.amazonaws.com/resy.com/images/icons/heart.svg",
+                },
+                locale: {
+                  language: "en-us",
+                },
+                name: "why_we_like_it",
+                title: null,
+              },
+            ],
+            allow_bypass_payment_method: 1,
+            events: [],
+          },
+          templates: {
+            "897389": {
+              is_paid: false,
+              venue_share: null,
+              restriction_id: null,
+              payment_structure: null,
+              cancellation_fee: null,
+              secs_cancel_cut_off: null,
+              time_cancel_cut_off: null,
+              secs_change_cut_off: null,
+              time_change_cut_off: null,
+              large_party_size_cancel: null,
+              large_party_cancellation_fee: null,
+              large_party_secs_cancel_cut_off: null,
+              large_party_time_cancel_cut_off: null,
+              large_party_secs_change_cut_off: null,
+              large_party_time_change_cut_off: null,
+              deposit_fee: null,
+              service_charge: null,
+              service_charge_options: [],
+              images: [
+                "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/640x360",
+              ],
+              raw_image_names: [
+                "60d71046996774cb9354a30b19f38abeb2b13102",
+                "1647d0c219d56a7eb0bb02d518670f997cc95938",
+                "950ed5d619d35bbc9aea7dfe447976420076d3d9",
+                "04baa62abd991dcfc307afe38de6e3333c90bfd1",
+                "f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0",
+                "fe268560dd3b55140953749693ebf315458fe86c",
+              ],
+              image_dimensions: [
+                [6006, 3996],
+                [6048, 4024],
+                [6048, 4024],
+                [5547, 3698],
+                [5665, 3782],
+                [5876, 3910],
+              ],
+              is_default: 1,
+              is_event: 0,
+              is_pickup: 0,
+              pickup_highlight: 0,
+              venue_id: 36899,
+              reservation_config: {
+                badge: null,
+                type: "",
+                secs_off_market: null,
+                time_off_market: null,
+              },
+              turn_times: [
+                {
+                  secs_amount: 5400,
+                  size: {
+                    max: 1,
+                    min: 1,
+                  },
+                },
+                {
+                  secs_amount: 5400,
+                  size: {
+                    max: 2,
+                    min: 2,
+                  },
+                },
+                {
+                  secs_amount: 5400,
+                  size: {
+                    max: 3,
+                    min: 3,
+                  },
+                },
+                {
+                  secs_amount: 5400,
+                  size: {
+                    max: 4,
+                    min: 4,
+                  },
+                },
+                {
+                  secs_amount: 5400,
+                  size: {
+                    max: null,
+                    min: 5,
+                  },
+                },
+              ],
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              content: {
+                "en-us": {
+                  about: {
+                    attribution: null,
+                    body: "Blossom on Columbus is a Michelin-recommended vegan restaurant in the Upper West Side neighborhood of Manhattan. Blossom serves plant-based world cuisine with an organic focus, including stone-baked pizzas, and offers a full bar with cocktails, wine, and beer. Enjoy the expansive dining room, window seating, or our outdoor patio (weather permitting).",
+                    title: null,
+                  },
+                  need_to_know: {
+                    attribution: null,
+                    body: "Reservations are available 90 days in advance. A portion of our dining room is held nightly for walk-in diners.\n\nIf you are running late, please call the restaurant at (212) 875-2600. We hold the table for a grace period of 15 minutes before offering the reservation to our waitlist.\n\nAlso, due to capacity restrictions, we request all guests honor our ninety minute visit time.  Thanks!",
+                    title: null,
+                  },
+                },
+              },
+              id: 897389,
+              menu: {
+                "en-us": [
+                  "Crispy Artichokes with Lemon-Caper Aioli",
+                  "Jackfruit Tacos with Tomatillo Salsa",
+                  "Seitan Piccata with Truffled Mashed Potato",
+                  "Chocolate Ganache with Berry Reduction",
+                ],
+              },
+              name: "UPDATED_DEFAULT_TEMPLATE",
+              item_ids: [],
+              menu_ids: [],
+            },
+            "900633": {
+              is_paid: true,
+              venue_share: null,
+              restriction_id: null,
+              payment_structure: null,
+              cancellation_fee: 20,
+              secs_cancel_cut_off: 7200,
+              time_cancel_cut_off: null,
+              secs_change_cut_off: 7200,
+              time_change_cut_off: null,
+              large_party_size_cancel: null,
+              large_party_cancellation_fee: null,
+              large_party_secs_cancel_cut_off: null,
+              large_party_time_cancel_cut_off: null,
+              large_party_secs_change_cut_off: null,
+              large_party_time_change_cut_off: null,
+              deposit_fee: null,
+              service_charge: null,
+              service_charge_options: [],
+              images: [
+                "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/640x360",
+              ],
+              raw_image_names: [
+                "60d71046996774cb9354a30b19f38abeb2b13102",
+                "1647d0c219d56a7eb0bb02d518670f997cc95938",
+                "950ed5d619d35bbc9aea7dfe447976420076d3d9",
+                "04baa62abd991dcfc307afe38de6e3333c90bfd1",
+                "f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0",
+                "fe268560dd3b55140953749693ebf315458fe86c",
+              ],
+              image_dimensions: [
+                [6006, 3996],
+                [6048, 4024],
+                [6048, 4024],
+                [5547, 3698],
+                [5665, 3782],
+                [5876, 3910],
+              ],
+              is_default: 0,
+              is_event: 0,
+              is_pickup: 0,
+              pickup_highlight: 0,
+              venue_id: 36899,
+              reservation_config: {
+                badge: null,
+                type: "",
+                secs_off_market: 1800,
+                time_off_market: null,
+              },
+              turn_times: [
+                {
+                  secs_amount: 5400,
+                  size: {
+                    max: 2,
+                    min: 1,
+                  },
+                },
+                {
+                  secs_amount: 7200,
+                  size: {
+                    max: 4,
+                    min: 3,
+                  },
+                },
+                {
+                  secs_amount: 8100,
+                  size: {
+                    max: 5,
+                    min: 5,
+                  },
+                },
+                {
+                  secs_amount: 10800,
+                  size: {
+                    max: 6,
+                    min: 6,
+                  },
+                },
+                {
+                  secs_amount: 11700,
+                  size: {
+                    max: null,
+                    min: 7,
+                  },
+                },
+              ],
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              content: {
+                "en-us": {
+                  need_to_know: {
+                    attribution: null,
+                    body: "If you are running late, please call the restaurant at (212) 875-2600. \n\nWe hold the table for a grace period of 15 minutes before offering the reservation to our waitlist.\n\nParties of 8 or more, please call us directly to book!\n\n",
+                    title: null,
+                  },
+                  about: {
+                    attribution: null,
+                    body: "Blossom on Columbus is a Michelin-recommended vegan restaurant in the Upper West Side neighborhood of Manhattan. Blossom serves plant-based world cuisine with an organic focus, including stone-baked pizzas, and offers a full bar with cocktails, wine, and beer. Enjoy the expansive dining room, window seating, or our outdoor patio (weather permitting).",
+                    title: null,
+                  },
+                },
+              },
+              id: 900633,
+              menu: {
+                "en-us": [
+                  "Crispy Artichokes with Lemon-Caper Aioli",
+                  "Jackfruit Tacos with Tomatillo Salsa",
+                  "Seitan Piccata with Truffled Mashed Potato",
+                  "Chocolate Ganache with Berry Reduction",
+                ],
+              },
+              name: "900633",
+              item_ids: [],
+              menu_ids: [],
+            },
+            "900634": {
+              is_paid: true,
+              venue_share: null,
+              restriction_id: null,
+              payment_structure: null,
+              cancellation_fee: 20,
+              secs_cancel_cut_off: 7200,
+              time_cancel_cut_off: null,
+              secs_change_cut_off: 7200,
+              time_change_cut_off: null,
+              large_party_size_cancel: null,
+              large_party_cancellation_fee: null,
+              large_party_secs_cancel_cut_off: null,
+              large_party_time_cancel_cut_off: null,
+              large_party_secs_change_cut_off: null,
+              large_party_time_change_cut_off: null,
+              deposit_fee: null,
+              service_charge: null,
+              service_charge_options: [],
+              images: [
+                "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/640x360",
+                "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/640x360",
+              ],
+              raw_image_names: [
+                "60d71046996774cb9354a30b19f38abeb2b13102",
+                "1647d0c219d56a7eb0bb02d518670f997cc95938",
+                "950ed5d619d35bbc9aea7dfe447976420076d3d9",
+                "04baa62abd991dcfc307afe38de6e3333c90bfd1",
+                "f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0",
+                "fe268560dd3b55140953749693ebf315458fe86c",
+              ],
+              image_dimensions: [
+                [6006, 3996],
+                [6048, 4024],
+                [6048, 4024],
+                [5547, 3698],
+                [5665, 3782],
+                [5876, 3910],
+              ],
+              is_default: 0,
+              is_event: 0,
+              is_pickup: 0,
+              pickup_highlight: 0,
+              venue_id: 36899,
+              reservation_config: {
+                badge: null,
+                type: "",
+                secs_off_market: 1800,
+                time_off_market: null,
+              },
+              turn_times: [
+                {
+                  secs_amount: 5400,
+                  size: {
+                    max: 2,
+                    min: 1,
+                  },
+                },
+                {
+                  secs_amount: 7200,
+                  size: {
+                    max: 4,
+                    min: 3,
+                  },
+                },
+                {
+                  secs_amount: 9000,
+                  size: {
+                    max: 5,
+                    min: 5,
+                  },
+                },
+                {
+                  secs_amount: 10800,
+                  size: {
+                    max: null,
+                    min: 6,
+                  },
+                },
+              ],
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              content: {
+                "en-us": {
+                  need_to_know: {
+                    attribution: null,
+                    body: "If you are running late, please call the restaurant at (212) 875-2600. \n\nWe hold the table for a grace period of 15 minutes before offering the reservation to our waitlist.\n\nParties of 8 or more, please call us directly to book!\n\n",
+                    title: null,
+                  },
+                  about: {
+                    attribution: null,
+                    body: "Blossom on Columbus is a Michelin-recommended vegan restaurant in the Upper West Side neighborhood of Manhattan. Blossom serves plant-based world cuisine with an organic focus, including stone-baked pizzas, and offers a full bar with cocktails, wine, and beer. Enjoy the expansive dining room, window seating, or our outdoor patio (weather permitting).",
+                    title: null,
+                  },
+                },
+              },
+              id: 900634,
+              menu: {
+                "en-us": [
+                  "Crispy Artichokes with Lemon-Caper Aioli",
+                  "Jackfruit Tacos with Tomatillo Salsa",
+                  "Seitan Piccata with Truffled Mashed Potato",
+                  "Chocolate Ganache with Berry Reduction",
+                ],
+              },
+              name: "900634",
+              item_ids: [],
+              menu_ids: [],
+            },
+          },
+          slots: [
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/11:00:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 12:30:00",
+                start: "2024-01-07 11:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704641400,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/11:00:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 12:30:00",
+                start: "2024-01-07 11:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704641400,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/11:15:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 12:45:00",
+                start: "2024-01-07 11:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704642300,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/11:15:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 12:45:00",
+                start: "2024-01-07 11:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704642300,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/11:30:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 13:00:00",
+                start: "2024-01-07 11:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704643200,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/11:30:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 13:00:00",
+                start: "2024-01-07 11:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704643200,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/11:45:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 13:15:00",
+                start: "2024-01-07 11:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704644100,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/11:45:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 13:15:00",
+                start: "2024-01-07 11:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704644100,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/12:00:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 13:30:00",
+                start: "2024-01-07 12:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704645000,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/12:00:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 13:30:00",
+                start: "2024-01-07 12:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704645000,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/12:15:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 13:45:00",
+                start: "2024-01-07 12:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704645900,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/12:15:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 13:45:00",
+                start: "2024-01-07 12:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704645900,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/12:30:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 14:00:00",
+                start: "2024-01-07 12:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704646800,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/12:30:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 14:00:00",
+                start: "2024-01-07 12:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704646800,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/12:45:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 14:15:00",
+                start: "2024-01-07 12:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704647700,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/12:45:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 14:15:00",
+                start: "2024-01-07 12:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704647700,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/13:00:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 14:30:00",
+                start: "2024-01-07 13:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704648600,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/13:00:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 14:30:00",
+                start: "2024-01-07 13:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704648600,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/13:15:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 14:45:00",
+                start: "2024-01-07 13:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704649500,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/13:15:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 14:45:00",
+                start: "2024-01-07 13:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704649500,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/13:30:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 15:00:00",
+                start: "2024-01-07 13:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704650400,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/13:30:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 15:00:00",
+                start: "2024-01-07 13:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704650400,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/13:45:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 15:15:00",
+                start: "2024-01-07 13:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704651300,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/13:45:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 15:15:00",
+                start: "2024-01-07 13:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704651300,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/14:00:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 15:30:00",
+                start: "2024-01-07 14:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704652200,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/14:00:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 15:30:00",
+                start: "2024-01-07 14:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704652200,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/14:15:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 15:45:00",
+                start: "2024-01-07 14:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704653100,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/14:15:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 15:45:00",
+                start: "2024-01-07 14:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704653100,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/14:30:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 16:00:00",
+                start: "2024-01-07 14:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704654000,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/14:30:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 16:00:00",
+                start: "2024-01-07 14:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704654000,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/14:45:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 16:15:00",
+                start: "2024-01-07 14:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704654900,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/14:45:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 16:15:00",
+                start: "2024-01-07 14:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704654900,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629943,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/15:00:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 16:30:00",
+                start: "2024-01-07 15:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704655800,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489531],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 22,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/15:00:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 16:30:00",
+                start: "2024-01-07 15:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704655800,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629943,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/15:15:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 16:45:00",
+                start: "2024-01-07 15:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704656700,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489531],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 22,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/15:15:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 16:45:00",
+                start: "2024-01-07 15:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704656700,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629943,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/15:30:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 17:00:00",
+                start: "2024-01-07 15:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704657600,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489531],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 21,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/15:30:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 17:00:00",
+                start: "2024-01-07 15:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704657600,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629943,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/15:45:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 17:15:00",
+                start: "2024-01-07 15:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704658500,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489531],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 21,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/15:45:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 17:15:00",
+                start: "2024-01-07 15:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704658500,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629943,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/16:00:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 17:30:00",
+                start: "2024-01-07 16:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704659400,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489531],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 21,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/16:00:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 17:30:00",
+                start: "2024-01-07 16:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704659400,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629941,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/16:15:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 17:45:00",
+                start: "2024-01-07 16:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704660300,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489529],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 20,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/16:15:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 17:45:00",
+                start: "2024-01-07 16:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704660300,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629941,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/16:30:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 18:00:00",
+                start: "2024-01-07 16:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704661200,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489529],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 20,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/16:30:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 18:00:00",
+                start: "2024-01-07 16:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704661200,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629941,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/16:45:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 18:15:00",
+                start: "2024-01-07 16:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704662100,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489529],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 20,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900633/1/2024-01-07/2024-01-07/16:45:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 18:15:00",
+                start: "2024-01-07 16:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704662100,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192697,
+                service: {
+                  type: {
+                    id: 1,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900633,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629941,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/17:00:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 18:30:00",
+                start: "2024-01-07 17:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704663000,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489529],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 20,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/17:00:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 18:30:00",
+                start: "2024-01-07 17:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704663000,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629941,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/17:15:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 18:45:00",
+                start: "2024-01-07 17:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704663900,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489529],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 20,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/17:15:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 18:45:00",
+                start: "2024-01-07 17:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704663900,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 629941,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/17:30:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 19:00:00",
+                start: "2024-01-07 17:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704664800,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489529],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 20,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/17:30:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 19:00:00",
+                start: "2024-01-07 17:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704664800,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/17:45:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 19:15:00",
+                start: "2024-01-07 17:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704665700,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 21,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/17:45:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 19:15:00",
+                start: "2024-01-07 17:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704665700,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/18:00:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 19:30:00",
+                start: "2024-01-07 18:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704666600,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 21,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/18:00:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 19:30:00",
+                start: "2024-01-07 18:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704666600,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/18:15:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 19:45:00",
+                start: "2024-01-07 18:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704667500,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 22,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/18:15:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 19:45:00",
+                start: "2024-01-07 18:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704667500,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/18:30:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 20:00:00",
+                start: "2024-01-07 18:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704668400,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 22,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/18:30:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 20:00:00",
+                start: "2024-01-07 18:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704668400,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/18:45:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 20:15:00",
+                start: "2024-01-07 18:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704669300,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 22,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/18:45:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 20:15:00",
+                start: "2024-01-07 18:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704669300,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/19:00:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 20:30:00",
+                start: "2024-01-07 19:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704670200,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/19:00:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 20:30:00",
+                start: "2024-01-07 19:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704670200,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/19:15:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 20:45:00",
+                start: "2024-01-07 19:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704671100,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/19:15:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 20:45:00",
+                start: "2024-01-07 19:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704671100,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/19:30:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 21:00:00",
+                start: "2024-01-07 19:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704672000,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/19:30:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 21:00:00",
+                start: "2024-01-07 19:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704672000,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/19:45:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 21:15:00",
+                start: "2024-01-07 19:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704672900,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/19:45:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 21:15:00",
+                start: "2024-01-07 19:45:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704672900,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/20:00:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 21:30:00",
+                start: "2024-01-07 20:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704673800,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/20:00:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 21:30:00",
+                start: "2024-01-07 20:00:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704673800,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/20:15:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 21:45:00",
+                start: "2024-01-07 20:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704674700,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/20:15:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 21:45:00",
+                start: "2024-01-07 20:15:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704674700,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 969636,
+                type: "Dining Room",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/20:30:00/2/Dining Room",
+              },
+              date: {
+                end: "2024-01-07 22:00:00",
+                start: "2024-01-07 20:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25552,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704675600,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [763668],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 23,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+            {
+              availability: {
+                id: 3,
+              },
+              config: {
+                id: 630002,
+                type: "Patio",
+                token:
+                  "rgs://resy/36899/900634/2/2024-01-07/2024-01-07/20:30:00/2/Patio",
+              },
+              date: {
+                end: "2024-01-07 22:00:00",
+                start: "2024-01-07 20:30:00",
+              },
+              exclusive: {
+                id: 0,
+              },
+              is_global_dining_access: false,
+              floorplan: {
+                id: 25554,
+              },
+              id: null,
+              market: {
+                date: {
+                  off: 1704675600,
+                  on: 1696910400,
+                },
+              },
+              meta: {
+                size: {
+                  assumed: 2,
+                },
+                type: {
+                  id: 1,
+                },
+              },
+              lock: null,
+              pacing: {
+                beyond: false,
+              },
+              score: {
+                total: 100,
+              },
+              shift: {
+                id: 192698,
+                service: {
+                  type: {
+                    id: 2,
+                  },
+                },
+                day: "2024-01-07",
+              },
+              size: {
+                max: 2,
+                min: 1,
+              },
+              status: {
+                id: 1,
+              },
+              table: {
+                id: [489562],
+              },
+              template: {
+                id: 900634,
+              },
+              time: {
+                turn: {
+                  actual: 5400,
+                  estimated: 5400,
+                },
+              },
+              quantity: 2,
+              display_config: {
+                color: {
+                  background: null,
+                  font: null,
+                },
+              },
+              reservation_config: {
+                badge: null,
+              },
+              gdc_perk: null,
+              payment: {
+                is_paid: true,
+                cancellation_fee: 20,
+                deposit_fee: null,
+                service_charge: null,
+                venue_share: null,
+                payment_structure: null,
+                secs_cancel_cut_off: 7200,
+                time_cancel_cut_off: null,
+                secs_change_cut_off: 7200,
+                time_change_cut_off: null,
+                service_charge_options: [],
+              },
+            },
+          ],
+          notifies: [],
+          pickups: {
+            slots: [],
+            service_types: {},
+          },
+        },
+      ],
+      meta: {
+        offset: 1,
+        limit: null,
+      },
+    },
+    guest_token:
+      "UQ_FVMDZPmHislMj7Khn2SZ|56T|fVD3G74bV6t|Ow335WhkKpudYA0o5|SMEyz09IfXeGE6qne92nfkI77xkyORHERDKjxKH2pEYLf7dYI=-8a980d5fa0a2e735f1231c9f52fba881a5088de5bdee3d0315b94095",
+  },
+};

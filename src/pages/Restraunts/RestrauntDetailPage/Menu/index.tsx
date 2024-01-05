@@ -1,4 +1,5 @@
 import { useEffect , useState } from "react";
+import { ResyRestrauntDetail } from "@/mockData";
 
 interface MenuProps {
   restrauntDetail: any; 
@@ -23,9 +24,10 @@ const Menu: React.FC<MenuProps> = ({ restrauntDetail }) => {
           <strong>Menu</strong>
         </h1>
         <hr className="mb-4 mt-4" />
-        {menuData?.restaurant_flag === "yelp"
-          ? <a href="">https://www.menu.com</a>
-          : <a href={menuData} target="blank">{menuData}</a>}
+        { restrauntDetail?.menus
+          ? <a href={menuData} target="blank">{menuData}</a>
+          : <a className="text-lg" href={menuData} target="blank">{ResyRestrauntDetail.data.results.venues[0].templates[900634].menu["en-us"]}</a>
+          }
       </div>
     </div>
   );

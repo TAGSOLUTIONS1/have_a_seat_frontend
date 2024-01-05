@@ -13,34 +13,33 @@ const ReservationStatus = () => {
   console.log(formData);
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const data:any = params.get("data");
+  const data: any = params.get("data");
 
-  console.log(JSON.parse(data))
+  console.log(JSON.parse(data));
 
   useEffect(() => {
     const finalData = JSON.parse(data);
-    if(finalData && finalData?.bookingInfo){
-      yelpReservation()
-    }else{
+    if (finalData && finalData?.bookingInfo) {
+      yelpReservation();
+    } else {
       openTableReservation();
     }
     // console.log(finalData)
   }, []);
-
 
   const openTableReservation = async () => {
     try {
       if (data !== null) {
         const myData = JSON.parse(decodeURIComponent(data));
         const finalData = myData.formData;
-        console.log(myData , 'rse')
-        console.log(myData.reservationFormData)
+        console.log(myData, "rse");
+        console.log(myData.reservationFormData);
         setFormData(finalData);
-  
+
         const reservationTime = finalData[0]?.reservation_time;
-        console.log(reservationTime)
+        console.log(reservationTime);
         const timeDifference = finalData[1]?.timeOffsetMinutes;
-        console.log(reservationTime)
+        console.log(reservationTime);
         const [hours, minutes] = reservationTime?.split(":");
         const formattedTimeMinutes =
           parseInt(hours, 10) * 60 + parseInt(minutes, 10);
@@ -51,10 +50,10 @@ const ReservationStatus = () => {
         const formattedMinutes = ("0" + calculatedMinutes).slice(-2);
         const finalTime = `${formattedHours}:${formattedMinutes}`;
 
-        console.log(finalTime)
-  
+        console.log(finalTime);
+
         setLoading(true);
-  
+
         const apiParams = {
           first_name: myData?.reservationFormData?.first_name,
           last_name: myData?.reservationFormData?.last_name,
@@ -71,8 +70,7 @@ const ReservationStatus = () => {
           date: finalData[0]?.reservation_date,
           time: finalTime,
         };
-  
-  
+
         const response = await axios.post(
           `${Base_Url}/api/v1/opentable/do_reservation`,
           null,

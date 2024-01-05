@@ -3,10 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 interface ReservationFormProps {
   formData: any;
-  bookingInfo:any;
+  bookingInfo: any;
 }
 
-const ReservationForm: React.FC<ReservationFormProps> = ({ formData , bookingInfo }) => {
+const ReservationForm: React.FC<ReservationFormProps> = ({
+  formData,
+  bookingInfo,
+}) => {
   // const [id, setId] = useState<any>();
   const navigate = useNavigate();
 
@@ -35,12 +38,13 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ formData , bookingInf
       [name]: value,
     }));
   };
-  
+
   const handleSubmit = () => {
     const updatedNextData = {
-      reservationFormData :reservationFormData , 
-      bookingInfo: bookingInfo, 
-      formData:formData};
+      reservationFormData: reservationFormData,
+      bookingInfo: bookingInfo,
+      formData: formData,
+    };
     const route = `/reservation-status?data=${encodeURIComponent(
       JSON.stringify(updatedNextData)
     )}`;

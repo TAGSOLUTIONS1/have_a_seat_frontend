@@ -13,8 +13,6 @@ const TimingHours: React.FC<MenuProps> = ({ restrauntDetail }) => {
     }
   }, [restrauntDetail]);
 
-  
-
   const formatTime = (time: string) => {
     const hours = time.slice(0, 2);
     const minutes = time.slice(2);
@@ -40,7 +38,7 @@ const TimingHours: React.FC<MenuProps> = ({ restrauntDetail }) => {
         </h1>
         <hr className="mb-4 mt-4" />
         <p className="text-purple-600">Dialog Timings</p>
-        {timingData?.alias  ? (
+        {timingData?.alias ? (
           timingData?.hours ? (
             timingData.hours[0].open.map((data: any, index: number) => {
               const startTime = formatTime(data.start);

@@ -10,6 +10,8 @@ import Reviews from "./Reviews";
 import Loader from "@/components/Loader";
 import { Base_Url } from "@/baseUrl";
 
+import { ResyRestrauntDetail } from "@/mockData";
+
 const RestrauntDetail = () => {
   const [restrauntDetail, setRestrauntDetail] = useState<any>({});
   const [prevId, setPrevId] = useState<string | null>(null);
@@ -32,7 +34,7 @@ const RestrauntDetail = () => {
     };
 
     if (yelp_alias === null && venue_id === null) {
-      setPrevId(map_url); 
+      setPrevId(map_url);
       setKey("open_table");
       setEndPoint(
         `${Base_Url}/api/v1/opentable/get_restaurant_details?map_url=${map_url}`
@@ -45,17 +47,17 @@ const RestrauntDetail = () => {
       );
     } else if (map_url === null && yelp_alias === null) {
       setKey("resy");
-      console.log(map_url , venue_id , key)
+      console.log(map_url, venue_id, key);
       setEndPoint(
         `${Base_Url}/api/v1/resy/get_restaurant_details?venue_id=${resyParams.venue_id}&date=${resyParams.date}&persons=${resyParams.persons}`
       );
-      console.log(endpoint)
     }
   }, [location.search, prevId]);
 
+  console.log(endpoint);
   useEffect(() => {
     const fetchData = async () => {
-      if (prevId && endpoint) {
+      if (endpoint) {
         try {
           const response = await axios.get(endpoint);
           console.log("Single Restaurant Detail:", response.data);
@@ -64,8 +66,8 @@ const RestrauntDetail = () => {
           } else if (key === "yelp") {
             setRestrauntDetail(response.data.data);
           } else if (key === "resy") {
-            setRestrauntDetail(response);
-            console.log(response);
+            console.log(response.data.data.results);
+            setRestrauntDetail(response.data.data);
           }
           setLoading(false);
         } catch (error) {
@@ -75,7 +77,9 @@ const RestrauntDetail = () => {
       }
     };
     fetchData();
-  }, [endpoint, prevId, key]);
+  }, [endpoint, key]);
+
+  console.log(restrauntDetail?.restaurant);
 
   return (
     <div>
@@ -93,11 +97,11 @@ const RestrauntDetail = () => {
           >
             <div
               style={{
-                backgroundImage: !restrauntDetail?.alias
-                  ? `url(${restrauntDetail?.restaurant?.photos?.profile?.large?.url})`
-                  : restrauntDetail?.alias === restrauntDetail?.alias
+                backgroundImage: restrauntDetail?.alias
                   ? `url(${restrauntDetail?.image_url})`
-                  : "",
+                  : restrauntDetail?.restaurant
+                  ? `url(${restrauntDetail?.restaurant?.photos?.profile?.large?.url})`
+                  : `url(${ResyRestrauntDetail?.data.results.venues[0].templates[897389].images[0]})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",

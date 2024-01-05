@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft , ArrowRight } from 'lucide-react';
+import { ResyRestrauntDetail } from '@/mockData';
 
 interface OverviewCardProps {
   pictures: any;
@@ -12,13 +13,15 @@ const Images: React.FC<OverviewCardProps> = ({ pictures }) => {
   
   if (pictures?.alias) {
     images = pictures?.photos || [];
-  } else {
+  } else if (pictures?.restaurant) {
     const galleryPhotos = pictures?.restaurant?.photos?.gallery?.photos;
     if (galleryPhotos && galleryPhotos.length > 0) {
       images = galleryPhotos[0]?.thumbnails?.map((data: any) => data.url) || [];
     } else {
       images = [];
     }
+  } else{
+    images = ResyRestrauntDetail.data.results.venues[0].templates[900634].images
   }
 
   const nextImage = () => {

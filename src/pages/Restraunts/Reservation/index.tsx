@@ -15,24 +15,6 @@ const Reservation = () => {
   const params = new URLSearchParams(location.search);
   const data: any = params.get("data");
 
-  // console.log(data)
-
-  // useEffect(() => {
-  //   let finalData: any = null;
-  //   try {
-  //     if (data !== null) {
-  //       const decodedData = decodeURIComponent(data);
-  //       finalData = JSON.parse(decodedData);
-  //       setFormData(finalData);
-  //       console.log("Parsed data:", finalData);
-  //     } else {
-  //       console.error("Data parameter is null or undefined");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error parsing JSON or decoding URI:", error);
-  //   }
-  // }, [data]);
-
   useEffect(() => {
     let finalData = null;
     try {

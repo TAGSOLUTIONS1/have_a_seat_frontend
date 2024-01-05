@@ -15,7 +15,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [shuffledRestaurants, setShuffledRestaurants] = useState<any[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (
@@ -61,7 +61,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
       setShuffledRestaurants(mergedRestaurants);
       setLoading(false);
     } else {
-      setErrorMessage("OOPS! No restaurant to display");
+      // setErrorMessage("OOPS! No restaurant to display");
       setLoading(false);
     }
   }, [yelpData, openTableData, resyData]);
@@ -72,9 +72,9 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
         <Loader />
       ) : (
         <div>
-          {errorMessage && errorMessage !== null ? (
+          {/* {errorMessage && errorMessage !== null ? (
             <h1 className="text-3xl text-red-600 italic">{errorMessage}</h1>
-          ) : null}
+          ) : null} */}
           {shuffledRestaurants?.map((data: any, index: any) => (
             <Link
               key={index}

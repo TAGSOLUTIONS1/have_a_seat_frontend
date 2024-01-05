@@ -52,7 +52,7 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
     console.log("Clicked data:", clickedData);
     console.log(reservationCard?.restaurant?.resturantId);
     const restraunt_id = reservationCard?.restaurant?.resturantId;
-    const updatedNextData = [formData, clickedData , restraunt_id];
+    const updatedNextData = [formData, clickedData, restraunt_id];
     console.log(updatedNextData, "ddddaaaattttaaaa");
     setNextData(updatedNextData);
     const route = `/reservation?data=${encodeURIComponent(
@@ -111,12 +111,10 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
         }
       );
       if (response.status === 200) {
-        console.log(
-          response.data.data.availability[0]?.availabilityDays[0]?.slots
-        );
-        setOpenTableTimeSlots(
-          response.data.data.availability[0]?.availabilityDays[0]?.slots
-        );
+
+        console.log(response?.data?.data?.data?.availability);
+       setOpenTableTimeSlots(response?.data?.data?.data?.availability)
+
       } else {
         throw new Error("Network response was not ok.");
       }
@@ -169,7 +167,7 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
             </button>
           ))
         : Array.isArray(openTableTimeSlots) &&
-          openTableTimeSlots.map((data: any, index: number) => (
+          openTableTimeSlots[0]?.availabilityDays[0]?.slots.map((data: any, index: number) => (
             <button
               key={index}
               className="bg-purple-600 text-white p-3 m-1 rounded-lg"

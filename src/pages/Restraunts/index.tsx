@@ -12,10 +12,10 @@ import Filters from "./Filters";
 const Search = () => {
   // const { authState } = useAuth();
   const [formData, setFormData] = useState<any>({});
-  const [yelpData , setYelpData] = useState<any>();
-  const [resyData , setResyData] = useState<any>();
+  const [yelpData, setYelpData] = useState<any>();
+  const [resyData, setResyData] = useState<any>();
   // const [apiData , setApiData] = useState<any>()
-  const [openTableData , setOpenTableData] = useState<any>();
+  const [openTableData, setOpenTableData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
 
   const location = useLocation();
@@ -31,7 +31,7 @@ const Search = () => {
         setFormData(finalData);
         setLoading(false);
         console.log(finalData);
-        console.log(formData , "updated Form Data")
+        console.log(formData, "updated Form Data");
       } else {
         console.error("Data parameter is null or undefined");
         setLoading(false);
@@ -51,8 +51,8 @@ const Search = () => {
             {
               params: formData,
               headers: {
-                accept: 'application/json'
-              }
+                accept: "application/json",
+              },
             }
           );
           console.log("YELP API Response:", response.data.data.businesses);
@@ -64,7 +64,7 @@ const Search = () => {
     };
 
     fetchYelpData();
-  }, [ formData, loading]);
+  }, [formData, loading]);
 
   useEffect(() => {
     const fetchResyData = async () => {
@@ -75,8 +75,8 @@ const Search = () => {
             {
               params: formData,
               headers: {
-                accept: 'application/json'
-              }
+                accept: "application/json",
+              },
             }
           );
           console.log("RESY API Response:", response.data.data.search.hits);
@@ -99,8 +99,8 @@ const Search = () => {
             {
               params: formData,
               headers: {
-                accept: 'application/json'
-              }
+                accept: "application/json",
+              },
             }
           );
           console.log("OPEN TABLE API Response:", response.data.data);
@@ -111,34 +111,36 @@ const Search = () => {
       }
     };
     fetchOpenTableData();
-  }, [ formData, loading]);
-
-  
+  }, [formData, loading]);
 
   if (loading) {
     return <div>Loading...</div>;
-  }  
+  }
 
   return (
     <>
-    <div className="flex flex-col md:flex-row lg:flex-row max-w-[1300px] mx-auto justify-center p-4">
-      <div className="w-full md:w-1/3 lg:w-1/3 md:sticky lg:sticky top-0 h-[800px]">
-        <h1 className="text-xl items-center text-center justify-center">
-          <strong>
-            <Sliders size={24} className="inline-block mr-2" />
-            FILTERS
-          </strong>
-        </h1>
-        <Filters />
-      </div>
+      <div className="flex flex-col md:flex-row lg:flex-row max-w-[1300px] mx-auto justify-center p-4">
+        <div className="w-full md:w-1/3 lg:w-1/3 md:sticky lg:sticky top-0 h-[800px]">
+          <h1 className="text-xl items-center text-center justify-center">
+            <strong>
+              <Sliders size={24} className="inline-block mr-2" />
+              FILTERS
+            </strong>
+          </h1>
+          <Filters />
+        </div>
         <div className="w-full">
-          <RestrautCards yelpData={yelpData} resyData={resyData} openTableData={openTableData}/>
-        </div> 
-       {/* {loading ? (
+          <RestrautCards
+            yelpData={yelpData}
+            resyData={resyData}
+            openTableData={openTableData}
+          />
+        </div>
+        {/* {loading ? (
         <div>Loading...</div>
       ) : (
       )} */}
-    </div>
+      </div>
     </>
   );
 };
