@@ -1,6 +1,6 @@
+import Loader from "@/components/Loader";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Loader from "@/components/Loader";
 
 interface RestaurantCardsProps {
   openTableData: any[];
@@ -15,7 +15,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [shuffledRestaurants, setShuffledRestaurants] = useState<any[]>([]);
-  // const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (
@@ -61,9 +61,8 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
       setShuffledRestaurants(mergedRestaurants);
       setLoading(false);
     } else {
-      console.log("no data to display");
-      // setErrorMessage("Data is not available.");
-      // setLoading(false);
+      setErrorMessage("OOPS! No restaurant to display");
+      setLoading(false);
     }
   }, [yelpData, openTableData, resyData]);
 
@@ -73,6 +72,9 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
         <Loader />
       ) : (
         <div>
+          {errorMessage && errorMessage !== null ? (
+            <h1 className="text-3xl text-red-600 italic">{errorMessage}</h1>
+          ) : null}
           {shuffledRestaurants?.map((data: any, index: any) => (
             <Link
               key={index}
@@ -92,7 +94,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
                     : data?.restraunt_type === "open_table"
                     ? data?.urls?.profileLink?.link
                     : data?.restraunt_type === "resy"
-                    ? data?.venue_id
+                    ? data?.id?.resy
                     : null
                 )}`,
               }}

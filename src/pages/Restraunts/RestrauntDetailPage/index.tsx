@@ -10,15 +10,12 @@ import Reviews from "./Reviews";
 import Loader from "@/components/Loader";
 import { Base_Url } from "@/baseUrl";
 
-
 const RestrauntDetail = () => {
   const [restrauntDetail, setRestrauntDetail] = useState<any>({});
   const [prevId, setPrevId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [endpoint, setEndPoint] = useState<any>();
   const [key, setKey] = useState<any>();
-
-  // console.log(key)
 
   const location = useLocation();
 
@@ -28,47 +25,63 @@ const RestrauntDetail = () => {
     const yelp_alias = params.get("yelp_alias");
     const venue_id = params.get("venue_id");
 
-    if ((yelp_alias === null) && (venue_id === null)) {
-      setPrevId(map_url);
+    const resyParams = {
+      venue_id: venue_id,
+      date: "2024-01-05",
+      persons: 2,
+    };
+
+    if (yelp_alias === null && venue_id === null) {
+      setPrevId(map_url); 
       setKey("open_table");
-      setEndPoint(`${Base_Url}/api/v1/opentable/get_restaurant_details?map_url=${map_url}`);
-    } else if ((map_url === null) && (venue_id === null)) {
+      setEndPoint(
+        `${Base_Url}/api/v1/opentable/get_restaurant_details?map_url=${map_url}`
+      );
+    } else if (map_url === null && venue_id === null) {
       setPrevId(yelp_alias);
       setKey("yelp");
-      setEndPoint(`${Base_Url}/api/v1/yelp/get_restaurant_details/${yelp_alias}`);
-    } else if ((map_url === null) && (yelp_alias === null)){
-       setKey("resy");
-       setEndPoint(`${Base_Url}/api/v1/resy/get_restaurant_details/${venue_id}`);
+      setEndPoint(
+        `${Base_Url}/api/v1/yelp/get_restaurant_details/${yelp_alias}`
+      );
+    } else if (map_url === null && yelp_alias === null) {
+      setKey("resy");
+      console.log(map_url , venue_id , key)
+      setEndPoint(
+        `${Base_Url}/api/v1/resy/get_restaurant_details?venue_id=${resyParams.venue_id}&date=${resyParams.date}&persons=${resyParams.persons}`
+      );
+      console.log(endpoint)
     }
   }, [location.search, prevId]);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (prevId) {
+      if (prevId && endpoint) {
         try {
           const response = await axios.get(endpoint);
-          // console.log("Single Restaurant Detail:", response.data.data.restaurantProfile);
-          if (key === "open_table"){
-            setRestrauntDetail(response.data.data.restaurantProfile)
-          } else if (key === "yelp"){
+          console.log("Single Restaurant Detail:", response.data);
+          if (key === "open_table") {
+            setRestrauntDetail(response.data.data.restaurantProfile);
+          } else if (key === "yelp") {
             setRestrauntDetail(response.data.data);
-          } else if (key === "resy"){
-            setRestrauntDetail(response.data);
+          } else if (key === "resy") {
+            setRestrauntDetail(response);
+            console.log(response);
           }
-          setLoading(false); 
+          setLoading(false);
         } catch (error) {
           console.error("Error fetching data:", error);
+          setLoading(false);
         }
       }
     };
     fetchData();
-  }, [endpoint, prevId]);
+  }, [endpoint, prevId, key]);
 
   return (
     <div>
-       {loading ? (
-      <Loader />
-    ) :  (
+      {loading ? (
+        <Loader />
+      ) : (
         <>
           <section
             className="max-w-full p-4"
@@ -78,21 +91,20 @@ const RestrauntDetail = () => {
               alignItems: "center",
             }}
           >
-            <div 
+            <div
               style={{
-                backgroundImage:
-                  !restrauntDetail?.alias 
-                    ? `url(${restrauntDetail?.restaurant?.photos?.profile?.large?.url})`
-                    : restrauntDetail?.alias === restrauntDetail?.alias
-                    ? `url(${restrauntDetail?.image_url})`
-                    : "",
+                backgroundImage: !restrauntDetail?.alias
+                  ? `url(${restrauntDetail?.restaurant?.photos?.profile?.large?.url})`
+                  : restrauntDetail?.alias === restrauntDetail?.alias
+                  ? `url(${restrauntDetail?.image_url})`
+                  : "",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 width: "95%",
                 height: "500px",
                 borderRadius: "10px",
-                marginLeft:"30px"
+                marginLeft: "30px",
               }}
             ></div>
           </section>
@@ -102,14 +114,11 @@ const RestrauntDetail = () => {
           <section>
             <Pictures restrauntDetail={restrauntDetail} />
           </section>
-          {
-            restrauntDetail?.alias 
-            ? null
-            :
-          <section>
-            <Menu restrauntDetail={restrauntDetail} />
-          </section>
-          }
+          {restrauntDetail?.alias ? null : (
+            <section>
+              <Menu restrauntDetail={restrauntDetail} />
+            </section>
+          )}
           <section>
             <TimingHours restrauntDetail={restrauntDetail} />
           </section>
@@ -117,7 +126,7 @@ const RestrauntDetail = () => {
             <Reviews restrauntDetail={restrauntDetail} />
           </section>
         </>
-       )} 
+      )}
     </div>
   );
 };

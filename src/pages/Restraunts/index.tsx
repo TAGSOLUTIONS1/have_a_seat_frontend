@@ -7,6 +7,7 @@ import { Sliders } from "lucide-react";
 
 import RestrautCards from "./RestrauntCards";
 import Filters from "./Filters";
+// import YelpBookingInfo from "./Reservation/YelpBookingInfo";
 
 const Search = () => {
   // const { authState } = useAuth();
@@ -72,11 +73,7 @@ const Search = () => {
           const response = await axios.get(
             `${Base_Url}/api/v1/resy/get_restaurants`,
             {
-              params: {
-                location: 'New York',
-                date: '2024-01-05',
-                persons: 2
-              },
+              params: formData,
               headers: {
                 accept: 'application/json'
               }
@@ -123,6 +120,7 @@ const Search = () => {
   }  
 
   return (
+    <>
     <div className="flex flex-col md:flex-row lg:flex-row max-w-[1300px] mx-auto justify-center p-4">
       <div className="w-full md:w-1/3 lg:w-1/3 md:sticky lg:sticky top-0 h-[800px]">
         <h1 className="text-xl items-center text-center justify-center">
@@ -141,6 +139,7 @@ const Search = () => {
       ) : (
       )} */}
     </div>
+    </>
   );
 };
 

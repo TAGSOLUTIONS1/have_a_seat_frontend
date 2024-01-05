@@ -9,14 +9,13 @@ import { Base_Url } from "@/baseUrl";
 
 const Reservation = () => {
   const [formData, setFormData] = useState<any>();
-  const [bookingInfo , setBookingInfo] = useState<any>()
+  const [bookingInfo, setBookingInfo] = useState<any>();
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const data:any = params.get("data");
+  const data: any = params.get("data");
 
   // console.log(data)
-
 
   // useEffect(() => {
   //   let finalData: any = null;
@@ -73,7 +72,7 @@ const Reservation = () => {
       persons: persons,
     };
 
-    console.log(bookingInfoParams)
+    console.log(bookingInfoParams);
 
     try {
       const response = await axios.get(
@@ -86,7 +85,7 @@ const Reservation = () => {
       if (response.status === 200) {
         console.log("Request successful");
         console.log("Response data:", response?.data?.data);
-        setBookingInfo(response?.data?.data)
+        setBookingInfo(response?.data?.data);
       } else {
         console.error("Request failed with status:", response.status);
       }
@@ -101,12 +100,15 @@ const Reservation = () => {
         <div className="w-3/4 mt-12">
           <ReservationForm formData={formData} bookingInfo={bookingInfo} />
         </div>
-        <div className="w-3/4  mt-28">
-          <PreviousData formData={formData} bookingInfo={bookingInfo} />
-        </div>
-        <div className="w-3/4  mt-28">
-          <YelpBookingInfo bookingInfo={bookingInfo} />
-        </div>
+        {formData && formData[0]?.alias ? (
+          <div className="w-3/4  mt-28">
+            <YelpBookingInfo bookingInfo={bookingInfo} />
+          </div>
+        ) : (
+          <div className="w-3/4  mt-28">
+            <PreviousData formData={formData} bookingInfo={bookingInfo} />
+          </div>
+        )}
       </div>
     </>
   );
