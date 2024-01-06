@@ -18,12 +18,12 @@ const YelpBookingInfo: React.FC<YelpBookingInfoProps> = ({ bookingInfo }) => {
             />
           </div>
         </div>
-        <div className="w-2/3 p-6">
-          <div className="flex">
-            <div className=" flex flex-col text-gray-800">
-              <h3 className="text-white text-xl mb-4 font-bold">
+        <div className="w-2/3  p-6">
+              <h3 className="text-white text-center mr-24 text-2xl mb-4 font-bold">
                 Reservation Details:
               </h3>
+          <div className="flex">
+            <div className=" flex flex-col text-gray-800">
               <div className="flex space-x-20">
                 <h3 className="text-white text-md font-semibold">Date:</h3>
                 <p className="text-white ">{bookingInfo?.formattedDate}</p>
@@ -37,10 +37,10 @@ const YelpBookingInfo: React.FC<YelpBookingInfoProps> = ({ bookingInfo }) => {
                 <p className="text-white">{bookingInfo?.formattedTime}</p>
               </div>
             </div>
-            <div className="ml-8 flex flex-col text-gray-800">
-              <h3 className="text-white text-xl mb-4 font-bold">
+            <div className="ml-8 flex flex-col  text-gray-800">
+              {/* <h3 className="text-white text-xl mb-4 font-bold">
                 Reservation Details:
-              </h3>
+              </h3> */}
               <div className="flex space-x-14">
                 <h3 className="text-white text-md font-semibold">Name:</h3>
                 <p className="text-white ">{bookingInfo?.restaurant?.name}</p>
@@ -57,7 +57,7 @@ const YelpBookingInfo: React.FC<YelpBookingInfoProps> = ({ bookingInfo }) => {
               </div>
             </div>
           </div>
-          <div className=" flex flex-col mt-4 text-gray-800">
+          <div className=" flex flex-col mt-2 text-gray-800">
             <div>
               <h3 className="text-white text-lg mb-4 font-bold">Categories:</h3>
             </div>
