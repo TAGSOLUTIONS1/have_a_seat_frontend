@@ -12,13 +12,14 @@ const SearchLocation = () => {
     // longitude: -73.956516,
     reservation_covers: 2,
     persons: 2,
-    reservation_date: "2024-01-05",
-    date: "2024-01-05",
+    reservation_date: "2024-01-25",
+    date: "2024-01-25",
     reservation_time: "19:00",
   });
 
   const getLocationData = (value: string) => {
     setFormData({ ...formData, location: value });
+    console.log(value)
   };
 
   const handleSearch = () => {
@@ -29,7 +30,6 @@ const SearchLocation = () => {
     console.log(formData);
     setFormData("");
   };
-
 
   return (
     <>

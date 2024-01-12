@@ -6,26 +6,35 @@ interface RestaurantCardsProps {
   openTableData: any[];
   yelpData: any[];
   resyData: any[];
+  formData:any;
 }
 
 const RestaurantCards: React.FC<RestaurantCardsProps> = ({
   yelpData,
   openTableData,
   resyData,
+  formData
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [shuffledRestaurants, setShuffledRestaurants] = useState<any[]>([]);
-  // const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([
+    "yelp",
+    "open_table",
+    "resy",
+  ]);
 
   useEffect(() => {
+    console.log(formData)
     if (
-      (yelpData && yelpData.length > 0) ||
-      (openTableData && openTableData.length > 0) ||
-      (resyData && resyData.length > 0)
+      (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
+      (openTableData &&
+        openTableData.length > 0 &&
+        selectedTypes.includes("open_table")) ||
+      (resyData && resyData.length > 0 && selectedTypes.includes("resy"))
     ) {
       const mergedRestaurants: any = [];
 
-      if (yelpData && yelpData.length > 0) {
+      if (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) {
         mergedRestaurants.push(
           ...yelpData.map((restaurant: any) => ({
             ...restaurant,
@@ -33,7 +42,12 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
           }))
         );
       }
-      if (openTableData && openTableData.length > 0) {
+
+      if (
+        openTableData &&
+        openTableData.length > 0 &&
+        selectedTypes.includes("open_table")
+      ) {
         mergedRestaurants.push(
           ...openTableData.map((restaurant: any) => ({
             ...restaurant,
@@ -41,7 +55,8 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
           }))
         );
       }
-      if (resyData && resyData.length > 0) {
+
+      if (resyData && resyData.length > 0 && selectedTypes.includes("resy")) {
         mergedRestaurants.push(
           ...resyData.map((restaurant: any) => ({
             ...restaurant,
@@ -57,24 +72,99 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
           mergedRestaurants[i],
         ];
       }
+    
+      let matchedIndex = -1;
 
+      for (let i = 0; i < mergedRestaurants.length; i++) {
+        console.log(
+          `Checking ${mergedRestaurants[i].name} against ${formData.location}`
+        );
+        if (mergedRestaurants[i].name === formData.location) {
+          matchedIndex = i;
+          console.log("Match found:", mergedRestaurants[i]);
+          break;
+        }
+      }
+      
+      if (matchedIndex !== -1) {
+        const removedItem = mergedRestaurants.splice(matchedIndex, 1);
+        mergedRestaurants.unshift(removedItem[0]);
+      }
+      
       setShuffledRestaurants(mergedRestaurants);
+
       setLoading(false);
     } else {
-      // setErrorMessage("OOPS! No restaurant to display");
+      setShuffledRestaurants([]);
       setLoading(false);
     }
-  }, [yelpData, openTableData, resyData]);
+  }, [yelpData, openTableData, resyData, selectedTypes]);
+
+  const handleCheckboxChange = (type: string) => {
+    setSelectedTypes((prevSelectedTypes) => {
+      if (prevSelectedTypes.includes(type)) {
+        return prevSelectedTypes.filter((t) => t !== type);
+      } else {
+        return [...prevSelectedTypes, type];
+      }
+    });
+  };
 
   return (
     <div>
+      <div className="flex items-center justify-center text-center m-4 p-2 border-2 rounded-lg shadow-sm">
+        <div className="mr-4">
+          <input
+            type="checkbox"
+            id="checkbox1"
+            name="checkbox1"
+            defaultChecked
+            className=" h-8 w-8 rounded-full"
+            onChange={() => handleCheckboxChange("resy")}
+          />
+        </div>
+        <img
+          src="/assets/resy_logo_new.png"
+          alt="Logo 1"
+          className="w-[10%] h-9 mb-1 mr-10"
+        />
+        <div className="border-r border-gray-300 h-16 my-1 mx-4"></div>
+        <div className="mr-4">
+          <input
+            type="checkbox"
+            id="checkbox2"
+            name="checkbox2"
+            defaultChecked
+            className="h-8 w-8 ml-10"
+            onChange={() => handleCheckboxChange("open_table")}
+          />
+        </div>
+        <img
+          src="/assets/opentable.png"
+          alt="Logo 2"
+          className="w-[14%] h-10 mr-10"
+        />
+        <div className="border-r border-gray-300 h-16 my-1 mx-4"></div>
+        <div>
+          <input
+            type="checkbox"
+            id="checkbox3"
+            name="checkbox3"
+            defaultChecked
+            className="mr-4 h-8 w-8 text-purple-600"
+            onChange={() => handleCheckboxChange("yelp")}
+          />
+        </div>
+        <img
+          src="/assets/yelp_logo_new.png"
+          alt="Logo 3"
+          className="w-[8%] mb-1 h-8"
+        />
+      </div>
       {loading ? (
         <Loader />
       ) : (
         <div>
-          {/* {errorMessage && errorMessage !== null ? (
-            <h1 className="text-3xl text-red-600 italic">{errorMessage}</h1>
-          ) : null} */}
           {shuffledRestaurants?.map((data: any, index: any) => (
             <Link
               key={index}

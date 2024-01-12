@@ -35,6 +35,7 @@ const ReservationStatus = () => {
         console.log(myData, "rse");
         console.log(myData.reservationFormData);
         setFormData(finalData);
+        console.log(finalData)
 
         const reservationTime = finalData[0]?.reservation_time;
         console.log(reservationTime);
@@ -57,8 +58,8 @@ const ReservationStatus = () => {
         const apiParams = {
           first_name: myData?.reservationFormData?.first_name,
           last_name: myData?.reservationFormData?.last_name,
-          mobile_number: 3613043530,
-          mobile_country_id: "US",
+          mobile_number: myData?.reservationFormData?.phone,
+          mobile_country_id: "PK",
           email: myData?.reservationFormData?.email,
           persons: finalData[0]?.reservation_covers,
           restaurant_id: finalData[2],

@@ -50,8 +50,8 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
 
   const handleOpenTableReservation = (clickedData: any) => {
     console.log("Clicked data:", clickedData);
-    console.log(reservationCard?.restaurant?.resturantId);
-    const restraunt_id = reservationCard?.restaurant?.resturantId;
+    console.log(reservationCard?.restaurant?.restaurantId);
+    const restraunt_id = reservationCard?.restaurant?.restaurantId;
     const updatedNextData = [formData, clickedData, restraunt_id];
     console.log(updatedNextData, "ddddaaaattttaaaa");
     setNextData(updatedNextData);

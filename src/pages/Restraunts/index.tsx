@@ -1,37 +1,29 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { useLocation } from "react-router-dom";
 import { Base_Url } from "@/baseUrl";
 import { Sliders } from "lucide-react";
 
 import RestrautCards from "./RestrauntCards";
 import Filters from "./Filters";
-// import YelpBookingInfo from "./Reservation/YelpBookingInfo";
 
 const Search = () => {
-  // const { authState } = useAuth();
   const [formData, setFormData] = useState<any>({});
   const [yelpData, setYelpData] = useState<any>();
   const [resyData, setResyData] = useState<any>();
-  // const [apiData , setApiData] = useState<any>()
   const [openTableData, setOpenTableData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
-
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const data = params.get("data");
 
   useEffect(() => {
     let finalData: any = null;
-
     try {
       if (data !== null) {
         finalData = JSON.parse(decodeURIComponent(data));
         setFormData(finalData);
         setLoading(false);
-        console.log(finalData);
-        console.log(formData, "updated Form Data");
       } else {
         console.error("Data parameter is null or undefined");
         setLoading(false);
@@ -79,8 +71,8 @@ const Search = () => {
               },
             }
           );
-          console.log("RESY API Response:", response.data.data.search.hits);
-          setResyData(response.data.data.search.hits);
+          console.log("RESY API Response:", response?.data?.data?.businesses);
+          setResyData(response?.data?.data?.businesses);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -103,8 +95,8 @@ const Search = () => {
               },
             }
           );
-          console.log("OPEN TABLE API Response:", response.data.data);
-          setOpenTableData(response.data.data);
+          console.log("OPEN TABLE API Response:", response?.data?.data?.businesses);
+          setOpenTableData(response?.data?.data?.businesses);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -134,12 +126,9 @@ const Search = () => {
             yelpData={yelpData}
             resyData={resyData}
             openTableData={openTableData}
+            formData={formData}
           />
         </div>
-        {/* {loading ? (
-        <div>Loading...</div>
-      ) : (
-      )} */}
       </div>
     </>
   );

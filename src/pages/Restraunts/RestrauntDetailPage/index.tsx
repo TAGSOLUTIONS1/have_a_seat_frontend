@@ -29,15 +29,20 @@ const RestrauntDetail = () => {
 
     const resyParams = {
       venue_id: venue_id,
-      date: "2024-01-05",
+      date: "2024-01-25",
       persons: 2,
     };
 
     if (yelp_alias === null && venue_id === null) {
       setPrevId(map_url);
+      console.log(map_url)
+      const openTableParamUrl = map_url?.replace('https://www.opentable.com/', '');
+      // const parts = map_url?.split("/") ?? [];
+      // const openTableParamUrl = parts.slice(parts.lastIndexOf("r")).join("/");
+      console.log(openTableParamUrl);
       setKey("open_table");
       setEndPoint(
-        `${Base_Url}/api/v1/opentable/get_restaurant_details?map_url=${map_url}`
+        `${Base_Url}/api/v1/opentable/get_restaurant_details?map_url=${openTableParamUrl}`
       );
     } else if (map_url === null && venue_id === null) {
       setPrevId(yelp_alias);
@@ -47,27 +52,27 @@ const RestrauntDetail = () => {
       );
     } else if (map_url === null && yelp_alias === null) {
       setKey("resy");
-      console.log(map_url, venue_id, key);
+      // console.log(map_url, venue_id, key);
       setEndPoint(
         `${Base_Url}/api/v1/resy/get_restaurant_details?venue_id=${resyParams.venue_id}&date=${resyParams.date}&persons=${resyParams.persons}`
       );
     }
   }, [location.search, prevId]);
 
-  console.log(endpoint);
+  // console.log(endpoint);
   useEffect(() => {
     const fetchData = async () => {
       if (endpoint) {
         try {
           const response = await axios.get(endpoint);
-          console.log("Single Restaurant Detail:", response.data);
+          console.log("Single Restaurant Detail:", response.data.data.restaurant);
           if (key === "open_table") {
-            setRestrauntDetail(response.data.data.restaurantProfile);
+            setRestrauntDetail(response?.data?.data);
           } else if (key === "yelp") {
             setRestrauntDetail(response.data.data);
           } else if (key === "resy") {
-            console.log(response.data.data.results);
-            setRestrauntDetail(response.data.data);
+            console.log(response.data);
+            setRestrauntDetail(response.data);
           }
           setLoading(false);
         } catch (error) {
@@ -101,7 +106,7 @@ const RestrauntDetail = () => {
                   ? `url(${restrauntDetail?.image_url})`
                   : restrauntDetail?.restaurant
                   ? `url(${restrauntDetail?.restaurant?.photos?.profile?.large?.url})`
-                  : `url(${ResyRestrauntDetail?.data.results.venues[0].templates[897389].images[0]})`,
+                  : `url(${ResyRestrauntDetail?.data?.results?.venues[0]?.templates[897389]?.images[0]})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
