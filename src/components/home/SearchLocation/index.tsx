@@ -18,7 +18,10 @@ const SearchLocation = () => {
   });
 
   const getLocationData = (value: string) => {
-    setFormData({ ...formData, location: value });
+    const parts = value?.split(",")
+    const locate =  parts[0]
+    // console.log(locate)
+    setFormData({ ...formData, location: locate });
     console.log(value)
   };
 
