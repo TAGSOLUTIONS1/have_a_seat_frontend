@@ -24,7 +24,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
   ]);
 
   useEffect(() => {
-    console.log(formData)
+    // console.log(formData)
     if (
       (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
       (openTableData &&
@@ -76,9 +76,9 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
       let matchedIndex = -1;
 
       for (let i = 0; i < mergedRestaurants.length; i++) {
-        console.log(
-          `Checking ${mergedRestaurants[i].name} against ${formData.location}`
-        );
+        // console.log(
+        //   `Checking ${mergedRestaurants[i].name} against ${formData.location}`
+        // );
         if (mergedRestaurants[i].name === formData.location) {
           matchedIndex = i;
           console.log("Match found:", mergedRestaurants[i]);
@@ -112,8 +112,8 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
 
   return (
     <div>
-      <div className="flex items-center justify-center text-center m-4 p-2 border-2 rounded-lg shadow-sm">
-        <div className="mr-4">
+      <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row items-center justify-center text-center m-4 p-2 border-2 rounded-lg shadow-sm">
+        <div className="md:mr-4 lg:mr-4">
           <input
             type="checkbox"
             id="checkbox1"
@@ -126,39 +126,39 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
         <img
           src="/assets/resy_logo_new.png"
           alt="Logo 1"
-          className="w-[10%] h-9 mb-1 mr-10"
+          className="w-[40%] md:w-[10%] lg:w-[10%] sm:w-[40%] h-12 md:h-9 lg:h-9 mb-1 md:mr-10 lg:mr-10"
         />
-        <div className="border-r border-gray-300 h-16 my-1 mx-4"></div>
-        <div className="mr-4">
+        <div className="border-r hidden md:block lg:block border-gray-300 h-16 my-1 mx-4"></div>
+        <div className="md:mr-4 lg:mr-4 mt-4 md:mt-0 lg:mt-0">
           <input
             type="checkbox"
             id="checkbox2"
             name="checkbox2"
             defaultChecked
-            className="h-8 w-8 ml-10"
+            className="h-8 w-8 md:ml-10 lg:ml-10"
             onChange={() => handleCheckboxChange("open_table")}
           />
         </div>
         <img
           src="/assets/opentable.png"
           alt="Logo 2"
-          className="w-[14%] h-10 mr-10"
+          className="w-[50%] md:w-[14%] lg:w-[14%] h-14 md:h-10 lg:h-10 mb-1 md:mr-10 lg:mr-10"
         />
-        <div className="border-r border-gray-300 h-16 my-1 mx-4"></div>
+        <div className="border-r hidden md:block lg:block border-gray-300 h-16 my-1 mx-4"></div>
         <div>
           <input
             type="checkbox"
             id="checkbox3"
             name="checkbox3"
             defaultChecked
-            className="mr-4 h-8 w-8 text-purple-600"
+            className="mr-4 md:ml-6 lg:ml-6 h-8 w-8 text-purple-600"
             onChange={() => handleCheckboxChange("yelp")}
           />
         </div>
         <img
           src="/assets/yelp_logo_new.png"
           alt="Logo 3"
-          className="w-[8%] mb-1 h-8"
+          className=" mb-1 w-[40%] md:w-[8%] lg:w-[8%] h-14 md:h-8 lg:h-8"
         />
       </div>
       {loading ? (

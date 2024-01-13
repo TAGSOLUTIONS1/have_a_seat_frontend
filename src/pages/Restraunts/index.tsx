@@ -47,7 +47,7 @@ const Search = () => {
               },
             }
           );
-          console.log("YELP API Response:", response.data.data.businesses);
+          // console.log("YELP API Response:", response.data.data.businesses);
           setYelpData(response.data.data.businesses);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -71,7 +71,7 @@ const Search = () => {
               },
             }
           );
-          console.log("RESY API Response:", response?.data?.data?.businesses);
+          // console.log("RESY API Response:", response?.data?.data?.businesses);
           setResyData(response?.data?.data?.businesses);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -95,7 +95,7 @@ const Search = () => {
               },
             }
           );
-          console.log("OPEN TABLE API Response:", response?.data?.data?.businesses);
+          // console.log("OPEN TABLE API Response:", response?.data?.data?.businesses);
           setOpenTableData(response?.data?.data?.businesses);
         } catch (error) {
           console.error("Error fetching data:", error);

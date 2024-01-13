@@ -10,7 +10,7 @@ const Card3: React.FC<Card3Props> = ({ apiData }) => {
   const [data, setData] = useState<any>({});
   useEffect(() => {
     setData(apiData[8]);
-    console.log(apiData);
+    // console.log(apiData);
   }, [apiData]);
   return (
     <div

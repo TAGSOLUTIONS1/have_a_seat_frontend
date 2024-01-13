@@ -33,13 +33,13 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
     } else {
       fetchOpenTableTimeSlots();
     }
-    console.log(formData, "bytimeslots");
+    // console.log(formData, "bytimeslots");
   };
 
   const handleYelpReservation = (clickedData: any) => {
-    console.log("Clicked data:", clickedData);
+    // console.log("Clicked data:", clickedData);
     const updatedNextData = [reservationCard, clickedData];
-    console.log(formData);
+    // console.log(formData);
     setNextData(updatedNextData);
     const route = `/reservation?data=${encodeURIComponent(
       JSON.stringify(updatedNextData)
@@ -49,11 +49,11 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
   };
 
   const handleOpenTableReservation = (clickedData: any) => {
-    console.log("Clicked data:", clickedData);
+    // console.log("Clicked data:", clickedData);
     console.log(reservationCard?.restaurant?.restaurantId);
     const restraunt_id = reservationCard?.restaurant?.restaurantId;
     const updatedNextData = [formData, clickedData, restraunt_id];
-    console.log(updatedNextData, "ddddaaaattttaaaa");
+    // console.log(updatedNextData, "ddddaaaattttaaaa");
     setNextData(updatedNextData);
     const route = `/reservation?data=${encodeURIComponent(
       JSON.stringify(updatedNextData)
@@ -82,9 +82,9 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
       );
 
       if (response.status === 200) {
-        console.log(
-          response?.data?.data?.availability_data[0]?.availability_list
-        );
+        // console.log(
+        //   response?.data?.data?.availability_data[0]?.availability_list
+        // );
         setTimeSlots(
           response?.data?.data?.availability_data[0]?.availability_list
         );
@@ -112,7 +112,7 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
       );
       if (response.status === 200) {
 
-        console.log(response?.data?.data?.data?.availability);
+        // console.log(response?.data?.data?.data?.availability);
        setOpenTableTimeSlots(response?.data?.data?.data?.availability)
 
       } else {

@@ -60,7 +60,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
 
   return (
     <div className="flex bg-white p-8 rounded shadow-md ">
-      <div className="w-2/3 community-service-hours-form">
+      <div className=" w-full md:w-2/3 lg:w-2/3 community-service-hours-form">
         <h2 className="text-3xl font-bold text-center pb-8">
           Reservation Form
         </h2>
@@ -122,14 +122,14 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             <button
               type="submit"
               className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white w-1/2 align-center bg-purple-600 hover:bg-purple-800"
-              style={{ minWidth: "200px" }}
+              style={{ minWidth: "100px" }}
             >
               Make a Reservation
             </button>
           </div>
         </form>
       </div>
-      <div className="w-2/5 px-24">
+      <div className=" md:w-2/5 lg:w-2/5 hidden md:block lg:block md:px-24 lg:px-24 px-0">
         <img
           src="https://www.scaler.com/topics/stories/how-to-create-a-registration-form-in-html/assets/3.png"
           className="mt-32"

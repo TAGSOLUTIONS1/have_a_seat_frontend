@@ -15,7 +15,7 @@ const ReservationStatus = () => {
   const params = new URLSearchParams(location.search);
   const data: any = params.get("data");
 
-  console.log(JSON.parse(data));
+  // console.log(JSON.parse(data));
 
   useEffect(() => {
     const finalData = JSON.parse(data);
@@ -32,15 +32,15 @@ const ReservationStatus = () => {
       if (data !== null) {
         const myData = JSON.parse(decodeURIComponent(data));
         const finalData = myData.formData;
-        console.log(myData, "rse");
+        // console.log(myData, "rse");
         console.log(myData.reservationFormData);
         setFormData(finalData);
-        console.log(finalData)
+        // console.log(finalData)
 
         const reservationTime = finalData[0]?.reservation_time;
-        console.log(reservationTime);
+        // console.log(reservationTime);
         const timeDifference = finalData[1]?.timeOffsetMinutes;
-        console.log(reservationTime);
+        // console.log(reservationTime);
         const [hours, minutes] = reservationTime?.split(":");
         const formattedTimeMinutes =
           parseInt(hours, 10) * 60 + parseInt(minutes, 10);
@@ -51,7 +51,7 @@ const ReservationStatus = () => {
         const formattedMinutes = ("0" + calculatedMinutes).slice(-2);
         const finalTime = `${formattedHours}:${formattedMinutes}`;
 
-        console.log(finalTime);
+        // console.log(finalTime);
 
         setLoading(true);
 
@@ -99,7 +99,7 @@ const ReservationStatus = () => {
       if (data !== null) {
         finalData = JSON.parse(decodeURIComponent(data));
         setFormData(finalData);
-        console.log(finalData?.bookingInfo?.formSubmitPath);
+        // console.log(finalData?.bookingInfo?.formSubmitPath);
         const separator = finalData?.bookingInfo?.formSubmitPath;
         const parts = separator?.split("/");
         const date = parts[4];

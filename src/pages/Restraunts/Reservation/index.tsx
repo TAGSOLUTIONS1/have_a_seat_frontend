@@ -22,13 +22,13 @@ const Reservation = () => {
         const decodedData = decodeURIComponent(data);
         finalData = JSON.parse(decodedData);
         setFormData(finalData);
-        console.log("Parsed data:", finalData);
+        // console.log("Parsed data:", finalData);
       } else {
         console.error("Data parameter is null or undefined");
       }
     } catch (error) {
       console.error("Error parsing JSON or decoding URI:", error);
-      console.log("Malformed data:", data); // Log the malformed data
+      // console.log("Malformed data:", data); // Log the malformed data
     }
   }, [data]);
 
@@ -54,7 +54,7 @@ const Reservation = () => {
       persons: persons,
     };
 
-    console.log(bookingInfoParams);
+    // console.log(bookingInfoParams);
 
     try {
       const response = await axios.get(
@@ -65,8 +65,8 @@ const Reservation = () => {
       );
 
       if (response.status === 200) {
-        console.log("Request successful");
-        console.log("Response data:", response?.data?.data);
+        // console.log("Request successful");
+        // console.log("Response data:", response?.data?.data);
         setBookingInfo(response?.data?.data);
       } else {
         console.error("Request failed with status:", response.status);

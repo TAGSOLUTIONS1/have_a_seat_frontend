@@ -35,11 +35,11 @@ const RestrauntDetail = () => {
 
     if (yelp_alias === null && venue_id === null) {
       setPrevId(map_url);
-      console.log(map_url)
+      // console.log(map_url)
       const openTableParamUrl = map_url?.replace('https://www.opentable.com/', '');
       // const parts = map_url?.split("/") ?? [];
       // const openTableParamUrl = parts.slice(parts.lastIndexOf("r")).join("/");
-      console.log(openTableParamUrl);
+      // console.log(openTableParamUrl);
       setKey("open_table");
       setEndPoint(
         `${Base_Url}/api/v1/opentable/get_restaurant_details?map_url=${openTableParamUrl}`
@@ -65,7 +65,7 @@ const RestrauntDetail = () => {
       if (endpoint) {
         try {
           const response = await axios.get(endpoint);
-          console.log("Single Restaurant Detail:", response.data.data.restaurant);
+          // console.log("Single Restaurant Detail:", response.data.data.restaurant);
           if (key === "open_table") {
             setRestrauntDetail(response?.data?.data);
           } else if (key === "yelp") {
@@ -84,7 +84,7 @@ const RestrauntDetail = () => {
     fetchData();
   }, [endpoint, key]);
 
-  console.log(restrauntDetail?.restaurant);
+  // console.log(restrauntDetail?.restaurant);
 
   return (
     <div>

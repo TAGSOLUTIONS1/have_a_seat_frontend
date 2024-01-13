@@ -22,7 +22,7 @@ const SearchLocation = () => {
     const locate =  parts[0]
     // console.log(locate)
     setFormData({ ...formData, location: locate });
-    console.log(value)
+    // console.log(value)
   };
 
   const handleSearch = () => {
@@ -30,7 +30,7 @@ const SearchLocation = () => {
       JSON.stringify(formData)
     )}`;
     navigate(route);
-    console.log(formData);
+    // console.log(formData);
     setFormData("");
   };
 
