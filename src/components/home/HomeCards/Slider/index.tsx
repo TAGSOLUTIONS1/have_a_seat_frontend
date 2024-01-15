@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ShoppingBag } from "lucide-react";
 import { Heart } from "lucide-react";
 import { Eye } from "lucide-react";

@@ -58,7 +58,6 @@ export const useAuthProvider = (): AuthContextProps => {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken  = localStorage.getItem('refreshToken');
 
-    // console.log(accessToken);
     try {
       const config = {
         headers: {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { Globe } from 'lucide-react';
 
@@ -12,9 +13,9 @@ const Regions: React.FC = () => {
 
   const handlePriceFilterChange = (selectedRange: string) => {
     if (selectedRegion === selectedRange) {
-      setSelectedRegion(null); // Uncheck if the same checkbox is clicked again
+      setSelectedRegion(null); 
     } else {
-      setSelectedRegion(selectedRange); // Check the selected checkbox
+      setSelectedRegion(selectedRange); 
     }
   };
 

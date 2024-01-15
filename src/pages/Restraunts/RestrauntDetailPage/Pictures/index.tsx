@@ -1,5 +1,6 @@
-import Images from './Images'
 import { useState , useEffect } from 'react';
+
+import Images from './Images'
 
 interface OverviewCardProps {
   restrauntDetail: any; 
@@ -9,7 +10,6 @@ const Pictures: React.FC<OverviewCardProps> = ({ restrauntDetail }) => {
   const [pictures , setPictures]= useState<any>()
   useEffect(() => {
     if (Object.keys(restrauntDetail).length !== 0) {
-      // console.log(restrauntDetail, "at pics");
       setPictures(restrauntDetail)
     }
   }, [restrauntDetail]);

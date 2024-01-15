@@ -1,6 +1,8 @@
-import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+
+import { useLocation } from "react-router-dom";
 import axios from "axios";
+
 import ReservationSuccessFul from "./ReservationSuccess";
 import ReservationFailed from "./ReservationFailed";
 import { Base_Url } from "@/baseUrl";
@@ -10,12 +12,11 @@ const ReservationStatus = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<boolean | null>(null);
 
-  console.log(formData);
+  // console.log(formData);
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const data: any = params.get("data");
 
-  // console.log(JSON.parse(data));
 
   useEffect(() => {
     const finalData = JSON.parse(data);
@@ -24,7 +25,6 @@ const ReservationStatus = () => {
     } else {
       openTableReservation();
     }
-    // console.log(finalData)
   }, []);
 
   const openTableReservation = async () => {
@@ -32,15 +32,11 @@ const ReservationStatus = () => {
       if (data !== null) {
         const myData = JSON.parse(decodeURIComponent(data));
         const finalData = myData.formData;
-        // console.log(myData, "rse");
         console.log(myData.reservationFormData);
         setFormData(finalData);
-        // console.log(finalData)
 
         const reservationTime = finalData[0]?.reservation_time;
-        // console.log(reservationTime);
         const timeDifference = finalData[1]?.timeOffsetMinutes;
-        // console.log(reservationTime);
         const [hours, minutes] = reservationTime?.split(":");
         const formattedTimeMinutes =
           parseInt(hours, 10) * 60 + parseInt(minutes, 10);
@@ -50,8 +46,6 @@ const ReservationStatus = () => {
         const formattedHours = ("0" + calculatedHours).slice(-2);
         const formattedMinutes = ("0" + calculatedMinutes).slice(-2);
         const finalTime = `${formattedHours}:${formattedMinutes}`;
-
-        // console.log(finalTime);
 
         setLoading(true);
 
@@ -99,7 +93,6 @@ const ReservationStatus = () => {
       if (data !== null) {
         finalData = JSON.parse(decodeURIComponent(data));
         setFormData(finalData);
-        // console.log(finalData?.bookingInfo?.formSubmitPath);
         const separator = finalData?.bookingInfo?.formSubmitPath;
         const parts = separator?.split("/");
         const date = parts[4];
@@ -126,7 +119,7 @@ const ReservationStatus = () => {
             params: apiParams,
           }
         );
-        console.log("API Response:", response.data);
+        console.log("API Response:", response.data.data);
         setStatus(true);
         setLoading(false);
       } else {
@@ -145,9 +138,9 @@ const ReservationStatus = () => {
       {loading ? (
         <p>Loading...</p>
       ) : status === true ? (
-        <ReservationSuccessFul />
+        <ReservationSuccessFul formData={formData} />
       ) : status === false ? (
-        <ReservationFailed />
+        <ReservationFailed formData={formData}/>
       ) : (
         <p>No status available</p>
       )}

@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+
 import axios from "axios";
 
 interface State {
@@ -46,7 +47,6 @@ const ResetForm = () => {
       );
 
       if (response.status === 200) {
-        console.log("Password reset successful!");
         dispatch({ type: "RESET_FIELDS" });
       } else {
         console.log("reset failed");
@@ -55,6 +55,7 @@ const ResetForm = () => {
       console.error("Error occurred while resetting password:", error);
     }
   };
+
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mt-10">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">

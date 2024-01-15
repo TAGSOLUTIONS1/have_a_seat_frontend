@@ -4,6 +4,7 @@ import {
   GeoapifyContext,
   GeoapifyGeocoderAutocomplete,
 } from "@geoapify/react-geocoder-autocomplete";
+
 import GeoJSON from "geojson";
 
 import "@geoapify/geocoder-autocomplete/styles/minimal.css";

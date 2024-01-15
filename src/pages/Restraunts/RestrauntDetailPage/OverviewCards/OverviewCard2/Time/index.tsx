@@ -7,7 +7,6 @@ import {
     SelectValue,
   } from "@/components/ui/select";
 
-  // import { useEffect , useState } from "react";
   
   
   const timeOptions = [
@@ -30,11 +29,9 @@ import {
       }); 
     };
 
-    // console.log(reservationCard?.name)
 
     return (
       <Select onValueChange={handleTimeSelection}>
-        {/* <h1 className="my-2">Time</h1> */}
         <div className="text-black">
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select time" />

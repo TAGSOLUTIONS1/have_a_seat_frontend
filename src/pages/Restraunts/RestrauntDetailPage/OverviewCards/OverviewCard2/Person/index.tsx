@@ -16,7 +16,6 @@ const PersonCard:React.FC<PersonProps> = ({setFormData}) => {
   const handleSelectChange = (persons: any) => {
     const selectedPersons = parseInt(persons, 10);
   
-    // console.log(selectedPersons);
     setFormData((prev:any)=>{
       return {
         ...prev,
@@ -27,12 +26,10 @@ const PersonCard:React.FC<PersonProps> = ({setFormData}) => {
 
   return (
     <Select onValueChange={handleSelectChange}>
-      {/* <h1 className="my-2">Person</h1> */}
       <div className="text-black">
         <SelectTrigger className="w-full ">
           <SelectValue
             placeholder="Select Person"
-            // onSelect={handleSelectChange}
           />
         </SelectTrigger>
         <SelectContent>

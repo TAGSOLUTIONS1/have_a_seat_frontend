@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import { Base_Url } from "@/baseUrl";
 import DatePicker from "./Date";
 import PersonCard from "./Person";
 import Time from "./Time";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Base_Url } from "@/baseUrl";
 
 interface OverviewCardProps {
   overviewCardsData: any;
@@ -14,6 +16,7 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
   const [reservationCard, setReservationCard] = useState<any>();
   const [formData, setFormData] = useState<any>();
   const [nextData, setNextData] = useState<any>([]);
+  const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const [timeSlots, setTimeSlots] = useState<any>();
   const [openTableTimeSlots, setOpenTableTimeSlots] = useState<any>();
 
@@ -33,13 +36,10 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
     } else {
       fetchOpenTableTimeSlots();
     }
-    // console.log(formData, "bytimeslots");
   };
 
   const handleYelpReservation = (clickedData: any) => {
-    // console.log("Clicked data:", clickedData);
     const updatedNextData = [reservationCard, clickedData];
-    // console.log(formData);
     setNextData(updatedNextData);
     const route = `/reservation?data=${encodeURIComponent(
       JSON.stringify(updatedNextData)
@@ -49,11 +49,9 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
   };
 
   const handleOpenTableReservation = (clickedData: any) => {
-    // console.log("Clicked data:", clickedData);
     console.log(reservationCard?.restaurant?.restaurantId);
     const restraunt_id = reservationCard?.restaurant?.restaurantId;
     const updatedNextData = [formData, clickedData, restraunt_id];
-    // console.log(updatedNextData, "ddddaaaattttaaaa");
     setNextData(updatedNextData);
     const route = `/reservation?data=${encodeURIComponent(
       JSON.stringify(updatedNextData)
@@ -82,12 +80,10 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
       );
 
       if (response.status === 200) {
-        // console.log(
-        //   response?.data?.data?.availability_data[0]?.availability_list
-        // );
         setTimeSlots(
           response?.data?.data?.availability_data[0]?.availability_list
         );
+        setIsDataLoaded(true);
       } else {
         throw new Error("Network response was not ok.");
       }
@@ -111,10 +107,8 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
         }
       );
       if (response.status === 200) {
-
-        // console.log(response?.data?.data?.data?.availability);
-       setOpenTableTimeSlots(response?.data?.data?.data?.availability)
-
+        setOpenTableTimeSlots(response?.data?.data?.data?.availability);
+        setIsDataLoaded(true);
       } else {
         throw new Error("Network response was not ok.");
       }
@@ -152,33 +146,50 @@ const OverviewCard2: React.FC<OverviewCardProps> = ({ overviewCardsData }) => {
       </button>
       <hr className="mt-4 mb-4" />
       <h1 className="mt-4 text-lg mb-4 font-bold">Time Slots</h1>
-      {overviewCardsData?.alias
-        ? Array.isArray(timeSlots) &&
-          timeSlots.map((data: any, index: number) => (
-            <button
-              key={index}
-              className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-              onClick={() => handleYelpReservation(data)}
-            >
-              {new Date(data.timestamp * 1000).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </button>
-          ))
-        : Array.isArray(openTableTimeSlots) &&
-          openTableTimeSlots[0]?.availabilityDays[0]?.slots.map((data: any, index: number) => (
-            <button
-              key={index}
-              className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-              onClick={() => handleOpenTableReservation(data)}
-            >
-              {convertOffsetToTime(
-                data.timeOffsetMinutes,
-                formData?.reservation_time
-              )}
-            </button>
-          ))}
+      {
+        overviewCardsData?.alias ? (
+          isDataLoaded ? (
+            Array.isArray(timeSlots) && timeSlots.length > 0 ? (
+              timeSlots.map((data: any, index: number) => (
+                <button
+                  key={index}
+                  className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                  onClick={() => handleYelpReservation(data)}
+                >
+                  {new Date(data.timestamp * 1000).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </button>
+              ))
+            ) : (
+              <p className="text-lg text-red-600">No slots available.</p>
+            )
+          ) : (
+            <p></p>
+          )
+        ) : (
+          Array.isArray(openTableTimeSlots) &&
+          // openTableTimeSlots[0]?.availabilityDays[0]?.slots.length > 0 ? (
+          openTableTimeSlots[0]?.availabilityDays[0]?.slots.map(
+            (data: any, index: number) => (
+              <button
+                key={index}
+                className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                onClick={() => handleOpenTableReservation(data)}
+              >
+                {convertOffsetToTime(
+                  data.timeOffsetMinutes,
+                  formData?.reservation_time
+                )}
+              </button>
+            )
+          )
+        )
+        // ) : (
+        //   <p className="text-lg text-red-600">No slots available.</p>
+        // )
+      }
     </div>
   );
 };

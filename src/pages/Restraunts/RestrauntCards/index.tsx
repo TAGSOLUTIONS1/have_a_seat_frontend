@@ -1,5 +1,5 @@
-import Loader from "@/components/Loader";
 import React, { useEffect, useState } from "react";
+
 import { Link } from "react-router-dom";
 
 interface RestaurantCardsProps {
@@ -8,6 +8,8 @@ interface RestaurantCardsProps {
   resyData: any[];
   formData:any;
 }
+
+import Loader from "@/components/Loader";
 
 const RestaurantCards: React.FC<RestaurantCardsProps> = ({
   yelpData,
@@ -24,7 +26,6 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
   ]);
 
   useEffect(() => {
-    // console.log(formData)
     if (
       (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
       (openTableData &&
@@ -76,10 +77,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
       let matchedIndex = -1;
 
       for (let i = 0; i < mergedRestaurants.length; i++) {
-        // console.log(
-        //   `Checking ${mergedRestaurants[i].name} against ${formData.location}`
-        // );
-        if (mergedRestaurants[i].name === formData.location) {
+        if (mergedRestaurants[i].name.toLowerCase() === formData.location.toLowerCase()) {
           matchedIndex = i;
           console.log("Match found:", mergedRestaurants[i]);
           break;
@@ -112,14 +110,14 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row items-center justify-center text-center m-4 p-2 border-2 rounded-lg shadow-sm">
+      <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row items-center p-1 mb-2 mt-8 justify-center text-center  border-2 rounded-lg shadow-sm">
         <div className="md:mr-4 lg:mr-4">
           <input
             type="checkbox"
             id="checkbox1"
             name="checkbox1"
             defaultChecked
-            className=" h-8 w-8 rounded-full"
+            className=" h-6 w-6 rounded-full"
             onChange={() => handleCheckboxChange("resy")}
           />
         </div>
@@ -128,14 +126,14 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
           alt="Logo 1"
           className="w-[40%] md:w-[10%] lg:w-[10%] sm:w-[40%] h-12 md:h-9 lg:h-9 mb-1 md:mr-10 lg:mr-10"
         />
-        <div className="border-r hidden md:block lg:block border-gray-300 h-16 my-1 mx-4"></div>
+        <div className="border-r hidden md:block lg:block border-gray-300 h-10 my-1 mx-4"></div>
         <div className="md:mr-4 lg:mr-4 mt-4 md:mt-0 lg:mt-0">
           <input
             type="checkbox"
             id="checkbox2"
             name="checkbox2"
             defaultChecked
-            className="h-8 w-8 md:ml-10 lg:ml-10"
+            className="h-6 w-6 md:ml-10 lg:ml-10"
             onChange={() => handleCheckboxChange("open_table")}
           />
         </div>
@@ -144,14 +142,14 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = ({
           alt="Logo 2"
           className="w-[50%] md:w-[14%] lg:w-[14%] h-14 md:h-10 lg:h-10 mb-1 md:mr-10 lg:mr-10"
         />
-        <div className="border-r hidden md:block lg:block border-gray-300 h-16 my-1 mx-4"></div>
+        <div className="border-r hidden md:block lg:block border-gray-300 h-10 my-1 mx-4"></div>
         <div>
           <input
             type="checkbox"
             id="checkbox3"
             name="checkbox3"
             defaultChecked
-            className="mr-4 md:ml-6 lg:ml-6 h-8 w-8 text-purple-600"
+            className="mr-4 md:ml-6 lg:ml-6 h-6 w-6 text-purple-600"
             onChange={() => handleCheckboxChange("yelp")}
           />
         </div>

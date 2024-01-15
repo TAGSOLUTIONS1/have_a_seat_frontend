@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 interface ReservationFormProps {
@@ -10,7 +11,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   formData,
   bookingInfo,
 }) => {
-  // const [id, setId] = useState<any>();
+
   const navigate = useNavigate();
 
   const [reservationFormData, setReservationFormData] = useState({
@@ -20,16 +21,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     email: "",
   });
 
-  // useEffect(() => {
-  //   if (Array.isArray(formData) && formData.length > 0) {
-  //     if (formData[0]?.alias) {
-  //       console.log(formData)
-  //       setId(0);
-  //     } else {
-  //       setId(formData[0]?.diningAreas[0]?.diningAreaId);
-  //     }
-  //   }
-  // }, [formData]);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;

@@ -2,24 +2,28 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import "./nav.css";
 import { useEffect } from "react";
 import { fetchUserInfo } from "@/lib/utils";
 
 import { cn } from "@/lib/utils";
-import SideNav from "../SideNav";
 import { User } from "lucide-react";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 
+import SideNav from "../SideNav";
+import "./nav.css";
+
 const Navbar = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const { logout } = useAuth();
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUser] = useState<any>();
 
 
   const storageToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
+
     const token = localStorage.getItem('accessToken');
   
     const fetchUserInformation = async (userToken:any) => {

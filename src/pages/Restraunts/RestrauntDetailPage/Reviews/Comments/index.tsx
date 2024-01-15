@@ -1,6 +1,7 @@
-import { Star, ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-// import { yelpReviewsMock } from "@/mockData";
+
+import { Star, ArrowLeft, ArrowRight } from "lucide-react";
+
 interface ReviewsDataProps {
   reviewsData: any;
   yelpReviews: any;
@@ -10,8 +11,6 @@ const Comments: React.FC<ReviewsDataProps> = ({ reviewsData, yelpReviews }) => {
   const [reviews, setReviews] = useState<any[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const reviewsPerPage = 3;
-
-  // console.log(yelpReviews?.data);
 
   useEffect(() => {
     if (reviewsData?.reviewSearchResults) {

@@ -12,7 +12,6 @@ const YelpBookingInfo: React.FC<YelpBookingInfoProps> = ({ bookingInfo }) => {
               src={bookingInfo?.avatars["120s"]?.src}
               alt={bookingInfo?.avatars["120s"]?.altText}
               height={"255px"}
-              // width={"255px"}
               className="object-cover w-full md:w-[255px] lg:w-[255px]"
             />
           </div>

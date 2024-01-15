@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 
 interface Card2Props {
@@ -9,8 +10,8 @@ const Card2: React.FC<Card2Props> = ({ apiData }) => {
   const [data , setData] = useState<any>({})
   useEffect(()=>{
     setData(apiData[6])
-    // console.log(apiData)
   },[apiData])
+
   return (
     <div
       id="app"

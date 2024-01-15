@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { RockingChairIcon } from 'lucide-react';
 
@@ -12,9 +13,9 @@ const SeatingOptions: React.FC = () => {
 
   const handlePriceFilterChange = (selectedRange: string) => {
     if (selectedSeatingOption === selectedRange) {
-      setSelectedSeatingOption(null); // Uncheck if the same checkbox is clicked again
+      setSelectedSeatingOption(null); 
     } else {
-      setSelectedSeatingOption(selectedRange); // Check the selected checkbox
+      setSelectedSeatingOption(selectedRange); 
     }
   };
 

@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect , useState } from "react";
+
 import OverviewCard1 from "./OverviewCard1";
 import OverviewCard2 from "./OverviewCard2";
-import { useState } from "react";
 
 interface OverviewCardProps {
   restrauntDetail: any; 
@@ -12,7 +12,6 @@ const OverviewCard: React.FC<OverviewCardProps> = ({ restrauntDetail }) => {
   const [overviewCardsData , setOverviewCardsData]= useState<any>()
   useEffect(() => {
     if (Object.keys(restrauntDetail).length !== 0) {
-      // console.log(restrauntDetail, "at cards");
       setOverviewCardsData(restrauntDetail)
     }
   }, [restrauntDetail]);
@@ -28,18 +27,6 @@ const OverviewCard: React.FC<OverviewCardProps> = ({ restrauntDetail }) => {
       </div>
       <div className="col-span-1"></div>
     </div>
-
-  //   <div className="grid grid-row-8 mb-10  space-x-8">
-  //   <div className="col-span-1"></div>
-  //   <div className="row-span-1">
-  //     <OverviewCard1 overviewCardsData={overviewCardsData}  />
-  //   </div>
-  //   <div className="row-span-1  sticky top-0">
-  //     <OverviewCard2 overviewCardsData={overviewCardsData} />
-  //   </div>
-  //   <div className="col-span-1"></div>
-  // </div>
-
   );
 };
 

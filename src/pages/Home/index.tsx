@@ -2,10 +2,11 @@ import HomeCards from "@/components/home/HomeCards";
 import HomeBestSellerCards from "@/components/home/HomeBestSellerCards";
 import SearchLocation from "@/components/home/SearchLocation";
 
-import "./style.css";
 import HomeSlider from "@/components/home/HomeSlider";
 import Testimonials from "@/components/home/Testimonials";
 import HomeStats from "@/components/home/HomeStats";
+
+import "./style.css";
 
 const Home = () => {
   return (

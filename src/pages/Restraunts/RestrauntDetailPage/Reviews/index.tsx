@@ -1,37 +1,9 @@
-// import Comments from "./Comments";
-// import DetailRating from "./Rating";
-// import { useEffect, useState } from "react";
-
-// interface MenuProps {
-//   restrauntDetail: any;
-// }
-
-// const Reviews: React.FC<MenuProps> = ({ restrauntDetail }) => {
-//   const [reviewsData, setReviewsData] = useState<any>();
-
-//   useEffect(() => {
-//     if (Object.keys(restrauntDetail).length !== 0) {
-//       setReviewsData(restrauntDetail);
-//     }
-//   }, [restrauntDetail]);
-//   return (
-//     <div className=" grid grid-cols-8 space-x-4 mb-8 ">
-//       <div className="col-span-1"></div>
-//       <div className=" border rounded-lg shadow-lg mt-4 p-4 col-span-4 mr-4 ">
-//         <DetailRating reviewsData={reviewsData} />
-//         <hr className="mb-4 mt-4" />
-//         <Comments reviewsData={reviewsData} />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Reviews;
+import { useEffect, useState } from "react";
 
 import axios from "axios";
+
 import Comments from "./Comments";
 import DetailRating from "./Rating";
-import { useEffect, useState } from "react";
 import { Base_Url } from "@/baseUrl";
 
 interface MenuProps {
@@ -53,7 +25,6 @@ const Reviews: React.FC<MenuProps> = ({ restrauntDetail }) => {
       const response = await axios.get(
         `${Base_Url}/api/v1/yelp/get_restaurant_reviews/${alias}`
       );
-      // console.log('Reviews Data:', response.data.data);
       setYelpReviews(response.data.data);
     } catch (error) {
       console.error("Error fetching reviews:", error);

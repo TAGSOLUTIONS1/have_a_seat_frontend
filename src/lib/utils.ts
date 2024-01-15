@@ -4,7 +4,6 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 export function cn(...inputs: ClassValue[]): string {
-  // console.log(twMerge(clsx(inputs)))
   return twMerge(clsx(inputs));
 }
 
@@ -40,9 +39,6 @@ if (decodedToken && decodedToken?.user_id) {
       `https://tagsolutionsltd.com/auth/viewuser/${userId}/`,
       config
     );
-
-    // console.log(data?.data )
-
     return  data.data ;
   } catch (error) {
     console.error(error);

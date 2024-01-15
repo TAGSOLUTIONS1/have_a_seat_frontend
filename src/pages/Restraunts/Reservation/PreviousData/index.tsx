@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-// import { bookingInfo } from "@/mockData";
-// import axios from "axios";
 
 interface PreviousProps {
   formData: any;
@@ -35,7 +33,6 @@ const PreviousData: React.FC<PreviousProps> = ({ formData, bookingInfo }) => {
               </label>
               <input
                 disabled
-                // type="date"
                 id="date"
                 value={
                   prePopulatedData?.reservation_date

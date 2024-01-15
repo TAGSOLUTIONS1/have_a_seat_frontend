@@ -8,8 +8,6 @@ const SearchLocation = () => {
 
   const [formData, setFormData] = useState<any>({
    attributes: "reservation",
-    // latitude: 40.772385,
-    // longitude: -73.956516,
     reservation_covers: 2,
     persons: 2,
     reservation_date: "2024-01-25",
@@ -20,9 +18,7 @@ const SearchLocation = () => {
   const getLocationData = (value: string) => {
     const parts = value?.split(",")
     const locate =  parts[0]
-    // console.log(locate)
     setFormData({ ...formData, location: locate });
-    // console.log(value)
   };
 
   const handleSearch = () => {
@@ -30,7 +26,6 @@ const SearchLocation = () => {
       JSON.stringify(formData)
     )}`;
     navigate(route);
-    // console.log(formData);
     setFormData("");
   };
 

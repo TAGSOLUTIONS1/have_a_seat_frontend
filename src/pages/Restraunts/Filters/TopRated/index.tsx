@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { TrendingUpIcon } from 'lucide-react';
 
@@ -12,9 +13,9 @@ const TopRated: React.FC = () => {
 
   const handlePriceFilterChange = (selectedRange: string) => {
     if (selectedFilter === selectedRange) {
-      setSelectedFilter(null); // Uncheck if the same checkbox is clicked again
+      setSelectedFilter(null); 
     } else {
-      setSelectedFilter(selectedRange); // Check the selected checkbox
+      setSelectedFilter(selectedRange); 
     }
   };
 

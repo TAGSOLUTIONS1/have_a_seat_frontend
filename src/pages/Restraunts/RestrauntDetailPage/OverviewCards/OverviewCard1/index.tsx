@@ -1,4 +1,5 @@
 import { Star, MessageSquare, DollarSign, Utensils } from "lucide-react";
+
 import { ResyRestrauntDetail } from "@/mockData";
 
 interface OverviewCardProps {
