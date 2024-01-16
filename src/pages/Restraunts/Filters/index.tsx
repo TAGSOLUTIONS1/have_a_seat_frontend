@@ -1,30 +1,29 @@
-import PriceFilters from './PriceFilters';
+import Ameneties from "./Ameneties";
+import Cuisine from "./Cuisine";
 import DiningOptions from "./DiningOptions";
 import Experiences from "./Experiences";
-import SeatingOptions from "./SeatingOptions";
-import Regions from "./Regions";
 import Neighbourhood from "./NeighbourHoods";
-import Cuisine from "./Cuisine";
-import TopRated from "./TopRated";
+import PriceFilters from "./PriceFilters";
+import Regions from "./Regions";
 import SafetyPrecautions from "./SafetyPrecautions";
-import Ameneties from "./Ameneties";
+import SeatingOptions from "./SeatingOptions";
+import TopRated from "./TopRated";
 
 const Filters = () => {
   return (
     <div>
-      <DiningOptions/>
-      <Experiences/>
-      <SeatingOptions/>
-      <PriceFilters/>
-      <Regions/>
-      <Neighbourhood/>
-      <Cuisine/>
-      <TopRated/>
-      <SafetyPrecautions/>
-      <Ameneties/>
-      
+      <DiningOptions />
+      <Experiences />
+      <SeatingOptions />
+      <PriceFilters />
+      <Regions />
+      <Neighbourhood />
+      <Cuisine />
+      <TopRated />
+      <SafetyPrecautions />
+      <Ameneties />
     </div>
-  )
-}
+  );
+};
 
-export default Filters
+export default Filters;
