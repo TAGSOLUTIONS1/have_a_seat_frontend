@@ -10,6 +10,7 @@ import RestrauntDetail from "./pages/Restraunts/RestrauntDetailPage";
 import Footer from "./components/common/Footer";
 import Reservation from "./pages/Restraunts/Reservation";
 import ReservationStatus from "./pages/Restraunts/Reservation/ReservationStatus";
+import AccountLinks from "./pages/AccountLinks";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/restaurant-detail" element={<RestrauntDetail />} />
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/reservation-status" element={<ReservationStatus />} />
+        <Route path="/account-links" element={<AccountLinks />} />
       </Routes>
       <Footer />
     </>
