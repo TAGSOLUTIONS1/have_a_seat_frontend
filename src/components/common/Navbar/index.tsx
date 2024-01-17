@@ -13,10 +13,9 @@ import SideNav from "../SideNav";
 import "./nav.css";
 
 const Navbar = () => {
+
   const { logout } = useAuth();
-
   const [user, setUser] = useState<any>();
-
   const storageToken = localStorage.getItem("accessToken");
 
   useEffect(() => {

@@ -32,7 +32,7 @@ const Reviews: React.FC<MenuProps> = ({ restrauntDetail }) => {
   };
 
   useEffect(() => {
-    if (restrauntDetail?.alias ) {
+    if (restrauntDetail?.alias) {
       fetchReviews(restrauntDetail?.alias);
     } else {
       null;
@@ -43,9 +43,9 @@ const Reviews: React.FC<MenuProps> = ({ restrauntDetail }) => {
     <div className=" w-[full] ml-10 mt-8 md:ml-0 lg:ml-0 md:grid lg:grid md:grid-cols-8 lg:grid-cols-8 md:space-x-4 lg:space-x-4">
       <div className="col-span-1"></div>
       <div className="border rounded-lg shadow-lg mt-4 p-4 col-span-4 mr-4">
-        {restrauntDetail?.alias  ? null : (
+        {restrauntDetail?.restaurant ? (
           <DetailRating reviewsData={reviewsData} />
-        )}
+        ) : null}
         <hr className="mb-4 mt-4" />
         <h1 className="text-xl mb-4 font-bold">Reviews</h1>
         <Comments reviewsData={reviewsData} yelpReviews={yelpReviews} />

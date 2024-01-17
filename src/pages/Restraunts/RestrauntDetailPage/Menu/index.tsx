@@ -9,10 +9,9 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ restrauntDetail }) => {
 
   const [menuData , setMenuData]= useState<any>()
-  console.log(restrauntDetail)
   useEffect(() => {
     if (Object.keys(restrauntDetail).length !== 0) {
-      setMenuData(restrauntDetail?.menus?.menuInfo?.url)
+      setMenuData(restrauntDetail?.menus?.menuData[0]?.sections[0]?.items)
     return
     }
   }, [restrauntDetail]);
@@ -25,8 +24,10 @@ const Menu: React.FC<MenuProps> = ({ restrauntDetail }) => {
           <strong>Menu</strong>
         </h1>
         <hr className="mb-4 mt-4" />
-        { restrauntDetail?.menus
-          ? <a href={menuData} target="blank">{menuData}</a>
+        { restrauntDetail ? 
+          menuData?.map((data:any)=>{
+            return<p>{data.title}</p>
+          })
           : <a className="text-lg" href={menuData} target="blank">{ResyRestrauntDetail.data.results.venues[0].templates[900634].menu["en-us"]}</a>
           }
       </div>

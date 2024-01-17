@@ -28,10 +28,10 @@ export const useAuthProvider = (): AuthContextProps => {
   const login = async (email: string, password: string) => {
     try {
       const response = await axios.post(
-        "https://tagsolutionsltd.com/auth/login/",
+        "https://tagsolutionsltd.com/auth/jwt/login",
         {
-          email,
-          password,
+          username:email,
+          password:password,
         },
       );
       if (response.status === 200) {

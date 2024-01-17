@@ -1,4 +1,6 @@
 import { useState } from "react";
+// import { useRef , useEffect } from "react";
+
 import {
   Dialog,
   DialogContent,
@@ -8,6 +10,7 @@ import {
 
 const LinkDialogue = () => {
   const [restrauntType, setRestrauntType] = useState<string | null>(null);
+//   const iframeRef = useRef<any | null>(null);
 
   const openModalWindow = (url: string, width: any, height: any) => {
     var left = screen.width / 2 - width / 2;
@@ -41,6 +44,27 @@ const LinkDialogue = () => {
       setRestrauntType(type);
     }
   };
+
+//   const handleIFrameMessage = (event: any) => {
+//     if (event.source === iframeRef?.current?.contentWindow) {
+//       if (event.data && event.data.type === "cookieData") {
+//         console.log("Cookies from iframe:", event.data.cookies);
+//       }
+//     }
+//   };
+
+//   useEffect(() => {
+//     window.addEventListener("message", handleIFrameMessage);
+//     return () => {
+//       window.removeEventListener("message", handleIFrameMessage);
+//     };
+
+//   }, []);
+
+//   const cookies = document.cookie;
+//   const cookieData = { type: "cookieData", cookies };
+
+//   window.parent.postMessage(cookieData, "*");
 
   return (
     <>
@@ -116,6 +140,7 @@ const LinkDialogue = () => {
         >
           {restrauntType === "yelp" ? (
             <iframe
+            //   ref={iframeRef}
               src="https://www.yelp.com/signup?return_url=https%3A%2F%2Fwww.yelp.com%2F"
               className="w-full mt-4 h-[610px]"
               frameBorder="0"

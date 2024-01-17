@@ -201,12 +201,12 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = memo(
                         ? data?.images[0]
                         : data?.photos?.profile?.medium?.url
                     }
-                    alt="Restaurant"
+                    alt={data?.name}
                   />
                   <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col px-2">
                     <div className="p-4 pb-0 flex-1">
                       <h1 className=" text-3xl font-light mb-1 text-grey-darkest">
-                        <strong>{data.name}</strong>
+                      <strong>{data?.name?.length > 50 ? `${data?.name?.slice(0, 50)}...` : data?.name}</strong>
                       </h1>
                       <br />
                       <span className="text-grey-darkest">

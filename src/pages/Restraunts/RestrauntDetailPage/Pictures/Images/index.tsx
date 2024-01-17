@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { ArrowLeft , ArrowRight } from 'lucide-react';
-import { ResyRestrauntDetail } from '@/mockData';
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ResyRestrauntDetail } from "@/mockData";
 
 interface OverviewCardProps {
   pictures: any;
@@ -11,18 +11,23 @@ const Images: React.FC<OverviewCardProps> = ({ pictures }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   let images: string[] = [];
-  
+
   if (pictures?.alias) {
     images = pictures?.photos || [];
   } else if (pictures?.restaurant) {
     const galleryPhotos = pictures?.restaurant?.photos?.gallery?.photos;
     if (galleryPhotos && galleryPhotos.length > 0) {
-      images = galleryPhotos[0]?.thumbnails?.map((data: any) => data.url) || [];
+      const urls = galleryPhotos.map((photo: any) => {
+        const firstThumbnailUrl = photo.thumbnails[2]?.url;
+        return firstThumbnailUrl;
+      });
+      images = urls;
     } else {
       images = [];
     }
-  } else{
-    images = ResyRestrauntDetail.data.results.venues[0].templates[900634].images
+  } else {
+    images =
+      ResyRestrauntDetail.data.results.venues[0].templates[900634].images;
   }
 
   const nextImage = () => {

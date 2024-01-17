@@ -114,11 +114,11 @@ const RestrauntDetail = () => {
           <section>
             <Pictures restrauntDetail={restrauntDetail} />
           </section>
-          {restrauntDetail?.alias ? null : (
+          {/* {restrauntDetail?.alias ? null : ( */}
             <section>
               <Menu restrauntDetail={restrauntDetail} />
             </section>
-          )}
+           {/* )} */}
           <section>
             <TimingHours restrauntDetail={restrauntDetail} />
           </section>

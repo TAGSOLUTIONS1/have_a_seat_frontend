@@ -2,8 +2,11 @@ import React, { useState } from "react";
 
 import axios from "axios";
 
+import { useToast } from "@/components/ui/use-toast"
+
 const SignupForm = () => {
 
+  const { toast } = useToast()
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,23 +21,33 @@ const SignupForm = () => {
       const response = await axios.post(
         "https://tagsolutionsltd.com/auth/register/",
         {
-          first_name: firstName,
-          last_name: lastName,
+          // first_name: firstName,
+          // last_name: lastName,
           email,
           password,
-          phone_number: phoneNumber,
+          // phone_number: phoneNumber,
         },
       );
 
       if (response.status === 200) {
         console.log("Account created successfully!");
+        toast({
+          title: "Signed up SuccessFully",
+          description: "Friday, February 10, 2023 at 5:57 PM",
+        })
       } else {
         console.error("Failed to create account");
+        toast({
+          title: "Error Occoured",
+          description: "Friday, February 10, 2023 at 5:57 PM",
+        })
       }
     } catch (error) {
       console.error("Error occurred while signing up:", error);
+      
     }
   };
+
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
