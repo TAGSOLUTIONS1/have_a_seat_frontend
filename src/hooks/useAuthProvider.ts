@@ -1,17 +1,15 @@
-import { useReducer, createContext } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 import axios from "axios";
 
-import { fetchUserInfo } from "@/lib/utils";
 import { authReducer, initialState } from "../contexts/authContext/authReducer";
 
 import { AuthState } from "@/types/Auth.types";
 
 export interface AuthContextProps {
   authState: AuthState;
-  login: (email: string, password: string) => Promise<void>;
+  login: (formData: FormData) => Promise<void>;
   logout: () => void;
 }
 
@@ -22,32 +20,33 @@ export const AuthContext = createContext<AuthContextProps>({
 });
 
 export const useAuthProvider = (): AuthContextProps => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [authState, dispatch] = useReducer(authReducer, initialState);
 
-  const login = async (email: string, password: string) => {
+  const login = async (formData: FormData) => {
     try {
+      var requestOptions = {
+        method: "POST",
+        body: formData,
+        redirect: "follow",
+      };
+      const headers = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      };
       const response = await axios.post(
         "https://tagsolutionsltd.com/auth/jwt/login",
-        {
-          username:email,
-          password:password,
-          client_secret:"",
-          client_id:"",
-          scope:"",
-          grant_type:"",
-        },
+        requestOptions,
+        headers
       );
+      console.log(response);
       if (response.status === 200) {
-        const { access, refresh, user } = response.data;
-        localStorage.setItem('accessToken', access);
-        localStorage.setItem('refreshToken', refresh);
-        await fetchUserInfo(access);
-        dispatch({
-          type: "LOGIN_SUCCESS",
-          payload: { user, accessToken: access, refreshToken: refresh },
-        });
-        navigate("/");
+        const { access, refresh } = response.data;
+        // dispatch({
+        //   type: "LOGIN_SUCCESS",
+        //   payload: { accessToken: access, refreshToken: refresh },
+        // });
+        navigate("/dashboard");
       } else {
         dispatch({ type: "LOGIN_FAILURE" });
         console.error("Login failed");
@@ -59,27 +58,28 @@ export const useAuthProvider = (): AuthContextProps => {
   };
 
   const logout = async () => {
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken  = localStorage.getItem('refreshToken');
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
 
     try {
       const config = {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      };
       const response = await axios.post(
-        "https://tagsolutionsltd.com/auth/logout/",{
-          refresh_token:refreshToken
+        "https://tagsolutionsltd.com/auth/logout/",
+        {
+          refresh_token: refreshToken,
         },
         config
       );
       if (response.status === 200) {
-        authState.accessToken=null;
-        authState.refreshToken=null;
-        authState.user=null;
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
+        authState.accessToken = null;
+        authState.refreshToken = null;
+        authState.user = null;
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         dispatch({ type: "LOGOUT" });
         navigate("/login");
       } else {
@@ -92,9 +92,12 @@ export const useAuthProvider = (): AuthContextProps => {
 
   const refreshToken = async () => {
     try {
-      const refreshResponse = await axios.post("https://tagsolutionsltd.com/auth/token/refresh/", {
-        refresh: localStorage.getItem('refreshToken'),
-      });
+      const refreshResponse = await axios.post(
+        "https://tagsolutionsltd.com/auth/token/refresh/",
+        {
+          refresh: localStorage.getItem("refreshToken"),
+        }
+      );
       if (refreshResponse.status === 200) {
         const { access } = refreshResponse.data;
         dispatch({
@@ -111,7 +114,7 @@ export const useAuthProvider = (): AuthContextProps => {
 
   useEffect(() => {
     const interval = setInterval(refreshToken, 60000000);
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, [authState.refreshToken]);
 
   return { authState, login, logout };
