@@ -32,6 +32,10 @@ export const useAuthProvider = (): AuthContextProps => {
         {
           username:email,
           password:password,
+          client_secret:"",
+          client_id:"",
+          scope:"",
+          grant_type:"",
         },
       );
       if (response.status === 200) {

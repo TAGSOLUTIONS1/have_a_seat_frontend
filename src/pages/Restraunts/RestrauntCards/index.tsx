@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 import Loader from "@/components/Loader";
 
+import InfiniteScroll from "react-infinite-scroll-component";
+
 interface RestaurantCardsProps {
   openTableData: unknown[];
   yelpData: unknown[];
@@ -13,8 +15,10 @@ interface RestaurantCardsProps {
 
 const RestaurantCards: React.FC<RestaurantCardsProps> = memo(
   ({ yelpData, openTableData, resyData, formData }) => {
-    const [loading, setLoading] = useState<boolean>(true);
     const [shuffledRestaurants, setShuffledRestaurants] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+    const [hasMore, setHasMore] = useState<boolean>(true);
     const [selectedTypes, setSelectedTypes] = useState<string[]>([
       "yelp",
       "open_table",
@@ -22,6 +26,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = memo(
     ]);
 
     useEffect(() => {
+      setItemsPerPage(10);
       if (
         (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
         (openTableData &&
@@ -87,13 +92,9 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = memo(
           const removedItem = mergedRestaurants.splice(matchedIndex, 1);
           mergedRestaurants.unshift(removedItem[0]);
         }
-
         setShuffledRestaurants(mergedRestaurants);
-
-        setLoading(false);
       } else {
         setShuffledRestaurants([]);
-        setLoading(false);
       }
     }, [yelpData, openTableData, resyData, selectedTypes]);
 
@@ -105,6 +106,30 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = memo(
           return [...prevSelectedTypes, type];
         }
       });
+    };
+
+    const shuffleArray = (array: any[]) => {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    };
+
+    const fetchMoreData = () => {
+      if (!hasMore) {
+        return;
+      }
+      const allData = [...yelpData, ...openTableData, ...resyData];
+      const startIdx = currentPage * itemsPerPage;
+      const endIdx = (currentPage + 1) * itemsPerPage;
+      if (startIdx >= allData.length) {
+        setHasMore(false);
+        return;
+      }
+      const shuffledData = shuffleArray(allData.slice(startIdx, endIdx));
+      setShuffledRestaurants((prevData) => [...prevData, ...shuffledData]);
+      setCurrentPage((prevPage: any) => prevPage + 1);
     };
 
     return (
@@ -158,9 +183,12 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = memo(
             className=" mb-1 w-[40%] md:w-[8%] lg:w-[8%] h-14 md:h-8 lg:h-8"
           />
         </div>
-        {loading ? (
-          <Loader />
-        ) : (
+        <InfiniteScroll
+          dataLength={0}
+          next={fetchMoreData}
+          hasMore={hasMore}
+          loader={<Loader />}
+        >
           <div>
             {shuffledRestaurants?.map((data: any, index: any) => (
               <Link
@@ -206,7 +234,11 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = memo(
                   <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col px-2">
                     <div className="p-4 pb-0 flex-1">
                       <h1 className=" text-3xl font-light mb-1 text-grey-darkest">
-                      <strong>{data?.name?.length > 50 ? `${data?.name?.slice(0, 50)}...` : data?.name}</strong>
+                        <strong>
+                          {data?.name?.length > 50
+                            ? `${data?.name?.slice(0, 50)}...`
+                            : data?.name}
+                        </strong>
                       </h1>
                       <br />
                       <span className="text-grey-darkest">
@@ -296,7 +328,7 @@ const RestaurantCards: React.FC<RestaurantCardsProps> = memo(
               </Link>
             ))}
           </div>
-        )}
+        </InfiniteScroll>
       </div>
     );
   }

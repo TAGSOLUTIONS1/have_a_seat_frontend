@@ -58,7 +58,7 @@ const Search = () => {
       fetchDataFromApi("/api/v1/resy/get_restaurants", setResyData);
       fetchDataFromApi("/api/v1/opentable/get_restaurants", setOpenTableData);
     }
-  }, [formData, loading]);
+  }, [formData]);
 
   return (
     <>

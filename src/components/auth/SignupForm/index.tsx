@@ -2,49 +2,53 @@ import React, { useState } from "react";
 
 import axios from "axios";
 
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 
 const SignupForm = () => {
-
-  const { toast } = useToast()
+  const { toast } = useToast();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  // Form submit handler
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
+      const currentDate = new Date();
+      const date = currentDate.toString();
+
+      console.log(date);
+
       const response = await axios.post(
         "https://tagsolutionsltd.com/auth/register/",
         {
-          // first_name: firstName,
-          // last_name: lastName,
+          first_name: firstName,
+          last_name: lastName,
           email,
           password,
-          // phone_number: phoneNumber,
-        },
+          phone_number: phoneNumber,
+        }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log("Account created successfully!");
         toast({
-          title: "Signed up SuccessFully",
-          description: "Friday, February 10, 2023 at 5:57 PM",
-        })
+          title: "Signed up Successfully",
+          description: date,
+        });
       } else {
         console.error("Failed to create account");
-        toast({
-          title: "Error Occoured",
-          description: "Friday, February 10, 2023 at 5:57 PM",
-        })
       }
     } catch (error) {
       console.error("Error occurred while signing up:", error);
-      
+      const currentDate = new Date();
+      const date = currentDate.toString();
+    toast({
+      title: "Error Occurred",
+      description: date,
+    });
     }
   };
 

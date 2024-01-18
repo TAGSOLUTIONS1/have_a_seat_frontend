@@ -1,12 +1,19 @@
-import React from "react";
+import React, {useState} from "react";
 
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 
 const LoginForm = () => {
   
   const { login } = useAuth();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  // const [email, setEmail] = React.useState("");
+  // const [password, setPassword] = React.useState("");
+  const [formData, setFormData]=useState({
+    username:"",
+    password:"",
+    scope:"",
+    client_id:"",
+    client_secret:""
+  })
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,6 +23,16 @@ const LoginForm = () => {
       console.error("Error occurred while logging in:", error);
     }
   };
+
+  const handlechange=(event:React.ChangeEventHandler<HTMLInputElement> )=>{
+    const {name, value}=event
+    setFormData((prev)=>{
+      return{
+        ...prev,
+        [name]:value
+      }
+    })
+  }
 
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
@@ -32,8 +49,8 @@ const LoginForm = () => {
                 id="email"
                 className="border border-gray-300 rounded w-full py-2 px-3"
                 placeholder="Your Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="username"
+                onChange={ handlechange}
               />
             </div>
           </div>
