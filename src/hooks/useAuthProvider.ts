@@ -25,27 +25,26 @@ export const useAuthProvider = (): AuthContextProps => {
 
   const login = async (formData: FormData) => {
     try {
-      var requestOptions = {
+      let requestOptions: RequestInit = {
         method: "POST",
         body: formData,
         redirect: "follow",
       };
-      const headers = {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      };
-      const response = await axios.post(
+
+      const response = fetch(
         "https://tagsolutionsltd.com/auth/jwt/login",
-        requestOptions,
-        headers
-      );
+        requestOptions
+      )
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
       console.log(response);
       if (response.status === 200) {
         const { access, refresh } = response.data;
-        // dispatch({
-        //   type: "LOGIN_SUCCESS",
-        //   payload: { accessToken: access, refreshToken: refresh },
-        // });
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: { accessToken: access, refreshToken: refresh },
+        });
         navigate("/dashboard");
       } else {
         dispatch({ type: "LOGIN_FAILURE" });

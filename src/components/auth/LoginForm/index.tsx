@@ -9,12 +9,22 @@ const LoginForm = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    grant_type: "",
+    client_id: "",
+    client_secret: "",
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { username, password } = formData;
-    
+    const { username, password, grant_type, client_id, client_secret } =
+      formData;
+    let formdata = new FormData();
+    formdata.append("username", username);
+    formdata.append("password", password);
+    formdata.append("grant_type", grant_type);
+    formdata.append("client_id", client_id);
+    formdata.append("client_secret", client_secret);
+    login(formdata);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
