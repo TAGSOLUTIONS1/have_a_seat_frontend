@@ -1,47 +1,31 @@
 import axios from "axios";
 import { ClassValue, clsx } from "clsx";
-import { jwtDecode } from "jwt-decode";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
-export const fetchUserInfo = async (token: string) => {
-  try {
-    if (!token) {
-      throw new Error("Access token not found");
+export const fetchUserInfo = async () => {
+
+    const accessToken = localStorage.getItem("accessToken");
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      const response = await axios.get(
+        "https://tagsolutionsltd.com/api/v1/users/me",
+        config
+      );
+      if (response.status === 200) {
+        // console.log(response.data , "fetching id")
+        return response.data
+      } else {
+        console.error("User ID cannot be fetched");
+      }
+    } catch (error) {
+      console.error("Error occurred while fetching user id:", error);
     }
-
-    type JwtPayload = {
-      user_id: string;
-    };
-
-    const decodedToken = jwtDecode(token) as JwtPayload;
-    console.log(decodedToken);
-
-    let userId: string | null = null;
-
-    if (decodedToken && decodedToken?.user_id) {
-      userId = decodedToken.user_id;
-      console.log("User ID:", userId);
-    } else {
-      console.log("User ID not available in the decoded token.");
-    }
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const { data } = await axios.get(
-      `https://tagsolutionsltd.com/auth/viewuser/${userId}/`,
-      config
-    );
-    return data.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
   }
-};

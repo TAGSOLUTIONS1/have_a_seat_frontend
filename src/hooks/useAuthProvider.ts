@@ -1,12 +1,12 @@
 import { createContext, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchUserInfo } from "@/lib/utils";
 
 import axios from "axios";
 
 import { authReducer, initialState } from "../contexts/authContext/authReducer";
 
 import { AuthState } from "@/types/Auth.types";
-
 export interface AuthContextProps {
   authState: AuthState;
   login: (formData: FormData) => Promise<void>;
@@ -31,21 +31,29 @@ export const useAuthProvider = (): AuthContextProps => {
         redirect: "follow",
       };
 
-      const response = fetch(
-        "https://tagsolutionsltd.com/auth/jwt/login",
+      const response = await fetch(
+        "https://tagsolutionsltd.com/api/v1/auth/jwt/login",
         requestOptions
-      )
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
-      console.log(response);
+      );
+
+      const result = await response.json(); 
+
+      console.log(result);
+      console.log(result.access_token); 
+
+      const accessToken = result.access_token; 
+      console.log(accessToken);
+      localStorage.setItem("accessToken", accessToken);
+
       if (response.status === 200) {
-        const { access, refresh } = response.data;
-        dispatch({
-          type: "LOGIN_SUCCESS",
-          payload: { accessToken: access, refreshToken: refresh },
-        });
-        navigate("/dashboard");
+        // const { accessToken, refresh } = (result);
+        await fetchUserInfo(); 
+        console.log(result);
+        // dispatch({
+        //   type: "LOGIN_SUCCESS",
+        //   payload: {accessToken: accessToken, refreshToken: refresh },
+        // });
+        navigate("/");
       } else {
         dispatch({ type: "LOGIN_FAILURE" });
         console.error("Login failed");
@@ -56,9 +64,36 @@ export const useAuthProvider = (): AuthContextProps => {
     }
   };
 
+
+  // const fetchUserid = async ()=>{
+
+  //   const accessToken = localStorage.getItem("accessToken");
+
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     };
+  //     const response = await axios.get(
+  //       "https://tagsolutionsltd.com/api/v1/users/me",
+  //       config
+  //     );
+  //     if (response.status === 200) {
+  //       console.log(response.data , "fetching id")
+  //     } else {
+  //       console.error("User ID cannot be fetched");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error occurred while fetching user id:", error);
+  //   }
+  // }
+
+
   const logout = async () => {
+
     const accessToken = localStorage.getItem("accessToken");
-    const refreshToken = localStorage.getItem("refreshToken");
+    // const refreshToken = localStorage.getItem("refreshToken");
 
     try {
       const config = {
@@ -67,18 +102,18 @@ export const useAuthProvider = (): AuthContextProps => {
         },
       };
       const response = await axios.post(
-        "https://tagsolutionsltd.com/auth/logout/",
-        {
-          refresh_token: refreshToken,
-        },
+        "https://tagsolutionsltd.com/api/v1/auth/jwt/logout",
+        // {
+        //   refresh_token: refreshToken,
+        // },
         config
       );
       if (response.status === 200) {
         authState.accessToken = null;
-        authState.refreshToken = null;
-        authState.user = null;
+        // authState.refreshToken = null;
+        // authState.user = null;
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+        // localStorage.removeItem("refreshToken");
         dispatch({ type: "LOGOUT" });
         navigate("/login");
       } else {

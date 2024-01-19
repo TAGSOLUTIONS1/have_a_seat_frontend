@@ -3,7 +3,9 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
-import { fetchUserInfo } from "@/lib/utils";
+import axios from "axios";
+
+// import { fetchUserInfo } from "@/lib/utils";
 
 import { cn } from "@/lib/utils";
 import { User } from "lucide-react";
@@ -19,22 +21,36 @@ const Navbar = () => {
   const storageToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-
-    const fetchUserInformation = async (userToken: any) => {
-      try {
-        const userInfo = await fetchUserInfo(userToken);
-        setUser(JSON.parse(userInfo));
-      } catch (error) {
-        console.error("Error fetching user info:", error);
+    (async () => {
+      const localToken = localStorage.getItem("accessToken");
+      if (localToken) {
+        await fetchUserInfo(localToken);
       }
-    };
-    if (token) {
-      fetchUserInformation(token);
-    } else {
-      console.log("Token not available yet.");
-    }
+    })();
   }, [storageToken]);
+
+  const fetchUserInfo = async (localToken: any) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localToken}`,
+        },
+      };
+      const response = await axios.get(
+        "https://tagsolutionsltd.com/api/v1/users/me",
+        config
+      );
+      if (response.status === 200) {
+        console.log(response.data, "fetching id");
+        setUser(response.data);
+      } else {
+        console.error("Error fetching user data. Non-200 status code:", response.status);
+        console.error(response.data); 
+      }
+    } catch (error) {
+      // console.error("Error occurred while fetching user id:", error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -60,11 +76,11 @@ const Navbar = () => {
                 Have a Seat
               </span>
             </Link>
-            {/* <div className="relative left-[750px]">
+            <div className="relative left-[650px]">
               <p className="text-purple-600 text-lg float-left">
                 {user && user.email}
               </p>
-            </div> */}
+            </div>
           </div>
           <SideNav />
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
