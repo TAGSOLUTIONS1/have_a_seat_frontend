@@ -1,18 +1,23 @@
-import { useEffect , useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ResyRestrauntDetail } from "@/mockData";
 
 interface MenuProps {
-  restrauntDetail: any; 
+  restrauntDetail: any;
 }
 
 const Menu: React.FC<MenuProps> = ({ restrauntDetail }) => {
+  const [menuData, setMenuData] = useState<any>();
 
-  const [menuData , setMenuData]= useState<any>()
   useEffect(() => {
+    console.log(restrauntDetail)
     if (Object.keys(restrauntDetail).length !== 0) {
-      setMenuData(restrauntDetail?.menus?.menuData[0]?.sections[0]?.items)
-    return
+      if (restrauntDetail?.menus?.menuData?.length === 0) {
+        setMenuData(restrauntDetail?.menus?.menuData[0]?.sections[0]?.items);
+      } else {
+        setMenuData(restrauntDetail?.menus?.menuInfo?.url);
+      }
+      return;
     }
   }, [restrauntDetail]);
 
@@ -24,12 +29,21 @@ const Menu: React.FC<MenuProps> = ({ restrauntDetail }) => {
           <strong>Menu</strong>
         </h1>
         <hr className="mb-4 mt-4" />
-        { restrauntDetail ? 
-          menuData?.map((data:any)=>{
-            return<p>{data.title}</p>
-          })
-          : <a className="text-lg" href={menuData} target="blank">{ResyRestrauntDetail.data.results.venues[0].templates[900634].menu["en-us"]}</a>
-          }
+        {restrauntDetail ? (
+          Array.isArray(menuData) ? (
+            menuData.map((data) => <p key={data.title}>{data.title}</p>)
+          ) : (
+            <a href={menuData} target="_blank">{menuData}</a>
+          )
+        ) : (
+          <a className="text-lg" href={menuData} target="blank">
+            {
+              ResyRestrauntDetail.data.results.venues[0].templates[900634].menu[
+                "en-us"
+              ]
+            }
+          </a>
+        )}
       </div>
     </div>
   );

@@ -4,8 +4,10 @@ import { useAuth } from "@/contexts/authContext/AuthProvider";
 
 const LoginForm = () => {
   const { login } = useAuth();
+
   // const [email, setEmail] = React.useState("");
   // const [password, setPassword] = React.useState("");
+  
   const [formData, setFormData] = useState({
     username: "",
     password: "",
