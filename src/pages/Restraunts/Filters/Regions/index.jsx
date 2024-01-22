@@ -4,9 +4,7 @@ import { ArrowDown, ArrowUp, Globe } from "lucide-react";
 
 const Regions = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedRegion, setSelectedRegion] =
-    (useState < string) | (null > null);
-
+  const [selectedRegion, setSelectedRegion] =useState(null)
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };

@@ -4,8 +4,7 @@ import { ArrowDown, ArrowUp, Star } from "lucide-react";
 
 const Experiences = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedPriceFilter, setSelectedPriceFilter] =
-    (useState < string) | (null > null);
+  const [selectedPriceFilter, setSelectedPriceFilter] =useState(null)
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);

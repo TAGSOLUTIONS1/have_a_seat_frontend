@@ -4,8 +4,7 @@ import { ArrowDown, ArrowUp, CoinsIcon } from "lucide-react";
 
 const PriceFilters = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedPriceFilter, setSelectedPriceFilter] =
-    (useState < string) | (null > null);
+  const [selectedPriceFilter, setSelectedPriceFilter] =useState(null)
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);

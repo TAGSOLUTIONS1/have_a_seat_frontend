@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import { ArrowDown, ArrowUp, Home } from "lucide-react";
 
 const Amenities = () => {
-  const [showFilters, setShowFilters] = useState < boolean > false;
-  const [selectedPriceFilter, setSelectedPriceFilter] =
-    (useState < string) | (null > null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedPriceFilter, setSelectedPriceFilter] =useState(null);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
