@@ -11,6 +11,7 @@ import Footer from "./components/common/Footer";
 import Reservation from "./pages/Restraunts/Reservation";
 import ReservationStatus from "./pages/Restraunts/Reservation/ReservationStatus";
 import AccountLinks from "./pages/AccountLinks";
+import ForgetPassword from "./pages/ForgetPassword";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/forget" element={<ForgetPassword/>} />
         <Route path="/restraunts" element={<Search />} />
         <Route path="/restaurant-detail" element={<RestrauntDetail />} />
         <Route path="/reservation" element={<Reservation />} />

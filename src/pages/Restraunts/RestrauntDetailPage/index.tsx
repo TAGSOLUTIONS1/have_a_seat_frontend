@@ -22,6 +22,7 @@ const RestrauntDetail = () => {
   const location = useLocation();
 
   useEffect(() => {
+    
     const params = new URLSearchParams(location.search);
     const map_url = params.get("map_url");
     const yelp_alias = params.get("yelp_alias");

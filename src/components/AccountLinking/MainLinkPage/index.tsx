@@ -1,10 +1,52 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 import LinkPageDialogue from "../linkPageDialogue";
 
 const MainLinkingPage = () => {
+  const [user, setUser] = useState<any>();
+  const storageToken = localStorage.getItem("accessToken");
+
+  useEffect(() => {
+      const localToken = localStorage.getItem("accessToken");
+      if (localToken) {
+         fetchUserInfo(localToken);
+      }
+  }, [storageToken]);
+
+  const fetchUserInfo = async (localToken: any) => {
+    // console.log(localToken , "token")
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localToken}`,
+        },
+      };
+      const response = await axios.get(
+        "https://tagsolutionsltd.com/api/v1/users/me",
+        config
+      );
+      if (response.status === 200) {
+        console.log(response.data, "fetching id");
+        setUser(response.data);
+      } else {
+        console.error(
+          "Error fetching user data. Non-200 status code:",
+          response.status
+        );
+        console.error(response.data);
+      }
+    } catch (error) {
+      console.error("Error occurred while fetching:", error);
+    }
+  };
+
+  // console.log(user)
+
   return (
-    <div className="ml-36">
-      <div className="grid grid-cols-7 gap-7">
-        <div className=" col-span-2 mt-16">
+    <div className="md:ml-36 lg:ml-36">
+      <div className="grid grid-cols-7 md:gap-7 lg:gap-7">
+        <div className=" md:col-span-2 lg:col-span-2 sm:col-span-7 col-span-7  mt-16">
           <div className=" bg-white shadow-lg rounded-lg card">
             <div className="card-body">
               <div className="flex flex-col items-center text-center">
@@ -30,7 +72,7 @@ const MainLinkingPage = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-4 mt-16">
+        <div className="md:col-span-4 lg:col-span-4 sm:col-span-7 col-span-7  mt-16">
           <div className="bg-white shadow-lg rounded-lg px-8 pt-12 pb-8">
             <div className="mb-4">
               <div className="flex items-center">
@@ -46,7 +88,7 @@ const MainLinkingPage = () => {
                 <div className="w-1/3">
                   <h6 className="mb-0">Email</h6>
                 </div>
-                <div className="w-2/3 ">fip@jukmuh.al</div>
+                <div className="w-2/3 ">{user?.email || "N/A"}</div>
               </div>
             </div>
             <hr className="my-4" />

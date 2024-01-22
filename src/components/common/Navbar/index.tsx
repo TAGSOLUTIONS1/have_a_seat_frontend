@@ -15,7 +15,6 @@ import SideNav from "../SideNav";
 import "./nav.css";
 
 const Navbar = () => {
-
   const { logout } = useAuth();
   const [user, setUser] = useState<any>();
   const storageToken = localStorage.getItem("accessToken");
@@ -44,8 +43,11 @@ const Navbar = () => {
         console.log(response.data, "fetching id");
         setUser(response.data);
       } else {
-        console.error("Error fetching user data. Non-200 status code:", response.status);
-        console.error(response.data); 
+        console.error(
+          "Error fetching user data. Non-200 status code:",
+          response.status
+        );
+        console.error(response.data);
       }
     } catch (error) {
       // console.error("Error occurred while fetching user id:", error);
@@ -76,11 +78,6 @@ const Navbar = () => {
                 Have a Seat
               </span>
             </Link>
-            <div className="relative left-[650px]">
-              <p className="text-purple-600 text-lg float-left">
-                {user && user.email}
-              </p>
-            </div>
           </div>
           <SideNav />
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
@@ -108,7 +105,8 @@ const Navbar = () => {
               ) : (
                 <div className="flex space-x-2">
                   <div>
-                    <ul>
+                    <ul className="flex">
+                    <li className="p-4 mt-2 text-purple-600 text-lg">{user && user.email}</li>
                       <li className="p-4">
                         <Button
                           className={cn("rounded-full bg-purple-600 ")}
