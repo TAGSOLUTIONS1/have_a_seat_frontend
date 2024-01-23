@@ -12,7 +12,7 @@ const SignupForm = () => {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSub = async (e) => {
     e.preventDefault();
 
     try {
@@ -51,6 +51,30 @@ const SignupForm = () => {
     });
     }
   };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const currentDate = new Date();
+      const date = currentDate.toString();
+      const response = await axios.post(
+        "https://tagsolutionsltd.com/api/v1/auth/request-verify-token",
+        {
+          token,
+        }
+      );
+      if (response.status === 202) {
+        console.log(response)
+      } else {
+        console.log("reset failed");
+      }
+    } catch (error) {
+      console.error("Error occurred while resetting password:", error);
+    }
+  };
+
+  
 
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">

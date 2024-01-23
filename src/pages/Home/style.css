@@ -8,10 +8,9 @@
     }
   }
   
-  /* Apply the animation to your image */
   .rotating-image {
     animation-name: rotate360;
-    animation-duration: 30s; /* Change the duration to adjust the speed */
+    animation-duration: 30s; 
     animation-iteration-count: infinite;
     animation-timing-function: linear;
   }
@@ -24,7 +23,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    filter: brightness(30%); /* Adjust the values to your preference */
+    filter: brightness(30%);
   }
 
   .bg-banner-image {

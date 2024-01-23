@@ -99,7 +99,7 @@ const CardsSlider = () => {
               {[currentSlide, (currentSlide + 1) % totalSlides].map((index) => (
                 <div
                   key={index}
-                  className={`flex flex-col bg-white rounded-lg shadow-lg h-[430px] overflow-hidden ${
+                  className={`flex flex-col w-[320px] md:w-[400px] sm:[320px] lg:w-[400px] bg-white rounded-lg shadow-lg h-[430px] overflow-hidden ${
                     index === currentSlide
                       ? "transition-transform duration-500"
                       : ""
@@ -112,7 +112,7 @@ const CardsSlider = () => {
                   <div>
                     <img
                       src={slides[index].image}
-                      className="h-[220px] object-cover w-[340px]"
+                      className="h-[220px] object-cover w-[320px] sm:[320px] md:w-[400px] lg:w-[400px]"
                       alt=""
                     />
                   </div>

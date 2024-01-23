@@ -65,7 +65,7 @@ const Testimonials = () => {
           </p>
         </div>
         <div className="flex  mt-12 sm:ml-[300px]  md:ml-[500px]">
-          <div className="bg-purple-600 rounded-full h-10 w-10  flex items-center justify-center">
+          <div className="bg-purple-600 rounded-full h-10 w-10 mr-1  flex items-center justify-center">
             <ArrowLeft onClick={prevSlide} className="text-white w-6 h-6" />
           </div>
           <div className="bg-gray-600 rounded-full h-10 w-10 flex items-center justify-center">

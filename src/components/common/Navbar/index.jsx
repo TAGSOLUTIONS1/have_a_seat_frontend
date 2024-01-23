@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import axios from "axios";
 
-// import { fetchUserInfo } from "@/lib/utils";
-
 import { cn } from "@/lib/utils";
 import { User } from "lucide-react";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
@@ -15,6 +13,7 @@ import SideNav from "../SideNav";
 import "./nav.css";
 
 const Navbar = () => {
+
   const { logout } = useAuth();
   const [user, setUser] = useState();
   const storageToken = localStorage.getItem("accessToken");
@@ -65,7 +64,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-white border-b border-gray-200 sticky top-0 start-0 px-4 z-20">
+      <nav className="bg-white border-b border-gray-200 sticky top-0 start-0 px-0 sm:px-4 md:px-4 lg:px-4 xl:px-4 2xl:px-4 z-20">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
           <div className="flex items-center rtl:space-x-reverse">
             <Link className="flex" to="/">
@@ -80,6 +79,7 @@ const Navbar = () => {
             </Link>
           </div>
           <SideNav />
+
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
             <div className="relative">
               {user === undefined || user === null ? (
@@ -127,6 +127,7 @@ const Navbar = () => {
               )}
             </div>
           </div>
+
         </div>
       </nav>
     </>

@@ -5,10 +5,10 @@ import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 
 
-const ForgetForm = () => {
+const VerifyUserForm = () => {
   
   const { toast } = useToast();
-    const [email , setEmail] = useState("")
+    const [token , setToken] = useState("")
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,12 +16,12 @@ const ForgetForm = () => {
           const currentDate = new Date();
           const date = currentDate.toString();
           const response = await axios.post(
-            "https://tagsolutionsltd.com/api/v1/auth/forgot-password",
+            "https://tagsolutionsltd.com/api/v1/auth/verify",
             {
-              email,
+              token,
             }
           );
-          if (response.status === 202) {
+          if (response.status === 200) {
             console.log(response)
             toast({
               title: "Check Your Email to Reset your Password",
@@ -57,12 +57,12 @@ const ForgetForm = () => {
             <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
             <div className="flex-grow">
               <input
-                type="email"
-                id="email"
+                type="number"
+                id="token"
                 className="border border-gray-300 rounded w-full py-2 px-3"
-                placeholder="Existing Email"
-                value={email}
-                onChange={(e) =>setEmail(e.target.value )}
+                placeholder="token"
+                value={token}
+                onChange={(e) =>setToken(e.target.value )}
               />
             </div>
           </div>
@@ -81,4 +81,4 @@ const ForgetForm = () => {
   )
 }
 
-export default ForgetForm
+export default VerifyUserForm

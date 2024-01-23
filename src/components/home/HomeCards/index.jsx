@@ -5,7 +5,6 @@ const HomeCards = () => {
 
   return (
     <>
-      
         <div>
           <div className="">
             <CardsSlider />

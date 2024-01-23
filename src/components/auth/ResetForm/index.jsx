@@ -1,38 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import { useToast } from "@/components/ui/use-toast";
+
 import axios from "axios";
 
 const ResetForm = () => {
-
+  const { toast } = useToast();
   const location = useLocation();
-  const [paramsToken , setParamsToken] = useState()
-  const [newPassword , setnewPassword] = useState()
+  const [paramsToken, setParamsToken] = useState();
+  const [newPassword, setnewPassword] = useState();
 
-  useEffect(()=>{
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const token = params.get("token");
-    if(token && token!== null||undefined){
-      setParamsToken(token)
-    }else{
-      return
+    if ((token && token !== null) || undefined) {
+      setParamsToken(token);
+    } else {
+      return;
     }
-  },[])
-
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-
+      const currentDate = new Date();
+      const date = currentDate.toString();
       const response = await axios.post(
         "https://tagsolutionsltd.com/api/v1/auth/reset-password",
         {
-          token:paramsToken,
-          password: newPassword
+          token: paramsToken,
+          password: newPassword,
         }
       );
       if (response.status === 200) {
-        console.log(response)
+        toast({
+          title: "Check Your Email to Reset your Password",
+          description: date,
+        });
+        console.log(response);
+        
       } else {
         console.log("reset failed");
       }
@@ -49,7 +56,6 @@ const ResetForm = () => {
         </h1>
 
         <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-
           <div className="flex items-center mb-4">
             <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
             <div className="flex-grow">
@@ -57,9 +63,8 @@ const ResetForm = () => {
                 type="password"
                 id="new_password"
                 className="border border-gray-300 rounded w-full py-2 px-3"
-                placeholder="Password"
-                // value={newPassword}
-                 onChange={(e) =>setnewPassword(e.target.value )}
+                placeholder="Enter New Password"
+                onChange={(e) => setnewPassword(e.target.value)}
               />
             </div>
           </div>

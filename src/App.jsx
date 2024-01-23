@@ -22,7 +22,7 @@ function App() {
         <Route path="/about" element={<h1>About</h1>} />
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/forget" element={<ForgetPassword />} />
         <Route path="/restraunts" element={<Search />} />
         <Route path="/restaurant-detail" element={<RestrauntDetail />} />

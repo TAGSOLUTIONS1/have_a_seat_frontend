@@ -36,7 +36,7 @@ const SearchLocation = () => {
           <GeoApiAuto getLocationData={getLocationData} />
         </div>
         <Button
-          className="absolute sm:text-sm md:text-xl sm:py-4 sm:px-6 md:py-7 md:px-12 right-0 top-7 md:top-5 lg:top-5  mr-4 rounded-full"
+          className="absolute sm:text-sm md:text-xl sm:py-4 sm:px-6 md:py-7 md:px-12 right-16 top-28 sm:right-0 sm:top-7 md:right-0  md:top-5 lg:right-0 lg:top-5  mr-4 rounded-full"
           variant="default"
           size="lg"
           onClick={handleSearch}

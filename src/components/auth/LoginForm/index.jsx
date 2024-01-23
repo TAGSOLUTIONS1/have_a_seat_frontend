@@ -83,7 +83,7 @@ const LoginForm = () => {
             </button>
           </div>
           <p className="text-center">
-            <a href="/reset" className="underline">
+            <a href="/forget" className="underline">
               Forgot password
             </a>
           </p>
