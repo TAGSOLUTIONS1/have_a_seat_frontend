@@ -19,7 +19,6 @@ export const fetchUserInfo = async () => {
             config
         );
         if (response.status === 200) {
-            // console.log(response.data , "fetching id")
             return response.data;
         } else {
             console.error("User ID cannot be fetched");
