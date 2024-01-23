@@ -1,6 +1,6 @@
-import ResetForm from "@/components/auth/ResetForm";
+import VerifyUserForm from "./VerifyUserForm";
 
-const ResetPassword = () => {
+const VerifyUser = () => {
   return (
     <section className="h-[870px] bg-gray-50 flex items-center justify-center">
       <div className="container">
@@ -8,7 +8,7 @@ const ResetPassword = () => {
           <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
             <div className="bg-white rounded-lg shadow-lg p-7 md:p-10">
               <div className="flex justify-center">
-                <ResetForm />
+                <VerifyUserForm />
                 <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-1 md:order-2 ml-28 hidden md:block">
                   <img
                     src="/assets/reset-password.png"
@@ -25,4 +25,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default VerifyUser;

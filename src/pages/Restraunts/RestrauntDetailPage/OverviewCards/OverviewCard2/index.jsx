@@ -64,7 +64,7 @@ const OverviewCard2 = ({ overviewCardsData }) => {
       latitude: reservationCard.coordinates.latitude,
       date: formData?.reservation_date,
       time: formData?.reservation_time,
-      search_option: "INITIAL_SEARCH",
+      search_option: "SAME_WEEK_SEARCH",
       persons: formData?.reservation_covers,
     };
     try {
