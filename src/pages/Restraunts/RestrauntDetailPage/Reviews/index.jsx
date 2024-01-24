@@ -11,7 +11,7 @@ const Reviews = ({ restrauntDetail }) => {
   const [yelpReviews, setYelpReviews] = useState();
 
   useEffect(() => {
-    if (Object.keys(restrauntDetail).length !== 0) {
+    if (restrauntDetail && Object.keys(restrauntDetail).length !== 0) {
       setReviewsData(restrauntDetail);
     }
   }, [restrauntDetail]);

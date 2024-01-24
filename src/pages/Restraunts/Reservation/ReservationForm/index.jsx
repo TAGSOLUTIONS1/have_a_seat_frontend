@@ -99,6 +99,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
             onChange={handleChange}
           />
+          
           <div className="flex justify-center">
             <button
               type="submit"

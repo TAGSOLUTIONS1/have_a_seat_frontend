@@ -14,7 +14,7 @@ const PreviousData = ({ formData, bookingInfo }) => {
     <>
       <div className="bg-white p-8 rounded shadow-md">
         <h2 className="text-3xl font-bold text-center pb-8">
-          Previous Details
+          Reservation Details
         </h2>
         <form>
           <div className="flex flex-col space-y-4">

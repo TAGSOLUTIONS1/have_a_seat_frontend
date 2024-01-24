@@ -82,7 +82,7 @@ const Navbar = () => {
 
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
             <div className="relative">
-              {user === undefined || user === null ? (
+              {/* {user === undefined || user === null ? (
                 <div className="flex">
                   <ul className="flex ">
                     <li className="p-4">
@@ -102,7 +102,7 @@ const Navbar = () => {
                     </li>
                   </ul>
                 </div>
-              ) : (
+              ) : ( */}
                 <div className="flex space-x-2">
                   <div>
                     <ul className="flex">
@@ -124,7 +124,7 @@ const Navbar = () => {
                     </Link>
                   </div>
                 </div>
-              )}
+              {/* )} */}
             </div>
           </div>
 

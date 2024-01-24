@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
 import AccountLinks from "./pages/AccountLinks";
+
 import ForgetPassword from "./pages/ForgetPassword";
 import Home from "./pages/Home";
 import Login from "./pages/Login";

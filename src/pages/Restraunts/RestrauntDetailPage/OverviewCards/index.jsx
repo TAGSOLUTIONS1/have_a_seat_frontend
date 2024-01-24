@@ -5,11 +5,13 @@ import OverviewCard2 from "./OverviewCard2";
 
 const OverviewCard = ({ restrauntDetail }) => {
   const [overviewCardsData, setOverviewCardsData] = useState();
+
   useEffect(() => {
-    if (Object.keys(restrauntDetail).length !== 0) {
+    if (restrauntDetail && Object.keys(restrauntDetail).length !== 0) {
       setOverviewCardsData(restrauntDetail);
     }
   }, [restrauntDetail]);
+  
 
   return (
     <div className="grid grid-row-8 space-x-8 md:grid-cols-8 lg:grid-cols-8 md:space-x-4 lg:space-x-4 mb-10">
