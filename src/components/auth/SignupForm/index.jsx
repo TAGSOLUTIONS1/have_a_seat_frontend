@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,11 +13,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-
 import { SignupSchema, cn } from "@/lib/utils";
 import { register } from "@/services/auth";
 
+import { ToastAction } from "@radix-ui/react-toast";
+import { LucideLoader } from "lucide-react";
+
 const SignupForm = () => {
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     resolver: yupResolver(SignupSchema),
   });
@@ -24,15 +28,28 @@ const SignupForm = () => {
 
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
       const res = await register(data);
+      setLoading(false);
       toast({
         title: "Account created.",
-        description: "We've created your account for you.",
+        description: "We've created your account, please verify your email.",
         status: "success",
         duration: 10000 * 60,
         isClosable: true,
+        action: (
+          <ToastAction>
+            <Button
+              variant="default"
+              onClick={() => (window.location.href = "/login")}
+            >
+              Login
+            </Button>
+          </ToastAction>
+        ),
       });
     } catch (err) {
+      setLoading(false);
       switch (err.response.status) {
         case 400:
           toast({
@@ -107,13 +124,20 @@ const SignupForm = () => {
               variant="default"
               className={cn("rounded-md w-full text-xl")}
             >
-              Create an account
+              {loading ? (
+                <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
+              ) : (
+                "Create an account"
+              )}
             </Button>
           </form>
-          Already have an account?
-          <Button variant="link" href="/login" className="underline text-lg">
-            Click to login
-          </Button>
+
+          <p className="text-center">
+            Already have an account?{" "}
+            <a href="/login" className="underline text-primary text-lg">
+              Click to login
+            </a>
+          </p>
         </Form>
       </div>
     </div>
