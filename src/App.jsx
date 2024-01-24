@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
@@ -14,6 +14,9 @@ import RestrauntDetail from "./pages/Restraunts/RestrauntDetailPage";
 import Signup from "./pages/Signup";
 
 function App() {
+  const location = useLocation();
+  const showFooter =
+    location.pathname !== "/login" && location.pathname !== "/register";
   return (
     <>
       <Navbar />
@@ -30,7 +33,7 @@ function App() {
         <Route path="/reservation-status" element={<ReservationStatus />} />
         <Route path="/account-links" element={<AccountLinks />} />
       </Routes>
-      <Footer />
+      {showFooter && <Footer />}
     </>
   );
 }
