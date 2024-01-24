@@ -2,6 +2,8 @@ import axios from "axios";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import * as Yup from 'yup';
+
 export function cn(...inputs) {
     return twMerge(clsx(inputs));
 }
@@ -27,3 +29,9 @@ export const fetchUserInfo = async () => {
         console.error("Error occurred while fetching user id:", error);
     }
 };
+
+
+export const SignupSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string().required('Required')
+});

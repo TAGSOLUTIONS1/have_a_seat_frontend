@@ -1,30 +1,58 @@
 import { useForm } from "react-hook-form";
 
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
+
+import { SignupSchema, cn } from "@/lib/utils";
 import { register } from "@/services/auth";
 
 const SignupForm = () => {
-  const form = useForm();
+  const form = useForm({
+    resolver: yupResolver(SignupSchema),
+  });
   const { toast } = useToast();
 
   const onSubmit = async (data) => {
-    const response = await register(data);
-    if (response.success) {
+    try {
+      const res = await register(data);
       toast({
-        variant: "success",
-        title: "Success!",
-        description: "Your account has been created.",
+        title: "Account created.",
+        description: "We've created your account for you.",
+        status: "success",
+        duration: 10000 * 60,
+        isClosable: true,
       });
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: response.error.detail,
-      });
+    } catch (err) {
+      switch (err.response.status) {
+        case 400:
+          toast({
+            title: "Account already exists.",
+            description: "Please try again.",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          break;
+        case 500:
+          toast({
+            title: "Server error.",
+            description: "Please try again.",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          break;
+      }
     }
   };
 
@@ -51,6 +79,7 @@ const SignupForm = () => {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
               defaultValue=""
@@ -68,6 +97,7 @@ const SignupForm = () => {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
               defaultValue=""
