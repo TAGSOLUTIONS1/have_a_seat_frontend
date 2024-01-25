@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "lucide-react";
 
 import {
   Dialog,
@@ -35,7 +36,11 @@ const LinkPageDialogue = () => {
           <DialogFooter>
             {/* <Button className="w-24 text-md">Link</Button> */}
             <DialogClose asChild>
-              <Button className="w-24 text-md">Cancel</Button>
+              <div>
+              <Button className="w-24 text-md">Link</Button>
+              <Button className="w-24 ml-4 text-md">Cancel</Button>
+
+              </div>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

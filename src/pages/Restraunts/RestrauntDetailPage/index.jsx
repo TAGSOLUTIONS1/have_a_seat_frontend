@@ -80,6 +80,20 @@ const RestrauntDetail = () => {
     fetchData();
   }, [endpoint, key]);
 
+  const getRandomKey = (obj) => {
+    const keys = Object.keys(obj);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    console.log(randomKey)
+    return randomKey;
+  };
+
+  const randomTemplateKey = restrauntDetail?.templates
+    ? getRandomKey(restrauntDetail?.templates)
+    : null;
+
+  const randomTemplate =
+    randomTemplateKey && restrauntDetail?.templates[randomTemplateKey];
+
   return (
     <div>
       {loading ? (
@@ -100,7 +114,7 @@ const RestrauntDetail = () => {
                   ? `url(${restrauntDetail?.image_url})`
                   : restrauntDetail?.restaurant
                   ? `url(${restrauntDetail?.restaurant?.photos?.profile?.large?.url})`
-                  : `url(${ResyRestrauntDetail?.data?.results?.venues[0]?.templates[897389]?.images[0]})`,
+                  : `url(${randomTemplate?.images[0]})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",

@@ -1,9 +1,24 @@
 import React, { useState } from "react";
 
 import { useAuth } from "@/contexts/authContext/AuthProvider";
+import { LoginSchema , cn } from "@/lib/utils";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Button } from "@/components/ui/button";
+import { LucideLoader } from "lucide-react";
+
+
 
 const LoginForm = () => {
   const { login } = useAuth();
+  const [loading , setLoading] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(LoginSchema),
+  });
 
   // const [email, setEmail] = React.useState("");
   // const [password, setPassword] = React.useState("");
@@ -17,71 +32,93 @@ const LoginForm = () => {
   });
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (form) => {
+    setLoading(true);
+    console.log(form)
     const { username, password, grant_type, client_id, client_secret } =
       formData;
     let formdata = new FormData();
-    formdata.append("username", username);
-    formdata.append("password", password);
+    formdata.append("username", form.username);
+    formdata.append("password", form.password);
     formdata.append("grant_type", grant_type);
     formdata.append("client_id", client_id);
     formdata.append("client_secret", client_secret);
     login(formdata);
+    setLoading(false);
   };
+  
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
-  };
+  // const handleChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setFormData((prev) => {
+  //     return {
+  //       ...prev,
+  //       [name]: value,
+  //     };
+  //   });
+  // };
 
   return (
-    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
+     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
         <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 md:mb-10">
           Login
         </h1>
-        <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center mb-4">
             <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
             <div className="flex-grow">
               <input
                 type="email"
-                id="email"
-                className="border border-gray-300 rounded w-full py-2 px-3"
+                id="username"
+                className={`border ${
+                  errors.username ? "border-red-500" : "border-gray-300"
+                } rounded w-full py-2 px-3`}
                 placeholder="Your Email"
-                name="username"
-                onChange={handleChange}
+                {...register("username")}
               />
+              {errors.username && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.username.message}
+                </p>
+              )}
             </div>
           </div>
+
           <div className="flex items-center mb-4">
             <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
             <div className="flex-grow">
               <input
                 type="password"
                 id="password"
-                className="border border-gray-300 rounded w-full py-2 px-3"
+                className={`border ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } rounded w-full py-2 px-3`}
                 placeholder="Password"
-                name="password"
-                onChange={handleChange}
+                {...register("password")}
               />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
           </div>
 
           <div className="flex justify-center">
-            <button
+            <Button
               type="submit"
-              className="md:w-2/3 lg:w-1/2 sm:w-1 text-white bg-purple-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              variant="default"
+              className={cn("rounded-md w-1/2 text-xl")}
             >
-              LOGIN
-            </button>
+              {loading ? (
+                <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
+              ) : (
+                "Login"
+              )}
+            </Button>
           </div>
+
           <p className="text-center">
             <a href="/forget" className="underline">
               Forgot password

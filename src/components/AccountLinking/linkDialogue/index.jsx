@@ -10,7 +10,7 @@ import {
 
 const LinkDialogue = () => {
   const [restrauntType, setRestrauntType] = useState(null);
-//   const iframeRef = useRef<any | null>(null);
+  //   const iframeRef = useRef<any | null>(null);
 
   const openModalWindow = (url, width, height) => {
     var left = screen.width / 2 - width / 2;
@@ -37,6 +37,18 @@ const LinkDialogue = () => {
     openModalWindow("https://resy.com/?date=2024-01-16&seats=2", 1000, 550);
   };
 
+  const handleTockClick = () => {
+    openModalWindow("https://www.exploretock.com/signup?continue=%2F", 1000, 550);
+  };
+
+  const handleGoogleClick = () => {
+    openModalWindow("https://www.google.com/", 1000, 550);
+  };
+
+  const handleToastTabClick = () => {
+    openModalWindow("https://auth.toasttab.com/u/login/identifier?state=hKFo2SBqOVdWc2NOaFdtWFRfYTlTbG5Hb3NWSWVFM1dVYmEwSqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEczalgyQm9ud0JRbzh4UkQ0bGpTVHJYZnJVR19ndlVFo2NpZNkgVUd2eWtZdzh3U1VwNWptbUhqVk5pcUtWcGswYjU2SWU", 1000, 550);
+  };
+
   const handleRadioClick = (radioId, type) => {
     const radioElement = document.getElementById(radioId);
     if (radioElement) {
@@ -45,26 +57,26 @@ const LinkDialogue = () => {
     }
   };
 
-//   const handleIFrameMessage = (event: any) => {
-//     if (event.source === iframeRef?.current?.contentWindow) {
-//       if (event.data && event.data.type === "cookieData") {
-//         console.log("Cookies from iframe:", event.data.cookies);
-//       }
-//     }
-//   };
+  //   const handleIFrameMessage = (event: any) => {
+  //     if (event.source === iframeRef?.current?.contentWindow) {
+  //       if (event.data && event.data.type === "cookieData") {
+  //         console.log("Cookies from iframe:", event.data.cookies);
+  //       }
+  //     }
+  //   };
 
-//   useEffect(() => {
-//     window.addEventListener("message", handleIFrameMessage);
-//     return () => {
-//       window.removeEventListener("message", handleIFrameMessage);
-//     };
+  //   useEffect(() => {
+  //     window.addEventListener("message", handleIFrameMessage);
+  //     return () => {
+  //       window.removeEventListener("message", handleIFrameMessage);
+  //     };
 
-//   }, []);
+  //   }, []);
 
-//   const cookies = document.cookie;
-//   const cookieData = { type: "cookieData", cookies };
+  //   const cookies = document.cookie;
+  //   const cookieData = { type: "cookieData", cookies };
 
-//   window.parent.postMessage(cookieData, "*");
+  //   window.parent.postMessage(cookieData, "*");
 
   return (
     <>
@@ -134,13 +146,75 @@ const LinkDialogue = () => {
             </label>
           </div>
         </div>
+        <div className="flex gap-4 ">
+        <div
+          className="relative border-2 flex-1 rounded-lg pt-12 p-4"
+          onClick={() => handleRadioClick("radio4", "tock")}
+        >
+          <label htmlFor="radio4" className="cursor-pointer">
+            <img
+              src="/assets/tock-logo.png"
+              alt="Account Image 3"
+              className="w-full h-auto  object-contain rounded-md"
+            />
+            <div className="absolute top-2 right-2">
+              <input
+                type="radio"
+                id="radio4"
+                name="radio"
+                style={{ width: "20px", height: "20px" }}
+              />
+            </div>
+          </label>
+        </div>
+        <div
+          className="relative border-2 flex-1 rounded-lg pt-12 p-4"
+          onClick={() => handleRadioClick("radio5", "google")}
+        >
+          <label htmlFor="radio5" className="cursor-pointer">
+            <img
+              src="/assets/google-logo.jpg"
+              alt="Account Image 3"
+              className="w-full h-auto -mt-8 object-contain rounded-md"
+            />
+            <div className="absolute top-2 right-2">
+              <input
+                type="radio"
+                id="radio5"
+                name="radio"
+                style={{ width: "20px", height: "20px" }}
+              />
+            </div>
+          </label>
+        </div>
+        <div
+          className="relative border-2 flex-1 rounded-lg pt-12 p-4"
+          onClick={() => handleRadioClick("radio6", "toasttab")}
+        >
+          <label htmlFor="radio6" className="cursor-pointer">
+            <img
+              src="/assets/toasttab-logo.png"
+              alt="Account Image 3"
+              className="w-full h-auto -mt-2 object-contain rounded-md"
+            />
+            <div className="absolute top-2 right-2">
+              <input
+                type="radio"
+                id="radio6"
+                name="radio"
+                style={{ width: "20px", height: "20px" }}
+              />
+            </div>
+          </label>
+        </div>
+        </div>
         <DialogContent
           className="sm:max-w-[1300px]"
           style={{ height: "calc(100vh - 48px)" }}
         >
           {restrauntType === "yelp" ? (
             <iframe
-            //   ref={iframeRef}
+              //   ref={iframeRef}
               src="https://www.yelp.com/signup?return_url=https%3A%2F%2Fwww.yelp.com%2F"
               className="w-full mt-4 h-[610px]"
               frameBorder="0"
@@ -149,7 +223,13 @@ const LinkDialogue = () => {
             (handleOpenTableClick(), null)
           ) : restrauntType === "resy" ? (
             (handleResyClick(), null)
-          ) : null}
+          ) : restrauntType === "tock" ? (
+            (handleTockClick(), null)
+          ): restrauntType === "google" ? (
+            (handleGoogleClick(), null)
+          ): restrauntType === "toasttab" ? (
+            (handleToastTabClick(), null)
+          ):null}
           <DialogFooter></DialogFooter>
         </DialogContent>
       </Dialog>

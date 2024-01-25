@@ -21,12 +21,15 @@ import { LucideLoader } from "lucide-react";
 
 const SignupForm = () => {
   const [loading, setLoading] = useState(false);
+
   const form = useForm({
     resolver: yupResolver(SignupSchema),
   });
+
   const { toast } = useToast();
 
   const onSubmit = async (data) => {
+    console.log(data)
     try {
       setLoading(true);
       const res = await register(data);
