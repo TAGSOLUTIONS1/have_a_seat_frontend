@@ -10,7 +10,12 @@ import Time from "./Time";
 
 const OverviewCard2 = ({ overviewCardsData }) => {
   const [reservationCard, setReservationCard] = useState();
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState({
+    reservation_covers: null,
+    reservation_date: null,
+    reservation_time: null,
+  })
+  const [error, setError] = useState("");
   const [nextData, setNextData] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [timeSlots, setTimeSlots] = useState();
@@ -27,10 +32,30 @@ const OverviewCard2 = ({ overviewCardsData }) => {
   }, [nextData]);
 
   const handleTimeSlots = () => {
-    if (reservationCard?.alias) {
-      fetchYelpTimeSlots();
-    } else {
-      fetchOpenTableTimeSlots();
+    const { reservation_covers, reservation_date, reservation_time } = formData;
+  
+    if (
+      reservation_date === null ||
+      reservation_date === undefined 
+    ) {
+      setError("Date is Required");
+    } else if(
+      reservation_time === null ||
+      reservation_time === undefined 
+    ) {
+      setError("Time is Required");
+    } else if (
+      reservation_covers === null ||
+      reservation_covers === undefined 
+    ) {
+      setError("Persons are Required");
+    }else {
+      setError("")
+      if (reservationCard?.alias) {
+        fetchYelpTimeSlots();
+      } else {
+        fetchOpenTableTimeSlots();
+      }
     }
   };
 
@@ -134,12 +159,16 @@ const OverviewCard2 = ({ overviewCardsData }) => {
       <Time setFormData={setFormData} />
       <hr className="mt-4 mb-4" />
       <PersonCard setFormData={setFormData} />
+
       <button
         onClick={handleTimeSlots}
         className="w-full bg-purple-600 mt-4 text-white rounded-lg py-2 focus:outline-none"
       >
         Find a time
       </button>
+      {error && error !== null ? (
+        <p className="text-red-500 text-sm mt-1">{error}</p>
+      ) : null}
       <hr className="mt-4 mb-4" />
       <h1 className="mt-4 text-lg mb-4 font-bold">Time Slots</h1>
       {overviewCardsData?.alias ? (

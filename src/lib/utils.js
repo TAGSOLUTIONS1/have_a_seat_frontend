@@ -40,3 +40,18 @@ export const LoginSchema = Yup.object().shape({
     username: Yup.string().email('Invalid email').required('Required'),
     password: Yup.string().required('Required')
 });
+
+export const ResetSchema = Yup.object().shape({
+    newPassword: Yup.string().required('New Password is required'),
+  });
+
+export const ForgetSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+  });
+
+  export const ReservationSchema = Yup.object().shape({
+    first_name: Yup.string().required("First Name is required"),
+    last_name: Yup.string().required("Last Name is required"),
+    phone: Yup.string().required("Phone Number is required"),
+    email: Yup.string().email("Invalid email address").required("Email is required"),
+  });

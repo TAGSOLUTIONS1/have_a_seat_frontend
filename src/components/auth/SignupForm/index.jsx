@@ -29,7 +29,7 @@ const SignupForm = () => {
   const { toast } = useToast();
 
   const onSubmit = async (data) => {
-    console.log(data)
+    console.log(data);
     try {
       setLoading(true);
       const res = await register(data);
@@ -41,17 +41,15 @@ const SignupForm = () => {
         duration: 10000 * 60,
         isClosable: true,
         action: (
-          <ToastAction>
-            <Button
-              variant="default"
-              onClick={() => (window.location.href = "/login")}
-            >
-              Login
-            </Button>
+          <ToastAction altText="login">
+            <a href="/login">
+              <Button className="bg-purple-600">login</Button>
+            </a>
           </ToastAction>
         ),
       });
     } catch (err) {
+      console.log(err);
       setLoading(false);
       switch (err.response.status) {
         case 400:

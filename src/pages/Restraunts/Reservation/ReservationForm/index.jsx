@@ -80,7 +80,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             Number:
           </label>
           <input
-            type="text"
+           type="tel"
             id="phone"
             name="phone"
             required
