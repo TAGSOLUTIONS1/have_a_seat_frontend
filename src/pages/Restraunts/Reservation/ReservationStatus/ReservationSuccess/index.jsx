@@ -18,14 +18,14 @@ const ReservationSuccess = ({ formData }) => {
             <div>
               <h1 className="font-bold text-lg">Email</h1>
               <h3 className="text-md mb-1">
-                {formData?.reservationFormData?.email}
+                {formData?.email}
               </h3>
             </div>
             <div>
               <h1 className="font-bold text-lg">Name</h1>
               <h3 className="text-md mb-1">
-                {formData?.reservationFormData?.first_name} {""}{" "}
-                {formData?.reservationFormData?.last_name}
+                {formData?.first_name} {""}{" "}
+                {formData?.last_name}
               </h3>
             </div>
             <div>

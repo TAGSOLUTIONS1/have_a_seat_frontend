@@ -1,4 +1,5 @@
 const ReservationFailed = ({ formData }) => {
+  console.log(formData)
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="max-w-3xl  w-full mx-4 md:mx-auto rounded-lg overflow-hidden shadow-lg bg-white flex md:flex-row flex-col">
@@ -18,14 +19,14 @@ const ReservationFailed = ({ formData }) => {
             <div>
               <h1 className="font-bold text-lg">Email</h1>
               <h3 className="text-md mb-1">
-                {formData?.reservationFormData?.email}
+                {formData?.email}
               </h3>
             </div>
             <div>
               <h1 className="font-bold text-lg">Name</h1>
               <h3 className="text-md mb-1">
-                {formData?.reservationFormData?.first_name} {""}{" "}
-                {formData?.reservationFormData?.last_name}
+                {formData?.first_name} {""}{" "}
+                {formData?.last_name}
               </h3>
             </div>
             <div>

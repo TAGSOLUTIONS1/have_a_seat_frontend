@@ -18,7 +18,7 @@ const Menu = ({ restrauntDetail }) => {
   }, [restrauntDetail]);
 
   return (
-    <div className=" w-[full] ml-10 mt-8 md:ml-0 lg:ml-0 md:grid lg:grid md:grid-cols-8 lg:grid-cols-8 md:space-x-4 lg:space-x-4">
+    <div className=" w-[full] ml-4 mr-4 mt-8 md:ml-0 lg:ml-0 md:grid lg:grid md:grid-cols-8 lg:grid-cols-8 md:space-x-4 lg:space-x-4">
       <div className="col-span-1"></div>
       <div className="w-full md:col-span-4 mt-4 shadow-lg rounded-lg p-4 lg:col-span-4 mr-4 ">
         <h1 className="text-xl">

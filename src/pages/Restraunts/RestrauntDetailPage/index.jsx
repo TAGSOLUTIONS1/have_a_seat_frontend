@@ -118,10 +118,10 @@ const RestrauntDetail = () => {
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                width: "95%",
+                width: "100%",
                 height: "500px",
                 borderRadius: "10px",
-                marginLeft: "30px",
+                // marginLeft: "30px",
               }}
             ></div>
           </section>

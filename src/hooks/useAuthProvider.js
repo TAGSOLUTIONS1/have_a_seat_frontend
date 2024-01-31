@@ -9,6 +9,10 @@ import axios from "axios";
 import { authReducer, initialState } from "../contexts/authContext/authReducer";
 
 
+import { ToastAction } from "@radix-ui/react-toast";
+
+import { useToast } from "@/components/ui/use-toast";
+
 
 export const AuthContext = createContext({
   authState: initialState,
@@ -19,6 +23,8 @@ export const AuthContext = createContext({
 export const useAuthProvider = () => {
   const navigate = useNavigate()
   const [authState, dispatch] = useReducer(authReducer, initialState);
+  
+  const { toast } = useToast();
 
   const login = async (formData) => {
     try {
@@ -45,6 +51,13 @@ export const useAuthProvider = () => {
       if (response.status === 200) {
         // const { accessToken, refresh } = (result);
         await fetchUserInfo();
+        toast({
+          title: "Successfully Logged in.",
+          description: " you have logged in successfully in our app",
+          status: "Success",
+          duration: 9000,
+          isClosable: true,
+        });
         console.log(result);
         // dispatch({
         //   type: "LOGIN_SUCCESS",
@@ -53,6 +66,13 @@ export const useAuthProvider = () => {
         navigate("/");
       } else {
         dispatch({ type: "LOGIN_FAILURE" });
+        toast({
+          title: "Filed To log in ",
+          description: "Please try Signing up first",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
         console.error("Login failed");
       }
     } catch (error) {

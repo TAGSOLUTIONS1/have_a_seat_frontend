@@ -16,7 +16,7 @@ const Home = () => {
           className="absolute inset-0  z-0 bg-banner-image bg-no-repeat bg-cover bg-center brightness-30"
           style={{ zIndex: "-1" }}
         ></div>
-        <div className="relative z-10 max-w-screen-xl mt-10 sm:mt-20 left-0 right-0 md:bottom-32 mx-auto translate-y-1/3 md:translate-y-2/3 p-6 text-white">
+        <div className="relative z-10 max-w-screen-xl mt-10 sm:mt-10 left-0 right-0 md:bottom-32 mx-auto translate-y-1/3 md:translate-y-2/3 p-6 text-white">
           <div className="flex flex-col sm:-mt-14 md:-mt-14 md:flex-row items-center md:justify-between gap-5 md:gap-0">
             <div className="text-white text-center md:text-left flex flex-col justify-center md:flex-grow md:basis-3/5">
               <h1 className="title text-xl sm:text-3xl font-bold italic">
@@ -35,7 +35,7 @@ const Home = () => {
               <img
                 src="/assets/mainpage_round_image.jpg"
                 alt=""
-                className=" hidden sm:hidden md:block lg:block round-image mx-auto h-60 w-60 md:h-80 md:w-80 lg:h-96 lg:w-96 rounded-full border-8 border-white"
+                className=" round-image mx-auto h-60 w-60 md:h-80 md:w-80 lg:h-96 lg:w-96 rounded-full border-8 border-white"
               />
             </div>
           </div>

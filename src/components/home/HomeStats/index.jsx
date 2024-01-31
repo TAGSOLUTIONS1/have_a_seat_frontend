@@ -11,7 +11,7 @@ const HomeStats = () => {
             <div className="bg-transparent text-white text-center rounded-full w-32 md:w-44 h-32 md:h-44 flex items-center justify-center relative z-10">
               85,000+
             </div>
-            <div className="bg-purple-600 rounded-full border-white border-2 w-12 h-12 md:w-14 md:h-14 p-2 absolute bottom-0 right-[43px] md:right-[60px] lg:right-[60px]">
+            <div className="bg-purple-600 rounded-full border-white border-2 w-12 h-12 md:w-14 md:h-14 p-2 absolute bottom-0 right-[40px] md:right-[60px] lg:right-[60px]">
               <User className="text-white ml-2 mt-2 md:ml-2 md:mt-2" />
             </div>
           </div>
@@ -20,7 +20,7 @@ const HomeStats = () => {
             <div className="bg-transparent text-white text-center rounded-full w-32 md:w-44 h-32 md:h-44 flex items-center justify-center relative z-10">
               150+
             </div>
-            <div className="bg-purple-600 rounded-full border-white border-2 w-12 h-12 md:w-14 md:h-14 p-2 absolute bottom-0 right-[43px] md:right-[60px] lg:right-[60px]">
+            <div className="bg-purple-600 rounded-full border-white border-2 w-12 h-12 md:w-14 md:h-14 p-2 absolute bottom-0 right-[40px] md:right-[60px] lg:right-[60px]">
               <ChefHatIcon className="text-white ml-2 mt-2 md:ml-2 md:mt-2" />
             </div>
           </div>
@@ -29,7 +29,7 @@ const HomeStats = () => {
             <div className="bg-transparent text-white text-center rounded-full w-32 md:w-44 h-32 md:h-44 flex items-center justify-center relative z-10">
               72,000+
             </div>
-            <div className="bg-purple-600 rounded-full border-white border-2 w-12 h-12 md:w-14 md:h-14 p-2 absolute bottom-0 right-[43px] md:right-[60px] lg:right-[60px]">
+            <div className="bg-purple-600 rounded-full border-white border-2 w-12 h-12 md:w-14 md:h-14 p-2 absolute bottom-0 right-[40px] md:right-[60px] lg:right-[60px]">
               <Users className="text-white ml-2 mt-2 md:ml-2 md:mt-2" />
             </div>
           </div>
@@ -38,7 +38,7 @@ const HomeStats = () => {
             <div className="bg-transparent text-white text-center rounded-full w-32 md:w-44 h-32 md:h-44 flex items-center justify-center relative z-10">
               32+
             </div>
-            <div className="bg-purple-600 rounded-full border-white border-2 w-12 h-12 md:w-14 md:h-14 p-2 absolute bottom-0 right-[43px] md:right-[60px] lg:right-[60px]">
+            <div className="bg-purple-600 rounded-full border-white border-2 w-12 h-12 md:w-14 md:h-14 p-2 absolute bottom-0 right-[40px] md:right-[60px] lg:right-[60px]">
               <Trophy className="text-white ml-2 mt-2 md:ml-2 md:mt-2" />
             </div>
           </div>

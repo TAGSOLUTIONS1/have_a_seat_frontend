@@ -35,14 +35,14 @@ const Comments = ({ reviewsData, yelpReviews }) => {
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center justify-center text-center">
       <div className="flex items-center">
         <ArrowLeft className="cursor-pointer" size={30} onClick={handlePrev} />
       </div>
-      <div className="flex flex-col md:flex-row lg:flex-row">
+      <div className="flex flex-col md:flex-col lg:flex-row">
         {reviewsData?.restaurant &&
           displayedReviews.map((data, index) => (
-            <div className="w-[180px] md:w-1/3 lg:w-1/3" key={index}>
+            <div className="w-[180px] md:w-1/1 lg:w-1/3" key={index}>
               <h1 className="text-center mb-2">User</h1>
               <div className="flex justify-center">
                 {[...Array(5)].map((_, starIndex) => (
@@ -54,14 +54,14 @@ const Comments = ({ reviewsData, yelpReviews }) => {
                   />
                 ))}
               </div>
-              <div className="ml-3">
+              <div className="ml-3 mb-8">
                 <p>{truncateText(data.text)}</p>
               </div>
             </div>
           ))}
         {reviewsData?.alias &&
           yelpReviews?.reviews?.map((data, index) => (
-            <div className="w-[180px] md:w-1/3 lg:w-1/3" key={index}>
+            <div className="w-[180px] md:w-1/1 lg:w-1/3" key={index}>
               <h1 className="text-center mb-2">{data.user.name}</h1>
               <div className="flex justify-center">
                 {[...Array(5)].map((_, starIndex) => (
@@ -73,7 +73,7 @@ const Comments = ({ reviewsData, yelpReviews }) => {
                   />
                 ))}
               </div>
-              <div className="ml-3">
+              <div className="ml-3 mb-8">
                 <p>{truncateText(data.text)}</p>
               </div>
             </div>

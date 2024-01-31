@@ -12,7 +12,7 @@ const OverviewCard = ({ restrauntDetail }) => {
   }, [restrauntDetail]);
 
   return (
-    <div className="grid grid-row-8 space-x-8 md:grid-cols-8 lg:grid-cols-8 md:space-x-4 lg:space-x-4 mb-10">
+    <div className="grid grid-row-8 -ml-[30px] sm:-ml-[0px] md:-ml-[0px] lg:-ml-[0px]  space-x-8 md:grid-cols-8 lg:grid-cols-8 md:space-x-4 lg:space-x-4 mb-10">
       <div className="col-span-1"></div>
       <div className=" row-span-1 md:col-span-4 lg:col-span-4 mr-4">
         <OverviewCard1 overviewCardsData={overviewCardsData} />

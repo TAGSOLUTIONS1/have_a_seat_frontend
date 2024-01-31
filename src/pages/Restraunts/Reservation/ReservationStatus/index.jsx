@@ -32,7 +32,7 @@ const ReservationStatus = () => {
         const myData = JSON.parse(decodeURIComponent(data));
         const finalData = myData.formData;
         console.log(myData.reservationFormData);
-        setFormData(finalData);
+        setFormData(myData.reservationFormData);
 
         const reservationTime = finalData[0]?.reservation_time;
         const timeDifference = finalData[1]?.timeOffsetMinutes;
