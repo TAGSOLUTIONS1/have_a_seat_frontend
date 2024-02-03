@@ -50,13 +50,13 @@ const Testimonials = () => {
 
   return (
     <div className="w-full flex flex-col items-center mb-44">
-      <div className="flex items-center justify-between mt-20">
-        <div>
+      <div className="flex items-center   sm:px-28 md:mx-28 justify-between mt-20">
+        <div className="mr-24 sm:mr-0 md:mr-0 lg:mr-0">
           <span className="relative text-purple-600 sm:text-lg md:text-3xl lg:text-3xl  font-bold italic">
             <img
               src="/assets/heading_shapes_1.png"
               alt=""
-              className="absolute object-cover left-28  md:left-48 md:top-1/4 sm:h-4 sm:w-10 md:h-6 md:w-16"
+              className="absolute object-cover left-28 md:left-48 md:top-1/4 sm:h-4 sm:w-10 md:h-6 md:w-16"
             />
             Testimonials
           </span>

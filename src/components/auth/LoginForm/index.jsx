@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 
 import { useAuth } from "@/contexts/authContext/AuthProvider";
-import { LoginSchema , cn } from "@/lib/utils";
+import { LoginSchema, cn } from "@/lib/utils";
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@radix-ui/react-toast";
+import { useNavigate } from "react-router-dom";
 import { LucideLoader } from "lucide-react";
-
-
 
 const LoginForm = () => {
   const { login } = useAuth();
-  const [loading , setLoading] = useState(false)
+  const navigate = useNavigate()
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -23,7 +27,7 @@ const LoginForm = () => {
 
   // const [email, setEmail] = React.useState("");
   // const [password, setPassword] = React.useState("");
-  
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -32,40 +36,61 @@ const LoginForm = () => {
     client_secret: "",
   });
 
-
   const onSubmit = async (form) => {
-    setLoading(true);
-    console.log(form)
-    const { username, password, grant_type, client_id, client_secret } =
-      formData;
-    let formdata = new FormData();
-    formdata.append("username", form.username);
-    formdata.append("password", form.password);
-    formdata.append("grant_type", grant_type);
-    formdata.append("client_id", client_id);
-    formdata.append("client_secret", client_secret);
-    login(formdata);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const { username, password, grant_type, client_id, client_secret } =
+        formData;
+      let formdata = new FormData();
+      formdata.append("username", form.username);
+      formdata.append("password", form.password);
+      formdata.append("grant_type", grant_type);
+      formdata.append("client_id", client_id);
+      formdata.append("client_secret", client_secret);
+      const res = await login(formdata);
+      setLoading(false);
+      toast({
+        title: "Logged in successfully",
+        description: "you are Successfully logged in and can enjoy our Application",
+        status: "success",
+        duration: 10000 * 60,
+        isClosable: true,
+      });
+      navigate("/")
+    } catch (err) {
+      setLoading(false);
+      switch (err?.response?.status) {
+        case 400:
+          toast({
+            title: "Account already exists.",
+            description: "Please try again.",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          break;
+        case 500:
+          toast({
+            title: "Server error.",
+            description: "Please try again.",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          break;
+      }
+    }
   };
-  
-
-  // const handleChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setFormData((prev) => {
-  //     return {
-  //       ...prev,
-  //       [name]: value,
-  //     };
-  //   });
-  // };
-
   return (
-     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
+    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
         <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 md:mb-10">
           Login
         </h1>
-        <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="space-y-4 md:space-y-6"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="flex items-center mb-4">
             <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
             <div className="flex-grow">

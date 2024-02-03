@@ -8,63 +8,51 @@ import axios from "axios";
 
 import { authReducer, initialState } from "../contexts/authContext/authReducer";
 
-
 import { ToastAction } from "@radix-ui/react-toast";
 
 import { useToast } from "@/components/ui/use-toast";
 
-
 export const AuthContext = createContext({
   authState: initialState,
-  login: async () => { },
-  logout: () => { },
+  login: async () => {},
+  logout: () => {},
 });
 
 export const useAuthProvider = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [authState, dispatch] = useReducer(authReducer, initialState);
-  
+
   const { toast } = useToast();
 
+  const API_URL = "https://tagsolutionsltd.com/api/v1";
+
   const login = async (formData) => {
-    try {
-      let requestOptions = {
-        method: "POST",
-        body: formData,
-        redirect: "follow",
-      };
+    let requestOptions = {
+      method: "POST",
+      body: formData,
+      redirect: "follow",
+    };
 
-      const response = await fetch(
-        "https://tagsolutionsltd.com/api/v1/auth/jwt/login",
-        requestOptions
-      );
+    const response = await fetch(
+      "https://tagsolutionsltd.com/api/v1/auth/jwt/login",
+      requestOptions
+    );
 
-      const result = await response.json();
+    const result = await response.json();
 
-      console.log(result);
-      console.log(result.access_token);
+    console.log(result);
+    console.log(response);
+    // console.log(result.access_token);
 
-      const accessToken = result.access_token;
-      console.log(accessToken);
-      localStorage.setItem("accessToken", accessToken);
+    const accessToken = result.access_token;
+    // console.log(accessToken);
+    localStorage.setItem("accessToken", accessToken);
 
-      if (response.status === 200) {
-        // const { accessToken, refresh } = (result);
+    switch (response.status) {
+      case 200:
         await fetchUserInfo();
-        toast({
-          title: "Successfully Logged in.",
-          description: " you have logged in successfully in our app",
-          status: "Success",
-          duration: 9000,
-          isClosable: true,
-        });
-        console.log(result);
-        // dispatch({
-        //   type: "LOGIN_SUCCESS",
-        //   payload: {accessToken: accessToken, refreshToken: refresh },
-        // });
-        navigate("/");
-      } else {
+        return response.data;
+      case 400:
         dispatch({ type: "LOGIN_FAILURE" });
         toast({
           title: "Filed To log in ",
@@ -73,14 +61,67 @@ export const useAuthProvider = () => {
           duration: 9000,
           isClosable: true,
         });
-        console.error("Login failed");
-      }
-    } catch (error) {
-      dispatch({ type: "LOGIN_FAILURE" });
-      console.error("Error occurred while logging in:", error);
+        throw new Error(response.data);
+      default:
+        dispatch({ type: "LOGIN_FAILURE" });
+        throw new Error("Something went wrong");
     }
   };
 
+  // const login = async (formData) => {
+  //   try {
+  //     let requestOptions = {
+  //       method: "POST",
+  //       body: formData,
+  //       redirect: "follow",
+  //     };
+
+  //     const response = await fetch(
+  //       "https://tagsolutionsltd.com/api/v1/auth/jwt/login",
+  //       requestOptions
+  //     );
+
+  //     const result = await response.json();
+
+  //     console.log(result);
+  //     console.log(result.access_token);
+
+  //     const accessToken = result.access_token;
+  //     console.log(accessToken);
+  //     localStorage.setItem("accessToken", accessToken);
+
+  //     if (response.status === 200) {
+  //       // const { accessToken, refresh } = (result);
+  //       await fetchUserInfo();
+  //       toast({
+  //         title: "Successfully Logged in.",
+  //         description: " you have logged in successfully in our app",
+  //         status: "Success",
+  //         duration: 9000,
+  //         isClosable: true,
+  //       });
+  //       console.log(result);
+  //       // dispatch({
+  //       //   type: "LOGIN_SUCCESS",
+  //       //   payload: {accessToken: accessToken, refreshToken: refresh },
+  //       // });
+  //       navigate("/");
+  //     } else {
+  //       dispatch({ type: "LOGIN_FAILURE" });
+  //       toast({
+  //         title: "Filed To log in ",
+  //         description: "Please try Signing up first",
+  //         status: "error",
+  //         duration: 9000,
+  //         isClosable: true,
+  //       });
+  //       console.error("Login failed");
+  //     }
+  //   } catch (error) {
+  //     dispatch({ type: "LOGIN_FAILURE" });
+  //     console.error("Error occurred while logging in:", error);
+  //   }
+  // };
 
   // const fetchUserid = async ()=>{
 
@@ -106,9 +147,7 @@ export const useAuthProvider = () => {
   //   }
   // }
 
-
   const logout = async () => {
-
     const accessToken = localStorage.getItem("accessToken");
     // const refreshToken = localStorage.getItem("refreshToken");
 
