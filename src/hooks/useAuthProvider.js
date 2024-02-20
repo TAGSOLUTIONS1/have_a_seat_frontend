@@ -40,12 +40,7 @@ export const useAuthProvider = () => {
 
     const result = await response.json();
 
-    console.log(result);
-    console.log(response);
-    // console.log(result.access_token);
-
     const accessToken = result.access_token;
-    // console.log(accessToken);
     localStorage.setItem("accessToken", accessToken);
 
     switch (response.status) {
@@ -56,7 +51,27 @@ export const useAuthProvider = () => {
         dispatch({ type: "LOGIN_FAILURE" });
         toast({
           title: "Filed To log in ",
-          description: "Please try Signing up first",
+          description: "Email or password is invalid",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        throw new Error(response.data);
+      case 500:
+        dispatch({ type: "LOGIN_FAILURE" });
+        toast({
+          title: "Filed To log in ",
+          description: "Server Failed to response",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        throw new Error(response.data);
+      case 502:
+        dispatch({ type: "LOGIN_FAILURE" });
+        toast({
+          title: "Filed To log in ",
+          description: "Server Failed to response",
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -64,6 +79,13 @@ export const useAuthProvider = () => {
         throw new Error(response.data);
       default:
         dispatch({ type: "LOGIN_FAILURE" });
+        toast({
+          title: "Filed To log in ",
+          description: "Please try Signing up first",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
         throw new Error("Something went wrong");
     }
   };

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 import { SignupSchema, cn } from "@/lib/utils";
 import { register } from "@/services/auth";
 
@@ -20,6 +21,7 @@ import { ToastAction } from "@radix-ui/react-toast";
 import { LucideLoader } from "lucide-react";
 
 const SignupForm = () => {
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
 
   const form = useForm({
@@ -29,11 +31,12 @@ const SignupForm = () => {
   const { toast } = useToast();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    console.log(data)
     try {
       setLoading(true);
-      const res = await register(data);
+       await register(data);
       setLoading(false);
+      navigate("/")
       toast({
         title: "Account created.",
         description: "We've created your account, please verify your email.",
@@ -49,9 +52,9 @@ const SignupForm = () => {
         ),
       });
     } catch (err) {
-      console.log(err);
+      console.log(err , "ERROR ON THE RESPONSE OF SIGNUP API");
       setLoading(false);
-      switch (err.response.status) {
+      switch (err?.response?.status) {
         case 400:
           toast({
             title: "Account already exists.",
@@ -85,6 +88,40 @@ const SignupForm = () => {
             className="flex flex-col space-y-4 md:space-y-5"
             onSubmit={form.handleSubmit(onSubmit)}
           >
+            <FormField
+              control={form.control}
+              name="first_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="First name"
+                      className={cn("py-6 px-4 text-lg")}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              defaultValue=""
+            />
+            <FormField
+              control={form.control}
+              name="last_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="Last name"
+                      className={cn("py-6 px-4 text-lg")}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              defaultValue=""
+            />
             <FormField
               control={form.control}
               name="email"

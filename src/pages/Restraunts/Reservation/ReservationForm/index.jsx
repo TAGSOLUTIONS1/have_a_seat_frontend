@@ -112,10 +112,10 @@ const ReservationForm = ({ formData, bookingInfo }) => {
       </div>
       <div className=" md:w-2/5 lg:w-2/5 hidden md:block lg:block md:px-24 lg:px-24 px-0">
         <img
-          src="https://www.scaler.com/topics/stories/how-to-create-a-registration-form-in-html/assets/3.png"
+          src="/assets/bookingImage.svg"
           className="mt-32"
-          width={"200px"}
-          height={"300px"}
+          width={"250px"}
+          height={"350px"}
           alt=""
         />
       </div>

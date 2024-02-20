@@ -11,8 +11,8 @@ const SearchLocation = () => {
     attributes: "reservation",
     reservation_covers: 2,
     persons: 2,
-    reservation_date: "2024-01-25",
-    date: "2024-01-25",
+    reservation_date: "2024-02-25",
+    date: "2024-02-25",
     reservation_time: "19:00",
   });
 

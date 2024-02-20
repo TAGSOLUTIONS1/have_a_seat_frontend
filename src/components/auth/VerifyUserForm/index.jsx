@@ -10,6 +10,8 @@ const VerifyUserForm = () => {
   const { toast } = useToast();
     const [token , setToken] = useState("")
 
+    console.log(token)
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

@@ -19,6 +19,7 @@ const VerifyUserForm = () => {
     if (id && id !== null) {
       setToken(id);
       handleVerifyToken();
+      console.log(id)
     } else {
       return;
     }
@@ -28,6 +29,7 @@ const VerifyUserForm = () => {
     try {
       const currentDate = new Date();
       const date = currentDate.toString();
+      console.log(token)
 
       const response = await axios.post(
         "https://tagsolutionsltd.com/api/v1/auth/verify",
