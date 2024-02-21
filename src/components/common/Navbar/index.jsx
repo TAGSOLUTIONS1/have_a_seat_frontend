@@ -1,62 +1,21 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
-import axios from "axios";
 
+import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { cn } from "@/lib/utils";
 import { User } from "lucide-react";
-import { useAuth } from "@/contexts/authContext/AuthProvider";
 
 import SideNav from "../SideNav";
 import "./nav.css";
 
 const Navbar = () => {
-
-  const { logout } = useAuth();
-  const [user, setUser] = useState();
+  const { logout, authState } = useAuth();
   const storageToken = localStorage.getItem("accessToken");
-
-  useEffect(() => {
-    (async () => {
-      const localToken = localStorage.getItem("accessToken");
-      if (localToken) {
-        await fetchUserInfo(localToken);
-      }
-    })();
-  }, [storageToken]);
-
-  const fetchUserInfo = async (localToken) => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${localToken}`,
-        },
-      };
-      const response = await axios.get(
-        "https://tagsolutionsltd.com/api/v1/users/me",
-        config
-      );
-      if (response.status === 200) {
-        console.log(response.data, "fetching id");
-        setUser(response.data);
-      } else {
-        console.error(
-          "Error fetching user data. Non-200 status code:",
-          response.status
-        );
-        console.error(response.data);
-      }
-    } catch (error) {
-      // console.error("Error occurred while fetching user id:", error);
-    }
-  };
 
   const handleLogout = async () => {
     try {
       await logout();
-      setUser(null);
     } catch (error) {
       console.error("Error occurred while logging out:", error);
     }
@@ -79,10 +38,9 @@ const Navbar = () => {
             </Link>
           </div>
           <SideNav />
-
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
             <div className="relative">
-              {user === undefined || user === null ? (
+              {!authState.isAuthenticated && !authState.user ? (
                 <div className="flex">
                   <ul className="flex ">
                     <li className="p-4">
@@ -106,7 +64,9 @@ const Navbar = () => {
                 <div className="flex space-x-2">
                   <div>
                     <ul className="flex">
-                    <li className="p-4 mt-2 text-purple-600 text-lg">{user && user.email}</li>
+                      <li className="p-4 mt-2 decoration-solid text-purple-600 text-sm">
+                        {authState.user?.email}
+                      </li>
                       <li className="p-4">
                         <Button
                           className={cn("rounded-full bg-purple-600 ")}
@@ -127,7 +87,6 @@ const Navbar = () => {
               )}
             </div>
           </div>
-
         </div>
       </nav>
     </>

@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { LoginSchema, cn } from "@/lib/utils";
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { ToastAction } from "@radix-ui/react-toast";
-import { useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { LucideLoader } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
-  const { login } = useAuth();
-  const navigate = useNavigate()
+  const { login, handleError } = useAuth();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -25,60 +24,26 @@ const LoginForm = () => {
     resolver: yupResolver(LoginSchema),
   });
 
-  // const [email, setEmail] = React.useState("");
-  // const [password, setPassword] = React.useState("");
-
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    grant_type: "",
-    client_id: "",
-    client_secret: "",
-  });
-
   const onSubmit = async (form) => {
     try {
       setLoading(true);
-      const { username, password, grant_type, client_id, client_secret } =
-        formData;
-      let formdata = new FormData();
-      formdata.append("username", form.username);
-      formdata.append("password", form.password);
-      formdata.append("grant_type", grant_type);
-      formdata.append("client_id", client_id);
-      formdata.append("client_secret", client_secret);
-      const res = await login(formdata);
-      setLoading(false);
-      toast({
-        title: "Logged in successfully",
-        description: "you are Successfully logged in and can enjoy our Application",
-        status: "success",
-        duration: 10000 * 60,
-        isClosable: true,
-      });
-      navigate("/")
-    } catch (err) {
-      setLoading(false);
-      switch (err?.response?.status) {
-        case 400:
-          toast({
-            title: "Account already exists.",
-            description: "Please try again.",
-            status: "error",
-            duration: 9000,
-            isClosable: true,
-          });
-          break;
-        case 500:
-          toast({
-            title: "Server error.",
-            description: "Please try again.",
-            status: "error",
-            duration: 9000,
-            isClosable: true,
-          });
-          break;
+      const formdata = new FormData();
+      const formDataEntries = {
+        username: form.username,
+        password: form.password,
+        grant_type: "",
+        client_id: "",
+        client_secret: "",
+      };
+      for (const [key, value] of Object.entries(formDataEntries)) {
+        formdata.append(key, value);
       }
+      await login(formdata);
+      navigate("/");
+    } catch (err) {
+      handleError(err.response.status, toast);
+    } finally {
+      setLoading(false);
     }
   };
   return (

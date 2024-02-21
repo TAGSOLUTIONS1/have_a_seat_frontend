@@ -1,178 +1,94 @@
-import { fetchUserInfo } from "@/lib/utils";
 
 import { useNavigate } from "react-router-dom";
 
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useState } from "react";
 
 import axios from "axios";
 
-import { authReducer, initialState } from "../contexts/authContext/authReducer";
+import { Base_Url } from "@/baseUrl";
+import { fetchUserInfo } from "@/lib/utils";
 
-import { ToastAction } from "@radix-ui/react-toast";
-
-import { useToast } from "@/components/ui/use-toast";
+const initialState = {
+  isAuthenticated: false,
+  accessToken: null,
+  user: null,
+}
 
 export const AuthContext = createContext({
   authState: initialState,
-  login: async () => {},
-  logout: () => {},
+  login: async () => { },
+  logout: () => { },
+  handleError: () => { },
 });
+
 
 export const useAuthProvider = () => {
   const navigate = useNavigate();
-  const [authState, dispatch] = useReducer(authReducer, initialState);
+  const [authState, setAuthState] = useState(initialState);
 
-  const { toast } = useToast();
-
-  const API_URL = "https://tagsolutionsltd.com/api/v1";
+  const handleError = (status, toast) => {
+    let errorMessage = "Something went wrong";
+    switch (status) {
+      case 400:
+        errorMessage = "Account already exists. Please try again.";
+        break;
+      case 401:
+        errorMessage = "Invalid credentials. Please try again.";
+        break;
+      case 500:
+        errorMessage = "Server error. Please try again.";
+        break;
+    }
+    toast({
+      title: errorMessage,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    });
+    dispatch({ type: "LOGIN_FAILURE" });
+    throw new Error(errorMessage);
+  };
 
   const login = async (formData) => {
-    let requestOptions = {
-      method: "POST",
-      body: formData,
-      redirect: "follow",
-    };
+    try {
+      const requestOptions = {
+        method: "POST",
+        body: formData,
+        redirect: "follow",
+      };
+      const response = await fetch(`${Base_Url}/auth/jwt/login`, requestOptions);
 
-    const response = await fetch(
-      "https://tagsolutionsltd.com/api/v1/auth/jwt/login",
-      requestOptions
-    );
+      if (!response.ok) {
+        throw new Error(`Login failed with status: ${response.status}`);
+      }
 
-    const result = await response.json();
+      const result = await response.json();
+      localStorage.setItem("accessToken", result.access_token);
 
-    const accessToken = result.access_token;
-    localStorage.setItem("accessToken", accessToken);
+      const userInfo = await fetchUserInfo();
+      if (!userInfo) {
+        throw new Error("Failed to fetch user info.");
+      }
 
-    switch (response.status) {
-      case 200:
-        await fetchUserInfo();
-        return response.data;
-      case 400:
-        dispatch({ type: "LOGIN_FAILURE" });
-        toast({
-          title: "Filed To log in ",
-          description: "Email or password is invalid",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        throw new Error(response.data);
-      case 500:
-        dispatch({ type: "LOGIN_FAILURE" });
-        toast({
-          title: "Filed To log in ",
-          description: "Server Failed to response",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        throw new Error(response.data);
-      case 502:
-        dispatch({ type: "LOGIN_FAILURE" });
-        toast({
-          title: "Filed To log in ",
-          description: "Server Failed to response",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        throw new Error(response.data);
-      default:
-        dispatch({ type: "LOGIN_FAILURE" });
-        toast({
-          title: "Filed To log in ",
-          description: "Please try Signing up first",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        throw new Error("Something went wrong");
+      setAuthState({
+        isAuthenticated: true,
+        accessToken: result.access_token,
+        user: userInfo,
+      });
+      return result;
+    } catch (error) {
+      console.error("Error occurred while logging in:", error);
+      setAuthState({
+        isAuthenticated: false,
+        error: error.message,
+      });
+      throw error;
     }
   };
 
-  // const login = async (formData) => {
-  //   try {
-  //     let requestOptions = {
-  //       method: "POST",
-  //       body: formData,
-  //       redirect: "follow",
-  //     };
-
-  //     const response = await fetch(
-  //       "https://tagsolutionsltd.com/api/v1/auth/jwt/login",
-  //       requestOptions
-  //     );
-
-  //     const result = await response.json();
-
-  //     console.log(result);
-  //     console.log(result.access_token);
-
-  //     const accessToken = result.access_token;
-  //     console.log(accessToken);
-  //     localStorage.setItem("accessToken", accessToken);
-
-  //     if (response.status === 200) {
-  //       // const { accessToken, refresh } = (result);
-  //       await fetchUserInfo();
-  //       toast({
-  //         title: "Successfully Logged in.",
-  //         description: " you have logged in successfully in our app",
-  //         status: "Success",
-  //         duration: 9000,
-  //         isClosable: true,
-  //       });
-  //       console.log(result);
-  //       // dispatch({
-  //       //   type: "LOGIN_SUCCESS",
-  //       //   payload: {accessToken: accessToken, refreshToken: refresh },
-  //       // });
-  //       navigate("/");
-  //     } else {
-  //       dispatch({ type: "LOGIN_FAILURE" });
-  //       toast({
-  //         title: "Filed To log in ",
-  //         description: "Please try Signing up first",
-  //         status: "error",
-  //         duration: 9000,
-  //         isClosable: true,
-  //       });
-  //       console.error("Login failed");
-  //     }
-  //   } catch (error) {
-  //     dispatch({ type: "LOGIN_FAILURE" });
-  //     console.error("Error occurred while logging in:", error);
-  //   }
-  // };
-
-  // const fetchUserid = async ()=>{
-
-  //   const accessToken = localStorage.getItem("accessToken");
-
-  //   try {
-  //     const config = {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     };
-  //     const response = await axios.get(
-  //       "https://tagsolutionsltd.com/api/v1/users/me",
-  //       config
-  //     );
-  //     if (response.status === 200) {
-  //       console.log(response.data , "fetching id")
-  //     } else {
-  //       console.error("User ID cannot be fetched");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error occurred while fetching user id:", error);
-  //   }
-  // }
 
   const logout = async () => {
     const accessToken = localStorage.getItem("accessToken");
-    // const refreshToken = localStorage.getItem("refreshToken");
-
     try {
       const config = {
         headers: {
@@ -180,54 +96,48 @@ export const useAuthProvider = () => {
         },
       };
       const response = await axios.post(
-        "https://tagsolutionsltd.com/api/v1/auth/jwt/logout",
-        // {
-        //   refresh_token: refreshToken,
-        // },
+        "https://tagsolutionsltd.com/api/v1/auth/jwt/logout", null,
         config
       );
-      if (response.status === 200) {
-        authState.accessToken = null;
-        // authState.refreshToken = null;
-        // authState.user = null;
-        localStorage.removeItem("accessToken");
-        // localStorage.removeItem("refreshToken");
-        dispatch({ type: "LOGOUT" });
-        navigate("/login");
-      } else {
-        console.error("Logout failed");
-      }
+
+      localStorage.removeItem("accessToken");
+      setAuthState({
+        isAuthenticated: false,
+        accessToken: null,
+        user: null,
+      });
+      navigate("/");
     } catch (error) {
       console.error("Error occurred while logging out:", error);
     }
   };
 
-  const refreshToken = async () => {
-    try {
-      const refreshResponse = await axios.post(
-        "https://tagsolutionsltd.com/auth/token/refresh/",
-        {
-          refresh: localStorage.getItem("refreshToken"),
-        }
-      );
-      if (refreshResponse.status === 200) {
-        const { access } = refreshResponse.data;
-        dispatch({
-          type: "REFRESH_ACCESS_TOKEN",
-          payload: { accessToken: access },
-        });
-      } else {
-        console.error("Refresh token failed");
-      }
-    } catch (error) {
-      console.error("Error occurred while refreshing token:", error);
-    }
-  };
-
   useEffect(() => {
-    const interval = setInterval(refreshToken, 60000000);
+    async function initializeAuthState() {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        try {
+          const userInfo = await fetchUserInfo();
+          if (userInfo) {
+            setAuthState({
+              isAuthenticated: true,
+              accessToken: token,
+              user: userInfo,
+            });
+          }
+        } catch (error) {
+          console.error("Failed to fetch user info:", error);
+        }
+      }
+    }
+    const interval = setInterval(() => {
+      initializeAuthState();
+    }, 1000 * 60 * 60);
+    initializeAuthState();
     return () => clearInterval(interval);
-  }, [authState.refreshToken]);
+  }, []);
 
-  return { authState, login, logout };
+
+
+  return { authState, login, logout, handleError };
 };

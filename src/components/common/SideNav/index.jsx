@@ -1,14 +1,10 @@
-import { Link} from "react-router-dom";
-
-import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
-import axios from "axios";
 
+import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { cn } from "@/lib/utils";
 import { User } from "lucide-react";
-import { useAuth } from "@/contexts/authContext/AuthProvider";
 
 import {
   Sheet,
@@ -22,49 +18,11 @@ import {
 } from "@/components/ui/sheet";
 
 const SideNav = () => {
-  const { logout } = useAuth();
-  const [user, setUser] = useState();
-  const storageToken = localStorage.getItem("accessToken");
-
-  useEffect(() => {
-    (async () => {
-      const localToken = localStorage.getItem("accessToken");
-      if (localToken) {
-        await fetchUserInfo(localToken);
-      }
-    })();
-  }, [storageToken]);
-
-  const fetchUserInfo = async (localToken) => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${localToken}`,
-        },
-      };
-      const response = await axios.get(
-        "https://tagsolutionsltd.com/api/v1/users/me",
-        config
-      );
-      if (response.status === 200) {
-        console.log(response.data, "fetching id");
-        setUser(response.data);
-      } else {
-        console.error(
-          "Error fetching user data. Non-200 status code:",
-          response.status
-        );
-        console.error(response.data);
-      }
-    } catch (error) {
-      // console.error("Error occurred while fetching user id:", error);
-    }
-  };
+  const { logout, authState } = useAuth();
 
   const handleLogout = async () => {
     try {
       await logout();
-      setUser(null);
     } catch (error) {
       console.error("Error occurred while logging out:", error);
     }
@@ -115,7 +73,7 @@ const SideNav = () => {
             />
           </div>
           <div className="relative">
-            {user === undefined || user === null ? (
+            {!authState.isAuthenticated && !authState.user ? (
               <div className="fle mt-8">
                 <ul className="flex ">
                   <li className="p-2">
@@ -140,7 +98,7 @@ const SideNav = () => {
                 <div className="">
                   <ul>
                     <li className="p-4 mt-2 decoration-solid text-purple-600 text-sm">
-                      {user && user.email}
+                      {authState.user?.email}
                     </li>
                   </ul>
                   <ul className="flex ml-8">
