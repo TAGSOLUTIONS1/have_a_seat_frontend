@@ -95,7 +95,7 @@ export const useAuthProvider = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       };
-      const response = await axios.post(
+      await axios.post(
         "https://tagsolutionsltd.com/api/v1/auth/jwt/logout", null,
         config
       );
