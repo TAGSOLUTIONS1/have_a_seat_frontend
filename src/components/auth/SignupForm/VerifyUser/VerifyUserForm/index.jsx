@@ -1,74 +1,56 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
 import Loader from "@/components/Loader";
-import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const VerifyUserForm = () => {
-  const { toast } = useToast();
-
-  const [token, setToken] = useState("");
   const [verified, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const location = useLocation();
+  const { toast } = useToast();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const id = params.get("id");
-    if (id && id !== null) {
-      setToken(id);
-      handleVerifyToken();
-      console.log(id)
-    } else {
-      return;
-    }
-  }, [location.search]);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
 
   const handleVerifyToken = async () => {
     try {
       const currentDate = new Date();
       const date = currentDate.toString();
-      console.log(token)
-
       const response = await axios.post(
         "https://tagsolutionsltd.com/api/v1/auth/verify",
         {
-          token: token,
+          token: id,
         }
       );
-
-      if (response.status === 200) {
-        setVerified(true);
-        setLoading(false);
-        toast({
-          title: "Verified successfully",
-          description: date,
-        });
-      } else {
-        console.error("Failed to Verify");
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error("Error occurred while verifying:", error);
+      setVerified(true);
       setLoading(false);
-      const currentDate = new Date();
-      const date = currentDate.toString();
       toast({
-        title: "Error occurred while verifying:",
+        title: "Verified successfully",
         description: date,
+      });
+    } catch (error) {
+      setLoading(false);
+
+      toast({
+        title: error.response.data.detail,
       });
     }
   };
 
+  useEffect(() => {
+    handleVerifyToken();
+  }, [id]);
+
   return (
     <>
-      {loading && loading === true ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
           <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
-            {verified && verified === true ? (
+            {verified ? (
               <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 md:mb-10">
                 Verified Successfully
               </h1>
@@ -77,7 +59,7 @@ const VerifyUserForm = () => {
                 Verification Failed
               </h1>
             )}
-            {verified && verified === true ? (
+            {verified ? (
               <p className="text-center m-8 text-green-700">
                 You have been successfully verified, and we are pleased to
                 welcome you to our website. You now have the privilege to fully
@@ -93,14 +75,12 @@ const VerifyUserForm = () => {
             )}
             <form className="space-y-4 md:space-y-6">
               <Link to="/">
-                <div className="flex justify-center">
-                  <button
-                    type="submit"
-                    className="md:w-2/3 lg:w-1/2 sm:w-1/1 text-white bg-purple-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                  >
-                    continue to the website
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  className="md:w-2/3 lg:w-1/2 sm:w-1/1 text-white bg-purple-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                >
+                  Continue to the website
+                </button>
               </Link>
             </form>
           </div>

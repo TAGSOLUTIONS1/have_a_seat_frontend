@@ -99,7 +99,6 @@ export const useAuthProvider = () => {
         "https://tagsolutionsltd.com/api/v1/auth/jwt/logout", null,
         config
       );
-
       localStorage.removeItem("accessToken");
       setAuthState({
         isAuthenticated: false,
