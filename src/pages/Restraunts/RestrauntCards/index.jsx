@@ -176,12 +176,6 @@ const RestaurantCards = memo(
             className=" mb-1 w-[40%] md:w-[8%] lg:w-[8%] h-14 md:h-8 lg:h-8"
           />
         </div>
-        <InfiniteScroll
-          dataLength={0}
-          next={fetchMoreData}
-          hasMore={hasMore}
-          loader={<Loader />}
-        >
           <div>
             {shuffledRestaurants?.map((data, index) => (
               <Link
@@ -321,7 +315,6 @@ const RestaurantCards = memo(
               </Link>
             ))}
           </div>
-        </InfiniteScroll>
       </div>
     );
   }

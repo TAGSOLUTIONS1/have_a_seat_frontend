@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { cn } from "@/lib/utils";
-import { User } from "lucide-react";
+import { LucideLoader, User } from "lucide-react";
+
 
 import SideNav from "../SideNav";
 import "./nav.css";
@@ -12,6 +13,7 @@ import "./nav.css";
 const Navbar = () => {
   const { logout, authState } = useAuth();
   const storageToken = localStorage.getItem("accessToken");
+  console.log(authState.loading);
 
   const handleLogout = async () => {
     try {
@@ -39,53 +41,57 @@ const Navbar = () => {
           </div>
           <SideNav />
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-            <div className="relative">
-              {!authState.isAuthenticated && !authState.user ? (
-                <div className="flex">
-                  <ul className="flex ">
-                    <li className="p-4">
-                      <Button
-                        className={cn("rounded-full ml-2")}
-                        variant="outline"
-                        asChild
-                      >
-                        <Link to="/login">Login</Link>
-                      </Button>
-                    </li>
-                    <hr className="border-gray-200" />
-                    <li className="p-4">
-                      <Button className={cn("rounded-full")} asChild>
-                        <Link to="/register">Register</Link>
-                      </Button>
-                    </li>
-                  </ul>
-                </div>
-              ) : (
-                <div className="flex space-x-2">
-                  <div>
-                    <ul className="flex">
-                      <li className="p-4 mt-2 decoration-solid text-purple-600 text-sm">
-                        {authState.user?.email}
-                      </li>
+            {authState?.loading ? (
+              <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
+            ) : (
+              <div className="relative">
+                {!authState.isAuthenticated && !authState.user ? (
+                  <div className="flex">
+                    <ul className="flex ">
                       <li className="p-4">
                         <Button
-                          className={cn("rounded-full bg-purple-600 ")}
+                          className={cn("rounded-full ml-2")}
+                          variant="outline"
                           asChild
-                          onClick={handleLogout}
                         >
-                          <Link to="/">Logout</Link>
+                          <Link to="/login">Login</Link>
+                        </Button>
+                      </li>
+                      <hr className="border-gray-200" />
+                      <li className="p-4">
+                        <Button className={cn("rounded-full")} asChild>
+                          <Link to="/register">Register</Link>
                         </Button>
                       </li>
                     </ul>
                   </div>
-                  <div className="relative w-[40px] h-[40px] mt-4 bg-purple-600 rounded-full p-2">
-                    <Link to="account-links">
-                      <User className="cursor-pointer text-white w-6 h-6" />
-                    </Link>
+                ) : (
+                  <div className="flex space-x-2">
+                    <div>
+                      <ul className="flex">
+                        <li className="p-4 mt-2 decoration-solid text-purple-600 text-sm">
+                          {authState.user?.email}
+                        </li>
+                        <li className="p-4">
+                          <Button
+                            className={cn("rounded-full bg-purple-600 ")}
+                            asChild
+                            onClick={handleLogout}
+                          >
+                            <Link to="/">Logout</Link>
+                          </Button>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="relative w-[40px] h-[40px] mt-4 bg-purple-600 rounded-full p-2">
+                      <Link to="account-links">
+                        <User className="cursor-pointer text-white w-6 h-6" />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </nav>

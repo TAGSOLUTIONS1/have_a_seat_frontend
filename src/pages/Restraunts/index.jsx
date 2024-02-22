@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Filters from "./Filters";
 import RestrautCards from "./RestrauntCards";
+import Loader from "@/components/Loader";
 
 const Search = () => {
   const location = useLocation();
@@ -63,23 +64,30 @@ const Search = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row lg:flex-row max-w-[1300px] mx-auto justify-center p-4">
-        <div className="w-full md:w-1/3 lg:w-1/3 md:sticky lg:sticky top-[20%] h-[800px]">
-          <h1 className="text-xl items-center text-center justify-center">
-            <strong>
-              <Sliders size={24} className="inline-block mr-2" />
-              FILTERS
-            </strong>
-          </h1>
-          <Filters />
-        </div>
-        <div className="w-full">
-          <RestrautCards
-            yelpData={yelpData}
-            resyData={resyData}
-            openTableData={openTableData}
-            formData={formData}
-          />
-        </div>
+        {yelpData ? (
+          <>
+            <div className="w-full md:w-1/3 lg:w-1/3 md:sticky lg:sticky top-[20%] h-[800px]">
+              <h1 className="text-xl items-center text-center justify-center">
+                <strong>
+                  <Sliders size={24} className="inline-block mr-2" />
+                  FILTERS
+                </strong>
+              </h1>
+              <Filters />
+            </div>
+
+            <div className="w-full">
+              <RestrautCards
+                yelpData={yelpData}
+                resyData={resyData}
+                openTableData={openTableData}
+                formData={formData}
+              />
+            </div>
+          </>
+        ) : (
+          <Loader />
+        )}
       </div>
     </>
   );

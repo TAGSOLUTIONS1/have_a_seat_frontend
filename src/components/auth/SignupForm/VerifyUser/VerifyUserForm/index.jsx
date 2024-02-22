@@ -46,10 +46,12 @@ const VerifyUserForm = () => {
   return (
     <>
       {loading ? (
-        <Loader />
+        <div className="ml-[30%] -mt-[15%]">
+          <Loader />
+        </div>
       ) : (
         <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
-          <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
+          <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mt-12">
             {verified ? (
               <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 md:mb-10">
                 Verified Successfully
@@ -77,7 +79,7 @@ const VerifyUserForm = () => {
               <Link to="/">
                 <button
                   type="submit"
-                  className="md:w-2/3 lg:w-1/2 sm:w-1/1 text-white bg-purple-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-full md:w-3/4 lg:w-1/2 md:ml-[22%] lg:ml-[22%] text-white bg-purple-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mx-auto"
                 >
                   Continue to the website
                 </button>

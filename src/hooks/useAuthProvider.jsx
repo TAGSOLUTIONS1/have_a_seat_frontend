@@ -12,6 +12,7 @@ const initialState = {
   isAuthenticated: false,
   accessToken: null,
   user: null,
+  loading: false
 }
 
 export const AuthContext = createContext({
@@ -56,7 +57,7 @@ export const useAuthProvider = () => {
         body: formData,
         redirect: "follow",
       };
-      const response = await fetch(`${Base_Url}/auth/jwt/login`, requestOptions);
+      const response = await fetch(`${Base_Url}/api/v1/auth/jwt/login`, requestOptions);
 
       if (!response.ok) {
         throw new Error(`Login failed with status: ${response.status}`);
@@ -108,6 +109,7 @@ export const useAuthProvider = () => {
       navigate("/");
     } catch (error) {
       console.error("Error occurred while logging out:", error);
+      navigate("/");
     }
   };
 
@@ -116,16 +118,37 @@ export const useAuthProvider = () => {
       const token = localStorage.getItem("accessToken");
       if (token) {
         try {
+          setAuthState((prev)=>{
+            return{
+              ...prev,
+              loading:true
+            }
+          })
           const userInfo = await fetchUserInfo();
           if (userInfo) {
             setAuthState({
               isAuthenticated: true,
               accessToken: token,
               user: userInfo,
+              loading:false
             });
+          }
+          else{
+            setAuthState({
+              isAuthenticated: null,
+              accessToken: null,
+              user: null,
+              loading:false
+            })
           }
         } catch (error) {
           console.error("Failed to fetch user info:", error);
+          setAuthState({
+            isAuthenticated: null,
+            accessToken: null,
+            user: null,
+            loading:false
+          })
         }
       }
     }
