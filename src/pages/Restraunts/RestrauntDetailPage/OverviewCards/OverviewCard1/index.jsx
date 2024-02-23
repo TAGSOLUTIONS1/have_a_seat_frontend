@@ -8,7 +8,7 @@ const OverviewCard1 = ({ overviewCardsData }) => {
   const getRandomKey = (obj) => {
     const keys = Object.keys(obj);
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    console.log(randomKey)
+    console.log(randomKey);
     return randomKey;
   };
 
@@ -21,6 +21,24 @@ const OverviewCard1 = ({ overviewCardsData }) => {
   const randomTemplate =
     randomTemplateKey && overviewCardsData?.templates[randomTemplateKey];
 
+  const convertHtmlToText = (html) => {
+    // Create a temporary element
+    var tempElement = document.createElement("div");
+
+    // Set the HTML content
+    tempElement.innerHTML = html;
+
+    // Append the temporary element to the document body
+    document.body.appendChild(tempElement);
+
+    // Extract text content
+    var textContent = tempElement.textContent || tempElement.innerText;
+
+    // Remove the temporary element
+    document.body.removeChild(tempElement);
+
+    return textContent;
+  };
 
   return (
     <div className="border rounded-lg p-8 mb-4 shadow-lg ">
@@ -39,9 +57,9 @@ const OverviewCard1 = ({ overviewCardsData }) => {
             {overviewCardsData?.alias
               ? overviewCardsData?.rating
               : overviewCardsData?.restaurant
-              ? overviewCardsData?.restaurant?.statistics?.reviews?.ratings?.overall?.rating
-              : overviewCardsData?.venue?.rating
-                }
+              ? overviewCardsData?.restaurant?.statistics?.reviews?.ratings
+                  ?.overall?.rating
+              : overviewCardsData?.venue?.rating}
           </span>
         </div>
         <div className="flex items-center">
@@ -55,25 +73,21 @@ const OverviewCard1 = ({ overviewCardsData }) => {
         <div className="flex items-center">
           <DollarSign className="mr-1  text-purple-600" />
           <span>
-            { 
-                overviewCardsData?.alias
+            {overviewCardsData?.alias
               ? overviewCardsData?.review_count
               : overviewCardsData?.restaurant
-              ? overviewCardsData?.restaurant?.priceBand.name 
-              : overviewCardsData?.venue?.price_range
-            }
+              ? overviewCardsData?.restaurant?.priceBand.name
+              : overviewCardsData?.venue?.price_range}
           </span>
         </div>
         <div className="flex items-center">
           <Utensils className="mr-1 text-purple-600" />
           <span>
-            { 
-            overviewCardsData?.alias
-              ? "unspecified"
+            {overviewCardsData?.alias
+              ? overviewCardsData?.categories[0]?.title
               : overviewCardsData?.restaurant
               ? overviewCardsData?.restaurant?.primaryCuisine?.name
-              : overviewCardsData?.venue?.type
-            }
+              : overviewCardsData?.venue?.type}
           </span>
         </div>
       </div>
@@ -92,11 +106,8 @@ const OverviewCard1 = ({ overviewCardsData }) => {
           </>
         ) : (
           <>
-            {
-              overviewCardsData?.venue.location
-                .neighborhood
-            }{" "}
-            , {overviewCardsData?.venue.location.name}
+            {overviewCardsData?.venue.location.neighborhood} ,{" "}
+            {overviewCardsData?.venue.location.name}
           </>
         )}
       </p>
@@ -105,9 +116,8 @@ const OverviewCard1 = ({ overviewCardsData }) => {
         {overviewCardsData?.alias
           ? "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae iusto voluptatibus architecto, voluptate fugiat hic atque tempora placeat possimus commodi culpa quia molestiae dolore fuga blanditiis ipsum consectetur odio quo asperiores corrupti saepe. Totam!"
           : overviewCardsData?.restaurant
-          ? overviewCardsData?.restaurant?.description
-          : randomTemplate?.content["en-us"]?.about?.body
-              }
+          ? convertHtmlToText(overviewCardsData?.restaurant?.description)
+          : randomTemplate?.content["en-us"]?.about?.body}
       </p>
     </div>
   );

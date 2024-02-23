@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 const BestSeller = () => {
   return (
     <div className="w-full flex flex-col md:flex-row lg:flex-row items-center mt-8 justify-center md:space-x-8 lg:space-x-8">
-      <div className="relative flex flex-col md:flex-row lg:flex-row sm:flex-row mb-8 sm:mb-0">
+      <div className="relative flex flex-col md:flex-row lg:flex-row sm:flex-row mb-8 sm:mb-8 select-none ">
         <div className="order-1 md:order-0 lg:order-0 sm:order-0">
           <img
             src="/assets/offer_slider_1.png"
@@ -11,7 +11,7 @@ const BestSeller = () => {
             alt=""
           />
         </div>
-        <div className="ml-8 absolute inset-0 flex flex-col mt-8 justify-left items-left text-white order-0 md:order-1 lg:order-1 sm:order-1">
+        <div className="ml-8 absolute inset-0 flex flex-col mt-8 justify-left items-left text-white order-0 md:order-1 lg:order-1 sm:order-1 select-none">
           <h1 className="sm:text-lg md:text-2xl font-bold mb-4 text-purple-600 italic">
             Weekly Best Seller
           </h1>
@@ -29,7 +29,7 @@ const BestSeller = () => {
           </p>
         </div>
       </div>
-      <div className="relative flex flex-col md:flex-row lg:flex-row sm:flex-row mb-8 sm:mt-4">
+      <div className="relative flex flex-col md:flex-row lg:flex-row sm:flex-row mb-8 sm:mb-0 select-none ">
         <div className="order-1 md:order-0 lg:order-0 sm:order-0">
           <img
             src="/assets/offer_slider_2.png"

@@ -9,6 +9,10 @@ const YelpBookingInfo = ({ bookingInfo }) => {
               alt={bookingInfo?.avatars["120s"]?.altText}
               height={"255px"}
               className="object-cover w-full md:w-[255px] lg:w-[255px]"
+              style={{
+                borderTopLeftRadius: "8px",
+                borderBottomLeftRadius:"8px"
+              }}
             />
           </div>
         </div>

@@ -96,11 +96,11 @@ const LoginForm = () => {
             </div>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex w-full justify-center">
             <Button
               type="submit"
               variant="default"
-              className={cn("rounded-md w-1/2 text-xl")}
+              className={cn("rounded-md w-[97%] ml-[3%] text-xl") }
             >
               {loading ? (
                 <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
@@ -111,13 +111,13 @@ const LoginForm = () => {
           </div>
 
           <p className="text-center">
-            <a href="/forget" className="underline">
+            <a href="/forget" className="underline text-purple-600">
               Forgot password
             </a>
           </p>
           <p className="text-center">
             New to Reatraunt?{" "}
-            <a href="/register" className="underline">
+            <a href="/register" className="underline  text-purple-600">
               Click to Register
             </a>
           </p>

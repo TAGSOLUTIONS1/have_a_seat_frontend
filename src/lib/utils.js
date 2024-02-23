@@ -33,6 +33,8 @@ export const fetchUserInfo = async () => {
 
 export const SignupSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
+    first_name: Yup.string().required('Required'),
+    last_name: Yup.string().required('Required'),
     password: Yup.string().required('Required')
 });
 

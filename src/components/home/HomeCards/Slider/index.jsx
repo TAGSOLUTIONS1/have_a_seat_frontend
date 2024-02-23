@@ -61,10 +61,10 @@ const CardsSlider = () => {
     <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center mt-20">
         <div className="text-center">
-          <div className="md:flex md:items-center md:justify-between">
+          <div className="md:flex md:items-center md:justify-between select-none">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight text-purple-600 sm:text-4xl">
-                <span className="relative">
+              <h2 className="text-3xl font-bold tracking-tight mt-4 text-purple-600 sm:text-4xl">
+                <span className="relative ">
                   <img
                     src="/assets/heading_shapes_1.png"
                     alt=""
@@ -93,7 +93,7 @@ const CardsSlider = () => {
             </div>
           </div>
         </div>
-        <div className="relative my-8 w-full">
+        <div className="relative my-8 w-full select-none">
           <div className="flex justify-center space-x-6 sm:space-x-8">
             <div className="sm:flex sm:space-x-4">
               {[currentSlide, (currentSlide + 1) % totalSlides].map((index) => (

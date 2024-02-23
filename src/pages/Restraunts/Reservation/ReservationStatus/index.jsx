@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import { Base_Url } from "@/baseUrl";
 import ReservationFailed from "./ReservationFailed";
 import ReservationSuccessFul from "./ReservationSuccess";
+import Loader from "@/components/Loader";
 
 const ReservationStatus = () => {
   const [formData, setFormData] = useState();
@@ -136,7 +137,7 @@ const ReservationStatus = () => {
   return (
     <div>
       {loading ? (
-        <p>Loading...</p>
+        <Loader/>
       ) : status === true ? (
         <ReservationSuccessFul formData={formData} />
       ) : status === false ? (

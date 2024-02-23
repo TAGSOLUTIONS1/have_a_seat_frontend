@@ -7,14 +7,16 @@ import { Base_Url } from "@/baseUrl";
 import DatePicker from "./Date";
 import PersonCard from "./Person";
 import Time from "./Time";
+import { LucideLoader } from "lucide-react";
 
 const OverviewCard2 = ({ overviewCardsData }) => {
   const [reservationCard, setReservationCard] = useState();
+  const [loading , setLoading] = useState(false)
   const [formData, setFormData] = useState({
     reservation_covers: null,
     reservation_date: null,
     reservation_time: null,
-  })
+  });
   const [error, setError] = useState("");
   const [nextData, setNextData] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -33,24 +35,18 @@ const OverviewCard2 = ({ overviewCardsData }) => {
 
   const handleTimeSlots = () => {
     const { reservation_covers, reservation_date, reservation_time } = formData;
-  
-    if (
-      reservation_date === null ||
-      reservation_date === undefined 
-    ) {
+
+    if (reservation_date === null || reservation_date === undefined) {
       setError("Date is Required");
-    } else if(
-      reservation_time === null ||
-      reservation_time === undefined 
-    ) {
+    } else if (reservation_time === null || reservation_time === undefined) {
       setError("Time is Required");
     } else if (
       reservation_covers === null ||
-      reservation_covers === undefined 
+      reservation_covers === undefined
     ) {
       setError("Persons are Required");
-    }else {
-      setError("")
+    } else {
+      setError("");
       if (reservationCard?.alias) {
         fetchYelpTimeSlots();
       } else {
@@ -82,6 +78,7 @@ const OverviewCard2 = ({ overviewCardsData }) => {
   };
 
   const fetchYelpTimeSlots = async () => {
+    setLoading(true)
     const yelpTimeParams = {
       restaurant_id: reservationCard?.id,
       restaurat_alias: reservationCard?.alias,
@@ -104,16 +101,20 @@ const OverviewCard2 = ({ overviewCardsData }) => {
         setTimeSlots(
           response?.data?.data?.availability_data[0]?.availability_list
         );
+        setLoading(false)
         setIsDataLoaded(true);
       } else {
+        setLoading(fasle)
         throw new Error("Network response was not ok.");
       }
     } catch (error) {
+      setLoading(false)
       console.error("Error fetching data:", error);
     }
   };
 
   const fetchOpenTableTimeSlots = async () => {
+    setLoading(true)
     const openTableTimeParams = {
       restaurant_id: reservationCard?.restaurant?.restaurantId,
       date: formData?.reservation_date,
@@ -130,10 +131,13 @@ const OverviewCard2 = ({ overviewCardsData }) => {
       if (response.status === 200) {
         setOpenTableTimeSlots(response?.data?.data?.data?.availability);
         setIsDataLoaded(true);
+        setLoading(false)
       } else {
+        setLoading(false)
         throw new Error("Network response was not ok.");
       }
     } catch (error) {
+      setLoading(false)
       console.error("Error fetching data:", error);
     }
   };
@@ -171,41 +175,49 @@ const OverviewCard2 = ({ overviewCardsData }) => {
       ) : null}
       <hr className="mt-4 mb-4" />
       <h1 className="mt-4 text-lg mb-4 font-bold">Time Slots</h1>
-      {overviewCardsData?.alias ? (
-        isDataLoaded ? (
-          Array.isArray(timeSlots) && timeSlots.length > 0 ? (
-            timeSlots.map((data, index) => (
+      {loading ? (
+        <LucideLoader className="w-6 h-6 justify-center animate-spin align-middle mx-auto" />
+      ):(
+      <div>
+        {overviewCardsData?.alias ? (
+          isDataLoaded ? (
+            Array.isArray(timeSlots) && timeSlots.length > 0 ? (
+              timeSlots.map((data, index) => (
+                <button
+                  key={index}
+                  className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                  onClick={() => handleYelpReservation(data)}
+                >
+                  {new Date(data.timestamp * 1000).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </button>
+              ))
+            ) : (
+              <p className="text-lg text-red-600">No slots available.</p>
+            )
+          ) : (
+            <p></p>
+          )
+        ) : (
+          Array.isArray(openTableTimeSlots) &&
+          openTableTimeSlots[0]?.availabilityDays[0]?.slots.map(
+            (data, index) => (
               <button
                 key={index}
                 className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                onClick={() => handleYelpReservation(data)}
+                onClick={() => handleOpenTableReservation(data)}
               >
-                {new Date(data.timestamp * 1000).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
+                {convertOffsetToTime(
+                  data.timeOffsetMinutes,
+                  formData?.reservation_time
+                )}
               </button>
-            ))
-          ) : (
-            <p className="text-lg text-red-600">No slots available.</p>
+            )
           )
-        ) : (
-          <p></p>
-        )
-      ) : (
-        Array.isArray(openTableTimeSlots) &&
-        openTableTimeSlots[0]?.availabilityDays[0]?.slots.map((data, index) => (
-          <button
-            key={index}
-            className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-            onClick={() => handleOpenTableReservation(data)}
-          >
-            {convertOffsetToTime(
-              data.timeOffsetMinutes,
-              formData?.reservation_time
-            )}
-          </button>
-        ))
+        )}
+      </div>
       )}
     </div>
   );

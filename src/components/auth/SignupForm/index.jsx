@@ -160,7 +160,7 @@ const SignupForm = () => {
             <Button
               type="submit"
               variant="default"
-              className={cn("rounded-md w-full text-xl")}
+              className={cn("rounded-md w-full mt-8 text-xl")}
             >
               {loading ? (
                 <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
@@ -170,7 +170,7 @@ const SignupForm = () => {
             </Button>
           </form>
 
-          <p className="text-center">
+          <p className="text-center mt-4">
             Already have an account?{" "}
             <a href="/login" className="underline text-primary text-lg">
               Click to login

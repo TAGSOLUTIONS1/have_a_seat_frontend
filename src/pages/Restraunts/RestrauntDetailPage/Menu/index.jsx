@@ -5,13 +5,17 @@ import { ResyRestrauntDetail } from "@/mockData";
 const Menu = ({ restrauntDetail }) => {
   const [menuData, setMenuData] = useState();
 
+  console.log(menuData)
+
   useEffect(() => {
     console.log(restrauntDetail);
+  
     if (Object.keys(restrauntDetail).length !== 0) {
       if (restrauntDetail?.menus?.menuData?.length === 0) {
         setMenuData(restrauntDetail?.menus?.menuData[0]?.sections[0]?.items);
       } else {
         setMenuData(restrauntDetail?.menus?.menuInfo?.url);
+        console.log(restrauntDetail?.menus?.menuInfo?.url)
       }
       return;
     }
@@ -29,7 +33,7 @@ const Menu = ({ restrauntDetail }) => {
           Array.isArray(menuData) ? (
             menuData.map((data) => <p key={data.title}>{data.title}</p>)
           ) : (
-            <a href={menuData} target="_blank">
+            <a href={menuData} target="_blank" className="text-purple-600">
               {menuData}
             </a>
           )

@@ -39,6 +39,10 @@ const ReservationForm = ({ formData, bookingInfo }) => {
     });
   };
 
+  const handleCancel = ()=>{
+    navigate("/")
+  }
+
   return (
     <div className="flex bg-white p-8 rounded shadow-md ">
       <div className=" w-full md:w-2/3 lg:w-2/3 community-service-hours-form">
@@ -80,7 +84,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             Number:
           </label>
           <input
-           type="tel"
+           type="number"
             id="phone"
             name="phone"
             required
@@ -92,20 +96,28 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             Email:
           </label>
           <input
-            type="text"
+            type="email"
             id="email"
             name="email"
             required
             className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
             onChange={handleChange}
           />
-          <div className="flex justify-center">
+          <div className="flex flex-col md:flex-row lg:flex-row items-center justify-center md:space-x-4  lg:space-x-4 ">
             <button
               type="submit"
-              className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white w-1/2 align-center bg-purple-600 hover:bg-purple-800"
+              className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white w-full md:w-2/3 lg:w-2/3  align-center bg-purple-600 hover:bg-purple-800 mt-4"
               style={{ minWidth: "100px" }}
             >
               Make a Reservation
+            </button>
+            
+            <button
+              className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white w-full md:w-1/3 lg:w-1/3 align-center bg-purple-600 hover:bg-purple-800 mt-4"
+              style={{ minWidth: "100px" }}
+              onClick={handleCancel}
+            >
+              Cancel Reservation
             </button>
           </div>
         </form>

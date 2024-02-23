@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { createContext, useEffect, useState } from "react";
 
 import axios from "axios";
+import { Toast } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 import { Base_Url } from "@/baseUrl";
 import { fetchUserInfo } from "@/lib/utils";
@@ -24,6 +27,8 @@ export const AuthContext = createContext({
 
 
 export const useAuthProvider = () => {
+
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [authState, setAuthState] = useState(initialState);
 
@@ -59,12 +64,23 @@ export const useAuthProvider = () => {
       };
       const response = await fetch(`${Base_Url}/api/v1/auth/jwt/login`, requestOptions);
 
+      toast({
+        title: "Login SuccessFull.",
+        description: "You are logged in successfully",
+        status: "Success",
+        duration: 9000,
+        isClosable: true,
+      });
+
       if (!response.ok) {
         throw new Error(`Login failed with status: ${response.status}`);
       }
 
+      console.log(response.status)
+
       const result = await response.json();
       localStorage.setItem("accessToken", result.access_token);
+
 
       const userInfo = await fetchUserInfo();
       if (!userInfo) {
@@ -79,6 +95,13 @@ export const useAuthProvider = () => {
       return result;
     } catch (error) {
       console.error("Error occurred while logging in:", error);
+      toast({
+        title: "Login Failed.",
+        description: "Please try again and re check your credentials",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
       setAuthState({
         isAuthenticated: false,
         error: error.message,

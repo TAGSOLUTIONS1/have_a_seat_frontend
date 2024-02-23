@@ -76,7 +76,7 @@ const Search = () => {
               <Filters />
             </div>
 
-            <div className="w-full">
+            <div className="w-full mb-10">
               <RestrautCards
                 yelpData={yelpData}
                 resyData={resyData}

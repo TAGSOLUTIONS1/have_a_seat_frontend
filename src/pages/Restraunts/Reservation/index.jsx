@@ -7,10 +7,12 @@ import { Base_Url } from "@/baseUrl";
 import PreviousData from "./PreviousData";
 import ReservationForm from "./ReservationForm";
 import YelpBookingInfo from "./YelpBookingInfo";
+import Loader from "@/components/Loader";
 
 const Reservation = () => {
   const [formData, setFormData] = useState();
   const [bookingInfo, setBookingInfo] = useState();
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -38,6 +40,7 @@ const Reservation = () => {
   }, [formData]);
 
   const fetchBookingInfo = async () => {
+    setLoading(true);
     const separator = formData[1]?.form_action;
     const parts = separator?.split("/");
     const alias = parts[2];
@@ -63,30 +66,37 @@ const Reservation = () => {
 
       if (response.status === 200) {
         setBookingInfo(response?.data?.data);
+        setLoading(false);
       } else {
         console.error("Request failed with status:", response.status);
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error fetching booking info:", error);
+      setLoading(false);
     }
   };
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center ">
-        <div className="w-3/4 mt-12">
-          <ReservationForm formData={formData} bookingInfo={bookingInfo} />
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="flex flex-col justify-center items-center mb-24 ">
+          <div className="w-3/4 mt-12">
+            <ReservationForm formData={formData} bookingInfo={bookingInfo} />
+          </div>
+          {formData && formData[0]?.alias ? (
+            <div className="w-3/4  mt-28">
+              <YelpBookingInfo bookingInfo={bookingInfo} />
+            </div>
+          ) : (
+            <div className="w-3/4  mt-28">
+              <PreviousData formData={formData} bookingInfo={bookingInfo} />
+            </div>
+          )}
         </div>
-        {formData && formData[0]?.alias ? (
-          <div className="w-3/4  mt-28">
-            <YelpBookingInfo bookingInfo={bookingInfo} />
-          </div>
-        ) : (
-          <div className="w-3/4  mt-28">
-            <PreviousData formData={formData} bookingInfo={bookingInfo} />
-          </div>
-        )}
-      </div>
+      )}
     </>
   );
 };

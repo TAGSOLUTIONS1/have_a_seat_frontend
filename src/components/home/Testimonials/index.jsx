@@ -83,15 +83,15 @@ const Testimonials = () => {
               <div className="rounded-full overflow-hidden mb-4">
                 <img
                   src={slides[index].image}
-                  className="h-32 w-32 rounded-full object-cover"
+                  className="h-32 w-32 rounded-full object-cover select-none"
                   alt=""
                 />
               </div>
               <div className="mt-2">
-                <h1 className="text-purple-600 text-lg font-bold italic">
+                <h1 className="text-purple-600 text-lg font-bold italic select-none">
                   {slides[index].title}
                 </h1>
-                <p className="text-gray-800 mt-2 text-md font-bold non-italic">
+                <p className="text-gray-800 mt-2 text-md font-bold non-italic select-none">
                   {slides[index].intro}
                 </p>
                 <div className="flex mt-2 justify-center">

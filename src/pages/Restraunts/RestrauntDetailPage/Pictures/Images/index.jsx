@@ -66,17 +66,17 @@ const Images = ({ pictures }) => {
             <img
               src={imageUrls[getAdjacentIndex(-1)]}
               alt={`Image ${getAdjacentIndex(-1) + 1}`}
-              className=" hidden sm:block md:hidden lg:block w-24 h-24 object-cover rounded-lg absolute left-0 shadow-md ml-16"
+              className="hidden sm:block md:hidden lg:block w-24 h-24 object-cover rounded-lg absolute left-0 shadow-md ml-16 select-none" 
             />
             <img
               src={imageUrls[currentImageIndex]}
               alt={`Image ${currentImageIndex + 1}`}
-              className="w-44 h-44 md:w-64 md:h-48 lg:w-64 lg:h-48 object-cover rounded-lg shadow-md"
+              className="w-44 h-44 md:w-64 md:h-48 lg:w-64 lg:h-48 object-cover rounded-lg shadow-md select-none" 
             />
             <img
               src={imageUrls[getAdjacentIndex(1)]}
               alt={`Image ${getAdjacentIndex(1) + 1}`}
-              className=" hidden sm:block md:hidden lg:block w-24 h-24 object-cover rounded-lg absolute right-0 shadow-md mr-16"
+              className="hidden sm:block md:hidden lg:block w-24 h-24 object-cover rounded-lg absolute right-0 shadow-md mr-16 select-none" 
             />
           </>
         ) : (

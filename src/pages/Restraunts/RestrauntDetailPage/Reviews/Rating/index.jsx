@@ -3,6 +3,30 @@ import { Star } from "lucide-react";
 import { Volume2 } from "lucide-react";
 
 const DetailRating = ({ reviewsData }) => {
+  const generateStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const decimalPart = rating - fullStars;
+  
+    const stars = [];
+  
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<Star key={i} className="mx-1" fill="#9F7AEA" size={20} />);
+    }
+  
+    if (decimalPart >= 0.5) {
+      stars.push(<Star key="half" className="mx-1" fill="#9F7AEA" size={20} />);
+    } else if (decimalPart > 0) {
+      stars.push(<Star key="empty" className="mx-1" size={20} />);
+    }
+  
+    const remainingStars = 5 - stars.length;
+    for (let i = 0; i < remainingStars; i++) {
+      stars.push(<Star key={`empty-${i}`} className="mx-1" size={20} />);
+    }
+  
+    return stars;
+  };
+
   return (
     <div className=" mt-4">
       <div>
@@ -15,12 +39,13 @@ const DetailRating = ({ reviewsData }) => {
           Reviews can only be made by diners who have been at this restraunt.
         </p>
       </div>
-      <div className=" flex mt-4">
-        <Star className="mx-1" fill="#FFD60A" size={20} />
-        <Star className="mx-1" fill="#FFD60A" size={20} />
-        <Star className="mx-1" fill="#FFD60A" size={20} />
-        <Star className="mx-1" fill="#FFD60A" size={20} />
-        <Star className="mx-1" fill="#FFD60A" size={20} />
+      <div className="flex mt-4">
+        {generateStars(
+          reviewsData?.restaurant_flag === "yelp"
+            ? 5
+            : reviewsData?.restaurant?.statistics?.reviews?.ratings?.food
+                ?.rating
+        )}
         <span className="mx-4">
           {reviewsData?.restaurant_flag === "yelp"
             ? 5

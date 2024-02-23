@@ -218,7 +218,7 @@ const RestaurantCards = memo(
                     }
                     alt={data?.name}
                   />
-                  <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col px-2">
+                  <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col px-2 select-none">
                     <div className="p-4 pb-0 flex-1">
                       <h1 className=" text-3xl font-light mb-1 text-grey-darkest">
                         <strong>
@@ -306,7 +306,7 @@ const RestaurantCards = memo(
                     </div>
                     <div className="bg-grey-lighter p-3 flex items-center justify-between transition hover:bg-grey-light cursor-pointer">
                       <button className="rounded-full bg-purple-600 text-white p-2">
-                        Book Now
+                        Detail
                       </button>
                       <i className="fas fa-chevron-right"></i>
                     </div>

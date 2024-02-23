@@ -42,8 +42,10 @@ const Reviews = ({ restrauntDetail }) => {
         {restrauntDetail?.restaurant ? (
           <DetailRating reviewsData={reviewsData} />
         ) : null}
-        <hr className="mb-4 mt-4" />
+
+        {restrauntDetail?.restaurant ? <hr className="mb-4 mt-4" /> : null}
         <h1 className="text-xl mb-4 font-bold">Reviews</h1>
+        <hr className="mb-8 mt-4" />
         <Comments reviewsData={reviewsData} yelpReviews={yelpReviews} />
       </div>
     </div>

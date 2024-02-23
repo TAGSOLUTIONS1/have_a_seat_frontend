@@ -95,7 +95,7 @@ const RestrauntDetail = () => {
     randomTemplateKey && restrauntDetail?.templates[randomTemplateKey];
 
   return (
-    <div>
+    <div className="mb-24">
       {loading ? (
         <Loader />
       ) : (
@@ -113,7 +113,7 @@ const RestrauntDetail = () => {
                 backgroundImage: restrauntDetail?.alias
                   ? `url(${restrauntDetail?.image_url})`
                   : restrauntDetail?.restaurant
-                  ? `url(${restrauntDetail?.restaurant?.photos?.profile?.large?.url})`
+                  ? `url(${restrauntDetail?.restaurant?.photos?.gallery?.photos[0]?.thumbnails[6]?.url})`
                   : `url(${randomTemplate?.images[0]})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
@@ -131,11 +131,11 @@ const RestrauntDetail = () => {
           <section>
             <Pictures restrauntDetail={restrauntDetail} />
           </section>
-          {/* {restrauntDetail?.alias ? null : ( */}
+          {restrauntDetail?.alias ? null : (
           <section>
             <Menu restrauntDetail={restrauntDetail} />
           </section>
-          {/* )} */}
+          )}
           <section>
             <TimingHours restrauntDetail={restrauntDetail} />
           </section>
