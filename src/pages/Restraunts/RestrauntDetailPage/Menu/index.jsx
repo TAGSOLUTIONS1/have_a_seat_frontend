@@ -5,17 +5,17 @@ import { ResyRestrauntDetail } from "@/mockData";
 const Menu = ({ restrauntDetail }) => {
   const [menuData, setMenuData] = useState();
 
-  console.log(menuData)
+  console.log(restrauntDetail);
 
   useEffect(() => {
     console.log(restrauntDetail);
-  
+
     if (Object.keys(restrauntDetail).length !== 0) {
       if (restrauntDetail?.menus?.menuData?.length === 0) {
         setMenuData(restrauntDetail?.menus?.menuData[0]?.sections[0]?.items);
       } else {
         setMenuData(restrauntDetail?.menus?.menuInfo?.url);
-        console.log(restrauntDetail?.menus?.menuInfo?.url)
+        console.log(restrauntDetail?.menus?.menuInfo?.url);
       }
       return;
     }
@@ -29,7 +29,7 @@ const Menu = ({ restrauntDetail }) => {
           <strong>Menu</strong>
         </h1>
         <hr className="mb-4 mt-4" />
-        {restrauntDetail ? (
+        {restrauntDetail.restaurant ? (
           Array.isArray(menuData) ? (
             menuData.map((data) => <p key={data.title}>{data.title}</p>)
           ) : (
@@ -38,13 +38,15 @@ const Menu = ({ restrauntDetail }) => {
             </a>
           )
         ) : (
-          <a className="text-lg" href={menuData} target="blank">
-            {
-              ResyRestrauntDetail.data.results.venues[0].templates[900634].menu[
-                "en-us"
-              ]
-            }
-          </a>
+          <>
+            {restrauntDetail.menu_highlights.length > 0 ? (
+              restrauntDetail.menu_highlights.map((data, index) => (
+                <p key={index}>{data}</p>
+              ))
+            ) : (
+              <p>no Menu available</p>
+            )}
+          </>
         )}
       </div>
     </div>

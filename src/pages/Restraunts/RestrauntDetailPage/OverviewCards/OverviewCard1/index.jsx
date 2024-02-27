@@ -47,7 +47,7 @@ const OverviewCard1 = ({ overviewCardsData }) => {
           ? overviewCardsData?.name
           : overviewCardsData?.restaurant
           ? overviewCardsData?.restaurant?.name
-          : overviewCardsData?.venue.name}
+          : overviewCardsData?.name}
       </h2>
       <hr className="mb-4" />
       <div className="flex justify-between text-sm items-center">
@@ -59,7 +59,7 @@ const OverviewCard1 = ({ overviewCardsData }) => {
               : overviewCardsData?.restaurant
               ? overviewCardsData?.restaurant?.statistics?.reviews?.ratings
                   ?.overall?.rating
-              : overviewCardsData?.venue?.rating}
+              : overviewCardsData?.rating?.average}
           </span>
         </div>
         <div className="flex items-center">
@@ -67,7 +67,9 @@ const OverviewCard1 = ({ overviewCardsData }) => {
           <span>
             {overviewCardsData?.alias
               ? overviewCardsData?.review_count
-              : overviewCardsData?.reviewSearchResults?.totalCount}
+              : overviewCardsData?.restaurant
+              ? overviewCardsData?.reviewSearchResults?.totalCount
+              : overviewCardsData?.rating?.count}
           </span>
         </div>
         <div className="flex items-center">
@@ -77,7 +79,7 @@ const OverviewCard1 = ({ overviewCardsData }) => {
               ? overviewCardsData?.review_count
               : overviewCardsData?.restaurant
               ? overviewCardsData?.restaurant?.priceBand.name
-              : overviewCardsData?.venue?.price_range}
+              : overviewCardsData?.currency_symbol}
           </span>
         </div>
         <div className="flex items-center">
@@ -87,7 +89,7 @@ const OverviewCard1 = ({ overviewCardsData }) => {
               ? overviewCardsData?.categories[0]?.title
               : overviewCardsData?.restaurant
               ? overviewCardsData?.restaurant?.primaryCuisine?.name
-              : overviewCardsData?.venue?.type}
+              : overviewCardsData?.cuisine[0]}
           </span>
         </div>
       </div>
@@ -106,8 +108,9 @@ const OverviewCard1 = ({ overviewCardsData }) => {
           </>
         ) : (
           <>
-            {overviewCardsData?.venue.location.neighborhood} ,{" "}
-            {overviewCardsData?.venue.location.name}
+            {overviewCardsData?.neighborhood} ,{" "}
+            {overviewCardsData?.location.name} , {" "}
+            {overviewCardsData?.country}
           </>
         )}
       </p>
@@ -117,7 +120,8 @@ const OverviewCard1 = ({ overviewCardsData }) => {
           ? "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae iusto voluptatibus architecto, voluptate fugiat hic atque tempora placeat possimus commodi culpa quia molestiae dolore fuga blanditiis ipsum consectetur odio quo asperiores corrupti saepe. Totam!"
           : overviewCardsData?.restaurant
           ? convertHtmlToText(overviewCardsData?.restaurant?.description)
-          : randomTemplate?.content["en-us"]?.about?.body}
+          :"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae iusto voluptatibus architecto, voluptate fugiat hic atque tempora placeat possimus commodi culpa quia molestiae dolore fuga blanditiis ipsum consectetur odio quo asperiores corrupti saepe. Totam!"}
+           {/* randomTemplate?.content["en-us"]?.about?.body */}
       </p>
     </div>
   );

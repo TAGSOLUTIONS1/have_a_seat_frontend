@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { ResyRestrauntDetail } from "@/mockData";
 import { ArrowLeft, ArrowRight, Star } from "lucide-react";
 
 const Comments = ({ reviewsData, yelpReviews }) => {
@@ -7,7 +7,6 @@ const Comments = ({ reviewsData, yelpReviews }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const reviewsPerPage = 3;
 
-  console.log(reviewsData?.reviewSearchResults);
 
   useEffect(() => {
     if (reviewsData?.reviewSearchResults) {

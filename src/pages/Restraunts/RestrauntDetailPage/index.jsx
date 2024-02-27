@@ -6,6 +6,7 @@ import { Base_Url } from "@/baseUrl";
 import Loader from "@/components/Loader";
 import Menu from "./Menu";
 import OverviewCards from "./OverviewCards";
+import OverviewCard2 from "./OverviewCards/OverviewCard2";
 import Pictures from "./Pictures";
 import Reviews from "./Reviews";
 import TimingHours from "./TimingHours";
@@ -22,18 +23,23 @@ const RestrauntDetail = () => {
   const location = useLocation();
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const detailsParam = searchParams.get("details");
+
+    if (detailsParam) {
+      // Decode the parameter and set it in state
+      const decodedDetails = JSON.parse(decodeURIComponent(detailsParam));
+      console.log(decodedDetails);
+      setRestrauntDetail(decodedDetails);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const map_url = params.get("map_url");
     const yelp_alias = params.get("yelp_alias");
-    const venue_id = params.get("venue_id");
 
-    const resyParams = {
-      venue_id: venue_id,
-      date: "2024-01-25",
-      persons: 2,
-    };
-
-    if (yelp_alias === null && venue_id === null) {
+    if (yelp_alias === null) {
       setPrevId(map_url);
       const openTableParamUrl = map_url?.replace(
         "https://www.opentable.com/",
@@ -43,17 +49,14 @@ const RestrauntDetail = () => {
       setEndPoint(
         `${Base_Url}/api/v1/opentable/get_restaurant_details?map_url=${openTableParamUrl}`
       );
-    } else if (map_url === null && venue_id === null) {
+    } else if (map_url === null) {
       setPrevId(yelp_alias);
       setKey("yelp");
       setEndPoint(
         `${Base_Url}/api/v1/yelp/get_restaurant_details/${yelp_alias}`
       );
-    } else if (map_url === null && yelp_alias === null) {
-      setKey("resy");
-      setEndPoint(
-        `${Base_Url}/api/v1/resy/get_restaurant_details?venue_id=${resyParams.venue_id}&date=${resyParams.date}&persons=${resyParams.persons}`
-      );
+    } else {
+      null;
     }
   }, [location.search, prevId]);
 
@@ -66,9 +69,8 @@ const RestrauntDetail = () => {
             setRestrauntDetail(response?.data?.data);
           } else if (key === "yelp") {
             setRestrauntDetail(response.data.data);
-          } else if (key === "resy") {
-            console.log(response?.data?.data?.results?.venues[0]);
-            setRestrauntDetail(response?.data?.data?.results?.venues[0]);
+          } else {
+            return;
           }
           setLoading(false);
         } catch (error) {
@@ -83,7 +85,7 @@ const RestrauntDetail = () => {
   const getRandomKey = (obj) => {
     const keys = Object.keys(obj);
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    console.log(randomKey)
+    console.log(randomKey);
     return randomKey;
   };
 
@@ -114,7 +116,7 @@ const RestrauntDetail = () => {
                   ? `url(${restrauntDetail?.image_url})`
                   : restrauntDetail?.restaurant
                   ? `url(${restrauntDetail?.restaurant?.photos?.gallery?.photos[0]?.thumbnails[6]?.url})`
-                  : `url(${randomTemplate?.images[0]})`,
+                  : `url(${restrauntDetail?.images[0]})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
@@ -132,16 +134,21 @@ const RestrauntDetail = () => {
             <Pictures restrauntDetail={restrauntDetail} />
           </section>
           {restrauntDetail?.alias ? null : (
-          <section>
-            <Menu restrauntDetail={restrauntDetail} />
-          </section>
+            <section>
+              <Menu restrauntDetail={restrauntDetail} />
+            </section>
           )}
-          <section>
-            <TimingHours restrauntDetail={restrauntDetail} />
-          </section>
-          <section>
-            <Reviews restrauntDetail={restrauntDetail} />
-          </section>
+
+          {restrauntDetail?.region ? null : (
+            <>
+              <section>
+                <TimingHours restrauntDetail={restrauntDetail} />
+              </section>
+              <section>
+                <Reviews restrauntDetail={restrauntDetail} />
+              </section>
+            </>
+          )}
         </>
       )}
     </div>

@@ -36,7 +36,6 @@ const PersonCard = ({ setFormData }) => {
             <SelectItem value="7">7 Person</SelectItem>
             <SelectItem value="8">8 Person</SelectItem>
             <SelectItem value="9">9 Person</SelectItem>
-            <SelectItem value="Large Party">Large Party</SelectItem>
           </SelectGroup>
         </SelectContent>
       </div>

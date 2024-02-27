@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 const BestSeller = () => {
   return (
     <div className="w-full flex flex-col md:flex-row lg:flex-row items-center mt-8 justify-center md:space-x-8 lg:space-x-8">
-      <div className="relative flex flex-col md:flex-row lg:flex-row sm:flex-row mb-8 sm:mb-8 select-none ">
+      <div className="relative flex flex-col md:flex-row lg:flex-row md:mt-8 lg:mt-8 sm:flex-row mb-8 sm:mb-8 select-none ">
         <div className="order-1 md:order-0 lg:order-0 sm:order-0">
           <img
             src="/assets/offer_slider_1.png"

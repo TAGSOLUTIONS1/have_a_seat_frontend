@@ -17,20 +17,22 @@ const Images = ({ pictures }) => {
       });
     }
   } else {
-    const getRandomKey = (obj) => {
-      const keys = Object.keys(obj);
-      const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      return randomKey;
-    };
+    imageUrls = pictures?.images
 
-    const randomTemplateKey = pictures?.templates
-      ? getRandomKey(pictures?.templates)
-      : null;
+    // const getRandomKey = (obj) => {
+    //   const keys = Object.keys(obj);
+    //   const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    //   return randomKey;
+    // };
 
-    const randomTemplate =
-      randomTemplateKey && pictures?.templates[randomTemplateKey];
+    // const randomTemplateKey = pictures?.templates
+    //   ? getRandomKey(pictures?.templates)
+    //   : null;
 
-    imageUrls = randomTemplate?.images || [];
+    // const randomTemplate =
+    //   randomTemplateKey && pictures?.templates[randomTemplateKey];
+
+    // imageUrls = randomTemplate?.images || [];
   }
 
   const nextImage = () => {
@@ -61,7 +63,7 @@ const Images = ({ pictures }) => {
         <strong>Pictures</strong>
       </h1>
       <div className="max-w-6xl mt-8 mx-auto relative flex items-center justify-center">
-        {imageUrls.length > 0 ? (
+        {imageUrls?.length > 0 ? (
           <>
             <img
               src={imageUrls[getAdjacentIndex(-1)]}

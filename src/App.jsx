@@ -5,6 +5,7 @@ import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
 import AccountLinks from "./pages/AccountLinks";
 import ForgetPassword from "./pages/ForgetPassword";
+import Protected from "./components/ProtectedRoutes";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
@@ -17,7 +18,7 @@ import Signup from "./pages/Signup";
 function App() {
   const location = useLocation();
   const showFooter =
-    location.pathname !== "/login" && location.pathname !== "/register";
+    location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/forget" && location.pathname !== "/resetpassword";
   return (
     <>
       <Navbar />
@@ -33,7 +34,10 @@ function App() {
         <Route path="/restaurant-detail" element={<RestrauntDetail />} />
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/reservation-status" element={<ReservationStatus />} />
-        <Route path="/account-links" element={<AccountLinks />} />
+        {/* <Route path="/account-links" element={<Protected Component={<AccountLinks />} />} /> */}
+        <Route path="/account-links" element={<Protected />}>
+          <Route path="/account-links" element={<AccountLinks />} />
+        </Route>
       </Routes>
       {showFooter && <Footer />}
     </>

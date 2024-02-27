@@ -11,7 +11,7 @@ import { LucideLoader } from "lucide-react";
 
 const OverviewCard2 = ({ overviewCardsData }) => {
   const [reservationCard, setReservationCard] = useState();
-  const [loading , setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     reservation_covers: null,
     reservation_date: null,
@@ -78,7 +78,7 @@ const OverviewCard2 = ({ overviewCardsData }) => {
   };
 
   const fetchYelpTimeSlots = async () => {
-    setLoading(true)
+    setLoading(true);
     const yelpTimeParams = {
       restaurant_id: reservationCard?.id,
       restaurat_alias: reservationCard?.alias,
@@ -101,20 +101,20 @@ const OverviewCard2 = ({ overviewCardsData }) => {
         setTimeSlots(
           response?.data?.data?.availability_data[0]?.availability_list
         );
-        setLoading(false)
+        setLoading(false);
         setIsDataLoaded(true);
       } else {
-        setLoading(fasle)
+        setLoading(fasle);
         throw new Error("Network response was not ok.");
       }
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       console.error("Error fetching data:", error);
     }
   };
 
   const fetchOpenTableTimeSlots = async () => {
-    setLoading(true)
+    setLoading(true);
     const openTableTimeParams = {
       restaurant_id: reservationCard?.restaurant?.restaurantId,
       date: formData?.reservation_date,
@@ -131,13 +131,13 @@ const OverviewCard2 = ({ overviewCardsData }) => {
       if (response.status === 200) {
         setOpenTableTimeSlots(response?.data?.data?.data?.availability);
         setIsDataLoaded(true);
-        setLoading(false)
+        setLoading(false);
       } else {
-        setLoading(false)
+        setLoading(false);
         throw new Error("Network response was not ok.");
       }
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       console.error("Error fetching data:", error);
     }
   };
@@ -177,47 +177,53 @@ const OverviewCard2 = ({ overviewCardsData }) => {
       <h1 className="mt-4 text-lg mb-4 font-bold">Time Slots</h1>
       {loading ? (
         <LucideLoader className="w-6 h-6 justify-center animate-spin align-middle mx-auto" />
-      ):(
-      <div>
-        {overviewCardsData?.alias ? (
-          isDataLoaded ? (
-            Array.isArray(timeSlots) && timeSlots.length > 0 ? (
-              timeSlots.map((data, index) => (
-                <button
-                  key={index}
-                  className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                  onClick={() => handleYelpReservation(data)}
-                >
-                  {new Date(data.timestamp * 1000).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </button>
-              ))
+      ) : (
+        <div>
+          {overviewCardsData?.alias ? (
+            isDataLoaded ? (
+              Array.isArray(timeSlots) && timeSlots.length > 0 ? (
+                timeSlots.map((data, index) => (
+                  <button
+                    key={index}
+                    className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                    onClick={() => handleYelpReservation(data)}
+                  >
+                    {new Date(data.timestamp * 1000).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </button>
+                ))
+              ) : (
+                <p className="text-lg text-red-600">No slots available.</p>
+              )
+            ) : (
+              <p></p>
+            )
+          ) : isDataLoaded ? (
+            Array.isArray(openTableTimeSlots) &&
+            openTableTimeSlots[0]?.availabilityDays[0]?.slots.length > 0 ? (
+              openTableTimeSlots[0]?.availabilityDays[0]?.slots.map(
+                (data, index) => (
+                  <button
+                    key={index}
+                    className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                    onClick={() => handleOpenTableReservation(data)}
+                  >
+                    {convertOffsetToTime(
+                      data.timeOffsetMinutes,
+                      formData?.reservation_time
+                    )}
+                  </button>
+                )
+              )
             ) : (
               <p className="text-lg text-red-600">No slots available.</p>
             )
           ) : (
             <p></p>
-          )
-        ) : (
-          Array.isArray(openTableTimeSlots) &&
-          openTableTimeSlots[0]?.availabilityDays[0]?.slots.map(
-            (data, index) => (
-              <button
-                key={index}
-                className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                onClick={() => handleOpenTableReservation(data)}
-              >
-                {convertOffsetToTime(
-                  data.timeOffsetMinutes,
-                  formData?.reservation_time
-                )}
-              </button>
-            )
-          )
-        )}
-      </div>
+          )}
+        </div>
       )}
     </div>
   );

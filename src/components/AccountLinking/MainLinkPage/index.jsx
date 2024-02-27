@@ -1,14 +1,22 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { Edit, Save } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 import Loader from "@/components/Loader";
-
 import LinkPageDialogue from "../linkPageDialogue";
 
 const MainLinkingPage = () => {
   const [user, setUser] = useState();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editedData, setEditedData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+  });
   const storageToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -19,7 +27,6 @@ const MainLinkingPage = () => {
   }, [storageToken]);
 
   const fetchUserInfo = async (localToken) => {
-    // console.log(localToken , "token")
     setLoading(true);
     try {
       const config = {
@@ -32,7 +39,6 @@ const MainLinkingPage = () => {
         config
       );
       if (response.status === 200) {
-        console.log(response.data, "fetching id");
         setUser(response.data);
         setLoading(false);
       } else {
@@ -50,7 +56,77 @@ const MainLinkingPage = () => {
     }
   };
 
-  // console.log(user)
+  const handleEditClick = () => {
+    setIsEditMode(true);
+    setEditedData({
+      first_name: user?.first_name || "",
+      last_name: user?.last_name || "",
+      email: user?.email || "",
+    });
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      const localToken = localStorage.getItem("accessToken");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localToken}`,
+        },
+      };
+
+      const response = await axios.patch(
+        "https://tagsolutionsltd.com/api/v1/users/me",
+        editedData,
+        config
+      );
+
+      if (response.status === 200) {
+        console.log("User data updated successfully");
+        toast({
+          title: "Data Updated Successfuly",
+          // description: "Please try again.",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        fetchUserInfo(localToken);
+        setIsEditMode(false);
+      } else {
+        console.error(
+          "Error updating user data. Non-200 status code:",
+          response.status
+        );
+        toast({
+          title: "Failed to update data",
+          description: "Please try again later.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        console.error(response.data);
+      }
+    } catch (error) {
+      toast({
+        title: "Failed to update data",
+        description: "Please try again later.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      console.error("Error occurred while updating user data:", error);
+    }
+  };
+
+  const handleCancelClick = () => {
+    setIsEditMode(false);
+  };
+
+  const handleInputChange = (field, value) => {
+    setEditedData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
 
   return (
     <>
@@ -86,40 +162,98 @@ const MainLinkingPage = () => {
               </div>
             </div>
             <div className="md:col-span-4 lg:col-span-4 mx-2 sm:ml-24 sm:-mr-24 mb-52 sm:col-span-5 col-span-7 mt-32">
-              <div className="bg-white shadow-lg rounded-lg px-6 pt-12 pb-8">
-                <div className="mb-4">
+              <div
+                className={`bg-white shadow-lg rounded-lg px-6 pt-12 pb-8 ${
+                  isEditMode ? "h-[295px] pt-4 overflow-hidden" : ""
+                }`}
+              >
+                <div className="mb-8">
                   <div className="flex items-center">
                     <div className="w-1/3">
-                      <h6 className="mb-0">Full Name</h6>
+                      <h6 className="mb-0">First Name</h6>
                     </div>
                     <div className="w-2/3">
-                      {user?.first_name || "N/A"} {user?.last_name || "N/A"}
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          value={editedData?.first_name}
+                          className="border-2 p-2 -mb-4 rounded-lg"
+                          onChange={(e) =>
+                            handleInputChange("first_name", e.target.value)
+                          }
+                        />
+                      ) : (
+                        user?.first_name || "N/A"
+                      )}
                     </div>
                   </div>
                 </div>
-                <hr className="my-4" />
-                <div className="mb-4">
+                <div className="mb-8">
+                  <div className="flex items-center">
+                    <div className="w-1/3">
+                      <h6 className="mb-0">Last Name</h6>
+                    </div>
+                    <div className="w-2/3">
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          value={editedData?.last_name}
+                          className="border-2 p-2 -mb-4 rounded-lg"
+                          onChange={(e) =>
+                            handleInputChange("last_name", e.target.value)
+                          }
+                        />
+                      ) : (
+                        user?.last_name || "N/A"
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="mb-8">
                   <div className="flex items-center">
                     <div className="w-1/3">
                       <h6 className="mb-0">Email</h6>
                     </div>
-                    <div className="w-2/3 ">{user?.email || "N/A"}</div>
-                  </div>
-                </div>
-                <hr className="my-4" />
-                <div className="mb-4">
-                  <div className="flex items-center">
-                    <div className="w-1/3">
-                      <h6 className="mb-0">Password</h6>
+                    <div className="w-2/3">
+                      {isEditMode ? (
+                        <input
+                          type="email"
+                          value={editedData?.email}
+                          className="border-2 p-2 rounded-lg w-2/3"
+                          onChange={(e) =>
+                            handleInputChange("email", e.target.value)
+                          }
+                        />
+                      ) : (
+                        user?.email || "N/A"
+                      )}
                     </div>
-                    <div className="w-2/3">**********</div>
                   </div>
                 </div>
+                
                 <div className="flex justify-center items-center mx-auto mt-9">
-                  <Button className="bg-purple-600">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit
-                  </Button>
+                  {isEditMode ? (
+                    <>
+                      <Button
+                        className="bg-purple-600 mr-2"
+                        onClick={handleSaveClick}
+                      >
+                        <Save className="mr-2 h-4 w-4" />
+                        Save
+                      </Button>
+                      <Button
+                        className="bg-red-500"
+                        onClick={handleCancelClick}
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  ) : (
+                    <Button className="bg-purple-600" onClick={handleEditClick}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

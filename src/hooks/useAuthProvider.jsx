@@ -110,7 +110,6 @@ export const useAuthProvider = () => {
     }
   };
 
-
   const logout = async () => {
     const accessToken = localStorage.getItem("accessToken");
     try {
@@ -132,7 +131,6 @@ export const useAuthProvider = () => {
       navigate("/");
     } catch (error) {
       console.error("Error occurred while logging out:", error);
-      navigate("/");
     }
   };
 

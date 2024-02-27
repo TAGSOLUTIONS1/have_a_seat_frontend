@@ -188,7 +188,7 @@ const RestaurantCards = memo(
                       : data?.restraunt_type === "open_table"
                       ? "map_url"
                       : data?.restraunt_type === "resy"
-                      ? "venue_id"
+                      ? "details"
                       : null
                   }=${encodeURIComponent(
                     data?.restraunt_type === "yelp"
@@ -196,7 +196,7 @@ const RestaurantCards = memo(
                       : data?.restraunt_type === "open_table"
                       ? data?.urls?.profileLink?.link
                       : data?.restraunt_type === "resy"
-                      ? data?.id?.resy
+                      ? encodeURIComponent(JSON.stringify(data))
                       : null
                   )}`,
                 }}

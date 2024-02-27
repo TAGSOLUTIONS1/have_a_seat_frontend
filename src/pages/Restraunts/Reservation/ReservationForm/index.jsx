@@ -40,7 +40,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
   };
 
   const handleCancel = ()=>{
-    navigate("/")
+    navigate(-1)
   }
 
   return (

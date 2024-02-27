@@ -26,6 +26,7 @@ const Search = () => {
           accept: "application/json",
         },
       });
+      // console.log( response.data.data.businesses)
       return response.data.data.businesses;
     } catch (error) {
       console.error("Error fetching data:", error);
