@@ -27,6 +27,7 @@ const OverviewCard2 = ({ overviewCardsData }) => {
 
   useEffect(() => {
     setReservationCard(overviewCardsData);
+    console.log(overviewCardsData)
   }, [overviewCardsData]);
 
   useEffect(() => {
@@ -50,6 +51,7 @@ const OverviewCard2 = ({ overviewCardsData }) => {
       if (reservationCard?.alias) {
         fetchYelpTimeSlots();
       } else {
+        console.log(reservationCard?.restaurant?.restaurantId)
         fetchOpenTableTimeSlots();
       }
     }
@@ -115,6 +117,7 @@ const OverviewCard2 = ({ overviewCardsData }) => {
 
   const fetchOpenTableTimeSlots = async () => {
     setLoading(true);
+    console.log(reservationCard?.restaurant?.restaurantId)
     const openTableTimeParams = {
       restaurant_id: reservationCard?.restaurant?.restaurantId,
       date: formData?.reservation_date,

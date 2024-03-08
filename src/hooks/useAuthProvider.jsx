@@ -16,6 +16,7 @@ const initialState = {
   accessToken: null,
   user: null,
   loading: false
+  
 }
 
 export const AuthContext = createContext({
@@ -30,6 +31,7 @@ export const useAuthProvider = () => {
 
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [loading , setLoading] = useState(true)
   const [authState, setAuthState] = useState(initialState);
 
   const handleError = (status, toast) => {
@@ -57,6 +59,7 @@ export const useAuthProvider = () => {
 
   const login = async (formData) => {
     try {
+      // setLoading(true)
       const requestOptions = {
         method: "POST",
         body: formData,
@@ -72,7 +75,11 @@ export const useAuthProvider = () => {
         isClosable: true,
       });
 
+      setLoading(false)
+
+
       if (!response.ok) {
+        setLoading(false)
         throw new Error(`Login failed with status: ${response.status}`);
       }
 
@@ -95,6 +102,7 @@ export const useAuthProvider = () => {
       return result;
     } catch (error) {
       console.error("Error occurred while logging in:", error);
+      setLoading(false)
       toast({
         title: "Login Failed.",
         description: "Please try again and re check your credentials",
@@ -182,5 +190,5 @@ export const useAuthProvider = () => {
 
 
 
-  return { authState, login, logout, handleError };
+  return { authState,loading ,  login, logout, handleError };
 };
