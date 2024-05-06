@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Edit, Save } from "lucide-react";
+import { Edit, Save, HistoryIcon } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import Loader from "@/components/Loader";
 import LinkPageDialogue from "../linkPageDialogue";
@@ -150,9 +150,17 @@ const MainLinkingPage = () => {
                         {user?.first_name || "N/A"} {user?.last_name || "N/A"}
                       </h4>
                       <div>
-                        <div className="flex items-center">
+                        <div className="flex items-center space-x-4">
                           <div className="w-full text-center">
                             <LinkPageDialogue />
+                          </div>
+                          <div className="w-full text-center ">
+                            <a href="/user-history">
+                            <Button className="bg-purple-600 mt-4 mx-auto" >
+                              <HistoryIcon className="mr-2 h-4 w-4" />
+                              History
+                            </Button>
+                            </a>
                           </div>
                         </div>
                       </div>
@@ -230,7 +238,7 @@ const MainLinkingPage = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-center items-center mx-auto mt-9">
                   {isEditMode ? (
                     <>

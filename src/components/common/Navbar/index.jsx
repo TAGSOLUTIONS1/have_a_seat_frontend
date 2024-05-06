@@ -6,7 +6,6 @@ import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { cn } from "@/lib/utils";
 import { LucideLoader, User } from "lucide-react";
 
-
 import SideNav from "../SideNav";
 import "./nav.css";
 

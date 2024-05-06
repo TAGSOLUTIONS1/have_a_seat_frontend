@@ -14,6 +14,7 @@ import Reservation from "./pages/Restraunts/Reservation";
 import ReservationStatus from "./pages/Restraunts/Reservation/ReservationStatus";
 import RestrauntDetail from "./pages/Restraunts/RestrauntDetailPage";
 import Signup from "./pages/Signup";
+import UserHistory from "./components/AccountLinking/UserHistory";
 
 function App() {
   const location = useLocation();
@@ -34,6 +35,7 @@ function App() {
         <Route path="/restaurant-detail" element={<RestrauntDetail />} />
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/reservation-status" element={<ReservationStatus />} />
+        <Route path="/user-history" element={<UserHistory />} />
         {/* <Route path="/account-links" element={<Protected Component={<AccountLinks />} />} /> */}
         <Route path="/account-links" element={<Protected />}>
           <Route path="/account-links" element={<AccountLinks />} />
