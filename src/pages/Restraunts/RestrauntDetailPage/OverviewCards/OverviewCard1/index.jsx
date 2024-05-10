@@ -3,12 +3,12 @@ import { DollarSign, MessageSquare, Star, Utensils } from "lucide-react";
 import { ResyRestrauntDetail } from "@/mockData";
 
 const OverviewCard1 = ({ overviewCardsData }) => {
-  console.log(overviewCardsData);
+  // console.log(overviewCardsData);
 
   const getRandomKey = (obj) => {
     const keys = Object.keys(obj);
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    console.log(randomKey);
+    // console.log(randomKey);
     return randomKey;
   };
 

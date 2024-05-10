@@ -10,7 +10,7 @@ const VerifyUserForm = () => {
   const { toast } = useToast();
     const [token , setToken] = useState("")
 
-    console.log(token)
+    // console.log(token)
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,14 +24,14 @@ const VerifyUserForm = () => {
             }
           );
           if (response.status === 200) {
-            console.log(response)
+            // console.log(response)
             toast({
               title: "Check Your Email to Reset your Password",
               description: date,
             });
             setEmail("")
           } else {
-            console.log("reset failed");
+            // console.log("reset failed");
             toast({
               title: "Error occurred while resetting password",
               description: "Please try Again later",

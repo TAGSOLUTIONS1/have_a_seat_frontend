@@ -4,7 +4,7 @@ const PreviousData = ({ formData, bookingInfo }) => {
   const [prePopulatedData, setPrePopulatedData] = useState();
   useEffect(() => {
     if (Array.isArray(formData) && formData.length > 0) {
-      console.log(formData[0]);
+      // console.log(formData[0]);
       setPrePopulatedData(formData[0]);
       return;
     }

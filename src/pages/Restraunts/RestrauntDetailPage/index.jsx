@@ -29,7 +29,7 @@ const RestrauntDetail = () => {
     if (detailsParam) {
       // Decode the parameter and set it in state
       const decodedDetails = JSON.parse(decodeURIComponent(detailsParam));
-      console.log(decodedDetails);
+      // console.log(decodedDetails);
       setRestrauntDetail(decodedDetails);
     }
   }, [location.search]);
@@ -85,7 +85,7 @@ const RestrauntDetail = () => {
   const getRandomKey = (obj) => {
     const keys = Object.keys(obj);
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    console.log(randomKey);
+    // console.log(randomKey);
     return randomKey;
   };
 

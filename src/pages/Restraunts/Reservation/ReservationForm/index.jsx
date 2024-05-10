@@ -30,7 +30,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
       JSON.stringify(updatedNextData)
     )}`;
     navigate(route);
-    console.log(updatedNextData);
+    // console.log(updatedNextData);
     setReservationFormData({
       first_name: "",
       last_name: "",

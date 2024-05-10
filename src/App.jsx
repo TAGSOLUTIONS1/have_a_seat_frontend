@@ -15,11 +15,15 @@ import ReservationStatus from "./pages/Restraunts/Reservation/ReservationStatus"
 import RestrauntDetail from "./pages/Restraunts/RestrauntDetailPage";
 import Signup from "./pages/Signup";
 import UserHistory from "./components/AccountLinking/UserHistory";
+import UserStatistics from "./components/AccountLinking/UserStatistics";
 
 function App() {
   const location = useLocation();
   const showFooter =
-    location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/forget" && location.pathname !== "/resetpassword";
+    location.pathname !== "/login" &&
+    location.pathname !== "/register" &&
+    location.pathname !== "/forget" &&
+    location.pathname !== "/resetpassword";
   return (
     <>
       <Navbar />
@@ -36,6 +40,7 @@ function App() {
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/reservation-status" element={<ReservationStatus />} />
         <Route path="/user-history" element={<UserHistory />} />
+        <Route path="/user-Statistics" element={<UserStatistics />} />
         {/* <Route path="/account-links" element={<Protected Component={<AccountLinks />} />} /> */}
         <Route path="/account-links" element={<Protected />}>
           <Route path="/account-links" element={<AccountLinks />} />

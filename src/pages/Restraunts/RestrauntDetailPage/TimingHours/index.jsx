@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const TimingHours = ({ restrauntDetail }) => {
   const [timingData, setTimingData] = useState();
-  console.log(restrauntDetail)
+  // console.log(restrauntDetail)
 
   useEffect(() => {
     if (Object.keys(restrauntDetail).length !== 0) {

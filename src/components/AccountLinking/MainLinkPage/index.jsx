@@ -81,7 +81,7 @@ const MainLinkingPage = () => {
       );
 
       if (response.status === 200) {
-        console.log("User data updated successfully");
+        // console.log("User data updated successfully");
         toast({
           title: "Data Updated Successfuly",
           // description: "Please try again.",
@@ -154,14 +154,14 @@ const MainLinkingPage = () => {
                           <div className="w-full text-center">
                             <LinkPageDialogue />
                           </div>
-                          <div className="w-full text-center ">
+                          {/* <div className="w-full text-center ">
                             <a href="/user-history">
                             <Button className="bg-purple-600 mt-4 mx-auto" >
                               <HistoryIcon className="mr-2 h-4 w-4" />
                               History
                             </Button>
                             </a>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>

@@ -12,7 +12,7 @@ import "./nav.css";
 const Navbar = () => {
   const { logout, authState } = useAuth();
   const storageToken = localStorage.getItem("accessToken");
-  console.log(authState.loading);
+  // console.log(authState.loading);
 
   const handleLogout = async () => {
     try {
@@ -80,9 +80,17 @@ const Navbar = () => {
                             <Link to="/">Logout</Link>
                           </Button>
                         </li>
+                        <li className="p-4">
+                          <Button
+                            className={cn("rounded-full bg-purple-600 ")}
+                            asChild
+                          >
+                            <Link to="/user-history">Reservations</Link>
+                          </Button>
+                        </li>
                       </ul>
                     </div>
-                    <div className="relative w-[40px] h-[40px] mt-4 bg-purple-600 rounded-full p-2">
+                    <div className="relative w-[12%] h-[10%] mt-4 bg-purple-600 rounded-full p-2">
                       <Link to="account-links">
                         <User className="cursor-pointer text-white w-6 h-6" />
                       </Link>

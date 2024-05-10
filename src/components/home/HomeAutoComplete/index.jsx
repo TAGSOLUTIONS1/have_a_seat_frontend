@@ -13,7 +13,7 @@ const GeoApiAuto = ({ getLocationData }) => {
   };
 
   const onSuggestionChange = (value) => {
-    console.log(value);
+    // console.log(value);
   };
 
   const handleChange = (value) => {

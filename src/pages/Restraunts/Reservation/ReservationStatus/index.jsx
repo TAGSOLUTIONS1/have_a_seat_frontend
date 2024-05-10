@@ -32,7 +32,7 @@ const ReservationStatus = () => {
       if (data !== null) {
         const myData = JSON.parse(decodeURIComponent(data));
         const finalData = myData.formData;
-        console.log(myData.reservationFormData);
+        // console.log(myData.reservationFormData);
         setFormData(myData.reservationFormData);
 
         const reservationTime = finalData[0]?.reservation_time;
@@ -74,7 +74,7 @@ const ReservationStatus = () => {
             params: apiParams,
           }
         );
-        console.log("API Response:", response.data);
+        // console.log("API Response:", response.data);
         setStatus(true);
         setLoading(false);
       } else {
@@ -120,7 +120,7 @@ const ReservationStatus = () => {
             params: apiParams,
           }
         );
-        console.log("API Response:", response.data.data);
+        // console.log("API Response:", response.data.data);
         setStatus(true);
         setLoading(false);
       } else {

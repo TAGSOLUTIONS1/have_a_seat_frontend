@@ -76,7 +76,7 @@ const RestaurantCards = memo(
             formData.location.toLowerCase()
           ) {
             matchedIndex = i;
-            console.log("Match found:", mergedRestaurants[i]);
+            // console.log("Match found:", mergedRestaurants[i]);
             break;
           }
         }

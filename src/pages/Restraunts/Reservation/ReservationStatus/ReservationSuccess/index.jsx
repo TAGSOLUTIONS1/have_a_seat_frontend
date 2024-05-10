@@ -1,5 +1,5 @@
 const ReservationSuccess = ({ formData }) => {
-  console.log(formData)
+  // console.log(formData)
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="max-w-3xl w-full mx-4 md:mx-auto rounded-lg overflow-hidden shadow-lg bg-white flex md:flex-row flex-col">

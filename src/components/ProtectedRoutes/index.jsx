@@ -9,7 +9,7 @@ const Protected = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(loading , "protected component")
+    // console.log(loading , "protected component")
     if (!authState.accessToken && !loading) {
       navigate("/login");
     }

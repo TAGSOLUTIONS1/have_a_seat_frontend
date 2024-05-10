@@ -45,9 +45,9 @@ const ResetForm = () => {
           description: date,
         });
         navigate("/")
-        console.log(response);
+        // console.log(response);
       } else {
-        console.log("reset failed");
+        console.error("reset failed");
       }
     } catch (error) {
       console.error("Error occurred while resetting password:", error);

@@ -31,7 +31,7 @@ const SignupForm = () => {
   const { toast } = useToast();
 
   const onSubmit = async (data) => {
-    console.log(data)
+    // console.log(data)
     try {
       setLoading(true);
        await register(data);
@@ -52,7 +52,7 @@ const SignupForm = () => {
         ),
       });
     } catch (err) {
-      console.log(err , "ERROR ON THE RESPONSE OF SIGNUP API");
+      console.error(err , "ERROR ON THE RESPONSE OF SIGNUP API");
       setLoading(false);
       switch (err?.response?.status) {
         case 400:

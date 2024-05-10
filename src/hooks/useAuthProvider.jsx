@@ -83,7 +83,7 @@ export const useAuthProvider = () => {
         throw new Error(`Login failed with status: ${response.status}`);
       }
 
-      console.log(response.status)
+      // console.log(response.status)
 
       const result = await response.json();
       localStorage.setItem("accessToken", result.access_token);

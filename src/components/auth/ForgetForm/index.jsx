@@ -114,14 +114,14 @@ const ForgetForm = () => {
       );
 
       if (response.status === 202) {
-        console.log(response);
+        // console.log(response);
         toast({
           title: 'Check Your Email to Reset your Password',
           description: date,
         });
         setEmail('');
       } else {
-        console.log('reset failed');
+        // console.log('reset failed');
         toast({
           title: 'Error occurred while resetting password',
           description: 'Please try Again later',

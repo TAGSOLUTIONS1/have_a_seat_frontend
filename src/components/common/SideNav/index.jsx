@@ -64,7 +64,7 @@ const SideNav = () => {
           <SheetDescription>{/* Login or Signup here  */}</SheetDescription>
         </SheetHeader>
         <div className=" justify-center text-center align-middle items-center w-full">
-          <div>
+          <div className="justify-center text-center align-middle items-center">
             <img
               src="https://bootdey.com/img/Content/avatar/avatar7.png"
               alt="Admin"
@@ -94,14 +94,14 @@ const SideNav = () => {
                 </ul>
               </div>
             ) : (
-              <div className="flex space-x-2">
+              <div className="flex space-x-1">
                 <div className="">
                   <ul>
                     <li className="p-4 mt-2 decoration-solid text-purple-600 text-sm">
                       {authState.user?.email}
                     </li>
                   </ul>
-                  <ul className="flex ml-8">
+                  <ul className="flex justify-center items-center ml-2">
                     <li className="p-1">
                       <Button
                         className={cn("rounded-full bg-purple-600 ")}
@@ -109,6 +109,14 @@ const SideNav = () => {
                         onClick={handleLogout}
                       >
                         <Link to="/">Logout</Link>
+                      </Button>
+                    </li>
+                    <li className="p-4">
+                      <Button
+                        className={cn("rounded-full bg-purple-600 ")}
+                        asChild
+                      >
+                        <Link to="/user-history">Reservations</Link>
                       </Button>
                     </li>
                     <li>
