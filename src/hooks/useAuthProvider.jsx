@@ -127,7 +127,7 @@ export const useAuthProvider = () => {
         },
       };
       await axios.post(
-        "https://tagsolutionsltd.com/api/v1/auth/jwt/logout", null,
+        "https://3.101.103.14/api/v1/auth/jwt/logout", null,
         config
       );
       localStorage.removeItem("accessToken");

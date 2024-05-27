@@ -78,7 +78,7 @@ const OverviewCard1 = ({ overviewCardsData }) => {
             {overviewCardsData?.alias
               ? overviewCardsData?.review_count
               : overviewCardsData?.restaurant
-              ? overviewCardsData?.restaurant?.priceBand.name
+              ? overviewCardsData?.restaurant?.priceBand?.name
               : overviewCardsData?.currency_symbol}
           </span>
         </div>

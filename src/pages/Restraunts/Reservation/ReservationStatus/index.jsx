@@ -1,38 +1,91 @@
 import { useEffect, useState } from "react";
-
 import axios from "axios";
-import { useLocation } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 import { Base_Url } from "@/baseUrl";
 import ReservationFailed from "./ReservationFailed";
 import ReservationSuccessFul from "./ReservationSuccess";
 import Loader from "@/components/Loader";
+import { useAuth } from "@/contexts/authContext/AuthProvider";
 
 const ReservationStatus = () => {
-  const [formData, setFormData] = useState();
+  const { authState } = useAuth();
+  const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(null);
-
-  // console.log(formData);
+  const navigate = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const data = params.get("data");
 
   useEffect(() => {
-    const finalData = JSON.parse(data);
-    if (finalData && finalData?.bookingInfo) {
-      yelpReservation();
-    } else {
-      openTableReservation();
+    if (!authState.user?.id) {
+      navigate("/login");
+      return;
     }
-  }, []);
+
+    if (data) {
+      const finalData = JSON.parse(data);
+      if (finalData?.bookingInfo) {
+        yelpReservation();
+        PostReservation();
+      } else {
+        openTableReservation();
+      }
+    }
+  }, [authState, data, navigate]);
+
+  const PostReservation = async () => {
+    try {
+      let finalData = null;
+      if (data) {
+        finalData = JSON.parse(decodeURIComponent(data));
+        setFormData(finalData);
+
+        const separator = finalData?.bookingInfo?.formSubmitPath;
+        const parts = separator?.split("/");
+        const date = parts[4];
+        const time = parts[5];
+        const people = parts[6];
+
+        const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`;
+        const DateAndTime = `${date}T${formattedTime}`;
+
+        const requiredApiParams = {
+          reservation_date: DateAndTime,
+          restaurant_id: finalData?.formData[0]?.alias,
+          restaurant_name: finalData?.bookingInfo?.businessName,
+          location: "new york",
+          user_id: authState.user.id,
+          price: 150,
+          num_diners: people,
+          cuisine_type: finalData?.bookingInfo?.restaurant?.categories[0],
+          indoor_outdoor: "Indoor",
+        };
+
+        setLoading(true);
+        const response = await axios.post(
+          `${Base_Url}/api/v1/add_reservations/`,
+          requiredApiParams
+        );
+
+        setStatus(true);
+        setLoading(false);
+        console.log(response, "response in API");
+      } else {
+        console.error("Data parameter is null or undefined");
+      }
+    } catch (error) {
+      console.error("Error :", error);
+      setStatus(false);
+      setLoading(false);
+    }
+  };
 
   const openTableReservation = async () => {
     try {
-      if (data !== null) {
+      if (data) {
         const myData = JSON.parse(decodeURIComponent(data));
         const finalData = myData.formData;
-        // console.log(myData.reservationFormData);
         setFormData(myData.reservationFormData);
 
         const reservationTime = finalData[0]?.reservation_time;
@@ -64,7 +117,6 @@ const ReservationStatus = () => {
           country_id: "US",
           date: finalData[0]?.reservation_date,
           time: finalTime,
-          
         };
 
         const response = await axios.post(
@@ -74,7 +126,6 @@ const ReservationStatus = () => {
             params: apiParams,
           }
         );
-        // console.log("API Response:", response.data);
         setStatus(true);
         setLoading(false);
       } else {
@@ -91,7 +142,7 @@ const ReservationStatus = () => {
   const yelpReservation = async () => {
     try {
       let finalData = null;
-      if (data !== null) {
+      if (data) {
         finalData = JSON.parse(decodeURIComponent(data));
         setFormData(finalData);
         const separator = finalData?.bookingInfo?.formSubmitPath;
@@ -120,7 +171,6 @@ const ReservationStatus = () => {
             params: apiParams,
           }
         );
-        // console.log("API Response:", response.data.data);
         setStatus(true);
         setLoading(false);
       } else {
@@ -137,7 +187,7 @@ const ReservationStatus = () => {
   return (
     <div>
       {loading ? (
-        <Loader/>
+        <Loader />
       ) : status === true ? (
         <ReservationSuccessFul formData={formData} />
       ) : status === false ? (

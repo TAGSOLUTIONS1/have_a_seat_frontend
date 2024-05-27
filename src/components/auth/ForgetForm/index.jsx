@@ -16,7 +16,7 @@
 //           const currentDate = new Date();
 //           const date = currentDate.toString();
 //           const response = await axios.post(
-//             "https://tagsolutionsltd.com/api/v1/auth/forgot-password",
+//             "https://3.101.103.14/api/v1/auth/forgot-password",
 //             {
 //               email,
 //             }
@@ -107,7 +107,7 @@ const ForgetForm = () => {
       const currentDate = new Date();
       const date = currentDate.toString();
       const response = await axios.post(
-        'https://tagsolutionsltd.com/api/v1/auth/forgot-password',
+        'https://3.101.103.14/api/v1/auth/forgot-password',
         {
           email: data.email,
         }

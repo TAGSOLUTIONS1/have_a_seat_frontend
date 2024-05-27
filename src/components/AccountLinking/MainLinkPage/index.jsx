@@ -35,7 +35,7 @@ const MainLinkingPage = () => {
         },
       };
       const response = await axios.get(
-        "https://tagsolutionsltd.com/api/v1/users/me",
+        "https://3.101.103.14/api/v1/users/me",
         config
       );
       if (response.status === 200) {
@@ -75,7 +75,7 @@ const MainLinkingPage = () => {
       };
 
       const response = await axios.patch(
-        "https://tagsolutionsltd.com/api/v1/users/me",
+        "https://3.101.103.14/api/v1/users/me",
         editedData,
         config
       );

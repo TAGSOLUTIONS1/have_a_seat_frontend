@@ -1,13 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LucideHistory } from "lucide-react";
+import axios from "axios";
+import { useAuth } from "@/contexts/authContext/AuthProvider";
+import { Base_Url } from "@/baseUrl";
 
 const UserHistory = () => {
+  const { authState } = useAuth();
   const navigate = useNavigate();
+  const [reservations, setReservations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const redirectToUserStatistics = () => {
     navigate("/user-statistics");
   };
+
+  const getUserHistory = async () => {
+    try {
+      const response = await axios.get(
+        `${Base_Url}/api/v1/get_all_reservations_by_user/`,
+        {
+          params: { user_id: authState?.user?.id },
+        }
+      );
+      setReservations(response?.data?.reservations);
+      console.log(response?.data?.reservations, "userResponse");
+    } catch (error) {
+      setError("Failed to fetch reservations.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getUserHistory();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   const data = [
     {
@@ -90,20 +126,22 @@ const UserHistory = () => {
               </tr>
             </thead>
             <tbody className="text-gray-700">
-              {data.map((item) => (
+              {reservations.map((item) => (
                 <tr
                   key={item.id}
                   className="border-b border-gray-200 hover:bg-gray-100"
                 >
-                  <td className="text-left py-5 px-7">{item.name}</td>
-                  <td className="text-left py-5 px-7">{item.price}</td>
-                  <td className="text-left py-5 px-7">{item.num_diners}</td>
-                  <td className="text-left py-5 px-7">{item.indoor_outdoor}</td>
                   <td className="text-left py-5 px-7">
-                    {new Date(item.reservation_date).toLocaleString()}
+                    {item?.Reservation?.restaurant_name}
                   </td>
-                  <td className="text-left py-5 px-7">{item.location}</td>
-                  <td className="text-left py-5 px-7">{item.cuisine_type}</td>
+                  <td className="text-left py-5 px-7">{item?.Reservation?.price}</td>
+                  <td className="text-left py-5 px-7">{item?.Reservation?.num_diners}</td>
+                  <td className="text-left py-5 px-7">{item?.Reservation?.indoor_outdoor}</td>
+                  <td className="text-left py-5 px-7">
+                    {new Date(item.Reservation?.reservation_date).toLocaleString()}
+                  </td>
+                  <td className="text-left py-5 px-7">{item?.Reservation?.location}</td>
+                  <td className="text-left py-5 px-7">{item?.Reservation?.cuisine_type}</td>
                 </tr>
               ))}
             </tbody>
