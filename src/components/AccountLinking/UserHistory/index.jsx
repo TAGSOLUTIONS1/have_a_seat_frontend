@@ -4,6 +4,7 @@ import { LucideHistory } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { Base_Url } from "@/baseUrl";
+import Loader from "@/components/Loader";
 
 const UserHistory = () => {
   const { authState } = useAuth();
@@ -38,48 +39,12 @@ const UserHistory = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div><Loader/></div>;
   }
 
   if (error) {
     return <div>{error}</div>;
   }
-
-  const data = [
-    {
-      name: "Oshika Sushi",
-      price: 150,
-      num_diners: 2,
-      indoor_outdoor: "Outdoor",
-      current_date: "2024-05-10T07:20:57.878068",
-      reservation_date: "2024-05-11T18:00:00",
-      review: null,
-      location: "Colorado",
-      cuisine_type: "FAST FOOD",
-    },
-    {
-      name: "Oshika Sushi",
-      price: 100,
-      num_diners: 4,
-      indoor_outdoor: "Outdoor",
-      current_date: "2024-05-10T07:20:57.878068",
-      reservation_date: "2024-05-11T18:00:00",
-      review: null,
-      location: "Colorado",
-      cuisine_type: "FAST FOOD",
-    },
-    {
-      name: "Oshika Sushi",
-      price: 90,
-      num_diners: 8,
-      indoor_outdoor: "Indoor",
-      current_date: "2024-05-10T07:20:57.878068",
-      reservation_date: "2024-05-11T18:00:00",
-      review: null,
-      location: "Colorado",
-      cuisine_type: "FAST FOOD",
-    },
-  ];
 
   return (
     <div className="bg-white min-h-screen p-6 pt-24 lg:py-28 lg:x-24 sm:px-6 lg:px-8">

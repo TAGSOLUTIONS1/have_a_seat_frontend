@@ -60,7 +60,7 @@ const UserStatistics = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div><Loader/></div>;
   }
 
   if (error) {
