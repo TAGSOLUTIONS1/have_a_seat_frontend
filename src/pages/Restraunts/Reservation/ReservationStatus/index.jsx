@@ -18,21 +18,14 @@ const ReservationStatus = () => {
   const data = params.get("data");
 
   useEffect(() => {
-    if (!authState.user?.id) {
-      navigate("/login");
-      return;
+    const finalData = JSON.parse(data);
+    if (finalData?.bookingInfo) {
+      yelpReservation();
+      PostReservation();
+    } else {
+      openTableReservation();
     }
-
-    if (data) {
-      const finalData = JSON.parse(data);
-      if (finalData?.bookingInfo) {
-        yelpReservation();
-        PostReservation();
-      } else {
-        openTableReservation();
-      }
-    }
-  }, [authState, data, navigate]);
+  }, []);
 
   const PostReservation = async () => {
     try {
@@ -55,7 +48,6 @@ const ReservationStatus = () => {
           restaurant_id: finalData?.formData[0]?.alias,
           restaurant_name: finalData?.bookingInfo?.businessName,
           location: "new york",
-          user_id: authState.user.id,
           price: 150,
           num_diners: people,
           cuisine_type: finalData?.bookingInfo?.restaurant?.categories[0],
@@ -64,8 +56,14 @@ const ReservationStatus = () => {
 
         setLoading(true);
         const response = await axios.post(
-          `${Base_Url}/api/v1/add_reservations/`,
-          requiredApiParams
+          `${Base_Url}/api/v1/reservation/create_reservation/`,
+          requiredApiParams,
+          {
+            headers: {
+              Authorization: `Bearer ${authState?.accessToken}`,
+              accept: "application/json",
+            },
+          }
         );
 
         setStatus(true);

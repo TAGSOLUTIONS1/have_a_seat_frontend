@@ -41,9 +41,12 @@ const UserStatistics = () => {
   const getUserStatistics = async () => {
     try {
       const response = await axios.get(
-        `${Base_Url}/api/v1/reservation_statistics_user/`,
+        `${Base_Url}/api/v1/reservation/statistics/`,
         {
-          params: { user_id: authState?.user?.id },
+          headers: {
+            Authorization: `Bearer ${authState?.accessToken}`,
+            accept: "application/json"
+          }
         }
       );
       setStatistics(response?.data);
@@ -56,9 +59,11 @@ const UserStatistics = () => {
   };
 
   useEffect(() => {
-    getUserStatistics();
-  }, []);
-
+    if (authState && authState.accessToken) {
+      getUserStatistics();
+    }
+  }, [authState]);
+  
   if (loading) {
     return <div><Loader/></div>;
   }

@@ -2,16 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/contexts/authContext/AuthProvider";
 
 const ReservationForm = ({ formData, bookingInfo }) => {
+  const { authState } = useAuth();
   const navigate = useNavigate();
-
-  const [reservationFormData, setReservationFormData] = useState({
-    first_name: "",
-    last_name: "",
-    phone: "",
-    email: "",
-  });
+  const { toast } = useToast();
 
   const validationSchema = Yup.object({
     first_name: Yup.string().required("First Name is required"),
@@ -28,10 +25,20 @@ const ReservationForm = ({ formData, bookingInfo }) => {
       first_name: "",
       last_name: "",
       phone: "",
-      email: "",
+      email: "",  
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      if (!authState.user?.id) {
+        toast({
+          title: "You need to login first",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        return;
+      }
+
       const updatedNextData = {
         reservationFormData: values,
         bookingInfo: bookingInfo,
@@ -41,12 +48,6 @@ const ReservationForm = ({ formData, bookingInfo }) => {
         JSON.stringify(updatedNextData)
       )}`;
       navigate(route);
-      setReservationFormData({
-        first_name: "",
-        last_name: "",
-        phone: "",
-        email: "",
-      });
     },
   });
 
