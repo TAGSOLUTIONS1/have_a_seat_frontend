@@ -19,20 +19,99 @@ const ReservationStatus = () => {
 
   useEffect(() => {
     const finalData = JSON.parse(data);
+    console.log(finalData, "final data");
     if (finalData?.bookingInfo) {
       yelpReservation();
-      PostReservation();
+      PostYelpReservation();
     } else {
+      PostOpentableReservation();
       openTableReservation();
     }
   }, []);
 
-  const PostReservation = async () => {
+  const PostOpentableReservation = async () => {
     try {
       let finalData = null;
       if (data) {
         finalData = JSON.parse(decodeURIComponent(data));
+        console.log(finalData);
         setFormData(finalData);
+
+        const newDate = finalData?.formData[0]?.reservation_date;
+
+        const newTime = finalData?.formData[0]?.reservation_time;
+        const newTimeOffset = finalData?.formData[1]?.timeOffsetMinutes;
+        const id = finalData?.formData[2].toString();
+
+        const [hours, minutes] = newTime.split(":").map(Number);
+
+        const Finaldate = new Date();
+        Finaldate.setHours(hours);
+        Finaldate.setMinutes(minutes);
+
+        Finaldate.setMinutes(Finaldate.getMinutes() + newTimeOffset);
+
+        const newFormattedTime = `${Finaldate.getHours()
+          .toString()
+          .padStart(2, "0")}:${Finaldate.getMinutes()
+          .toString()
+          .padStart(2, "0")}`;
+
+        const FinalApiTime = `${newDate}T${newTime}`;
+        const cousine = finalData?.formData[5]
+        const people = finalData?.formData[0]?.reservation_covers;
+
+        const requiredApiParams = {
+          reservation_date: FinalApiTime,
+          restaurant_id: id,
+          restaurant_name: finalData?.formData[3],
+          location: finalData?.formData[4]?.city,
+          price: 150,
+          num_diners: people,
+          cuisine_type: cousine[0]?.name,
+          indoor_outdoor: "Indoor",
+        };
+
+        console.log(requiredApiParams , "requiredApiParams")
+
+        setLoading(true);
+        const response = await axios.post(
+          `${Base_Url}/api/v1/reservation/create_reservation/`,
+          requiredApiParams,
+          {
+            headers: {
+              Authorization: `Bearer ${authState?.accessToken}`,
+              accept: "application/json",
+            },
+          }
+        );
+
+        setStatus(true);
+        setLoading(false);
+        console.log(response, "response in API");
+      } else {
+        console.error("Data parameter is null or undefined");
+      }
+    } catch (error) {
+      console.error("Error :", error);
+      setStatus(false);
+      setLoading(false);
+    }
+  };
+
+  const PostYelpReservation = async () => {
+    try {
+      let finalData = null;
+      if (data) {
+        finalData = JSON.parse(decodeURIComponent(data));
+        console.log(finalData);
+        setFormData(finalData);
+
+        const address = finalData?.bookingInfo?.formattedAddress;
+        const cityParts = address?.split("<br>");
+        const cityStateZip = cityParts[1];
+        const cityPartsPro = cityStateZip.split(", ");
+        const city = cityPartsPro[0];
 
         const separator = finalData?.bookingInfo?.formSubmitPath;
         const parts = separator?.split("/");
@@ -47,7 +126,7 @@ const ReservationStatus = () => {
           reservation_date: DateAndTime,
           restaurant_id: finalData?.formData[0]?.alias,
           restaurant_name: finalData?.bookingInfo?.businessName,
-          location: "new york",
+          location: city,
           price: 150,
           num_diners: people,
           cuisine_type: finalData?.bookingInfo?.restaurant?.categories[0],

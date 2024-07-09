@@ -24,6 +24,7 @@ const Reservation = () => {
       if (data !== null) {
         const decodedData = decodeURIComponent(data);
         finalData = JSON.parse(decodedData);
+        console.log(finalData , "finalData")
         setFormData(finalData);
       } else {
         console.error("Data parameter is null or undefined");

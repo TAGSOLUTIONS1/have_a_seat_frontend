@@ -19,8 +19,8 @@ const BestSeller = () => {
             Spade's Cafe
           </p>
           <p className="sm:text-sm md:text-lg text-gray-600">
-            Neque porro quisquam <br /> est qui dolor <br /> ipsum quia dolor sit
-            ametsed.
+            Neque porro quisquam <br /> est qui dolor <br /> ipsum quia dolor
+            sit ametsed.
           </p>
           <p className="sm:text-sm md:text-lg underline mt-4 text-gray-600">
             <span className="flex cursor-pointer">
@@ -45,8 +45,8 @@ const BestSeller = () => {
             StarBucks
           </p>
           <p className="sm:text-sm md:text-lg text-gray-600">
-          Neque porro quisquam <br /> est qui dolor <br /> ipsum quia dolor sit
-            ametsed.
+            Neque porro quisquam <br /> est qui dolor <br /> ipsum quia dolor
+            sit ametsed.
           </p>
           <p className="sm:text-sm md:text-lg underline mt-4 text-gray-600">
             <span className="flex cursor-pointer">

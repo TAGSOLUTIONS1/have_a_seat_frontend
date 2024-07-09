@@ -29,6 +29,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      console.log(authState , "auth state while doing reservation")
       if (!authState.user?.id) {
         toast({
           title: "You need to login first",

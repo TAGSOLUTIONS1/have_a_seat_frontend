@@ -89,6 +89,7 @@ const UserHistory = () => {
   };
 
   useEffect(() => {
+    console.log(authState , "autState")
     if (authState && authState.accessToken) {
       getUserHistory();
     }
@@ -120,7 +121,7 @@ const UserHistory = () => {
             className="bg-purple-600 text-white rounded px-4 py-2"
             onClick={redirectToUserStatistics}
           >
-            Go to User Statistics
+            Go to {authState?.user?.first_name} Dining history
           </button>
         </div>
         <div className="overflow-x-auto">

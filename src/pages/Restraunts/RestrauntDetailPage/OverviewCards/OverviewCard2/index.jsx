@@ -69,8 +69,12 @@ const OverviewCard2 = ({ overviewCardsData }) => {
 
   const handleOpenTableReservation = (clickedData) => {
     // console.log(reservationCard?.restaurant?.restaurantId);
-    const restraunt_id = reservationCard?.restaurant?.restaurantId;
-    const updatedNextData = [formData, clickedData, restraunt_id];
+    const restraunt_id = reservationCard?.restaurant?.restaurantId
+    const restaurantName = reservationCard?.restaurant?.name
+    const restaurantAddress = reservationCard?.restaurant?.address
+    const restaurantCuisines = reservationCard?.restaurant?.cuisines
+    const updatedNextData = [formData, clickedData, restraunt_id , restaurantName , restaurantAddress , restaurantCuisines];
+    
     setNextData(updatedNextData);
     const route = `/reservation?data=${encodeURIComponent(
       JSON.stringify(updatedNextData)
