@@ -46,7 +46,7 @@ const GlobeComponent = ({ locations }) => {
       pointsData={locations}
       pointAltitude={0.01}
       pointColor={() => "red"}
-      pointRadius={0.5}
+      pointRadius={0.8}
       labelsData={locations}
       labelLat={(d) => d.lat}
       labelLng={(d) => d.lng}

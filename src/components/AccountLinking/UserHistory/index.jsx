@@ -121,35 +121,35 @@ const UserHistory = () => {
             className="bg-purple-600 text-white rounded px-4 py-2"
             onClick={redirectToUserStatistics}
           >
-            Go to {authState?.user?.first_name} Dining history
+            Go to {authState?.user?.first_name} dining history
           </button>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white">
             <thead>
-              <tr className="bg-purple-600 text-white">
-                <th className="text-left py-5 px-7 uppercase font-semibold text-sm">
+              <tr className="bg-purple-600 text-white text-center">
+                <th className="text-center py-5 px-7  uppercase font-semibold text-sm">
                   Restaurant name
                 </th>
-                <th className="text-left py-5 px-7 uppercase font-semibold text-sm">
+                <th className="text-center py-5 px-7 uppercase font-semibold text-sm">
                   Price
                 </th>
-                <th className="text-left py-5 px-7 uppercase font-semibold text-sm">
+                <th className="text-center py-5 px-7 uppercase font-semibold text-sm">
                   Num Diners
                 </th>
-                <th className="text-left py-5 px-7 uppercase font-semibold text-sm">
+                <th className="text-center py-5 px-7 uppercase font-semibold text-sm">
                   Indoor/Outdoor
                 </th>
-                <th className="text-left py-5 px-7 uppercase font-semibold text-sm">
+                <th className="text-center py-5 px-7 uppercase font-semibold text-sm">
                   Reservation Date
                 </th>
-                <th className="text-left py-5 px-7 uppercase font-semibold text-sm">
+                <th className="text-center py-5 px-7 uppercase font-semibold text-sm">
                   Location
                 </th>
-                <th className="text-left py-5 px-7 uppercase font-semibold text-sm">
+                <th className="text-center py-5 px-7 uppercase font-semibold text-sm">
                   Cuisine Type
                 </th>
-                <th className="text-left py-5 uppercase font-semibold text-sm">
+                <th className="text-center py-5 uppercase font-semibold text-sm">
                   Action
                 </th>
               </tr>
@@ -160,30 +160,30 @@ const UserHistory = () => {
                   key={item?.Reservation?.id}
                   className="border-b border-gray-200 hover:bg-gray-100"
                 >
-                  <td className="text-left py-5 px-7">
+                  <td className="text-center py-5 px-7">
                     {item?.Reservation?.restaurant_name}
                   </td>
-                  <td className="text-left py-5 px-7">
+                  <td className="text-center py-5 px-7">
                     {item?.Reservation?.price}
                   </td>
-                  <td className="text-left py-5 px-7">
+                  <td className="text-center py-5 px-7">
                     {item?.Reservation?.num_diners}
                   </td>
-                  <td className="text-left py-5 px-7">
+                  <td className="text-center py-5 px-7">
                     {item?.Reservation?.indoor_outdoor}
                   </td>
-                  <td className="text-left py-5 px-7">
+                  <td className="text-center py-5 px-7">
                     {new Date(
                       item.Reservation?.reservation_date
                     ).toLocaleString()}
                   </td>
-                  <td className="text-left py-5 px-7">
+                  <td className="text-center py-5 px-7">
                     {item?.Reservation?.location}
                   </td>
-                  <td className="text-left py-5 px-7">
+                  <td className="text-center py-5 px-7">
                     {item?.Reservation?.cuisine_type}
                   </td>
-                  <td className="text-left py-5">
+                  <td className="text-center py-5">
                     <div className="relative">
                       <button
                         onClick={() => toggleDropdown(item?.Reservation?.id)}
@@ -195,13 +195,13 @@ const UserHistory = () => {
                         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-10">
                           <button
                             onClick={() => handleUpdate(item?.Reservation?.id)}
-                            className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                            className="block w-full text-center px-4 py-2 text-gray-700 hover:bg-gray-100"
                           >
                             Update
                           </button>
                           <button
                             onClick={() => handleDelete(item?.Reservation?.id)}
-                            className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                            className="block w-full text-center px-4 py-2 text-gray-700 hover:bg-gray-100"
                           >
                             Delete
                           </button>
