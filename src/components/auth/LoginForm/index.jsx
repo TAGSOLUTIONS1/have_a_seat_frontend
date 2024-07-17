@@ -8,7 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LucideLoader } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const { login, handleError } = useAuth();
@@ -117,9 +117,9 @@ const LoginForm = () => {
           </p>
           <p className="text-center">
             New to Reatraunt?{" "}
-            <a href="/register" className="underline  text-purple-600">
+            <Link to="/register" className="underline  text-purple-600">
               Click to Register
-            </a>
+            </Link>
           </p>
         </form>
       </div>
