@@ -172,7 +172,7 @@ const UserHistory = () => {
             className="bg-purple-600 text-white rounded px-4 py-2"
             onClick={redirectToUserStatistics}
           >
-            Go to {authState?.user?.first_name} dining history
+            Go to {authState?.user?.first_name}'s dining history
           </button>
         </div>
         <div className="overflow-x-auto">

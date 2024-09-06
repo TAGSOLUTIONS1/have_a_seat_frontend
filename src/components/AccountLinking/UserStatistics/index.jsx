@@ -44,7 +44,7 @@ const UserStatistics = () => {
   const getUserStatistics = async () => {
     try {
       const response = await axios.get(
-        `https://3.101.103.14/api/v1/reservation/statistics/`,
+        `https://tags-inc.com/api/v1/reservation/statistics/`,
         {
           headers: {
             Authorization: `Bearer ${authState?.accessToken}`,

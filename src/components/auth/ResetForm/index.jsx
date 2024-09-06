@@ -33,7 +33,7 @@ const ResetForm = () => {
       const currentDate = new Date();
       const date = currentDate.toString();
       const response = await axios.post(
-        "https://3.101.103.14/api/v1/auth/reset-password",
+        "https://tags-inc.com/api/v1/auth/reset-password",
         {
           token: paramsToken,
           password: data.newPassword,
