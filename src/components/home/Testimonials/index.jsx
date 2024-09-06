@@ -32,7 +32,7 @@ const Testimonials = () => {
     {
       image: "/assets/testimonial_img_3.jpg",
       title: "Jimmy Neesham",
-      intro: "From casual dinners to special occasions, HaveA Seat ensures I always get a reservation at the best places. A must-have app for food lovers!",
+      intro: "From casual dinners to special occasions, HaveASeat ensures I always get a reservation at the best places. A must-have app for food lovers!",
       location: "California",
       phoneNumber: "(051)7860123",
     },
