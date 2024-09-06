@@ -18,24 +18,25 @@ const Testimonials = () => {
     {
       image: "/assets/testimonial_img_1.jpg",
       title: "Matt Henry",
-      intro: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      intro: "HaveASeat made finding and booking restaurants in China so easy! The user-friendly interface and quick reservations saved me so much time.",
       location: "China",
       phoneNumber: "(051)7860123",
     },
     {
       image: "/assets/testimonial_img_2.jpg",
       title: "David Convay",
-      intro: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      intro: "I never imagined booking a table in New York could be so seamless. The app offers great restaurant options and confirms bookings instantly. Highly recommended!",
       location: "New York",
       phoneNumber: "(051)7860123",
     },
     {
       image: "/assets/testimonial_img_3.jpg",
       title: "Jimmy Neesham",
-      intro: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      intro: "From casual dinners to special occasions, HaveA Seat ensures I always get a reservation at the best places. A must-have app for food lovers!",
       location: "California",
       phoneNumber: "(051)7860123",
     },
+    
   ];
 
   const totalSlides = slides.length;
