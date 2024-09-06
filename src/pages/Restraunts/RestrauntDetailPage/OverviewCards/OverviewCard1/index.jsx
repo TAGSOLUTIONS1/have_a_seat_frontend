@@ -117,10 +117,10 @@ const OverviewCard1 = ({ overviewCardsData }) => {
       <hr className="mb-4 mt-4" />
       <p className="text-sm mt-4 mb-4">
         {overviewCardsData?.alias
-          ? "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae iusto voluptatibus architecto, voluptate fugiat hic atque tempora placeat possimus commodi culpa quia molestiae dolore fuga blanditiis ipsum consectetur odio quo asperiores corrupti saepe. Totam!"
+          ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
           : overviewCardsData?.restaurant
           ? convertHtmlToText(overviewCardsData?.restaurant?.description)
-          :"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae iusto voluptatibus architecto, voluptate fugiat hic atque tempora placeat possimus commodi culpa quia molestiae dolore fuga blanditiis ipsum consectetur odio quo asperiores corrupti saepe. Totam!"}
+          :"Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."}
            {/* randomTemplate?.content["en-us"]?.about?.body */}
       </p>
     </div>
