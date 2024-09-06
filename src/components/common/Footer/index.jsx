@@ -15,8 +15,7 @@ const Footer = () => {
                   Have a Seat
                 </div>
                 <p className="text-white text-lg mb-4 font-bold mt-4 lg:text-left">
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Quam ratione non, et iusto suscipit ex.
+                Experience seamless dining reservations with the world at your fingertips and Join millions of diners worldwide and reserve your next meal with confidence.
                 </p>
                 <div className="flex space-x-4 mt-8">
                 <div className="relative bg-purple-600 rounded-full p-2">
@@ -52,21 +51,21 @@ const Footer = () => {
                       <span className="">
                        <PhoneCall fill="white" className="mr-4"/> 
                       </span>
-                      (051)090909090
+                      +1 (860) 960-0316
                     </li>
                     <hr/>
                     <li className="flex items-center">
                       <span className="">
                         <Mail  className="mr-4"/>
                       </span>
-                      haveaseat@gmail.com 
+                      contact@haveaseaton.com
                     </li>
                     <hr/>
                     <li className="flex items-center">
                       <span className="">
-                        <MapPin   className="mr-4"/>
+                        <MapPin   className="mr-4"/>  
                       </span>
-                      Contact Us
+                      New York
                     </li>
                 </ul>
               </div>

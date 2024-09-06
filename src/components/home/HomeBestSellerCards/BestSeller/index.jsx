@@ -19,14 +19,13 @@ const BestSeller = () => {
             Spade's Cafe
           </p>
           <p className="sm:text-sm md:text-lg text-gray-600">
-            Neque porro quisquam <br /> est qui dolor <br /> ipsum quia dolor
-            sit ametsed.
+          Cozy up with fresh coffee and locally <br/> sourced bites at Spade's Cafe, your <br/>perfect spot for relaxation.
           </p>
-          <p className="sm:text-sm md:text-lg underline mt-4 text-gray-600">
+          {/* <p className="sm:text-sm md:text-lg underline mt-4 text-gray-600">
             <span className="flex cursor-pointer">
               Visit Now <ArrowRight className="mt-2 h-5" />
             </span>
-          </p>
+          </p> */}
         </div>
       </div>
       <div className="relative flex flex-col md:flex-row lg:flex-row sm:flex-row mb-8 sm:mb-0 select-none ">
@@ -45,14 +44,13 @@ const BestSeller = () => {
             StarBucks
           </p>
           <p className="sm:text-sm md:text-lg text-gray-600">
-            Neque porro quisquam <br /> est qui dolor <br /> ipsum quia dolor
-            sit ametsed.
+          Enjoy signature espresso drinks and <br/> tasty snacks at Starbucks, <br/> the world’s favorite coffeehouse.
           </p>
-          <p className="sm:text-sm md:text-lg underline mt-4 text-gray-600">
+          {/* <p className="sm:text-sm md:text-lg underline mt-4 text-gray-600">
             <span className="flex cursor-pointer">
               Visit Now <ArrowRight className="mt-2 h-5" />
             </span>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

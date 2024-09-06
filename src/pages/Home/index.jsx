@@ -26,8 +26,7 @@ const Home = () => {
                 Greats Restraunts with <br /> Wonderful Features
               </p>
               <p className=" hidden md:block lg:block description text-base sm:text-lg font-bold mt-4">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. <br />
-                Ipsum fugit minima et debitis ut distinctio optio.
+              Discover and book at the world's largest collection <br/> of restaurants with ease.From local gems to fine dining, <br/> explore endless global options and reserve your perfect table in seconds.
               </p>
               <SearchLocation />
             </div>
