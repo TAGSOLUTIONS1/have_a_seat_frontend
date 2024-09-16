@@ -39,7 +39,7 @@ const SignupForm = () => {
       navigate("/")
       toast({
         title: "Account created.",
-        description: "We've created your account, please verify your email.",
+        description: "We've created your account.",
         status: "success",
         duration: 10000 * 60,
         isClosable: true,

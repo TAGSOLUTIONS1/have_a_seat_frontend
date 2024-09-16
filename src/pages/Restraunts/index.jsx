@@ -18,15 +18,14 @@ const Search = () => {
   const [openTableData, setOpenTableData] = useState();
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async (apiEndpoint) => {
+  const fetchData = async (apiEndpoint, customFormData) => {
     try {
       const response = await axios.get(`${Base_Url}${apiEndpoint}`, {
-        params: formData,
+        params: customFormData,
         headers: {
           accept: "application/json",
         },
       });
-      // console.log( response.data.data.businesses)
       return response.data.data.businesses;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -52,7 +51,11 @@ const Search = () => {
   useEffect(() => {
     if (!loading) {
       const fetchDataFromApi = async (apiEndpoint, setData) => {
-        const data = await fetchData(apiEndpoint);
+        let customFormData = formData;
+        if (apiEndpoint === "/api/v1/opentable/get_restaurants" && formData.term) {
+          customFormData = { ...formData, categories: formData.term, term: undefined };
+        }
+        const data = await fetchData(apiEndpoint, customFormData);
         setData(data);
       };
 
@@ -60,7 +63,7 @@ const Search = () => {
       fetchDataFromApi("/api/v1/resy/get_restaurants", setResyData);
       fetchDataFromApi("/api/v1/opentable/get_restaurants", setOpenTableData);
     }
-  }, [formData]);
+  }, [formData, loading]);
 
   return (
     <>

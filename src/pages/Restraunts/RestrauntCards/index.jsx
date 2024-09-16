@@ -60,36 +60,34 @@ const RestaurantCards = memo(
           );
         }
 
-        for (let i = mergedRestaurants?.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [mergedRestaurants[i], mergedRestaurants[j]] = [
-            mergedRestaurants[j],
-            mergedRestaurants[i],
-          ];
+        const shuffledRestaurants = shuffleArray(mergedRestaurants);
+
+        const termLowerCase =
+          formData?.term?.trim()?.toLowerCase() || '';
+    
+        const matchedRestaurant = shuffledRestaurants.find((restaurant) => {
+          const name = restaurant.name.toLowerCase();
+          return name === termLowerCase && termLowerCase !== '';
+        });
+    
+        const filteredRestaurants = shuffledRestaurants.filter((restaurant) => {
+          const name = restaurant.name.toLowerCase();
+          return !(name === termLowerCase && termLowerCase !== '');
+        });
+    
+        if (matchedRestaurant) {
+          filteredRestaurants.unshift(matchedRestaurant);
         }
 
-        let matchedIndex = -1;
-
-        for (let i = 0; i < mergedRestaurants.length; i++) {
-          if (
-            mergedRestaurants[i].name.toLowerCase() ===
-            formData.location.toLowerCase()
-          ) {
-            matchedIndex = i;
-            // console.log("Match found:", mergedRestaurants[i]);
-            break;
-          }
-        }
-
-        if (matchedIndex !== -1) {
-          const removedItem = mergedRestaurants.splice(matchedIndex, 1);
-          mergedRestaurants.unshift(removedItem[0]);
-        }
-        setShuffledRestaurants(mergedRestaurants);
+        filteredRestaurants.forEach((restaurant) => {
+          console.log(restaurant.name);
+        });
+    
+        setShuffledRestaurants(filteredRestaurants);
       } else {
         setShuffledRestaurants([]);
       }
-    }, [yelpData, openTableData, resyData, selectedTypes]);
+    }, [yelpData, openTableData, resyData, selectedTypes, formData.term]);
 
     const handleCheckboxChange = (type) => {
       setSelectedTypes((prevSelectedTypes) => {
