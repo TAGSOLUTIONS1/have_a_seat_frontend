@@ -116,7 +116,7 @@ const LoginForm = () => {
             </a>
           </p>
           <p className="text-center">
-            New to Reatraunt?{" "}
+            New to Restaurant?{" "}
             <Link to="/register" className="underline  text-purple-600">
               Click to Register
             </Link>

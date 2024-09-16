@@ -188,8 +188,10 @@ const OverviewCard2 = ({ overviewCardsData }) => {
         <div>
           {overviewCardsData?.alias ? (
             isDataLoaded ? (
-              Array.isArray(timeSlots) && timeSlots.length > 0 ? (
-                timeSlots.map((data, index) => (
+              Array.isArray(timeSlots) && timeSlots.length > 0  ? (
+                timeSlots
+                .filter(data => !isNaN(data.timestamp)) 
+                .map((data, index) => (
                   <button
                     key={index}
                     className="bg-purple-600 text-white p-3 m-1 rounded-lg"
@@ -210,7 +212,9 @@ const OverviewCard2 = ({ overviewCardsData }) => {
           ) : isDataLoaded ? (
             Array.isArray(openTableTimeSlots) &&
             openTableTimeSlots[0]?.availabilityDays[0]?.slots.length > 0 ? (
-              openTableTimeSlots[0]?.availabilityDays[0]?.slots.map(
+              openTableTimeSlots[0]?.availabilityDays[0]?.slots
+              .filter(data => !isNaN(data.timeOffsetMinutes))
+              .map(
                 (data, index) => (
                   <button
                     key={index}
