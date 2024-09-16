@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GeoApiAuto from "../HomeAutoComplete";
 import TermApiAuto from "../HometermAutoComplete"; 
@@ -10,12 +10,8 @@ const getCurrentDate = () => {
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
-  // return `${year}-${month}-${day}`;
   return `2024-09-17`;
-
 };
-
-
 
 const SearchLocation = () => {
   const navigate = useNavigate();
@@ -29,9 +25,7 @@ const SearchLocation = () => {
   });
 
   const [error, setError] = useState(null);
-  const [suggestions, setSuggestions] = useState([]);
   const [term, setTerm] = useState("");
-
 
   const getLocationData = (value) => {
     const parts = value?.split(",");
@@ -51,9 +45,10 @@ const SearchLocation = () => {
     navigate(route);
     setFormData((prevData) => ({ ...prevData, term: "" }));
   };
-    const handleTermChange = (e) => {
+
+  const handleTermChange = (e) => {
     setTerm(e);
-    setFormData((prevData) => ({ ...prevData, term: e}));
+    setFormData((prevData) => ({ ...prevData, term: e }));
   };
 
   const getCurrentLocation = () => {
@@ -87,41 +82,38 @@ const SearchLocation = () => {
   };
 
   return (
-    <>
-      <div className="flex flex-col gap-4">
-        <div className="flex gap-4">
-          <div className="mt-2 relative w-full bg-white rounded-full p-2">
-            <div
-              className={`w-full p-7 text-base md:text-lg text-black rounded-full border-2 ${
-                error ? "border-red-500" : "border-gray-200"
-              } focus:border-gray-200 focus:outline-none`}
-            >
-              <GeoApiAuto getLocationData={getLocationData} />
-            </div>
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="relative w-full md:w-auto bg-white rounded-full p-2">
+          <div
+            className={`w-full p-4 text-base md:text-lg text-black rounded-full border-2 ${
+              error ? "border-red-500" : "border-gray-200"
+            } focus:border-gray-200 focus:outline-none`}
+          >
+            <GeoApiAuto getLocationData={getLocationData} />
           </div>
-
-          <div className="mt-2 relative w-full bg-white rounded-full p-2">
-            <div
-              className={`w-full p-7 text-base md:text-lg text-black rounded-full border-2 focus:border-red-200 focus:outline-none`}
-            >
-              <TermApiAuto getTermData={handleTermChange} />
-            </div>
-          </div>
-
         </div>
 
-        <div className="flex justify-center mt-4">
-          <Button
-            className="sm:text-sm md:text-xl sm:py-4 sm:px-6 md:py-7 md:px-12 rounded-full"
-            variant="default"
-            size="lg"
-            onClick={handleSearch}
+        <div className="relative w-full md:w-auto bg-white rounded-full p-2">
+          <div
+            className={`w-full p-4 text-base md:text-lg text-black rounded-full border-2 focus:border-red-200 focus:outline-none`}
           >
-            Search
-          </Button>
+            <TermApiAuto getTermData={handleTermChange} />
+          </div>
         </div>
       </div>
-    </>
+
+      <div className="flex justify-center mt-2">
+        <Button
+          className="text-sm md:text-xl py-4 px-6 rounded-full"
+          variant="default"
+          size="lg"
+          onClick={handleSearch}
+        >
+          Search
+        </Button>
+      </div>
+    </div>
   );
 };
 
