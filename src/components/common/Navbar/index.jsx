@@ -1,18 +1,14 @@
 import { Link } from "react-router-dom";
-
 import { Button } from "@/components/ui/button";
-
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { cn } from "@/lib/utils";
 import { LucideLoader, User } from "lucide-react";
-
 import SideNav from "../SideNav";
 import "./nav.css";
 
 const Navbar = () => {
   const { logout, authState } = useAuth();
   const storageToken = localStorage.getItem("accessToken");
-  // console.log(authState.loading);
 
   const handleLogout = async () => {
     try {
@@ -30,10 +26,10 @@ const Navbar = () => {
             <Link className="flex" to="/">
               <img
                 src="/assets/static_logo.png"
-                className="h-20 w-32"
+                className="h-16 w-24 sm:h-20 sm:w-24  md:h-20 md:w-32"
                 alt="have A seat Logo"
               />
-              <span className="self-center italic text-4xl text-purple-600 font-semibold whitespace-nowrap custom-font">
+              <span className="text-3xl self-center italic sm:text-4xl text-purple-600 font-semibold whitespace-nowrap custom-font">
                 Have a Seat
               </span>
             </Link>
@@ -49,7 +45,7 @@ const Navbar = () => {
                     <ul className="flex ">
                       <li className="p-4">
                         <Button
-                          className={cn("rounded-full ml-2")}
+                          className={cn("rounded-full ")}
                           variant="outline"
                           asChild
                         >
@@ -68,10 +64,10 @@ const Navbar = () => {
                   <div className="flex space-x-2">
                     <div>
                       <ul className="flex">
-                        <li className="p-4 mt-2 decoration-solid text-purple-600 text-sm">
+                        <li className="pt-5 pr-2 mt-2 decoration-solid text-purple-600 text-sm">
                           {authState.user?.email}
                         </li>
-                        <li className="p-4">
+                        <li className="pt-4">
                           <Button
                             className={cn("rounded-full bg-purple-600 ")}
                             asChild

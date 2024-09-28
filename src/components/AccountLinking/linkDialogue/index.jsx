@@ -1,6 +1,4 @@
-import { useState } from "react";
-// import { useRef , useEffect } from "react";
-
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +9,11 @@ import {
 const LinkDialogue = () => {
   const [restrauntType, setRestrauntType] = useState(null);
   //   const iframeRef = useRef<any | null>(null);
+  const [selectedTypes, setSelectedTypes] = useState({
+    yelp: false,
+    opentable: false,
+    resy: false,
+  });
 
   const openModalWindow = (url, width, height) => {
     var left = screen.width / 2 - width / 2;
@@ -49,13 +52,16 @@ const LinkDialogue = () => {
     openModalWindow("https://auth.toasttab.com/u/login/identifier?state=hKFo2SBqOVdWc2NOaFdtWFRfYTlTbG5Hb3NWSWVFM1dVYmEwSqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEczalgyQm9ud0JRbzh4UkQ0bGpTVHJYZnJVR19ndlVFo2NpZNkgVUd2eWtZdzh3U1VwNWptbUhqVk5pcUtWcGswYjU2SWU", 1000, 550);
   };
 
-  const handleRadioClick = (radioId, type) => {
-    const radioElement = document.getElementById(radioId);
-    if (radioElement) {
-      radioElement.click();
-      setRestrauntType(type);
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.link_restaurant) {
+      setSelectedTypes({
+        yelp: user.link_restaurant.yelp || false,
+        opentable: user.link_restaurant.opentable || false,
+        resy: user.link_restaurant.resy || false,
+      });
     }
-  };
+  }, []);
 
   //   const handleIFrameMessage = (event: any) => {
   //     if (event.source === iframeRef?.current?.contentWindow) {
@@ -77,6 +83,33 @@ const LinkDialogue = () => {
   //   const cookieData = { type: "cookieData", cookies };
 
   //   window.parent.postMessage(cookieData, "*");
+  
+  // Function to handle checkbox changes
+  const handleCheckboxChange = (type) => {
+    const updatedTypes = {
+      ...selectedTypes,
+      [type]: !selectedTypes[type],
+    };
+    setSelectedTypes(updatedTypes);
+
+    // Update the restaurant type in the backend
+    const accessToken = localStorage.getItem("accessToken");
+    fetch("https://tags-inc.com/api/v1/users/me", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        link_restaurant: {
+          yelp: updatedTypes.yelp,
+          opentable: updatedTypes.opentable,
+          resy: updatedTypes.resy,
+        },
+      }),
+    }).then((response) => response.json());
+    localStorage.setItem("user", JSON.stringify({ link_restaurant: updatedTypes }));
+  };
 
   return (
     <>
@@ -84,69 +117,74 @@ const LinkDialogue = () => {
         <div className="flex gap-4 py-4">
           <div
             className="relative border-2 rounded-lg flex-1 pt-12 p-4"
-            onClick={() => handleRadioClick("radio1", "resy")}
+            onClick={() => handleCheckboxChange("resy")}
           >
-            <label htmlFor="radio1" className="cursor-pointer">
+            <label htmlFor="checkbox1" className="cursor-pointer">
               <img
                 src="assets/resy_logo_new.png"
-                alt="Account Image 1"
+                alt="Resy"
                 className="w-full h-auto object-contain rounded-md"
               />
               <div className="absolute top-2 right-2">
                 <input
-                  type="radio"
-                  id="radio1"
-                  name="radio"
+                  type="checkbox"
+                  id="checkbox1"
+                  name="checkbox"
                   style={{ width: "20px", height: "20px" }}
+                  checked={selectedTypes.resy}
+                  onChange={() => handleCheckboxChange("resy")}
                 />
               </div>
             </label>
           </div>
-          <DialogTrigger asChild>
+
             <div
               className="relative border-2 rounded-lg flex-1 pt-12 p-4"
-              onClick={() => handleRadioClick("radio2", "yelp")}
+              onClick={() => handleCheckboxChange("yelp")}
             >
-              <label htmlFor="radio2" className="cursor-pointer">
+              <label htmlFor="checkbox2" className="cursor-pointer">
                 <img
                   src="assets/yelp_logo_new.png"
-                  alt="Account Image 2"
+                  alt="Yelp"
                   className="w-full h-auto object-contain rounded-md"
                 />
                 <div className="absolute top-2 right-2">
                   <input
-                    type="radio"
-                    id="radio2"
-                    name="radio"
+                    type="checkbox"
+                    id="checkbox2"
+                    name="checkbox"
                     style={{ width: "20px", height: "20px" }}
-                    onClick={() => handleRadioClick("radio2", "yelp")}
+                    checked={selectedTypes.yelp}
+                    onChange={() => handleCheckboxChange("yelp")}
                   />
                 </div>
               </label>
             </div>
-          </DialogTrigger>
+
           <div
             className="relative border-2 flex-1 rounded-lg pt-12 p-4"
-            onClick={() => handleRadioClick("radio3", "opentable")}
+            onClick={() => handleCheckboxChange("opentable")}
           >
-            <label htmlFor="radio3" className="cursor-pointer">
+            <label htmlFor="checkbox3" className="cursor-pointer">
               <img
                 src="/assets/opentable.png"
-                alt="Account Image 3"
+                alt="OpenTable"
                 className="w-full h-auto mt-2 object-contain rounded-md"
               />
               <div className="absolute top-2 right-2">
                 <input
-                  type="radio"
-                  id="radio3"
-                  name="radio"
+                  type="checkbox"
+                  id="checkbox3"
+                  name="checkbox"
                   style={{ width: "20px", height: "20px" }}
+                  checked={selectedTypes.opentable}
+                  onChange={() => handleCheckboxChange("opentable")}
                 />
               </div>
             </label>
           </div>
         </div>
-        <div className="flex gap-4 ">
+        {/* <div className="flex gap-4 ">
         <div
           className="relative border-2 flex-1 rounded-lg pt-12 p-4"
           onClick={() => handleRadioClick("radio4", "tock")}
@@ -207,12 +245,13 @@ const LinkDialogue = () => {
             </div>
           </label>
         </div>
-        </div>
+        </div> */}
         <DialogContent
           className="sm:max-w-[1300px]"
           style={{ height: "calc(100vh - 48px)" }}
         >
-          {restrauntType === "yelp" ? (
+          
+          {/* {restrauntType === "yelp" ? (
             <iframe
               //   ref={iframeRef}
               src="https://www.yelp.com/signup?return_url=https%3A%2F%2Fwww.yelp.com%2F"
@@ -229,7 +268,7 @@ const LinkDialogue = () => {
             (handleGoogleClick(), null)
           ): restrauntType === "toasttab" ? (
             (handleToastTabClick(), null)
-          ):null}
+          ):null} */}
           <DialogFooter></DialogFooter>
         </DialogContent>
       </Dialog>

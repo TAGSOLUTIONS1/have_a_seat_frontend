@@ -34,3 +34,9 @@
     font-style: italic; 
   }
   
+
+  .geoapify-autocomplete-input{
+    padding: 0;
+    width: 100%;
+    margin: 0.25rem 0;
+  }

@@ -25,14 +25,14 @@ const Testimonials = () => {
     {
       image: "/assets/testimonial_img_2.jpg",
       title: "David Convay",
-      intro: "I never imagined booking a table in New York could be so seamless. The app offers great restaurant options and confirms bookings instantly. Highly recommended!",
+      intro: "I never imagined booking a table in New York could be so seamless. Highly recommended!",
       location: "New York",
       phoneNumber: "(051)7860123",
     },
     {
       image: "/assets/testimonial_img_3.jpg",
       title: "Jimmy Neesham",
-      intro: "From casual dinners to special occasions, HaveASeat ensures I always get a reservation at the best places. A must-have app for food lovers!",
+      intro: "From casual dinners to special occasions, HaveASeat ensures I always get a reservation at the best places.",
       location: "California",
       phoneNumber: "(051)7860123",
     },
@@ -51,7 +51,7 @@ const Testimonials = () => {
 
   return (
     <div className="w-full flex flex-col items-center mb-44">
-      <div className="flex items-center   sm:px-28 md:mx-28 justify-between mt-20">
+      <div className="flex items-center md:px-2 sm:px-4 justify-between mt-20">
         <div className="mr-24 sm:mr-0 md:mr-0 lg:mr-0">
           <span className="relative text-purple-600 sm:text-lg md:text-3xl lg:text-3xl  font-bold italic">
             <img

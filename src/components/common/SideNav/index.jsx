@@ -36,7 +36,7 @@ const SideNav = () => {
           size="icon"
           data-collapse-toggle="navbar-default"
           type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100  "
+          className="inline-flex items-center mx-2  p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100  "
           aria-controls="navbar-default"
           aria-expanded="false"
         >
@@ -64,11 +64,11 @@ const SideNav = () => {
           <SheetDescription>{/* Login or Signup here  */}</SheetDescription>
         </SheetHeader>
         <div className=" justify-center text-center align-middle items-center w-full">
-          <div className="justify-center text-center align-middle items-center">
+          <div className="flex justify-center text-center align-middle items-center">
             <img
               src="https://bootdey.com/img/Content/avatar/avatar7.png"
               alt="Admin"
-              className="rounded-circle ml-8 mt-8"
+              className="rounded-circle"
               width="150"
             />
           </div>
@@ -94,14 +94,13 @@ const SideNav = () => {
                 </ul>
               </div>
             ) : (
-              <div className="flex space-x-1">
                 <div className="">
                   <ul>
-                    <li className="p-4 mt-2 decoration-solid text-purple-600 text-sm">
+                    <li className="p-4  text-center mt-2 decoration-solid text-purple-600 text-sm">
                       {authState.user?.email}
                     </li>
                   </ul>
-                  <ul className="flex justify-center items-center ml-2">
+                  <ul className="flex flex-wrap justify-center items-center ml-2">
                     <li className="p-1">
                       <Button
                         className={cn("rounded-full bg-purple-600 ")}
@@ -128,7 +127,6 @@ const SideNav = () => {
                     </li>
                   </ul>
                 </div>
-              </div>
             )}
           </div>
         </div>

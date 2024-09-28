@@ -17,6 +17,10 @@ const Search = () => {
   const [resyData, setResyData] = useState();
   const [openTableData, setOpenTableData] = useState();
   const [loading, setLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [selectedStarFilter, setSelectedStarFilter] = useState(null);
+  const [selectedPriceFilter, setSelectedPriceFilter] = useState(null);
+  const [selectedCuisineFilter, setSelectedCuisineFilter] = useState(null);
 
   const fetchData = async (apiEndpoint, customFormData) => {
     try {
@@ -65,19 +69,58 @@ const Search = () => {
     }
   }, [formData, loading]);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <>
-      <div className="flex flex-col md:flex-row lg:flex-row max-w-[1300px] mx-auto justify-center p-4">
+      <div className="flex flex-col lg:flex-row max-w-[1300px] mx-auto justify-center p-4">
+        <div className="lg:hidden">
+          <button
+            className="lg:block bg-white text-black-600 px-2 py-1 rounded-full border-gray-300 shadow-md"
+            onClick={toggleSidebar}
+          >
+            <Sliders size={15} className="inline-block mr-2" />
+            Filters
+          </button>
+        </div>
+
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 z-50 bg-white shadow-lg p-4 lg:hidden overflow-auto"
+            style={{ width: "250px" }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h1 className="text-xl">
+                <strong>Filters</strong>
+              </h1>
+              <button className="text-2xl" onClick={toggleSidebar}>
+                &times;
+              </button>
+            </div>
+            <Filters
+              selectedStarFilter={selectedStarFilter} setSelectedStarFilter={setSelectedStarFilter}
+              selectedPriceFilter={selectedPriceFilter} setSelectedPriceFilter={setSelectedPriceFilter}
+              selectedCuisineFilter={selectedCuisineFilter} setSelectedCuisineFilter={setSelectedCuisineFilter}
+            />
+          </div>
+        )}
+
         {yelpData ? (
           <>
-            <div className="w-full md:w-1/3 lg:w-1/3 md:sticky lg:sticky top-[20%] h-[800px]">
+            <div className="hidden lg:block w-full md:w-1/3 lg:w-1/3 md:sticky lg:sticky top-0">
               <h1 className="text-xl items-center text-center justify-center">
                 <strong>
                   <Sliders size={24} className="inline-block mr-2" />
                   FILTERS
                 </strong>
               </h1>
-              <Filters />
+                <Filters
+                  selectedStarFilter={selectedStarFilter} setSelectedStarFilter={setSelectedStarFilter}
+                  selectedPriceFilter={selectedPriceFilter} setSelectedPriceFilter={setSelectedPriceFilter}
+                  selectedCuisineFilter={selectedCuisineFilter} setSelectedCuisineFilter={setSelectedCuisineFilter}
+                />
             </div>
 
             <div className="w-full mb-10">
@@ -86,6 +129,9 @@ const Search = () => {
                 resyData={resyData}
                 openTableData={openTableData}
                 formData={formData}
+                selectedStarFilter={selectedStarFilter}
+                selectedPriceFilter={selectedPriceFilter}
+                selectedCuisineFilter={selectedCuisineFilter}
               />
             </div>
           </>

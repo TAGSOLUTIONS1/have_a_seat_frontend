@@ -2,9 +2,8 @@ import React, { useState } from "react";
 
 import { ArrowDown, ArrowUp, CoinsIcon } from "lucide-react";
 
-const PriceFilters = () => {
+const PriceFilters = ({selectedPriceFilter, setSelectedPriceFilter}) => {
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedPriceFilter, setSelectedPriceFilter] =useState(null)
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -18,7 +17,8 @@ const PriceFilters = () => {
     }
   };
 
-  const priceRanges = ["30$ and under", "31$ to 50$", "50$ and over"];
+  const priceRanges = ["$", "$$", "$$$", "$$$$"];
+
 
   return (
     <div className="w-auto mt-2">
@@ -42,7 +42,7 @@ const PriceFilters = () => {
       </div>
       {showFilters && (
         <div className="mx-4 mt-2">
-          {priceRanges.map((range) => (
+          {priceRanges.map((range, index) => (
             <div
               key={range}
               className="flex px-4 items-center justify-between space-x-2 text-sm"
@@ -54,8 +54,8 @@ const PriceFilters = () => {
                 type="checkbox"
                 id={range}
                 value={range}
-                checked={selectedPriceFilter === range}
-                onChange={() => handlePriceFilterChange(range)}
+                checked={selectedPriceFilter === index + 1}
+                onChange={() => handlePriceFilterChange(index + 1)}
                 className="h-6 w-6 mr-2 mb-1"
               />
             </div>
