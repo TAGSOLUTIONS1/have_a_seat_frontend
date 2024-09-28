@@ -2,19 +2,19 @@ import React, { useState } from "react";
 
 import { ArrowDown, ArrowUp, Pizza } from "lucide-react";
 
-const Cuisine = () => {
+const Cuisine = ({selectedCuisineFilter, setSelectedCuisineFilter}) => {
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedPriceFilter, setSelectedPriceFilter] =useState  (null);
+  // const [selectedCuisineFilter, setSelectedCuisineFilter] =useState  (null);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };
 
   const handlePriceFilterChange = (selectedRange) => {
-    if (selectedPriceFilter === selectedRange) {
-      setSelectedPriceFilter(null);
+    if (selectedCuisineFilter === selectedRange) {
+      setSelectedCuisineFilter(null);
     } else {
-      setSelectedPriceFilter(selectedRange);
+      setSelectedCuisineFilter(selectedRange);
     }
   };
 
@@ -25,30 +25,39 @@ const Cuisine = () => {
     "Seafood",
     "French",
     "Indian",
+    "Bar", 
+    "Lounge", 
+    "Sushi",
     "Japanese",
-    "British",
-    "German",
-    "Tapas / Small Plates",
-    "Grill",
-    "Irish",
-    "Argentinean",
-    "Afternoon Tea",
-    "Lebanese",
-    "Persian",
-    "Pork",
-    "Polynesian",
-    "Balkan style",
-    "Asian",
+    "Chinese",
+    "Mexican",
     "Mediterranean",
-    "Peruvian",
     "Cocktail Bar",
-    "Middle Eastern",
-    "Gastro Pub",
-    "Lounge",
-    "Bar / Lounge / Bottle Service",
-    "Contemporary Asian",
     "International",
-    "Thai",
+
+
+    // "Peruvian",
+    // "Thai",
+    // "Middle Eastern",
+    // "Gastro Pub",
+    // "Lounge",
+
+
+    // "Bottle Service",
+    // "British",
+    // "German",
+    // "Tapas / Small Plates",
+    // "Grill",
+    // "Irish",
+    // "Argentinean",
+    // "Afternoon Tea",
+    // "Lebanese",
+    // "Persian",
+    // "Pork",
+    // "Polynesian",
+    // "Balkan style",
+    // "Asian",
+    // "Contemporary Asian",
   ];
 
   return (
@@ -85,7 +94,7 @@ const Cuisine = () => {
                 type="checkbox"
                 id={range}
                 value={range}
-                checked={selectedPriceFilter === range}
+                checked={selectedCuisineFilter === range}
                 onChange={() => handlePriceFilterChange(range)}
                 className="h-6 w-6 mr-2 mb-1"
               />

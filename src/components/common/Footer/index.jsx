@@ -5,7 +5,7 @@ const Footer = () => {
   
   return (
     <section className="w-full h-full">
-      <div className="relative h-[600px] sm:[500] md:h-[400px] lg:h-[400px] w-full p-6 bg-[url('/assets/footer_bg.jpg')] bg-no-repeat bg-cover bg-center">
+      <div className="relative h-[650px] sm:[500] md:h-[570px] lg:h-[450px] w-full p-6 bg-[url('/assets/footer_bg.jpg')] bg-no-repeat bg-cover bg-center">
         <div className="absolute inset-0 bg-primary opacity-80 "></div>
         <div className="absolute align-middle z-10 max-w-screen-xl left-0 right-0 mx-auto p-6">
           <div className="flex flex-col lg:flex-row align-middle justify-center items-center lg:items-start lg:space-x-8">
@@ -46,7 +46,7 @@ const Footer = () => {
                 <h1 className="text-white underline font-bold text-2xl non-italic">
                   CONTACT US 
                 </h1>
-                <ul className="mt-8 text-white list-square space-y-4 text-2xl">
+                <ul className="mt-8 text-sm sm:text:md md:text-xl  text-white list-square space-y-4 text-2xl">
                 <li className="flex items-center">
                       <span className="">
                        <PhoneCall fill="white" className="mr-4"/> 

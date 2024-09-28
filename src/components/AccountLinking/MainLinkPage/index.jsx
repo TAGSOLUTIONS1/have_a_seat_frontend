@@ -41,6 +41,7 @@ const MainLinkingPage = () => {
       );
       if (response.status === 200) {
         setUser(response.data);
+        localStorage.setItem("user", JSON.stringify(response.data));
         setLoading(false);
       } else {
         console.error(

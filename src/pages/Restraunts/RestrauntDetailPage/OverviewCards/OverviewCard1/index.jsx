@@ -76,20 +76,44 @@ const OverviewCard1 = ({ overviewCardsData }) => {
           <DollarSign className="mr-1  text-purple-600" />
           <span>
             {overviewCardsData?.alias
-              ? overviewCardsData?.review_count
+              ? overviewCardsData?.price
               : overviewCardsData?.restaurant
               ? overviewCardsData?.restaurant?.priceBand?.name
-              : overviewCardsData?.currency_symbol}
+              : overviewCardsData?.price_range_id === 1
+              ? "$"
+              : overviewCardsData?.price_range_id === 2
+              ? "$$"
+              : overviewCardsData?.price_range_id === 3
+              ? "$$$"
+              : overviewCardsData?.price_range_id === 4
+              ? "$$$$"
+              : null}
           </span>
         </div>
         <div className="flex items-center">
           <Utensils className="mr-1 text-purple-600" />
           <span>
-            {overviewCardsData?.alias
-              ? overviewCardsData?.categories[0]?.title
-              : overviewCardsData?.restaurant
-              ? overviewCardsData?.restaurant?.primaryCuisine?.name
-              : overviewCardsData?.cuisine[0]}
+            {overviewCardsData?.alias ? (
+              <>
+                <span className="sm:hidden">
+                  {overviewCardsData?.categories[0]?.title}
+                </span>
+                <span className="hidden sm:inline">
+                  {overviewCardsData?.categories.map((category) => category.title).join(", ")}
+                </span>
+              </>
+            ) : overviewCardsData?.restaurant ? (
+              overviewCardsData?.restaurant?.primaryCuisine?.name
+            ) : (
+              <>
+                <span className="sm:hidden">
+                  {overviewCardsData?.cuisine[0]}
+                </span>
+                <span className="hidden sm:inline">
+                  {overviewCardsData?.cuisine.map((cuisineItem) => cuisineItem).join(", ")}
+                </span>
+              </>
+            )}
           </span>
         </div>
       </div>

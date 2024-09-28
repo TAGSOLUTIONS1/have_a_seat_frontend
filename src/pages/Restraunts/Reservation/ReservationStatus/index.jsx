@@ -22,19 +22,16 @@ const ReservationStatus = () => {
     console.log(finalData, "final data");
     if (finalData?.bookingInfo) {
       yelpReservation();
-      PostYelpReservation();
     } else {
-      PostOpentableReservation();
       openTableReservation();
     }
   }, []);
 
-  const PostOpentableReservation = async () => {
+  const PostOpentableReservation = async (reservationId, restaurantType) => {
     try {
       let finalData = null;
       if (data) {
         finalData = JSON.parse(decodeURIComponent(data));
-        console.log(finalData);
         setFormData(finalData);
 
         const newDate = finalData?.formData[0]?.reservation_date;
@@ -62,6 +59,9 @@ const ReservationStatus = () => {
         const people = finalData?.formData[0]?.reservation_covers;
 
         const requiredApiParams = {
+          reservation_id: reservationId,
+          reservation_type: restaurantType,
+          reservation_status: "CONFIRMED",
           reservation_date: FinalApiTime,
           restaurant_id: id,
           restaurant_name: finalData?.formData[3],
@@ -76,9 +76,10 @@ const ReservationStatus = () => {
 
         setLoading(true);
         const response = await axios.post(
-          `${Base_Url}/api/v1/reservation/create_reservation/`,
-          requiredApiParams,
+          `${Base_Url}/api/v1/reservation/create_reservation/`, 
+          null, 
           {
+            params: requiredApiParams,
             headers: {
               Authorization: `Bearer ${authState?.accessToken}`,
               accept: "application/json",
@@ -99,7 +100,7 @@ const ReservationStatus = () => {
     }
   };
 
-  const PostYelpReservation = async () => {
+  const PostYelpReservation = async (reservationId, restaurantType) => {
     try {
       let finalData = null;
       if (data) {
@@ -123,6 +124,9 @@ const ReservationStatus = () => {
         const DateAndTime = `${date}T${formattedTime}`;
 
         const requiredApiParams = {
+          reservation_id: reservationId,
+          reservation_type: restaurantType,
+          reservation_status: "CONFIRMED",
           reservation_date: DateAndTime,
           restaurant_id: finalData?.formData[0]?.alias,
           restaurant_name: finalData?.bookingInfo?.businessName,
@@ -135,16 +139,16 @@ const ReservationStatus = () => {
 
         setLoading(true);
         const response = await axios.post(
-          `${Base_Url}/api/v1/reservation/create_reservation/`,
-          requiredApiParams,
+          `${Base_Url}/api/v1/reservation/create_reservation/`, 
+          null, 
           {
+            params: requiredApiParams,
             headers: {
               Authorization: `Bearer ${authState?.accessToken}`,
               accept: "application/json",
             },
           }
         );
-
         setStatus(true);
         setLoading(false);
         console.log(response, "response in API");
@@ -203,8 +207,16 @@ const ReservationStatus = () => {
             params: apiParams,
           }
         );
+        console.log("Response:" , response)
         setStatus(true);
         setLoading(false);
+        if (response.data.success === true) {
+          console.log("Reservation created successfully");
+        if (response.data.data && response.data.data.reservationId) {
+          console.log("Reservation created successfully");
+          PostOpentableReservation(response.data.data.reservationId, "OPENTABLE");
+          }
+        } 
       } else {
         console.error("Data parameter is null or undefined");
         setLoading(false);
@@ -250,11 +262,19 @@ const ReservationStatus = () => {
         );
         setStatus(true);
         setLoading(false);
+        console.log(response, "response in API");
+        if (response.data.success === true) {
+          console.log("Reservation created successfully");
+        if (response.data.data && response.data.data.rez_id) {
+          console.log("Reservation created successfully");
+          PostYelpReservation(response.data.data.rez_id, "YELP");
+        }
       } else {
         console.error("Data parameter is null or undefined");
         setLoading(false);
+        }
       }
-    } catch (error) {
+   } catch (error) {
       console.error("Error :", error);
       setStatus(false);
       setLoading(false);

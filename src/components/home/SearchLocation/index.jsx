@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GeoApiAuto from "../HomeAutoComplete";
+import * as yup from "yup";
 import TermApiAuto from "../HometermAutoComplete"; 
 import axios from "axios";
 
@@ -10,7 +11,8 @@ const getCurrentDate = () => {
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
-  return `2024-09-17`;
+  return `${year}-${month}-${day}`;
+  // return `2024-09-17`;
 };
 
 const SearchLocation = () => {

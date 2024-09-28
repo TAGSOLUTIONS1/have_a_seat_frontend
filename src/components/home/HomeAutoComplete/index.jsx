@@ -26,7 +26,7 @@ const GeoApiAuto = ({ getLocationData }) => {
         placeSelect={onPlaceSelect}
         suggestionsChange={onSuggestionChange}
         onUserInput={handleChange}
-        placeholder="Enter a location"
+        placeholder="Enter location"
       />
     </GeoapifyContext>
   );

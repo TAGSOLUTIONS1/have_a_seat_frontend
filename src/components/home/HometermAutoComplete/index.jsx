@@ -1,6 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const groupByType = (suggestions) => {
+  return suggestions.reduce((acc, suggestion) => {
+    if (!acc[suggestion.type]) {
+      acc[suggestion.type] = [];
+    }
+    acc[suggestion.type].push(suggestion);
+    return acc;
+  }, {});
+};
+
 const fetchSuggestions = async (term, setSuggestions) => {
   try {
     const response = await axios.get(
@@ -19,7 +29,6 @@ const TermApiAuto = ({ getTermData }) => {
   const [term, setTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
-
 
   const handleTermChange = (e) => {
     const value = e.target.value;
@@ -50,6 +59,9 @@ const TermApiAuto = ({ getTermData }) => {
     getTermData(term);
   };
 
+  const groupedSuggestions = groupByType(suggestions);
+  const typeOrder = ["Cuisine", "Restaurant"];
+
   return (
     <div className="relative w-full">
       <input
@@ -61,17 +73,44 @@ const TermApiAuto = ({ getTermData }) => {
         className="w-full p-2 rounded focus:outline-none"
       />
       {suggestions.length > 0 && (
-        <div className="absolute bg-white border border-gray-200 mt-1 w-full rounded-lg shadow-lg z-10 left-0 max-h-60 overflow-y-auto">
+        <div className="absolute bg-white border border-gray-200 mt-1 w-full rounded-lg shadow-lg z-10 left-0 max-h-80 overflow-y-auto">
           <ul className="list-none p-2">
-            {suggestions.map((suggestion) => (
-              <li
-                key={suggestion.id}
-                className="p-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleSuggestionClick(suggestion)}
-              >
-                <strong>{suggestion.type}:</strong> {suggestion.name}
-              </li>
-            ))}
+            {typeOrder.map((type) => {
+              const items = groupedSuggestions[type];
+              if (!items || items.length === 0) return null;
+
+              return (
+                <li key={type}>
+                  <div className="flex items-center p-2">
+                    <img
+                      src={`/assets/${type.toLowerCase()}-logo.png`}
+                      alt={`${type} Logo`}
+                      className="w-6 h-6 mr-2"
+                    />
+                    <strong>{type}:</strong>
+                  </div>
+                  <ul className="list-none">
+                    {items.map((suggestion) => (
+                      <li
+                        key={suggestion.id}
+                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleSuggestionClick(suggestion)}
+                      >
+                        <div className="font-bold">{suggestion.name}</div>
+                        {type === "Restaurant" && (
+                          <div className="text-sm text-gray-600">
+                            {suggestion.neighborhoodName}, {suggestion.macroName}
+                          </div>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                  {type !== typeOrder[typeOrder.length - 1] && (
+                    <hr className="my-2 border-gray-300" />
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

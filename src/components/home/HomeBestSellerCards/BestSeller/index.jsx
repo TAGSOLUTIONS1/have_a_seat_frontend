@@ -18,8 +18,8 @@ const BestSeller = () => {
           <p className="sm:text-xl md:text-3xl mb-4 text-gray-600 font-bold">
             Spade's Cafe
           </p>
-          <p className="sm:text-sm md:text-lg text-gray-600">
-          Cozy up with fresh coffee and locally <br/> sourced bites at Spade's Cafe, your <br/>perfect spot for relaxation.
+          <p className="text-sm  sm:text-sm md:text-lg text-gray-600">
+          Cozy up with fresh coffee <br/>and locally sourced bites <br/>at Spade's Cafe, your <br/>perfect spot for relaxation.
           </p>
           {/* <p className="sm:text-sm md:text-lg underline mt-4 text-gray-600">
             <span className="flex cursor-pointer">
@@ -41,10 +41,10 @@ const BestSeller = () => {
             Daily Offers
           </h1>
           <p className="sm:text-xl md:text-3xl mb-4 text-gray-600 font-bold">
-            StarBucks
+            Nice Matin
           </p>
-          <p className="sm:text-sm md:text-lg text-gray-600">
-          Enjoy signature espresso drinks and <br/> tasty snacks at Starbucks, <br/> the world’s favorite coffeehouse.
+          <p className="text-sm sm:text-lg md:text-lg text-gray-600 ">
+          Enjoy signature espresso <br/>drinks and tasty snacks at <br/>Nice Matin, the city's <br/>favorite coffeehouse.
           </p>
           {/* <p className="sm:text-sm md:text-lg underline mt-4 text-gray-600">
             <span className="flex cursor-pointer">

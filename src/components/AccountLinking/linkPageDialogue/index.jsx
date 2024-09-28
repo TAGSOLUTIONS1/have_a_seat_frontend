@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "lucide-react";
-
+import { Link as LucideLink } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,8 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-import { LucideLink } from "lucide-react";
 import LinkDialogue from "../linkDialogue";
 
 const LinkPageDialogue = () => {
@@ -34,7 +31,6 @@ const LinkPageDialogue = () => {
           </DialogHeader>
           <LinkDialogue />
           <DialogFooter>
-            {/* <Button className="w-24 text-md">Link</Button> */}
             <DialogClose asChild>
               <div>
               <Button className="w-24 text-md">Link</Button>
