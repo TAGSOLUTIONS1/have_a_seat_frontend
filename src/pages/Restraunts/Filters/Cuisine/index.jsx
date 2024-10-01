@@ -4,7 +4,6 @@ import { ArrowDown, ArrowUp, Pizza } from "lucide-react";
 
 const Cuisine = ({selectedCuisineFilter, setSelectedCuisineFilter}) => {
   const [showFilters, setShowFilters] = useState(false);
-  // const [selectedCuisineFilter, setSelectedCuisineFilter] =useState  (null);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -41,8 +40,6 @@ const Cuisine = ({selectedCuisineFilter, setSelectedCuisineFilter}) => {
     // "Middle Eastern",
     // "Gastro Pub",
     // "Lounge",
-
-
     // "Bottle Service",
     // "British",
     // "German",
