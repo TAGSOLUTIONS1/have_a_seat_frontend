@@ -18,7 +18,7 @@ const VerifyUserForm = () => {
           const currentDate = new Date();
           const date = currentDate.toString();
           const response = await axios.post(
-            "https://tags-inc.com/api/v1/auth/verify",
+            "https://3.101.103.14/api/v1/auth/verify",
             {
               token,
             }
