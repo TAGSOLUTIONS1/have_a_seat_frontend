@@ -1,11 +1,11 @@
 // import axios from "axios";
 
-// const API_URL = "https://tags-inc.com/api/v1"
+// const API_URL = "https://3.101.103.14/api/v1"
 
 
 import axios from "axios";
 
-const API_URL = "https://tags-inc.com/api/v1";
+const API_URL = "https://3.101.103.14/api/v1";
 
 export const register = async (formData) => {
   const registerResponse = await axios.post(

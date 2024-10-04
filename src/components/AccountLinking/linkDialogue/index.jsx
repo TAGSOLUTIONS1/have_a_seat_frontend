@@ -94,7 +94,7 @@ const LinkDialogue = () => {
 
     // Update the restaurant type in the backend
     const accessToken = localStorage.getItem("accessToken");
-    fetch("https://tags-inc.com/api/v1/users/me", {
+    fetch("https://3.101.103.14/api/v1/users/me", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

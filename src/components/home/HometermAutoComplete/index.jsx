@@ -14,7 +14,7 @@ const groupByType = (suggestions) => {
 const fetchSuggestions = async (term, setSuggestions) => {
   try {
     const response = await axios.get(
-      `https://tags-inc.com/api/v1/opentable/autocomplete?term=${encodeURIComponent(term)}`
+      `https://3.101.103.14/api/v1/opentable/autocomplete?term=${encodeURIComponent(term)}`
     );
     const results = response.data.data.data.autocomplete.autocompleteResults.filter(
       (item) => item.type === "Restaurant" || item.type === "Cuisine"
