@@ -23,7 +23,7 @@ const Home = () => {
                 Satisfy Your Cravings
               </h1>
               <p className="subtitle text-3xl md:text-5xl font-bold mt-2">
-                Greats Restraunts with <br /> Wonderful Features
+                Greats Restaurants with <br /> Wonderful Features
               </p>
               <p className=" hidden md:block lg:block description text-base sm:text-lg font-bold mt-4">
               Discover and book at the world's largest collection <br/> of restaurants with ease.From local gems to fine dining, <br/> explore endless global options and reserve your perfect table in seconds.
