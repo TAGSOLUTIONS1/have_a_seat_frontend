@@ -1,6 +1,5 @@
 import * as React from "react";
-import { useState , useEffect } from "react";
-
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -13,40 +12,37 @@ import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 const DatePicker = ({ setFormData }) => {
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(new Date()); // Default to current date
 
   useEffect(() => {
-    if (date) {
-      const formattedDate = format(date, "yyyy-MM-dd");
-      setFormData((prev) => ({
-        ...prev,
-        reservation_date: formattedDate,
-      }));
-    }
+    const formattedDate = format(date, "yyyy-MM-dd");
+    setFormData((prev) => ({
+      ...prev,
+      reservation_date: formattedDate,
+    }));
   }, [date, setFormData]);
 
   return (
     <div>
       <Popover>
-        {/* <h2 className="my-2">Date</h2> */}
         <div className="text-black">
           <PopoverTrigger asChild>
             <Button
               variant={"outline"}
               className={cn(
-                "w-full  justify-start text-left font-normal",
+                "w-full justify-start text-left font-normal",
                 !date && "text-muted-foreground"
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "PPP") : <span>Pick a date</span>}
+              {format(date, "PPP")} {/* Show the current date */}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
             <Calendar
               mode="single"
               selected={date}
-              onSelect={setDate}
+              onSelect={setDate} // Update date on selection
               initialFocus
             />
           </PopoverContent>

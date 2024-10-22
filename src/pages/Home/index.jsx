@@ -1,7 +1,6 @@
 import HomeBestSellerCards from "@/components/home/HomeBestSellerCards";
 import HomeCards from "@/components/home/HomeCards";
 import SearchLocation from "@/components/home/SearchLocation";
-
 import HomeSlider from "@/components/home/HomeSlider";
 import HomeStats from "@/components/home/HomeStats";
 import Testimonials from "@/components/home/Testimonials";
@@ -16,17 +15,19 @@ const Home = () => {
           className="absolute inset-0  z-0 bg-banner-image bg-no-repeat bg-cover bg-center brightness-30"
           style={{ zIndex: "-1" }}
         ></div>
-        <div className="relative z-10 -mt-10 sm:-mt-18 md:mt-1 lg:mt-10 max-w-screen-xl mt-10 sm:mt-10 left-0 right-0 md:bottom-32 mx-auto translate-y-1/3 md:translate-y-2/3 p-6 text-white">
+        <div className="relative z-10  sm:-mt-18 md:mt-1 lg:mt-10 max-w-screen-xl mt-10 sm:mt-10 left-0 right-0 md:bottom-32 mx-auto translate-y-1/3 md:translate-y-2/3 p-6 text-white">
           <div className="flex flex-col sm:-mt-14 md:-mt-14 md:flex-row items-center md:justify-between gap-5 md:gap-0 select-none">
             <div className="text-white text-center md:text-left flex flex-col justify-center md:flex-grow md:basis-3/5">
               <h1 className="title text-xl sm:text-3xl font-bold italic">
                 Satisfy Your Cravings
               </h1>
-              <p className="subtitle text-3xl md:text-5xl font-bold mt-2">
-                Greats Restaurants with <br /> Wonderful Features
+              <p className="subtitle text-3xl md:text-5xl font-bold mt-1">
+                Great Restaurants with <br /> Wonderful Features
               </p>
-              <p className=" hidden md:block lg:block description text-base sm:text-lg font-bold mt-4">
-              Discover and book at the world's largest collection <br/> of restaurants with ease.From local gems to fine dining, <br/> explore endless global options and reserve your perfect table in seconds.
+              <p className="description text-base font-bold mt-1 hidden md:block">
+                Discover and book at the world's largest collection
+                <br className="hidden md:block lg:block" /> of restaurants with ease. From local gems to fine dining,
+                <br className="hidden md:block lg:block" /> explore endless global options and reserve your perfect table in seconds.
               </p>
               <SearchLocation />
             </div>

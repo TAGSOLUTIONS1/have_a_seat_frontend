@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -20,16 +20,34 @@ const ReservationForm = ({ formData, bookingInfo }) => {
     email: Yup.string().email("Invalid email address").required("Email is required"),
   });
 
+  // Initialize form values
+  const [initialValues, setInitialValues] = useState({
+    first_name: "",
+    last_name: "",
+    phone: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    // Retrieve data from local storage
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const parsedData = JSON.parse(userData);
+      const newValues = {
+        first_name: parsedData.first_name || "",
+        last_name: parsedData.last_name || "",
+        phone: "", // Optionally set a default value or leave empty
+        email: parsedData.email || "",
+      };
+      setInitialValues(newValues);
+      formik.setValues(newValues); // Update formik values when initial values change
+    }
+  }, []);
+
   const formik = useFormik({
-    initialValues: {
-      first_name: "",
-      last_name: "",
-      phone: "",
-      email: "",  
-    },
+    initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(authState , "auth state while doing reservation")
       if (!authState.user?.id) {
         toast({
           title: "You need to login first",
@@ -51,6 +69,11 @@ const ReservationForm = ({ formData, bookingInfo }) => {
       navigate(route);
     },
   });
+
+  // Ensure initial values are set when formik is initialized
+  useEffect(() => {
+    formik.setValues(initialValues);
+  }, [initialValues]);
 
   return (
     <div className="flex bg-white p-8 rounded shadow-md">
@@ -120,7 +143,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
           <div className="flex flex-col md:flex-row lg:flex-row items-center justify-center md:space-x-4 lg:space-x-4 ">
             <button
               type="submit"
-              className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white w-full md:w-2/3 lg:w-2/3  align-center bg-purple-600 hover:bg-purple-800 mt-4"
+              className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white w-full md:w-2/3 lg:w-2/3 align-center bg-purple-600 hover:bg-purple-800 mt-4"
               style={{ minWidth: "100px" }}
             >
               Make a Reservation
@@ -137,7 +160,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
           </div>
         </form>
       </div>
-      <div className=" md:w-2/5 lg:w-2/5 hidden md:block lg:block md:px-24 lg:px-24 px-0">
+      <div className="md:w-2/5 lg:w-2/5 hidden md:block lg:block md:px-24 lg:px-24 px-0">
         <img
           src="/assets/bookingImage.svg"
           className="mt-32"

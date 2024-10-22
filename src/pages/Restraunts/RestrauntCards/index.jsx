@@ -1,11 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
-
 import { Link } from "react-router-dom";
-
-import Loader from "@/components/Loader";
-
-import InfiniteScroll from "react-infinite-scroll-component";
-
+import SearchLocationV2 from "@/components/searchLocationRestaurant";
 const RestaurantCards = memo(
   ({
     yelpData,
@@ -18,38 +13,44 @@ const RestaurantCards = memo(
   }) => {
     const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
     const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [hasMore, setHasMore] = useState(true);
-
-    localStorage.getItem("user");
-    const user = JSON.parse(localStorage.getItem("user"));
+    const [searchTerm, setSearchTerm] = useState(formData?.term || "");
     
-
+    const user = JSON.parse(localStorage.getItem("user"));
     const initialTypes = user
       ? [
           user?.link_restaurant?.yelp ? "yelp" : null,
           user?.link_restaurant?.opentable ? "open_table" : null,
           user?.link_restaurant?.resy ? "resy" : null,
-        ].filter(Boolean) // Only include linked platforms
-      : ["yelp", "open_table", "resy"]; 
+        ].filter(Boolean)
+      : ["yelp", "open_table", "resy"];
 
-      console.log(initialTypes)
     const [selectedTypes, setSelectedTypes] = useState(initialTypes);
+
+    // Function to handle location data
+    const getLocationData = (value) => {
+      console.log("Selected Location:", value);
+      // Handle location data here (e.g., update state, navigate, etc.)
+    };
+
+    // Function to handle term data
+    const getTermData = (value) => {
+      console.log("Selected Term:", value);
+      setSearchTerm(value); // Update search term state
+    };
 
     useEffect(() => {
       setItemsPerPage(10);
       if (
         (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
-        (openTableData &&
-          openTableData.length > 0 &&
-          selectedTypes.includes("open_table")) ||
+        (openTableData && openTableData.length > 0 && selectedTypes.includes("open_table")) ||
         (resyData && resyData.length > 0 && selectedTypes.includes("resy"))
       ) {
         const mergedRestaurants = [];
 
-        if (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) {
+        if (yelpData && selectedTypes.includes("yelp")) {
           mergedRestaurants.push(
             ...yelpData.map((restaurant) => ({
               ...restaurant,
@@ -60,7 +61,6 @@ const RestaurantCards = memo(
 
         if (
           openTableData &&
-          openTableData.length > 0 &&
           selectedTypes.includes("open_table")
         ) {
           mergedRestaurants.push(
@@ -71,7 +71,7 @@ const RestaurantCards = memo(
           );
         }
 
-        if (resyData && resyData.length > 0 && selectedTypes.includes("resy")) {
+        if (resyData && selectedTypes.includes("resy")) {
           mergedRestaurants.push(
             ...resyData.map((restaurant) => ({
               ...restaurant,
@@ -80,18 +80,16 @@ const RestaurantCards = memo(
           );
         }
 
-        const shuffledRestaurants = shuffleArray(mergedRestaurants);
-
-        const termLowerCase = formData?.term?.trim()?.toLowerCase() || "";
+        const shuffledRestaurants = mergedRestaurants;
 
         const matchedRestaurant = shuffledRestaurants.find((restaurant) => {
           const name = restaurant.name.toLowerCase();
-          return name === termLowerCase && termLowerCase !== "";
+          return name === searchTerm.toLowerCase() && searchTerm !== "";
         });
 
         const filteredRestaurants = shuffledRestaurants.filter((restaurant) => {
           const name = restaurant.name.toLowerCase();
-          return !(name === termLowerCase && termLowerCase !== "");
+          return !(name === searchTerm.toLowerCase() && searchTerm !== "");
         });
 
         if (matchedRestaurant) {
@@ -102,7 +100,7 @@ const RestaurantCards = memo(
       } else {
         setShuffledRestaurants([]);
       }
-    }, [yelpData, openTableData, resyData, selectedTypes]);
+    }, [yelpData, openTableData, resyData, selectedTypes, searchTerm]);
 
     useEffect(() => {
       let filteredRestaurants = shuffledRestaurants;
@@ -128,26 +126,8 @@ const RestaurantCards = memo(
               default:
                 price = null;
             }
-          } else if (
-            restaurant.restraunt_type === "open_table" ||
-            restaurant.restraunt_type === "resy"
-          ) {
-            switch (restaurant.priceBand?.priceBandId || restaurant.price_range_id) {
-              case 1:
-                price = 1;
-                break;
-              case 2:
-                price = 2;
-                break;
-              case 3:
-                price = 3;
-                break;
-              case 4:
-                price = 4;
-                break;
-              default:
-                price = null;
-            }
+          } else {
+            price = restaurant.priceBand?.priceBandId || restaurant.price_range_id;
           }
           return price != null && price == selectedPriceFilter;
         });
@@ -160,11 +140,7 @@ const RestaurantCards = memo(
           if (restaurant.restraunt_type === "yelp") {
             rating = Math.floor(parseFloat(restaurant.rating));
           } else if (restaurant.restraunt_type === "open_table") {
-            rating = Math.floor(
-              parseFloat(
-                restaurant.statistics?.reviews?.ratings?.overall?.rating
-              )
-            );
+            rating = Math.floor(parseFloat(restaurant.statistics?.reviews?.ratings?.overall?.rating));
           } else if (restaurant.restraunt_type === "resy") {
             rating = Math.floor(parseFloat(restaurant.rating?.average));
           }
@@ -175,7 +151,6 @@ const RestaurantCards = memo(
       if (selectedCuisineFilter != null) {
         filteredRestaurants = filteredRestaurants.filter((restaurant) => {
           let cuisine = null;
-      
           if (restaurant.restraunt_type === "yelp") {
             cuisine = restaurant?.categories?.map((category) => category.title.toLowerCase()).join(", ");
           } else if (restaurant.restraunt_type === "open_table") {
@@ -183,13 +158,11 @@ const RestaurantCards = memo(
           } else if (restaurant.restraunt_type === "resy") {
             cuisine = restaurant?.cuisine?.map((cuisineItem) => cuisineItem.toLowerCase()).join(", ");
           }
-      
           return cuisine != null && cuisine.includes(selectedCuisineFilter.toLowerCase());
         });
       }
 
       setFilteredRestaurants(filteredRestaurants);
-      console.log(filteredRestaurants);
     }, [
       selectedStarFilter,
       selectedPriceFilter,
@@ -217,6 +190,10 @@ const RestaurantCards = memo(
 
     return (
       <div>
+        <div className="border-2 border-gray-200 rounded-lg shadow-sm bg-white">
+          <SearchLocationV2 />
+        </div>
+
         <div className="flex flex-col small:flex-row items-center p-1 mb-2 mt-2 justify-center text-center border-2 rounded-lg shadow-sm">
           <div className="flex flex-row justify-center md:flex-row sm:items-center sm:justify-center">
             <div className="flex justify-between sm:mr-4 sm:mb-0">
@@ -232,8 +209,8 @@ const RestaurantCards = memo(
               </div>
               <img
                 src="/assets/resy_logo_new.png"
-                alt="Logo 1"
-                className="w-20 h-8 sm:w-32 sm:h-12 md:w-36 lg:w-36 mr-1 small:w-20 small:h-9 rounded-full"
+                alt="Resy Logo"
+                className="w-20 h-8 sm:w-32 sm:h-12 md:w-36 lg:w-36 mr-1 rounded-full"
               />
             </div>
 
@@ -250,13 +227,13 @@ const RestaurantCards = memo(
               </div>
               <img
                 src="/assets/yelp_logo_new.png"
-                alt="Logo 3"
-                className="w-20 h-7 sm:w-32 sm:h-14 md:w-36 lg:w-36 small:w-20 small:h-9"
+                alt="Yelp Logo"
+                className="w-20 h-7 sm:w-32 sm:h-14 md:w-36 lg:w-36"
               />
             </div>
           </div>
 
-          <div className="flex justify-center mt-2 sm:ml-4">
+          <div className="flex justify-center sm:mr-4 sm:mb-0">
             <div className="flex items-center mr-2 sm:mr-4">
               <input
                 type="checkbox"
@@ -269,11 +246,13 @@ const RestaurantCards = memo(
             </div>
             <img
               src="/assets/opentable.png"
-              alt="Logo 2"
-              className="w-13 h-7 sm:w-32 sm:h-12 md:w-36 md:h-11 lg:w-36 "
+              alt="Open Table Logo"
+              className="w-20 h-7 sm:w-32 sm:h-14 md:w-36 lg:w-36"
             />
           </div>
         </div>
+
+        {/* Filtered Restaurants List */}
         <div>
           {filteredRestaurants?.map((data, index) => (
             <Link
@@ -299,10 +278,7 @@ const RestaurantCards = memo(
                 )}`,
               }}
             >
-              <div
-                key={index}
-                className="bg-white w-full mb-2 p-1 md:h-[15rem] lg:h-[15rem] shadow-xl rounded-2xl flex flex-col md:flex-row lg:flex-row card text-grey-darkest"
-              >
+              <div className="bg-white w-full mb-2 p-1 md:h-[15rem] lg:h-[15rem] shadow-xl rounded-2xl flex flex-col md:flex-row lg:flex-row card text-grey-darkest">
                 <img
                   className="w-full md:w-1/3 lg:w-1/3 h-1/3 md:h-full lg:h-full rounded-2xl object-cover"
                   src={
@@ -318,7 +294,7 @@ const RestaurantCards = memo(
                 />
                 <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col px-2 select-none">
                   <div className="p-4 pb-0 flex-1">
-                    <h1 className="text-2xl lg:text-3xl font-light mb-1 text-grey-darkest">
+                    <h1 className="text-xl  font-light mb-1 text-grey-darkest">
                       <strong>
                         {data?.name?.length > 50
                           ? `${data?.name?.slice(0, 50)}...`
@@ -329,7 +305,6 @@ const RestaurantCards = memo(
                     <span className="text-grey-darkest">
                       <h2 className="font-bold">Rating</h2>
                       <i className="fas fa-map-marker-alt mr-1 text-grey-dark"></i>
-
                       {data.restraunt_type === "yelp"
                         ? data?.rating
                         : data.restraunt_type === "open_table"
@@ -337,31 +312,28 @@ const RestaurantCards = memo(
                         : data.restraunt_type === "resy"
                         ? data?.rating?.average
                         : null}
-
-                      <span className="text-base sm:text-lg">/5</span>
+                      <span className="text-sm sm:text-base">/5</span>
                     </span>
-                    
+
                     {data?.statistics?.recentReservationCount > 0 && (
-                  <div className="flex justify-between text-sm items-center">
-                    <div className="flex items-center">
-                      <span>
-                        <strong>Booked {data.statistics.recentReservationCount} times today</strong>
-                      </span>
-                    </div>
-                  </div>
-                )}
+                      <div className="flex justify-between text-sm items-center">
+                        <div className="flex items-center">
+                          <span>
+                            <strong>Booked {data.statistics.recentReservationCount} times today</strong>
+                          </span>
+                        </div>
+                      </div>
+                    )}
                     <div className="flex items-center mt-4">
                       <div className="pr-2 text-base">
                         <h2 className="font-bold">Address:</h2>
                         <div>
-                          {" "}
                           {data.restraunt_type === "yelp" ? (
                             <p>{data?.location?.display_address}</p>
                           ) : data?.restraunt_type === "open_table" ? (
                             <div>
                               <p>
-                                {data?.address?.line1 &&
-                                  `${data?.address?.line1} `}
+                                {data?.address?.line1 && `${data?.address?.line1} `}
                                 {data?.address?.city}
                               </p>
                             </div>
@@ -374,8 +346,6 @@ const RestaurantCards = memo(
                         </div>
                       </div>
                     </div>
-
-
                   </div>
                 </div>
                 <div className="hidden md:block lg:block border-l border-gray-300 h-44 my-6"></div>
@@ -384,7 +354,7 @@ const RestaurantCards = memo(
                     {data.restraunt_type === "yelp" ? (
                       <img
                         src="/assets/yelp_logo_new.png"
-                        alt="yelp logo"
+                        alt="Yelp Logo"
                         width={86}
                         height={64}
                         className="mb-2"
@@ -392,7 +362,7 @@ const RestaurantCards = memo(
                     ) : data.restraunt_type === "open_table" ? (
                       <img
                         src="/assets/opentable.png"
-                        alt="open table logo"
+                        alt="Open Table Logo"
                         width={106}
                         height={84}
                         className="mb-2"
@@ -400,7 +370,7 @@ const RestaurantCards = memo(
                     ) : data.restraunt_type === "resy" ? (
                       <img
                         src="/assets/resy_logo_new.png"
-                        alt="resy logo"
+                        alt="Resy Logo"
                         width={76}
                         height={54}
                         className="mb-2"

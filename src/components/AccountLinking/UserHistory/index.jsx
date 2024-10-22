@@ -177,10 +177,11 @@ const UserHistory = () => {
   };
 
   const handleCancelReservation = async (reservation) => {
+    setCurrentReservationDetails(reservation);
+  
     if (reservation.reservation_type === "YELP") {
       await yelpConfirmReservation(reservation);
     } else {
-      setCurrentReservationDetails(reservation);
       toast({
         title: "Reservation Cancellation Feature is not available for this restaurant type",
         status: "warning",
@@ -188,7 +189,7 @@ const UserHistory = () => {
         isClosable: true,
       });
     }
-  }; 
+  };
   
   const handleDeleteReservation = (reservation) => {
     setCurrentReservationDetails(reservation);
@@ -212,7 +213,7 @@ const UserHistory = () => {
     }
   };
 
-  const yelpCancelReservation = async (id) => {
+  const yelpCancelReservation = async () => {
     try {
       const response = await axios.get(
         `${Base_Url}/api/v1/yelp/cancel_reservation`,
@@ -232,40 +233,32 @@ const UserHistory = () => {
       if (response.data.success) {
         await updateReservationStatus(currentReservationDetails.id);
         toast({
-          title: "Yelp Reservation Cancelled Successfully",
+          title: "Reservation Cancelled Successfully",
           status: "success",
           duration: 9000,
           isClosable: true,
         });
       } else {
         toast({
-          title: "Failed to Cancel Yelp Reservation",
-          status: "error",
+          title: "Cancellation Not Allowed",
+          description: "This reservation cannot be canceled.",
+          status: "info",
           duration: 9000,
           isClosable: true,
         });
       }
       setCancelModalOpen(false);
     } catch (error) {
-      if (error.response.status === 400 && error.response.data.detail.success === false) {
-        toast({
-          title: error.response.data.detail.error.error_message,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        }
-      else {
       toast({
-        title: "Error occurred while cancelling the Yelp reservation",
+        title: "Error occurred while cancelling the reservation",
         status: "error",
         duration: 9000,
         isClosable: true,
       });
-      }
+      setCancelModalOpen(false);
     }
   };
-
+  
   const yelpConfirmReservation = async (reservation) => {
     setCurrentReservationDetails(reservation);
     try {
@@ -299,6 +292,7 @@ const UserHistory = () => {
 
   const updateReservationStatus = async (reservationId) => {
     try {
+      // This will set the reservation status to "CANCELLED"
       await axios.patch(
         `${Base_Url}/api/v1/reservation/update_reservation/${reservationId}/`,
         { reservation_status: "CANCELLED" },
@@ -309,10 +303,12 @@ const UserHistory = () => {
           }
         }
       );
+      await getUserHistory();
     } catch (error) {
       console.error("Error updating reservation status:", error);
     }
   };
+  
 
   useEffect(() => {
     if (authState && authState.accessToken) {
@@ -425,30 +421,30 @@ const UserHistory = () => {
                   </td>
                   
                   <td className="text-center py-5">
-                    <div className="relative" ref={dropdownRef}>
+                    <div className="relative " ref={dropdownRef}>
                       <button
                         onClick={() => toggleDropdown(item?.id)}
-                        className="bg-gray-300 text-gray-700 rounded px-2 py-1"
+                        className="bg-gray-300 text-gray-700 rounded px-2 py-0.5"
                       >
                         ...
                       </button>
                       {dropdownOpen === item?.id && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-10">
+                        <div className="absolute bottom-full right-6 mt-1 w-48 bg-white border border-gray-300 rounded shadow-lg z-10 overflow-y-auto">
                           <button
                             onClick={() => handleUpdateClick(item?.id)}
-                            className="block w-full text-center px-4 py-2 text-gray-700 hover:bg-gray-100"
+                            className="block w-full text-center px-2 py-1 text-gray-700 hover:bg-gray-100"
                           >
                             Add Review
                           </button>
                           <button
                             onClick={() => handleCancelReservation(item)}
-                            className="block w-full text-center px-4 py-2 text-gray-700 hover:bg-gray-100"
+                            className="block w-full text-center px-2 py-1 text-gray-700 hover:bg-gray-100"
                           >
                             Cancel Reservation
                           </button>
                           <button
                             onClick={() => handleDeleteReservation(item)}
-                            className="block w-full text-center px-4 py-2 text-red-600 hover:bg-red-100"
+                            className="block w-full text-center px-2 py-1 text-red-600 hover:bg-red-100"
                           >
                             Delete
                           </button>

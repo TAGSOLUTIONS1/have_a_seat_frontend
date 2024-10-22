@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GeoApiAuto from "../HomeAutoComplete";
-import * as yup from "yup";
-import TermApiAuto from "../HometermAutoComplete"; 
-import axios from "axios";
+import TermApiAuto from "../HometermAutoComplete";
+import LocationTracker from "@/components/LocationTracker";
+import { useToast } from "@/components/ui/use-toast"; 
 
 const getCurrentDate = () => {
   const today = new Date();
@@ -12,11 +12,11 @@ const getCurrentDate = () => {
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
-  // return `2024-09-17`;
 };
 
 const SearchLocation = () => {
   const navigate = useNavigate();
+  const { toast } = useToast(); // Initialize toast
   const [formData, setFormData] = useState({
     attributes: "reservation",
     reservation_covers: 2,
@@ -24,63 +24,58 @@ const SearchLocation = () => {
     reservation_date: getCurrentDate(),
     date: getCurrentDate(),
     reservation_time: "19:00",
+    location: '',
+    term: '',
   });
-
+  
   const [error, setError] = useState(null);
-  const [term, setTerm] = useState("");
 
   const getLocationData = (value) => {
-    const parts = value?.split(",");
-    const locate = parts[0];
-    setFormData((prevData) => ({ ...prevData, location: locate }));
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, location: value };
+      localStorage.setItem('searchFormData', JSON.stringify(updatedData)); // Store updated location in local storage
+      return updatedData;
+    });
   };
 
   const handleSearch = () => {
+    if (!formData.location && !formData.term) {
+      toast({
+        title: "Input Required",
+        description: "Please Enter  a Location",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      return;
+    }
+    
     if (!formData.location) {
       getCurrentLocation();
       return;
     }
-
+    
+    localStorage.setItem('searchFormData', JSON.stringify(formData)); // Store form data before navigating
     const route = `/restraunts?data=${encodeURIComponent(
       JSON.stringify(formData)
     )}`;
     navigate(route);
-    setFormData((prevData) => ({ ...prevData, term: "" }));
   };
 
   const handleTermChange = (e) => {
-    setTerm(e);
-    setFormData((prevData) => ({ ...prevData, term: e }));
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, term: e };
+      localStorage.setItem('searchFormData', JSON.stringify(updatedData)); // Store updated term in local storage
+      return updatedData;
+    });
   };
 
-  const getCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          try {
-            const response = await axios.get(
-              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-            );
-            const location = response.data.address.city || response.data.address.state || "Unknown Location";
-            setFormData((prevData) => ({ ...prevData, location }));
-            const route = `/restraunts?data=${encodeURIComponent(
-              JSON.stringify({ ...formData, location })
-            )}`;
-            navigate(route);
-          } catch (error) {
-            console.error("Error getting location name:", error);
-            setError("Unable to retrieve location name. Please enter a location manually.");
-          }
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          setError("Unable to retrieve your location. Please enter a location manually.");
-        }
-      );
-    } else {
-      setError("Geolocation is not supported by this browser.");
-    }
+  const handleLocationUpdate = (location) => {
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, location };
+      localStorage.setItem('searchFormData', JSON.stringify(updatedData)); // Store updated location in local storage
+      return updatedData;
+    });
   };
 
   return (
@@ -92,13 +87,18 @@ const SearchLocation = () => {
               error ? "border-red-500" : "border-gray-200"
             } focus:border-gray-200 focus:outline-none`}
           >
-            <GeoApiAuto getLocationData={getLocationData} />
+            <GeoApiAuto 
+              getLocationData={getLocationData} 
+              location={formData.location}
+            />
           </div>
         </div>
 
         <div className="relative w-full md:w-auto bg-white rounded-full p-2">
           <div
-            className={`w-full p-4 text-base md:text-lg text-black rounded-full border-2 focus:border-red-200 focus:outline-none`}
+            className={`w-full p-4 text-base md:text-lg text-black rounded-full border-2 ${
+              error ? "border-red-500" : "border-gray-200"
+            } focus:border-gray-200 focus:outline-none`}
           >
             <TermApiAuto getTermData={handleTermChange} />
           </div>
@@ -107,13 +107,18 @@ const SearchLocation = () => {
 
       <div className="flex justify-center mt-2">
         <Button
-          className="text-sm md:text-xl py-4 px-6 rounded-full"
+          className="text-sm md:text-xl py-6 px-6 rounded-full"
           variant="default"
           size="lg"
           onClick={handleSearch}
         >
           Search
         </Button>
+      </div>
+      <div className="flex items-center justify-center mt-2">
+        <div className="flex-1">
+          <LocationTracker onLocationUpdate={handleLocationUpdate} />
+        </div>
       </div>
     </div>
   );
