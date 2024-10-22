@@ -6,36 +6,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEffect, useState } from "react";
 
 const PersonCard = ({ setFormData }) => {
-  const handleSelectChange = (persons) => {
-    const selectedPersons = parseInt(persons, 10);
+  const [selectedPersons, setSelectedPersons] = useState("2"); // Default to 2 persons
 
-    setFormData((prev) => {
-      return {
-        ...prev,
-        reservation_covers: selectedPersons,
-      };
-    });
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      reservation_covers: parseInt(selectedPersons, 10),
+    }));
+  }, [selectedPersons, setFormData]);
+
+  const handleSelectChange = (persons) => {
+    setSelectedPersons(persons); // Update state when selection changes
   };
 
   return (
-    <Select onValueChange={handleSelectChange}>
+    <Select value={selectedPersons} onValueChange={handleSelectChange}>
       <div className="text-black">
-        <SelectTrigger className="w-full ">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select Person" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="1">1 Person</SelectItem>
-            <SelectItem value="2">2 Person</SelectItem>
-            <SelectItem value="3">3 Person</SelectItem>
-            <SelectItem value="4">4 Person</SelectItem>
-            <SelectItem value="5">5 Person</SelectItem>
-            <SelectItem value="6">6 Person</SelectItem>
-            <SelectItem value="7">7 Person</SelectItem>
-            <SelectItem value="8">8 Person</SelectItem>
-            <SelectItem value="9">9 Person</SelectItem>
+            {Array.from({ length: 9 }, (_, i) => (
+              <SelectItem key={i} value={(i + 1).toString()}>
+                {i + 1} Person{(i > 0) ? 's' : ''}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </div>

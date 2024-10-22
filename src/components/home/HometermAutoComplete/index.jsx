@@ -25,10 +25,14 @@ const fetchSuggestions = async (term, setSuggestions) => {
   }
 };
 
-const TermApiAuto = ({ getTermData }) => {
-  const [term, setTerm] = useState("");
+const TermApiAuto = ({ getTermData, term: initialTerm }) => {
+  const [term, setTerm] = useState(initialTerm || ""); 
   const [suggestions, setSuggestions] = useState([]);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
+
+  useEffect(() => {
+    setTerm(initialTerm || ""); 
+  }, [initialTerm]);
 
   const handleTermChange = (e) => {
     const value = e.target.value;
@@ -63,14 +67,14 @@ const TermApiAuto = ({ getTermData }) => {
   const typeOrder = ["Cuisine", "Restaurant"];
 
   return (
-    <div className="relative w-full">
+    <div className="relative max-w-full">
       <input
         type="text"
         value={term}
         onChange={handleTermChange}
         onBlur={handleBlur}
         placeholder="Restaurant Name, Cuisine"
-        className="w-full p-2 rounded focus:outline-none"
+        className="w-full p-3 ml-2 mr-2 rounded focus:outline-none"
       />
       {suggestions.length > 0 && (
         <div className="absolute bg-white border border-gray-200 mt-1 w-full rounded-lg shadow-lg z-10 left-0 max-h-80 overflow-y-auto">
@@ -81,7 +85,7 @@ const TermApiAuto = ({ getTermData }) => {
 
               return (
                 <li key={type}>
-                  <div className="flex items-center p-2">
+                  <div className="flex items-center p-2">  
                     <img
                       src={`/assets/${type.toLowerCase()}-logo.png`}
                       alt={`${type} Logo`}
@@ -89,16 +93,16 @@ const TermApiAuto = ({ getTermData }) => {
                     />
                     <strong>{type}:</strong>
                   </div>
-                  <ul className="list-none">
+                  <ul className="list-none p-2">
                     {items.map((suggestion) => (
                       <li
                         key={suggestion.id}
                         className="p-2 hover:bg-gray-100 cursor-pointer"
                         onClick={() => handleSuggestionClick(suggestion)}
                       >
-                        <div className="font-bold">{suggestion.name}</div>
+                        <div className="font-semibold">{suggestion.name}</div>
                         {type === "Restaurant" && (
-                          <div className="text-sm text-gray-600">
+                          <div className="text-xs text-gray-600">
                             {suggestion.neighborhoodName}, {suggestion.macroName}
                           </div>
                         )}

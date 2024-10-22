@@ -31,12 +31,18 @@ const SignupForm = () => {
   const { toast } = useToast();
 
   const onSubmit = async (data) => {
-    // console.log(data)
     try {
       setLoading(true);
-       await register(data);
+      await register(data);
+      // Store user data in local storage
+      localStorage.setItem('userData', JSON.stringify({
+        first_name: data.first_name,
+        last_name: data.last_name,
+        email: data.email,
+        // You might want to store phone if you collect it in the signup form
+      }));
       setLoading(false);
-      navigate("/")
+      navigate("/");
       toast({
         title: "Account created.",
         description: "We've created your account.",
@@ -52,8 +58,9 @@ const SignupForm = () => {
         ),
       });
     } catch (err) {
-      console.error(err , "ERROR ON THE RESPONSE OF SIGNUP API");
+      console.error(err, "ERROR ON THE RESPONSE OF SIGNUP API");
       setLoading(false);
+      // Handle error cases
       switch (err?.response?.status) {
         case 400:
           toast({
@@ -76,7 +83,6 @@ const SignupForm = () => {
       }
     }
   };
-
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">

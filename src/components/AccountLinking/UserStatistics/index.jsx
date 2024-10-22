@@ -1,33 +1,20 @@
 import React, { useState, useEffect } from "react";
-
-import DonutChart from "react-donut-chart";
 import {
   Chart as ChartJS,
   ArcElement,
   Tooltip,
   Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
 } from "chart.js";
-import { Bar, Doughnut } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
 
 import { useAuth } from "@/contexts/authContext/AuthProvider";
-import { Base_Url } from "@/baseUrl";
 import Loader from "@/components/Loader";
 import GlobeComponent from "@/components/shared/Globe";
 import getCoordinates from "@/lib/utils";
 
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement
-);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const UserStatistics = () => {
   const { authState } = useAuth();
@@ -36,10 +23,6 @@ const UserStatistics = () => {
   const [error, setError] = useState(null);
   const [showGlobe, setShowGlobe] = useState(false);
   const [locations, setLocations] = useState([]);
-
-  const redirectToUserStatistics = () => {
-    navigate("/user-statistics");
-  };
 
   const getUserStatistics = async () => {
     try {
@@ -52,18 +35,16 @@ const UserStatistics = () => {
           },
         }
       );
-      setStatistics(response?.data);
+      setStatistics(response.data);
 
       const locationPromises =
-        response?.data?.average_locations?.map(async (location) => {
+        response.data?.average_locations?.map(async (location) => {
           const coords = await getCoordinates(location);
           return coords;
         }) || [];
 
       const locationsWithCoords = await Promise.all(locationPromises);
       setLocations(locationsWithCoords.filter(Boolean));
-
-      console.log(response?.data, "userStatistics");
     } catch (error) {
       setError("Failed to fetch statistics");
     } finally {
@@ -78,23 +59,28 @@ const UserStatistics = () => {
   }, [authState]);
 
   if (loading) {
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
+    return <Loader />;
   }
 
   if (error) {
     return <div>{error}</div>;
   }
 
+  // Fetching and calculating data from the API response
+  const totalReservations = statistics?.number_of_reservations_per_year
+    ? Object.values(statistics.number_of_reservations_per_year).reduce((a, b) => a + b, 0)
+    : 0;
+
+  const totalCancellations = 0; // Replace with actual cancellation data if available
+  const indoorReservations = statistics?.indoor_vs_outdoor?.indoor || 0;
+  const outdoorReservations = statistics?.indoor_vs_outdoor?.outdoor || 0;
+
   const data = {
-    labels: ["Percentage of Cancelation", "Total Reservation"],
+    labels: ["Total Reservations", "Percentage of Cancellation"],
     datasets: [
       {
-        label: "Resrvation rate",
-        data: [1, 6],
+        label: "Reservation Rate",
+        data: [totalReservations, totalCancellations],
         backgroundColor: ["#E0B0FF", "#CBC3E3"],
       },
     ],
@@ -105,7 +91,7 @@ const UserStatistics = () => {
     datasets: [
       {
         label: "Indoor vs Outdoor",
-        data: [5, 1],
+        data: [indoorReservations, outdoorReservations],
         backgroundColor: ["#E0B0FF", "#CBC3E3"],
       },
     ],
@@ -130,14 +116,14 @@ const UserStatistics = () => {
     <div className="bg-white min-h-screen p-6 pt-24 lg:py-28 lg:x-24 sm:px-6 lg:px-8">
       <div className="max-w-[1300px] bg-gray-100 mx-auto lg:px-24 lg:py-24 p-6 rounded-lg ">
         <h1 className="text-3xl font-bold text-purple-600 mb-16 text-center">
-          {authState?.user?.first_name}'s dining history
+          {authState?.user?.first_name}'s Dining History
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-14">
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h2 className="text-2xl font-semibold text-purple-600 mb-4">
-                Reservations this year
+                Reservations This Year
               </h2>
               <div className="flex items-center justify-between">
                 <div className="text-xl font-normal text-purple-600">
@@ -155,29 +141,24 @@ const UserStatistics = () => {
 
               <div>
                 {historyReservations.map(([year, count]) => (
-                  <>
-                    <div
-                      key={year}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="text-xl font-normal text-purple-600">
-                        {count}
-                      </div>
-                      <div className="text-sm text-gray-500">{year}</div>
+                  <div key={year} className="flex items-center justify-between">
+                    <div className="text-xl font-normal text-purple-600">
+                      {count}
                     </div>
+                    <div className="text-sm text-gray-500">{year}</div>
                     <hr className="my-4 border-t-2 border-purple-300" />
-                  </>
+                  </div>
                 ))}
               </div>
             </div>
 
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h2 className="text-2xl font-semibold text-purple-600">
-                Average time
+                Average Time
               </h2>
               <p className="mb-4">
                 The time between making a reservation and the day of the
-                reservation
+                reservation.
               </p>
               <div className="flex items-center justify-between">
                 <div className="text-lg font-normal text-purple-600">
@@ -219,40 +200,40 @@ const UserStatistics = () => {
           </div>
 
           <div className="space-y-14">
-            <div className="space-y-14">
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-semibold text-purple-600 mb-4">
-                  Average Number of Diners
-                </h2>
-                <div className="flex items-center justify-between">
-                  <div className="text-xl font-bold text-purple-600">2</div>
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-semibold text-purple-600 mb-4">
+                Average Number of Diners
+              </h2>
+              <div className="flex items-center justify-between">
+                <div className="text-xl font-bold text-purple-600">
+                  {statistics?.average_number_of_diners || 0}
                 </div>
               </div>
+            </div>
 
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-semibold text-purple-600 mb-4">
-                  {authState?.user?.first_name}'s Favourite Foods
-                </h2>
-                <div className="flex items-center mt-6 space-x-2">
-                  {statistics?.most_common_cuisine_types?.map((item, index) => (
-                    <div
-                      key={index}
-                      className="text-xl font-bold text-white bg-purple-600 px-4 py-2 rounded-full"
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-semibold text-purple-600 mb-4">
-                  Total Number of Reviews
-                </h2>
-                <div className="flex items-center justify-between">
-                  <div className="text-xl font-bold text-purple-600">
-                    {statistics?.number_of_reviews_left}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-semibold text-purple-600 mb-4">
+                {authState?.user?.first_name}'s Favourite Foods
+              </h2>
+              <div className="flex items-center mt-6 space-x-2">
+                {statistics?.most_common_cuisine_types?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="text-xl font-bold text-white bg-purple-600 px-4 py-2 rounded-full"
+                  >
+                    {item}
                   </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-semibold text-purple-600 mb-4">
+                Total Number of Reviews
+              </h2>
+              <div className="flex items-center justify-between">
+                <div className="text-xl font-bold text-purple-600">
+                  {statistics?.number_of_reviews_left || 0}
                 </div>
               </div>
             </div>
@@ -285,18 +266,14 @@ const UserStatistics = () => {
             <div>
               <div
                 onClick={() => setShowGlobe(!showGlobe)}
-                className="text-xl cursor-pointer p-2 px-3 mt-8 font-bold text-white bg-purple-600  rounded-full"
+                className="text-xl cursor-pointer p-2 px-3 mt-8 font-bold text-white bg-purple-600 rounded-full"
               >
                 <p className="flex justify-center space-x-2 items-center">
                   <div>{showGlobe ? "Close" : "Preview"} </div>
                   {showGlobe ? (
-                    <div>
-                      <EyeOff size={18} className="text-white" />
-                    </div>
+                    <EyeOff size={18} className="text-white" />
                   ) : (
-                    <div>
-                      <Eye size={18} className="text-white" />
-                    </div>
+                    <Eye size={18} className="text-white" />
                   )}
                 </p>
               </div>

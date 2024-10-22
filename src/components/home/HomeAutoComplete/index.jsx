@@ -7,13 +7,12 @@ import "@geoapify/geocoder-autocomplete/styles/minimal.css";
 import "@geoapify/geocoder-autocomplete/styles/round-borders.css";
 import "./autocomplete.css";
 
-const GeoApiAuto = ({ getLocationData }) => {
+const GeoApiAuto = ({ getLocationData, location }) => {
   const onPlaceSelect = (value) => {
     getLocationData(value.properties?.formatted);
   };
 
   const onSuggestionChange = (value) => {
-    // console.log(value);
   };
 
   const handleChange = (value) => {
@@ -27,6 +26,10 @@ const GeoApiAuto = ({ getLocationData }) => {
         suggestionsChange={onSuggestionChange}
         onUserInput={handleChange}
         placeholder="Enter location"
+        className="geoapify-autocomplete-input"
+        listClassName="geoapify-autocomplete-list"
+        itemClassName="geoapify-autocomplete-item"
+        value={location} 
       />
     </GeoapifyContext>
   );
