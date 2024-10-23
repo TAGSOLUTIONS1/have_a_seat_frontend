@@ -1,0 +1,154 @@
+import { DollarSign, MessageSquare, Star, Utensils } from "lucide-react";
+
+import { ResyRestrauntDetail } from "@/mockData";
+
+const OverviewCard1 = ({ overviewCardsData }) => {
+  // console.log(overviewCardsData);
+
+  const getRandomKey = (obj) => {
+    const keys = Object.keys(obj);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    // console.log(randomKey);
+    return randomKey;
+  };
+
+  // Getting a random key from overviewCardsData.templates
+  const randomTemplateKey = overviewCardsData?.templates
+    ? getRandomKey(overviewCardsData.templates)
+    : null;
+
+  // Getting the corresponding object based on the random key
+  const randomTemplate =
+    randomTemplateKey && overviewCardsData?.templates[randomTemplateKey];
+
+  const convertHtmlToText = (html) => {
+    // Create a temporary element
+    var tempElement = document.createElement("div");
+
+    // Set the HTML content
+    tempElement.innerHTML = html;
+
+    // Append the temporary element to the document body
+    document.body.appendChild(tempElement);
+
+    // Extract text content
+    var textContent = tempElement.textContent || tempElement.innerText;
+
+    // Remove the temporary element
+    document.body.removeChild(tempElement);
+
+    return textContent;
+  };
+
+  return (
+    <div className="border rounded-lg p-8 mb-4 shadow-lg ">
+      <h2 className="text-5xl  text-purple-600 mb-4 mt-1">
+        {overviewCardsData?.alias
+          ? overviewCardsData?.name
+          : overviewCardsData?.restaurant
+          ? overviewCardsData?.restaurant?.name
+          : overviewCardsData?.name}
+      </h2>
+      <hr className="mb-4" />
+      <div className="flex justify-between text-sm items-center">
+        <div className="flex items-center">
+          <Star className="mr-1  text-purple-600" />
+          <span>
+            {overviewCardsData?.alias
+              ? overviewCardsData?.rating
+              : overviewCardsData?.restaurant
+              ? overviewCardsData?.restaurant?.statistics?.reviews?.ratings
+                  ?.overall?.rating
+              : overviewCardsData?.rating?.average}
+          </span>
+        </div>
+        <div className="flex items-center">
+          <MessageSquare className="mr-1  text-purple-600" />
+          <span>
+            {overviewCardsData?.alias
+              ? overviewCardsData?.review_count
+              : overviewCardsData?.restaurant
+              ? overviewCardsData?.reviewSearchResults?.totalCount
+              : overviewCardsData?.rating?.count}
+          </span>
+        </div>
+        <div className="flex items-center">
+          <DollarSign className="mr-1  text-purple-600" />
+          <span>
+            {overviewCardsData?.alias
+              ? overviewCardsData?.price
+              : overviewCardsData?.restaurant
+              ? overviewCardsData?.restaurant?.priceBand?.name
+              : overviewCardsData?.price_range_id === 1
+              ? "$"
+              : overviewCardsData?.price_range_id === 2
+              ? "$$"
+              : overviewCardsData?.price_range_id === 3
+              ? "$$$"
+              : overviewCardsData?.price_range_id === 4
+              ? "$$$$"
+              : null}
+          </span>
+        </div>
+        <div className="flex items-center">
+          <Utensils className="mr-1 text-purple-600" />
+          <span>
+            {overviewCardsData?.alias ? (
+              <>
+                <span className="sm:hidden">
+                  {overviewCardsData?.categories[0]?.title}
+                </span>
+                <span className="hidden sm:inline">
+                  {overviewCardsData?.categories.map((category) => category.title).join(", ")}
+                </span>
+              </>
+            ) : overviewCardsData?.restaurant ? (
+              overviewCardsData?.restaurant?.primaryCuisine?.name
+            ) : (
+              <>
+                <span className="sm:hidden">
+                  {overviewCardsData?.cuisine[0]}
+                </span>
+                <span className="hidden sm:inline">
+                  {overviewCardsData?.cuisine.map((cuisineItem) => cuisineItem).join(", ")}
+                </span>
+              </>
+            )}
+          </span>
+        </div>
+      </div>
+      <hr className="mb-4 mt-4" />
+      <p className="textlg- mt-4 mb-4">
+        <span className="text-purple-600 text-xl ">Address: </span>{" "}
+        {overviewCardsData?.alias ? (
+          <>
+            {overviewCardsData?.location?.address1},{" "}
+            {overviewCardsData?.location?.city}
+          </>
+        ) : overviewCardsData?.restaurant ? (
+          <>
+            {overviewCardsData?.restaurant?.address?.line1} ,{" "}
+            {overviewCardsData?.restaurant?.address?.city}
+          </>
+        ) : (
+          <>
+            {overviewCardsData?.neighborhood} ,{" "}
+            {overviewCardsData?.location.name} , {" "}
+            {overviewCardsData?.country}
+          </>
+        )}
+      </p>
+      <hr className="mb-4 mt-4" />
+      <p className="text-sm mt-4 mb-4">
+        {overviewCardsData?.alias
+          ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
+          : overviewCardsData?.restaurant
+          ? convertHtmlToText(overviewCardsData?.restaurant?.description)
+          :"Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."}
+           {/* randomTemplate?.content["en-us"]?.about?.body */}
+      </p>
+    </div>
+  );
+};
+
+export default OverviewCard1;
