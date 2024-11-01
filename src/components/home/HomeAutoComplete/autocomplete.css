@@ -4,8 +4,11 @@
   border-radius: 5px;
   font-size: 18px;
   padding: 12px 16px;
-  width: 100%;
+  max-width: 300px; 
   margin: 0.5rem 0;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
 }
 
 .geoapify-autocomplete-input::placeholder {

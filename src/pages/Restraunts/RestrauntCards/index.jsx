@@ -11,13 +11,18 @@ const RestaurantCards = memo(
     selectedPriceFilter,
     selectedCuisineFilter,
   }) => {
-    const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
+    const [shuffledRestaurants, setShuffledRestaurants] = useState(() => {
+      const savedRestaurants = localStorage.getItem("shuffledRestaurants");
+      return savedRestaurants ? JSON.parse(savedRestaurants) : [];
+    });
     const [filteredRestaurants, setFilteredRestaurants] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [hasMore, setHasMore] = useState(true);
     const [searchTerm, setSearchTerm] = useState(formData?.term || "");
-    
+    const [searchLocation, setSearchLocation] = useState(formData?.location || "");
+    const previousSearchTerm = localStorage.getItem("previousSearchTerm");
+    const previousSearchLocation = localStorage.getItem("previousSearchLocation");
+
     const user = JSON.parse(localStorage.getItem("user"));
     const initialTypes = user
       ? [
@@ -32,21 +37,24 @@ const RestaurantCards = memo(
     // Function to handle location data
     const getLocationData = (value) => {
       console.log("Selected Location:", value);
-      // Handle location data here (e.g., update state, navigate, etc.)
+      setSearchLocation(value); // Update location state when changed
     };
 
     // Function to handle term data
-    const getTermData = (value) => {
+    const handleSearchTermChange = (value) => {
       console.log("Selected Term:", value);
-      setSearchTerm(value); // Update search term state
+      setSearchTerm(value);
     };
 
     useEffect(() => {
       setItemsPerPage(10);
+      // Update local storage only if the search term or location has changed
       if (
-        (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
-        (openTableData && openTableData.length > 0 && selectedTypes.includes("open_table")) ||
-        (resyData && resyData.length > 0 && selectedTypes.includes("resy"))
+        (formData?.term !== previousSearchTerm || formData?.location !== previousSearchLocation) &&
+        ((yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
+          (openTableData && openTableData.length > 0 && selectedTypes.includes("open_table")) ||
+          (resyData && resyData.length > 0 && selectedTypes.includes("resy")))
+        
       ) {
         const mergedRestaurants = [];
 
@@ -59,10 +67,7 @@ const RestaurantCards = memo(
           );
         }
 
-        if (
-          openTableData &&
-          selectedTypes.includes("open_table")
-        ) {
+        if (openTableData && selectedTypes.includes("open_table")) {
           mergedRestaurants.push(
             ...openTableData.map((restaurant) => ({
               ...restaurant,
@@ -80,14 +85,19 @@ const RestaurantCards = memo(
           );
         }
 
-        const shuffledRestaurants = mergedRestaurants;
+        // Shuffle and save to local storage
+        const shuffled = shuffleArray(mergedRestaurants);
+        localStorage.setItem("shuffledRestaurants", JSON.stringify(shuffled));
+        localStorage.setItem("previousSearchTerm", formData?.term); 
+        localStorage.setItem("previousSearchLocation", formData?.location); // Save the new search location
+        setShuffledRestaurants(shuffled);
 
-        const matchedRestaurant = shuffledRestaurants.find((restaurant) => {
+        const matchedRestaurant = shuffled.find((restaurant) => {
           const name = restaurant.name.toLowerCase();
           return name === searchTerm.toLowerCase() && searchTerm !== "";
         });
 
-        const filteredRestaurants = shuffledRestaurants.filter((restaurant) => {
+        const filteredRestaurants = shuffled.filter((restaurant) => {
           const name = restaurant.name.toLowerCase();
           return !(name === searchTerm.toLowerCase() && searchTerm !== "");
         });
@@ -96,11 +106,9 @@ const RestaurantCards = memo(
           filteredRestaurants.unshift(matchedRestaurant);
         }
 
-        setShuffledRestaurants(filteredRestaurants);
-      } else {
-        setShuffledRestaurants([]);
+        setFilteredRestaurants(filteredRestaurants);
       }
-    }, [yelpData, openTableData, resyData, selectedTypes, searchTerm]);
+    }, [yelpData, openTableData, resyData, selectedTypes, searchTerm, formData?.term, formData?.location, previousSearchTerm, previousSearchLocation]);
 
     useEffect(() => {
       let filteredRestaurants = shuffledRestaurants;
@@ -169,25 +177,31 @@ const RestaurantCards = memo(
       selectedCuisineFilter,
       shuffledRestaurants,
     ]);
+    const shuffleArray = (array) => {
+      const newArray = [...array]; 
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; 
+      }
+      return newArray; 
+    };
+
 
     const handleCheckboxChange = (type) => {
       setSelectedTypes((prevSelectedTypes) => {
-        if (prevSelectedTypes.includes(type)) {
-          return prevSelectedTypes.filter((t) => t !== type);
-        } else {
-          return [...prevSelectedTypes, type];
-        }
+        const updatedTypes = prevSelectedTypes.includes(type)
+          ? prevSelectedTypes.filter((t) => t !== type)
+          : [...prevSelectedTypes, type];
+        localStorage.setItem("selectedTypes", JSON.stringify(updatedTypes));
+        return updatedTypes;
       });
     };
-
-    const shuffleArray = (array) => {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    };
-
+    useEffect(() => {
+      let filteredRestaurants = shuffledRestaurants.filter((restaurant) =>
+        selectedTypes.includes(restaurant.restraunt_type)
+      );
+      setFilteredRestaurants(filteredRestaurants);
+    }, [selectedTypes, shuffledRestaurants]);
     return (
       <div>
         <div className="border-2 border-gray-200 rounded-lg shadow-sm bg-white">
