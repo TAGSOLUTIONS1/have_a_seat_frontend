@@ -20,7 +20,6 @@ const RestaurantCards = memo(
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState(formData?.term || "");
     const [searchLocation, setSearchLocation] = useState(formData?.location || "");
-
     // Fetch previously saved search term and location from localStorage
     const previousSearchTerm = localStorage.getItem("previousSearchTerm");
     const previousSearchLocation = localStorage.getItem("previousSearchLocation");
@@ -56,6 +55,7 @@ const RestaurantCards = memo(
         ((yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
           (openTableData && openTableData.length > 0 && selectedTypes.includes("open_table")) ||
           (resyData && resyData.length > 0 && selectedTypes.includes("resy")))
+        
       ) {
         const mergedRestaurants = [];
 
@@ -178,17 +178,6 @@ const RestaurantCards = memo(
       selectedCuisineFilter,
       shuffledRestaurants,
     ]);
-
-    const handleCheckboxChange = (type) => {
-      setSelectedTypes((prevSelectedTypes) => {
-        if (prevSelectedTypes.includes(type)) {
-          return prevSelectedTypes.filter((t) => t !== type);
-        } else {
-          return [...prevSelectedTypes, type];
-        }
-      });
-    };
-
     const shuffleArray = (array) => {
       const newArray = [...array]; 
       for (let i = newArray.length - 1; i > 0; i--) {
@@ -198,6 +187,22 @@ const RestaurantCards = memo(
       return newArray; 
     };
 
+
+    const handleCheckboxChange = (type) => {
+      setSelectedTypes((prevSelectedTypes) => {
+        const updatedTypes = prevSelectedTypes.includes(type)
+          ? prevSelectedTypes.filter((t) => t !== type)
+          : [...prevSelectedTypes, type];
+        localStorage.setItem("selectedTypes", JSON.stringify(updatedTypes));
+        return updatedTypes;
+      });
+    };
+    useEffect(() => {
+      let filteredRestaurants = shuffledRestaurants.filter((restaurant) =>
+        selectedTypes.includes(restaurant.restraunt_type)
+      );
+      setFilteredRestaurants(filteredRestaurants);
+    }, [selectedTypes, shuffledRestaurants]);
     return (
       <div>
         <div className="border-2 border-gray-200 rounded-lg shadow-sm bg-white">
