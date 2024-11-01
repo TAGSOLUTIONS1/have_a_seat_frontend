@@ -20,6 +20,7 @@ const RestaurantCards = memo(
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState(formData?.term || "");
     const [searchLocation, setSearchLocation] = useState(formData?.location || "");
+    // Fetch previously saved search term and location from localStorage
     const previousSearchTerm = localStorage.getItem("previousSearchTerm");
     const previousSearchLocation = localStorage.getItem("previousSearchLocation");
 
@@ -88,7 +89,7 @@ const RestaurantCards = memo(
         // Shuffle and save to local storage
         const shuffled = shuffleArray(mergedRestaurants);
         localStorage.setItem("shuffledRestaurants", JSON.stringify(shuffled));
-        localStorage.setItem("previousSearchTerm", formData?.term); 
+        localStorage.setItem("previousSearchTerm", formData?.term); // Save the new search term
         localStorage.setItem("previousSearchLocation", formData?.location); // Save the new search location
         setShuffledRestaurants(shuffled);
 
