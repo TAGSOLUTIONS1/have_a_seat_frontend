@@ -22,7 +22,7 @@ const Home = () => {
                 Satisfy Your Cravings
               </h1>
               <p className="subtitle text-3xl md:text-5xl font-bold mt-1">
-                Great Restaurants with <br /> Wonderful Features
+              Top-tier Restaurants, Enhanced  <br /> with Innovative Features.
               </p>
               <p className="description text-base font-bold mt-1 hidden md:block">
                 Discover and book at the world's largest collection
