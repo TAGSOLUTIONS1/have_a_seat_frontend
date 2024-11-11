@@ -13,11 +13,8 @@ const RestaurantCards = memo(
   }) => {
     const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
     const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [hasMore, setHasMore] = useState(true);
     const [searchTerm, setSearchTerm] = useState(formData?.term || "");
-    
+
     const user = JSON.parse(localStorage.getItem("user"));
     const initialTypes = user
       ? [
@@ -32,7 +29,6 @@ const RestaurantCards = memo(
     // Function to handle location data
     const getLocationData = (value) => {
       console.log("Selected Location:", value);
-      // Handle location data here (e.g., update state, navigate, etc.)
     };
 
     // Function to handle term data
@@ -42,7 +38,6 @@ const RestaurantCards = memo(
     };
 
     useEffect(() => {
-      setItemsPerPage(10);
       if (
         (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
         (openTableData && openTableData.length > 0 && selectedTypes.includes("open_table")) ||
@@ -80,7 +75,12 @@ const RestaurantCards = memo(
           );
         }
 
-        const shuffledRestaurants = mergedRestaurants;
+        // Deterministic shuffle based on restaurant name and ID
+        const shuffledRestaurants = mergedRestaurants.sort((a, b) => {
+          const keyA = (a.name + a.id).toLowerCase();
+          const keyB = (b.name + b.id).toLowerCase();
+          return keyA.localeCompare(keyB);
+        });
 
         const matchedRestaurant = shuffledRestaurants.find((restaurant) => {
           const name = restaurant.name.toLowerCase();
@@ -178,14 +178,6 @@ const RestaurantCards = memo(
           return [...prevSelectedTypes, type];
         }
       });
-    };
-
-    const shuffleArray = (array) => {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
     };
 
     return (
