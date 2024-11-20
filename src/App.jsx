@@ -16,6 +16,7 @@ import RestrauntDetail from "./pages/Restraunts/RestrauntDetailPage";
 import Signup from "./pages/Signup";
 import UserHistory from "./components/AccountLinking/UserHistory";
 import UserStatistics from "./components/AccountLinking/UserStatistics";
+import Landing from "./pages/Landing/Landing";
 
 function App() {
   const location = useLocation();
@@ -28,7 +29,7 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/about" element={<h1>About</h1>} />
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
@@ -46,7 +47,7 @@ function App() {
           <Route path="/account-links" element={<AccountLinks />} />
         </Route>
       </Routes>
-      {showFooter && <Footer />}
+      {/* {showFooter && <Footer />} */}
     </>
   );
 }

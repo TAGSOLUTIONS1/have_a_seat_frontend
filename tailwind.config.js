@@ -18,6 +18,10 @@ module.exports = {
     extend: {
       colors: {
         border: "hsl(var(--border))",
+        plum: "#9235E2",
+        lightGrey: "#F5EDFC",
+        shipGrey: "#39353C",
+        frenchPink: "#E5D2F1",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -71,7 +75,7 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       screens: {
-        'small': '400px',
+        small: "400px",
       },
     },
   },
