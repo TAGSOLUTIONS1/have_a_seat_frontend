@@ -2,14 +2,15 @@ import React from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { testimonials } from "../constants";
+import { testimonials } from "../../../components/constants/constants";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import TestiMonialCard from "./TestiMonialCard";
+import plate from "/assets/plate.png";
 
 const CustomPrevArrow = ({ onClick }) => (
   <div
     onClick={onClick}
-    className="absolute left-[-40px] top-1/2 transform -translate-y-1/2 bg-purple-600 rounded-full w-16 h-16 flex items-center justify-center cursor-pointer shadow-lg z-10"
+    className="absolute left-[-40px] top-1/2 transform -translate-y-1/2 bg-plum rounded-full w-16 h-16 flex items-center justify-center cursor-pointer shadow-lg z-10"
   >
     <ChevronLeft className="text-white text-2xl" />
   </div>
@@ -18,7 +19,7 @@ const CustomPrevArrow = ({ onClick }) => (
 const CustomNextArrow = ({ onClick }) => (
   <div
     onClick={onClick}
-    className="absolute right-[-40px] top-1/2 transform -translate-y-1/2 bg-purple-600 rounded-full w-16 h-16 flex items-center justify-center cursor-pointer shadow-lg z-10"
+    className="absolute right-[-40px] top-1/2 transform -translate-y-1/2 bg-plum rounded-full w-16 h-16 flex items-center justify-center cursor-pointer shadow-lg z-10"
   >
     <ChevronRight className="text-white text-2xl" />
   </div>
@@ -34,7 +35,12 @@ const settings = {
 };
 export default function Testimonials() {
   return (
-    <div className="p-[120px] bg-lightGrey">
+    <div className="p-[120px] relative bg-lightGrey">
+      {/* <img
+        src={plate}
+        alt=""
+        className="absolute top-[-35%] left-1/2 transform -translate-x-1/2 "
+      /> */}
       {/* content */}
       <div className="max-w-[640px] m-auto flex flex-col gap-6">
         <h1 className="text-[44px] font-bold text-plum text-center">
@@ -45,12 +51,15 @@ export default function Testimonials() {
           service. Guests appreciate the seamless access to a wide array of
           dining options.
         </p>
+        <div className="pr-20">
+          <div className="w-[100px]  m-auto  border-2 border-shipGrey"></div>
+        </div>
       </div>
       <div>
         <div className="slider-container max-w-[880px] m-auto py-[60px]">
           <Slider {...settings}>
             {testimonials.map((test) => (
-              <TestiMonialCard test={test} />
+              <TestiMonialCard test={test} key={test} />
             ))}
           </Slider>
         </div>
@@ -58,12 +67,3 @@ export default function Testimonials() {
     </div>
   );
 }
-
-// {/* Image Section */}
-// <div className="flex-shrink-0 border border-red-50">
-// <img
-//   src={testImg}
-//   alt="User"
-//   className="rounded-full h-[290px] w-[290px] object-cover"
-// />
-// </div>

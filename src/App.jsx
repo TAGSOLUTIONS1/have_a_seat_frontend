@@ -27,7 +27,6 @@ function App() {
     location.pathname !== "/resetpassword";
   return (
     <>
-      <Navbar />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/about" element={<h1>About</h1>} />

@@ -1,5 +1,8 @@
 import React from "react";
-import { hotels, resturantsList } from "../constants";
+import {
+  hotels,
+  resturantsList,
+} from "../../../components/constants/constants";
 import tick from "/assets/tick.png";
 import plate from "/assets/plate.png";
 
@@ -9,7 +12,7 @@ function Restaurants() {
       <div className="py-[10rem] px-[75px]">
         <div className="flex text-white gap-[100px]">
           {/* // images listing */}
-          <div className="flex flex-col gap-[60px] ">
+          <div className="flex flex-col gap-[60px] max-h-[1200px] overflow-y-auto no-scrollbar">
             {hotels.map((hotel) => (
               <img
                 src={hotel}

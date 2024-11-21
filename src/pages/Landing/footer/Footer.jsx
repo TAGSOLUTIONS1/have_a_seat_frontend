@@ -1,4 +1,7 @@
-import { footerLinks, socialMediaLinks } from "../constants";
+import {
+  footerLinks,
+  socialMediaLinks,
+} from "../../../components/constants/constants";
 import logo from "/assets/tags-logo.png";
 function Footer() {
   return (
@@ -31,7 +34,7 @@ function Footer() {
           <li>Social media</li>
           <li className="flex gap-[22px] ">
             {socialMediaLinks.map((link) => (
-              <img src={link} className="" />
+              <img src={link} key={link} />
             ))}
           </li>
         </ul>

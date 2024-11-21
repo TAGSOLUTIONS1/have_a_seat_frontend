@@ -1,11 +1,11 @@
 import bookingVideo from "/assets/videos/bookingVideo.mp4";
 function BookRestaurant() {
   return (
-    <div className="relative w-full h-[900px] border-2 border-gray-300 shadow-lg">
+    <div className="relative w-full h-[900px]  ">
       {/* Video Background */}
       <video
         className="absolute top-0 left-0 w-full h-full object-cover"
-        src={bookingVideo} // Replace with your actual video path
+        src={bookingVideo}
         autoPlay
         loop
         muted

@@ -5,15 +5,19 @@ import Restaurants from "./Restaurants/Restaurants";
 import BookRestaurant from "./BookResturant/BookRestaurant";
 import BestDeals from "./bestDeals/BestDeals";
 import Testimonials from "./testimonials/Testimonials";
+import WhyChooseUs from "./whyChooseUs/WhyChooseUs";
+import Hero from "./HeroSection/Hero";
 
 export default function Landing() {
   return (
     <div>
+      <Hero />
+      <WhyChooseUs />
       <Restaurants />
       <Stats />
       <BestDeals />
-      <BookRestaurant />
       <Testimonials />
+      <BookRestaurant />
       <Footer />
     </div>
   );
