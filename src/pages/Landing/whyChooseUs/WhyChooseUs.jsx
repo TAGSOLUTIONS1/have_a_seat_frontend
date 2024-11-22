@@ -4,7 +4,9 @@ const WhyChooseUs = () => {
     <section className="bg-lightGrey p-20">
       <div className="max-w-[1200px] mx-auto text-center">
         <div className="flex flex-col gap-7">
-          <h2 className="text-plum text-[44px] font-bold">Why choose us</h2>
+          <h2 className="text-plum text-[30px] md:text-[44px] font-bold">
+            Why choose us
+          </h2>
           <p className="text-shipGrey text-xl ">
             From search to booking, we make reserving a table quick and
             effortless

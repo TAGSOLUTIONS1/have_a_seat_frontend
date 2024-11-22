@@ -10,7 +10,7 @@ import plate from "/assets/plate.png";
 const CustomPrevArrow = ({ onClick }) => (
   <div
     onClick={onClick}
-    className="absolute left-[-40px] top-1/2 transform -translate-y-1/2 bg-plum rounded-full w-16 h-16 flex items-center justify-center cursor-pointer shadow-lg z-10"
+    className="absolute left-[10px] md:left-[-1.75rem] top-1/2 transform -translate-y-1/2 bg-plum rounded-full w-5 h-5 md:h-16 md:w-16 flex items-center justify-center cursor-pointer shadow-lg z-10"
   >
     <ChevronLeft className="text-white text-2xl" />
   </div>
@@ -19,7 +19,7 @@ const CustomPrevArrow = ({ onClick }) => (
 const CustomNextArrow = ({ onClick }) => (
   <div
     onClick={onClick}
-    className="absolute right-[-40px] top-1/2 transform -translate-y-1/2 bg-plum rounded-full w-16 h-16 flex items-center justify-center cursor-pointer shadow-lg z-10"
+    className="absolute right-2 md:right-[-1.75rem] top-1/2 transform -translate-y-1/2 bg-plum rounded-full w-5 h-5 md:h-16 md:w-16 flex items-center justify-center cursor-pointer shadow-lg z-10"
   >
     <ChevronRight className="text-white text-2xl" />
   </div>
@@ -35,24 +35,24 @@ const settings = {
 };
 export default function Testimonials() {
   return (
-    <div className="p-[120px] relative bg-lightGrey">
+    <div className="md:p-[120px] relative bg-lightGrey">
       {/* <img
         src={plate}
         alt=""
         className="absolute top-[-35%] left-1/2 transform -translate-x-1/2 "
       /> */}
       {/* content */}
-      <div className="max-w-[640px] m-auto flex flex-col gap-6">
-        <h1 className="text-[44px] font-bold text-plum text-center">
+      <div className="w-full md:max-w-[640px] m-auto flex flex-col gap-6">
+        <h1 className="text-[34px] w-[85%] md:w-full m-auto md:text-[44px] font-bold text-plum text-center">
           Stories from Our Guests
         </h1>
-        <p className="text-[19px] text-shipGrey text-center max-w-[570px]">
+        <p className="text-lg w-[85%] md:w-full m-auto md:text-[19px] text-shipGrey text-center max-w-[570px]">
           Our consistent positive feedback highlights the quality of our
           service. Guests appreciate the seamless access to a wide array of
           dining options.
         </p>
-        <div className="pr-20">
-          <div className="w-[100px]  m-auto  border-2 border-shipGrey"></div>
+        <div className="w-[80%] md:w-full m-auto ">
+          <div className="w-[100px]  m-auto  border-2 border-plum"></div>
         </div>
       </div>
       <div>

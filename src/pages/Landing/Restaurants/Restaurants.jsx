@@ -9,10 +9,10 @@ import plate from "/assets/plate.png";
 function Restaurants() {
   return (
     <div className="bg-shipGrey relative">
-      <div className="py-[10rem] px-[75px]">
-        <div className="flex text-white gap-[100px]">
+      <div className="pb-[15rem] pt-[5rem] md:py-[10rem] px-5 md:px-[75px]">
+        <div className=" w-[90%] m-auto md:w-full flex flex-col-reverse md:flex-row text-white gap-[100px]">
           {/* // images listing */}
-          <div className="flex flex-col gap-[60px] max-h-[1200px] overflow-y-auto no-scrollbar">
+          <div className="flex flex-col  gap-[60px] max-h-[1200px] overflow-y-auto no-scrollbar">
             {hotels.map((hotel) => (
               <img
                 src={hotel}
@@ -23,7 +23,7 @@ function Restaurants() {
           </div>
           {/* content */}
           <div className="max-w-[555px] relative flex flex-col gap-9">
-            <div className="text-[4.25rem] font-extrabold">
+            <div className=" text-[2.75rem] md:text-[4.25rem] font-extrabold">
               Discover Dining Delights Across Top Platforms
             </div>
             <div>
@@ -53,7 +53,7 @@ function Restaurants() {
       <img
         src={plate}
         alt="food plate"
-        className="absolute bottom-[-10rem] right-[250px]"
+        className="absolute bottom-[-12rem] md:right-[250px]"
       />
     </div>
   );

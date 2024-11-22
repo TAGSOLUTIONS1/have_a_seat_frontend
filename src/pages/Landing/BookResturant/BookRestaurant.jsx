@@ -1,7 +1,7 @@
 import bookingVideo from "/assets/videos/bookingVideo.mp4";
 function BookRestaurant() {
   return (
-    <div className="relative w-full h-[900px]  ">
+    <div className=" hidden md:block relative w-full h-[900px]  ">
       {/* Video Background */}
       <video
         className="absolute top-0 left-0 w-full h-full object-cover"
