@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import bookingVideo from "/assets/videos/bookingVideo.mp4";
+import { Phone } from "lucide-react";
 function BookRestaurant() {
   return (
     <div className=" hidden md:block relative w-full h-[900px]  ">
@@ -21,9 +23,18 @@ function BookRestaurant() {
             Explore the best restaurants, enjoy exclusive deals, and book your
             next dining experience with just a few clicks.
           </p>
-          <button className=" max-w-[205px] py-3 px-10 text-center cursor-pointer rounded-lg bg-lightGrey text-plum font-bold rounde">
-            Book a Table
-          </button>
+          <div className="flex items-center gap-10">
+            <Link
+              to="/reservation"
+              className=" max-w-[205px] py-3 px-10 text-center cursor-pointer rounded-lg bg-lightGrey text-plum hover:bg-plum hover:text-lightGrey font-bold rounde"
+            >
+              Book a Table
+            </Link>
+            <Link className="flex gap-3 text-white">
+              <Phone />
+              <span>0900 7 8 6 0 1</span>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

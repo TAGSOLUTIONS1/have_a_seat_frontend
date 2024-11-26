@@ -1,11 +1,10 @@
 import React from "react";
-import {
-  hotels,
-  resturantsList,
-} from "../../../components/constants/constants";
+import { hotels, resturantsList } from "@/components/constants/constants";
 import tick from "/assets/tick.png";
 import plate from "/assets/plate.png";
+import cal from "/assets/calender.png";
 
+import { Link } from "react-router-dom";
 function Restaurants() {
   return (
     <div className="bg-shipGrey relative">
@@ -43,9 +42,13 @@ function Restaurants() {
             </ul>
 
             <div>
-              <button className="bg-frenchPink text-plum text-lg font-bold rounded-lg py-3 px-9">
+              <Link
+                to="/reservation"
+                className="bg-frenchPink text-plum items-center max-w-fit flex gap-2 text-lg font-bold rounded-lg py-3 px-9 hover:bg-[#d5ccdb]"
+              >
+                <img src={cal} alt="calender icon" className="h-5 w-5" />
                 Reserve Today
-              </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -1,20 +1,26 @@
 import {
   footerLinks,
   socialMediaLinks,
-} from "../../../components/constants/constants";
-import logo from "/assets/tags-logo.png";
+} from "@/components/constants/constants";
+import { Link } from "react-router-dom";
+
 function Footer() {
   return (
-    <div>
+    <div id="contact">
       {/* web*/}
       <div className=" hidden md:flex px-5 md:px-[75px] py-24  flex-col md:flex-row justify-between">
         <div></div>
         <ul className="text-plum text-lg flex flex-col gap-[1.25rem]">
           <li className="font-bold">+1 (860) 960-0316</li>
-          <li>contact@haveaseaton.com</li>
-          <li className="text-white rounded-lg bg-plum py-3 px-10 text-center cursor-pointer">
-            Book a Table
+          <li>
+            <a href="mailto:contact@haveaseaton.com">contact@haveaseaton.com</a>
           </li>
+          <Link
+            to="reservation"
+            className="text-white rounded-lg bg-plum py-3 px-10 text-center cursor-pointer"
+          >
+            Book a Table
+          </Link>
         </ul>
         <ul className="flex flex-col gap-[1.25rem]">
           {footerLinks.map((link) => (
@@ -29,17 +35,20 @@ function Footer() {
           <li className="text-plum text-lg">Privacy Policy</li>
         </ul>
 
-        {/* social media */}
+        {/* social media web*/}
         <ul className=" text-plum text-lg flex flex-col gap-[1.25rem]">
           <li>Social media</li>
-          <li className="flex gap-[22px] ">
+
+          <div className="flex gap-2">
             {socialMediaLinks.map((link) => (
-              <img src={link} key={link} />
+              <Link key={link} to={link.link} className="text-plum text-lg">
+                {link.icon}
+              </Link>
             ))}
-          </li>
+          </div>
         </ul>
       </div>
-      {/* mobile */}
+      {/* social media mobile */}
       <div className="md:hidden px-5 md:px-[75px] py-24 flex flex-col md:flex-row justify-between">
         <div></div>
 
@@ -55,18 +64,28 @@ function Footer() {
 
         <ul className="text-plum text-lg flex my-5 flex-col gap-[1.25rem]">
           <li className="font-bold">+1 (860) 960-0316</li>
-          <li>contact@haveaseaton.com</li>
-          <li className="text-white rounded-lg w-[65%] bg-plum py-3 px-10 text-center cursor-pointer">
-            Book a Table
+          <li>
+            <a href="mailto:contact@haveaseaton.com">contact@haveaseaton.com</a>
           </li>
+          <Link className="text-white rounded-lg w-[65%] bg-plum py-3 px-10 text-center cursor-pointer">
+            Book a Table
+          </Link>
         </ul>
 
         {/* social media */}
         <ul className=" text-plum text-lg flex flex-col gap-[1.25rem]">
           <li>Social media</li>
           <li className="flex gap-[22px] ">
-            {socialMediaLinks.map((link) => (
-              <img src={link} key={link} />
+            {socialMediaLinks.map((item, index) => (
+              <a
+                key={item}
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center"
+              >
+                {item.icon}
+              </a>
             ))}
           </li>
         </ul>

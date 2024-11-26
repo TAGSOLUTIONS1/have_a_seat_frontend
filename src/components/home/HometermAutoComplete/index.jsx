@@ -14,11 +14,14 @@ const groupByType = (suggestions) => {
 const fetchSuggestions = async (term, setSuggestions) => {
   try {
     const response = await axios.get(
-      `https://3.101.103.14/api/v1/opentable/autocomplete?term=${encodeURIComponent(term)}`
+      `https://3.101.103.14/api/v1/opentable/autocomplete?term=${encodeURIComponent(
+        term
+      )}`
     );
-    const results = response.data.data.data.autocomplete.autocompleteResults.filter(
-      (item) => item.type === "Restaurant" || item.type === "Cuisine"
-    );
+    const results =
+      response.data.data.data.autocomplete.autocompleteResults.filter(
+        (item) => item.type === "Restaurant" || item.type === "Cuisine"
+      );
     setSuggestions(results);
   } catch (error) {
     console.error("Error fetching autocomplete data:", error);
@@ -26,12 +29,12 @@ const fetchSuggestions = async (term, setSuggestions) => {
 };
 
 const TermApiAuto = ({ getTermData, term: initialTerm }) => {
-  const [term, setTerm] = useState(initialTerm || ""); 
+  const [term, setTerm] = useState(initialTerm || "");
   const [suggestions, setSuggestions] = useState([]);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
 
   useEffect(() => {
-    setTerm(initialTerm || ""); 
+    setTerm(initialTerm || "");
   }, [initialTerm]);
 
   const handleTermChange = (e) => {
@@ -74,7 +77,7 @@ const TermApiAuto = ({ getTermData, term: initialTerm }) => {
         onChange={handleTermChange}
         onBlur={handleBlur}
         placeholder="Restaurant Name, Cuisine"
-        className="w-full p-3 ml-2 mr-2 rounded focus:outline-none"
+        className="w-full p-3 ml-2 mr-2 rounded border-none focus:outline-none bg-transparent text-plum"
       />
       {suggestions.length > 0 && (
         <div className="absolute bg-white border border-gray-200 mt-1 w-full rounded-lg shadow-lg z-10 left-0 max-h-80 overflow-y-auto">
@@ -85,7 +88,7 @@ const TermApiAuto = ({ getTermData, term: initialTerm }) => {
 
               return (
                 <li key={type}>
-                  <div className="flex items-center p-2">  
+                  <div className="flex items-center p-2">
                     <img
                       src={`/assets/${type.toLowerCase()}-logo.png`}
                       alt={`${type} Logo`}
@@ -103,7 +106,8 @@ const TermApiAuto = ({ getTermData, term: initialTerm }) => {
                         <div className="font-semibold">{suggestion.name}</div>
                         {type === "Restaurant" && (
                           <div className="text-xs text-gray-600">
-                            {suggestion.neighborhoodName}, {suggestion.macroName}
+                            {suggestion.neighborhoodName},{" "}
+                            {suggestion.macroName}
                           </div>
                         )}
                       </li>

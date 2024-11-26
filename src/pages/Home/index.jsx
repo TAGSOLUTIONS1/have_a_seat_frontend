@@ -22,12 +22,14 @@ const Home = () => {
                 Satisfy Your Cravings
               </h1>
               <p className="subtitle text-3xl md:text-5xl font-bold mt-1">
-              Top-tier Restaurants, Enhanced  <br /> with Innovative Features.
+                Top-tier Restaurants, Enhanced <br /> with Innovative Features.
               </p>
               <p className="description text-base font-bold mt-1 hidden md:block">
                 Discover and book at the world's largest collection
-                <br className="hidden md:block lg:block" /> of restaurants with ease. From local gems to fine dining,
-                <br className="hidden md:block lg:block" /> explore endless global options and reserve your perfect table in seconds.
+                <br className="hidden md:block lg:block" /> of restaurants with
+                ease. From local gems to fine dining,
+                <br className="hidden md:block lg:block" /> explore endless
+                global options and reserve your perfect table in seconds.
               </p>
               <SearchLocation />
             </div>

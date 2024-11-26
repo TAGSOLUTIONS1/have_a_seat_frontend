@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const LocationTracker = ({ onLocationUpdate }) => {
-  const [currentState, setCurrentState] = useState('');
-  const [initialState, setInitialState] = useState(''); 
+  const [currentState, setCurrentState] = useState("");
+  const [initialState, setInitialState] = useState("");
   const [isStateUpdated, setIsStateUpdated] = useState(false);
-  const [isLocationFetched, setIsLocationFetched] = useState(false); 
+  const [isLocationFetched, setIsLocationFetched] = useState(false);
 
   useEffect(() => {
     getInitialState();
@@ -17,15 +17,15 @@ const LocationTracker = ({ onLocationUpdate }) => {
       );
       const { latitude, longitude } = position.coords;
       const state = await getStateFromApi(latitude, longitude);
-      setInitialState(state); 
+      setInitialState(state);
       setIsLocationFetched(true);
     } catch (error) {
-      console.error('Error getting initial state:', error);
+      console.error("Error getting initial state:", error);
     }
   };
 
   const getCurrentLocation = async () => {
-    if (!isLocationFetched) return; 
+    if (!isLocationFetched) return;
 
     try {
       const position = await new Promise((resolve, reject) =>
@@ -33,11 +33,11 @@ const LocationTracker = ({ onLocationUpdate }) => {
       );
       const { latitude, longitude } = position.coords;
       const state = await getStateFromApi(latitude, longitude);
-      setCurrentState(state); 
+      setCurrentState(state);
       setIsStateUpdated(true);
-      onLocationUpdate(state); 
+      onLocationUpdate(state);
     } catch (error) {
-      console.error('Error getting current location:', error);
+      console.error("Error getting current location:", error);
     }
   };
 
@@ -46,7 +46,7 @@ const LocationTracker = ({ onLocationUpdate }) => {
       `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
     );
     const data = await response.json();
-    return data.address.state || "Unknown Location"; 
+    return data.address.state || "Unknown Location";
   };
 
   return (
@@ -62,11 +62,11 @@ const LocationTracker = ({ onLocationUpdate }) => {
         id="location-action"
         className="text-red-500 hover:text-red-700 text-xs md:text-sm lg:text-sm"
         onClick={(e) => {
-          e.preventDefault(); 
-          getCurrentLocation(); 
+          e.preventDefault();
+          getCurrentLocation();
         }}
       >
-        {isStateUpdated ? 'Update Location' : 'Get Current Location'}
+        {isStateUpdated ? "Update Location" : "Get Current Location"}
       </a>
     </div>
   );

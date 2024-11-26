@@ -90,3 +90,23 @@ const getCoordinates = async (locationName) => {
 };
 
 export default getCoordinates;
+
+export const getStateFromApi = async (lat, lon) => {
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+  );
+  const res = await response.json();
+  const result = {
+    city: res.address.district,
+    state: res.address.state,
+  };
+  return result || "Unknown Location";
+};
+
+export const getCurrentDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};

@@ -1,22 +1,30 @@
-import fb from "/assets/fb.png";
-import ig from "/assets/ig.png";
-import twt from "/assets/twt.png";
-import yt from "/assets/yt.png";
-
 import resy from "/assets/resy.png";
 import eatable from "/assets/eatable.png";
 import open1 from "/assets/opentable-1.png";
 import open2 from "/assets/opentable-2.png";
 import yelp from "/assets/yelp.png";
 import testImg from "/assets/testi-img.jpg";
-
 import pizza from "/assets/pizza.png";
 import search from "/assets/search.png";
 import calender from "/assets/calender.png";
 import arrows from "/assets/arrows.png";
 
 export const footerLinks = ["Home", "About", "Register", "Links"];
-export const socialMediaLinks = [fb, ig, twt, yt];
+import { Linkedin, Instagram, Facebook } from "lucide-react";
+export const socialMediaLinks = [
+  {
+    icon: <Instagram />,
+    link: "https://www.instagram.com/haveaseat.us/",
+  },
+  {
+    icon: <Facebook />,
+    link: "https://www.facebook.com/profile.php?id=61565129417366",
+  },
+  {
+    icon: <Linkedin />,
+    link: "https://www.linkedin.com/company/have-a-seat-official/ ",
+  },
+];
 export const stats = [
   {
     heading: "Cuisine Types",
@@ -92,7 +100,12 @@ export const whyUs = [
   },
 ];
 
-export const navLinks = ["Home", "About", "Menu", "Contact"];
+export const navLinks = [
+  { to: "home", label: "Home" },
+  { to: "about", label: "About" },
+  { to: "why", label: "Why Us" },
+  { to: "contact", label: "Contact" },
+];
 
 export const bestDeals = [
   {

@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 import GeoApiAuto from "../HomeAutoComplete";
 import TermApiAuto from "../HometermAutoComplete";
 import LocationTracker from "@/components/LocationTracker";
-import { useToast } from "@/components/ui/use-toast"; 
+import { useToast } from "@/components/ui/use-toast";
 
 const getCurrentDate = () => {
   const today = new Date();
   const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
@@ -24,16 +24,16 @@ const SearchLocation = () => {
     reservation_date: getCurrentDate(),
     date: getCurrentDate(),
     reservation_time: "19:00",
-    location: '',
-    term: '',
+    location: "",
+    term: "",
   });
-  
+
   const [error, setError] = useState(null);
 
   const getLocationData = (value) => {
     setFormData((prevData) => {
       const updatedData = { ...prevData, location: value };
-      localStorage.setItem('searchFormData', JSON.stringify(updatedData)); // Store updated location in local storage
+      localStorage.setItem("searchFormData", JSON.stringify(updatedData)); // Store updated location in local storage
       return updatedData;
     });
   };
@@ -49,13 +49,13 @@ const SearchLocation = () => {
       });
       return;
     }
-    
+
     if (!formData.location) {
       getCurrentLocation();
       return;
     }
-    
-    localStorage.setItem('searchFormData', JSON.stringify(formData)); // Store form data before navigating
+
+    localStorage.setItem("searchFormData", JSON.stringify(formData)); // Store form data before navigating
     const route = `/restraunts?data=${encodeURIComponent(
       JSON.stringify(formData)
     )}`;
@@ -65,7 +65,7 @@ const SearchLocation = () => {
   const handleTermChange = (e) => {
     setFormData((prevData) => {
       const updatedData = { ...prevData, term: e };
-      localStorage.setItem('searchFormData', JSON.stringify(updatedData)); // Store updated term in local storage
+      localStorage.setItem("searchFormData", JSON.stringify(updatedData)); // Store updated term in local storage
       return updatedData;
     });
   };
@@ -73,7 +73,7 @@ const SearchLocation = () => {
   const handleLocationUpdate = (location) => {
     setFormData((prevData) => {
       const updatedData = { ...prevData, location };
-      localStorage.setItem('searchFormData', JSON.stringify(updatedData)); // Store updated location in local storage
+      localStorage.setItem("searchFormData", JSON.stringify(updatedData)); // Store updated location in local storage
       return updatedData;
     });
   };
@@ -87,8 +87,8 @@ const SearchLocation = () => {
               error ? "border-red-500" : "border-gray-200"
             } focus:border-gray-200 focus:outline-none`}
           >
-            <GeoApiAuto 
-              getLocationData={getLocationData} 
+            <GeoApiAuto
+              getLocationData={getLocationData}
               location={formData.location}
             />
           </div>

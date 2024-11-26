@@ -35,7 +35,7 @@ const settings = {
 };
 export default function Testimonials() {
   return (
-    <div className="md:p-[120px] relative bg-lightGrey">
+    <div className="md:p-[120px] relative bg-lightGrey" id="about">
       {/* <img
         src={plate}
         alt=""

@@ -6081,8 +6081,8 @@ export const ResyRestrauntDetail = {
               privacy_policy: null,
             },
             service_types: {
-              "1": {},
-              "2": {},
+              1: {},
+              2: {},
             },
             top: false,
             ticket: {
@@ -6120,180 +6120,120 @@ export const ResyRestrauntDetail = {
               urls: {
                 "60d71046996774cb9354a30b19f38abeb2b13102": {
                   "1:1": {
-                    "200":
-                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/200",
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/1600",
+                    200: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/200",
+                    400: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/400",
+                    800: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/800",
+                    1600: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/1600",
                   },
                   "4:3": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/1600",
+                    400: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/400",
+                    800: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/800",
+                    1600: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/4:3/1600",
                   },
                   "16:9": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/1600",
+                    400: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/400",
+                    800: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/800",
+                    1600: "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/1600",
                   },
                 },
                 "1647d0c219d56a7eb0bb02d518670f997cc95938": {
                   "1:1": {
-                    "200":
-                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/200",
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/1600",
+                    200: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/200",
+                    400: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/400",
+                    800: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/800",
+                    1600: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/1600",
                   },
                   "4:3": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/1600",
+                    400: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/400",
+                    800: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/800",
+                    1600: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/4:3/1600",
                   },
                   "16:9": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/1600",
+                    400: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/400",
+                    800: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/800",
+                    1600: "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/1600",
                   },
                 },
                 "950ed5d619d35bbc9aea7dfe447976420076d3d9": {
                   "1:1": {
-                    "200":
-                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/200",
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/1600",
+                    200: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/200",
+                    400: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/400",
+                    800: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/800",
+                    1600: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/1600",
                   },
                   "4:3": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/1600",
+                    400: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/400",
+                    800: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/800",
+                    1600: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/4:3/1600",
                   },
                   "16:9": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/1600",
+                    400: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/400",
+                    800: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/800",
+                    1600: "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/1600",
                   },
                 },
                 "04baa62abd991dcfc307afe38de6e3333c90bfd1": {
                   "1:1": {
-                    "200":
-                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/200",
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/1600",
+                    200: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/200",
+                    400: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/400",
+                    800: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/800",
+                    1600: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/1600",
                   },
                   "4:3": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/1600",
+                    400: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/400",
+                    800: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/800",
+                    1600: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/4:3/1600",
                   },
                   "16:9": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/1600",
+                    400: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/400",
+                    800: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/800",
+                    1600: "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/1600",
                   },
                 },
                 f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0: {
                   "1:1": {
-                    "200":
-                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/200",
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/1600",
+                    200: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/200",
+                    400: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/400",
+                    800: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/800",
+                    1600: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/1600",
                   },
                   "4:3": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/1600",
+                    400: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/400",
+                    800: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/800",
+                    1600: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/4:3/1600",
                   },
                   "16:9": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/1600",
+                    400: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/400",
+                    800: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/800",
+                    1600: "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/1600",
                   },
                 },
                 fe268560dd3b55140953749693ebf315458fe86c: {
                   "1:1": {
-                    "200":
-                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/200",
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/1600",
+                    200: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/200",
+                    400: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/400",
+                    800: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/800",
+                    1600: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/1600",
                   },
                   "4:3": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/1600",
+                    400: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/400",
+                    800: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/800",
+                    1600: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/4:3/1600",
                   },
                   "16:9": {
-                    "400":
-                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/400",
-                    "800":
-                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/800",
-                    "1600":
-                      "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/1600",
+                    400: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/400",
+                    800: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/800",
+                    1600: "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/1600",
                   },
                 },
               },
               urls_by_resolution: {
                 "60d71046996774cb9354a30b19f38abeb2b13102": {
-                  "200": {
+                  200: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/200",
                   },
-                  "400": {
+                  400: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/400",
                     "4:3":
@@ -6301,7 +6241,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/400",
                   },
-                  "800": {
+                  800: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/800",
                     "4:3":
@@ -6309,7 +6249,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/16:9/800",
                   },
-                  "1600": {
+                  1600: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/60d71046996774cb9354a30b19f38abeb2b13102/jpg/1:1/1600",
                     "4:3":
@@ -6319,11 +6259,11 @@ export const ResyRestrauntDetail = {
                   },
                 },
                 "1647d0c219d56a7eb0bb02d518670f997cc95938": {
-                  "200": {
+                  200: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/200",
                   },
-                  "400": {
+                  400: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/400",
                     "4:3":
@@ -6331,7 +6271,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/400",
                   },
-                  "800": {
+                  800: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/800",
                     "4:3":
@@ -6339,7 +6279,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/16:9/800",
                   },
-                  "1600": {
+                  1600: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/1647d0c219d56a7eb0bb02d518670f997cc95938/jpg/1:1/1600",
                     "4:3":
@@ -6349,11 +6289,11 @@ export const ResyRestrauntDetail = {
                   },
                 },
                 "950ed5d619d35bbc9aea7dfe447976420076d3d9": {
-                  "200": {
+                  200: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/200",
                   },
-                  "400": {
+                  400: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/400",
                     "4:3":
@@ -6361,7 +6301,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/400",
                   },
-                  "800": {
+                  800: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/800",
                     "4:3":
@@ -6369,7 +6309,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/16:9/800",
                   },
-                  "1600": {
+                  1600: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/950ed5d619d35bbc9aea7dfe447976420076d3d9/jpg/1:1/1600",
                     "4:3":
@@ -6379,11 +6319,11 @@ export const ResyRestrauntDetail = {
                   },
                 },
                 "04baa62abd991dcfc307afe38de6e3333c90bfd1": {
-                  "200": {
+                  200: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/200",
                   },
-                  "400": {
+                  400: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/400",
                     "4:3":
@@ -6391,7 +6331,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/400",
                   },
-                  "800": {
+                  800: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/800",
                     "4:3":
@@ -6399,7 +6339,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/16:9/800",
                   },
-                  "1600": {
+                  1600: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/04baa62abd991dcfc307afe38de6e3333c90bfd1/jpg/1:1/1600",
                     "4:3":
@@ -6409,11 +6349,11 @@ export const ResyRestrauntDetail = {
                   },
                 },
                 f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0: {
-                  "200": {
+                  200: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/200",
                   },
-                  "400": {
+                  400: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/400",
                     "4:3":
@@ -6421,7 +6361,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/400",
                   },
-                  "800": {
+                  800: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/800",
                     "4:3":
@@ -6429,7 +6369,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/16:9/800",
                   },
-                  "1600": {
+                  1600: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/f19ca66a4bcd8a9566692d04534f3ba9ac2f97b0/jpg/1:1/1600",
                     "4:3":
@@ -6439,11 +6379,11 @@ export const ResyRestrauntDetail = {
                   },
                 },
                 fe268560dd3b55140953749693ebf315458fe86c: {
-                  "200": {
+                  200: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/200",
                   },
-                  "400": {
+                  400: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/400",
                     "4:3":
@@ -6451,7 +6391,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/400",
                   },
-                  "800": {
+                  800: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/800",
                     "4:3":
@@ -6459,7 +6399,7 @@ export const ResyRestrauntDetail = {
                     "16:9":
                       "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/16:9/800",
                   },
-                  "1600": {
+                  1600: {
                     "1:1":
                       "https://image.resy.com/3/003/2/36899/fe268560dd3b55140953749693ebf315458fe86c/jpg/1:1/1600",
                     "4:3":
@@ -6479,20 +6419,20 @@ export const ResyRestrauntDetail = {
               ],
               aspect_ratios: {
                 "1:1": {
-                  "200": "200x200",
-                  "400": "400x400",
-                  "800": "800x800",
-                  "1600": "1600x1600",
+                  200: "200x200",
+                  400: "400x400",
+                  800: "800x800",
+                  1600: "1600x1600",
                 },
                 "4:3": {
-                  "400": "400x300",
-                  "800": "800x600",
-                  "1600": "1600x1200",
+                  400: "400x300",
+                  800: "800x600",
+                  1600: "1600x1200",
                 },
                 "16:9": {
-                  "400": "400x225",
-                  "800": "800x450",
-                  "1600": "1600x900",
+                  400: "400x225",
+                  800: "800x450",
+                  1600: "1600x900",
                 },
               },
             },
@@ -6553,7 +6493,7 @@ export const ResyRestrauntDetail = {
             events: [],
           },
           templates: {
-            "897389": {
+            897389: {
               is_paid: false,
               venue_share: null,
               restriction_id: null,
@@ -6677,7 +6617,7 @@ export const ResyRestrauntDetail = {
               item_ids: [],
               menu_ids: [],
             },
-            "900633": {
+            900633: {
               is_paid: true,
               venue_share: null,
               restriction_id: null,
@@ -6801,7 +6741,7 @@ export const ResyRestrauntDetail = {
               item_ids: [],
               menu_ids: [],
             },
-            "900634": {
+            900634: {
               is_paid: true,
               venue_share: null,
               restriction_id: null,

@@ -12,8 +12,7 @@ const GeoApiAuto = ({ getLocationData, location }) => {
     getLocationData(value.properties?.formatted);
   };
 
-  const onSuggestionChange = (value) => {
-  };
+  const onSuggestionChange = (value) => {};
 
   const handleChange = (value) => {
     getLocationData(value);
@@ -26,10 +25,10 @@ const GeoApiAuto = ({ getLocationData, location }) => {
         suggestionsChange={onSuggestionChange}
         onUserInput={handleChange}
         placeholder="Enter location"
-        className="geoapify-autocomplete-input"
-        listClassName="geoapify-autocomplete-list"
-        itemClassName="geoapify-autocomplete-item"
-        value={location} 
+        className="geoapify-autocomplete-input "
+        listClassName="geoapify-autocomplete-items  "
+        itemClassName="geoapify-autocomplete-item "
+        value={location}
       />
     </GeoapifyContext>
   );

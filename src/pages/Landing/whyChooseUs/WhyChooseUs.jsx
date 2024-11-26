@@ -1,10 +1,10 @@
 import { whyUs } from "../../../components/constants/constants";
 const WhyChooseUs = () => {
   return (
-    <section className="bg-lightGrey p-20">
+    <section className="bg-lightGrey p-20 " id="why">
       <div className="max-w-[1200px] mx-auto text-center">
         <div className="flex flex-col gap-7">
-          <h2 className="text-plum text-[30px] md:text-[44px] font-bold">
+          <h2 className="text-plum text-[30px] md:text-[44px]  font-bold">
             Why choose us
           </h2>
           <p className="text-shipGrey text-xl ">

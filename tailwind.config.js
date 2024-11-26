@@ -15,6 +15,10 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      pt: ["PT Sans", "sans - serif"],
+      cabinet: ["Cabinet Grotesk", "sans-serif"],
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
