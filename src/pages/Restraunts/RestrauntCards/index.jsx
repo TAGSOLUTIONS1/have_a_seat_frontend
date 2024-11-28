@@ -1,6 +1,8 @@
 import React, { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchLocationV2 from "@/components/searchLocationRestaurant";
+const initialTypes = ["yelp", "open_table", "resy"];
+
 const RestaurantCards = memo(
   ({
     yelpData,
@@ -15,35 +17,89 @@ const RestaurantCards = memo(
     const [filteredRestaurants, setFilteredRestaurants] = useState([]);
     const [searchTerm, setSearchTerm] = useState(formData?.term || "");
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    const initialTypes = user
-      ? [
-          user?.link_restaurant?.yelp ? "yelp" : null,
-          user?.link_restaurant?.opentable ? "open_table" : null,
-          user?.link_restaurant?.resy ? "resy" : null,
-        ].filter(Boolean)
-      : ["yelp", "open_table", "resy"];
-
     const [selectedTypes, setSelectedTypes] = useState(initialTypes);
 
-    // Function to handle location data
-    const getLocationData = (value) => {
-      console.log("Selected Location:", value);
-    };
+    const user = JSON.parse(localStorage.getItem("user"));
 
-    // Function to handle term data
-    const getTermData = (value) => {
-      console.log("Selected Term:", value);
-      setSearchTerm(value); // Update search term state
-    };
+    // // Function to handle location data
+    // const getLocationData = (value) => {
+    //   console.log("Selected Location:", value);
+    // };
 
+    // // Function to handle term data
+    // const getTermData = (value) => {
+    //   console.log("Selected Term:", value);
+    //   setSearchTerm(value); // Update search term state
+    // };
+
+    // useEffect(() => {
+    //   if (
+    //     (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
+    //     (openTableData &&
+    //       openTableData.length > 0 &&
+    //       selectedTypes.includes("open_table")) ||
+    //     (resyData && resyData.length > 0 && selectedTypes.includes("resy"))
+    //   ) {
+    //     const mergedRestaurants = [];
+
+    //     if (yelpData && selectedTypes.includes("yelp")) {
+    //       mergedRestaurants.push(
+    //         ...yelpData.map((restaurant) => ({
+    //           ...restaurant,
+    //           restraunt_type: "yelp",
+    //         }))
+    //       );
+    //     }
+
+    //     if (openTableData && selectedTypes.includes("open_table")) {
+    //       mergedRestaurants.push(
+    //         ...openTableData.map((restaurant) => ({
+    //           ...restaurant,
+    //           restraunt_type: "open_table",
+    //         }))
+    //       );
+    //     }
+
+    //     if (resyData && selectedTypes.includes("resy")) {
+    //       mergedRestaurants.push(
+    //         ...resyData.map((restaurant) => ({
+    //           ...restaurant,
+    //           restraunt_type: "resy",
+    //         }))
+    //       );
+    //     }
+
+    //     // Deterministic shuffle based on restaurant name and ID
+    //     const shuffledRestaurants = mergedRestaurants.sort((a, b) => {
+    //       const keyA = (a.name + a.id).toLowerCase();
+    //       const keyB = (b.name + b.id).toLowerCase();
+    //       return keyA.localeCompare(keyB);
+    //     });
+
+    //     const matchedRestaurant = shuffledRestaurants.find((restaurant) => {
+    //       const name = restaurant.name.toLowerCase();
+    //       return name === searchTerm.toLowerCase() && searchTerm !== "";
+    //     });
+
+    //     const filteredRestaurants = shuffledRestaurants.filter((restaurant) => {
+    //       const name = restaurant.name.toLowerCase();
+    //       return !(name === searchTerm.toLowerCase() && searchTerm !== "");
+    //     });
+
+    //     if (matchedRestaurant) {
+    //       filteredRestaurants.unshift(matchedRestaurant);
+    //     }
+
+    //     setShuffledRestaurants(filteredRestaurants);
+    //   } else {
+    //     setShuffledRestaurants([]);
+    //   }
+    // }, [yelpData, openTableData, resyData, selectedTypes, searchTerm]);
     useEffect(() => {
       if (
-        (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
-        (openTableData &&
-          openTableData.length > 0 &&
-          selectedTypes.includes("open_table")) ||
-        (resyData && resyData.length > 0 && selectedTypes.includes("resy"))
+        (yelpData && selectedTypes.includes("yelp")) ||
+        (openTableData && selectedTypes.includes("open_table")) ||
+        (resyData && selectedTypes.includes("resy"))
       ) {
         const mergedRestaurants = [];
 
@@ -74,32 +130,17 @@ const RestaurantCards = memo(
           );
         }
 
-        // Deterministic shuffle based on restaurant name and ID
         const shuffledRestaurants = mergedRestaurants.sort((a, b) => {
           const keyA = (a.name + a.id).toLowerCase();
           const keyB = (b.name + b.id).toLowerCase();
           return keyA.localeCompare(keyB);
         });
 
-        const matchedRestaurant = shuffledRestaurants.find((restaurant) => {
-          const name = restaurant.name.toLowerCase();
-          return name === searchTerm.toLowerCase() && searchTerm !== "";
-        });
-
-        const filteredRestaurants = shuffledRestaurants.filter((restaurant) => {
-          const name = restaurant.name.toLowerCase();
-          return !(name === searchTerm.toLowerCase() && searchTerm !== "");
-        });
-
-        if (matchedRestaurant) {
-          filteredRestaurants.unshift(matchedRestaurant);
-        }
-
-        setShuffledRestaurants(filteredRestaurants);
+        setShuffledRestaurants(shuffledRestaurants);
       } else {
         setShuffledRestaurants([]);
       }
-    }, [yelpData, openTableData, resyData, selectedTypes, searchTerm]);
+    }, [yelpData, openTableData, resyData, selectedTypes]);
 
     useEffect(() => {
       let filteredRestaurants = shuffledRestaurants;
@@ -181,23 +222,35 @@ const RestaurantCards = memo(
       shuffledRestaurants,
     ]);
 
+    // const handleCheckboxChange = (type) => {
+    //   setSelectedTypes((prevSelectedTypes) => {
+    //     if (prevSelectedTypes.includes(type)) {
+    //       return prevSelectedTypes.filter((t) => t !== type);
+    //     } else {
+    //       return [...prevSelectedTypes, type];
+    //     }
+    //   });
+    // };
+
     const handleCheckboxChange = (type) => {
       setSelectedTypes((prevSelectedTypes) => {
         if (prevSelectedTypes.includes(type)) {
+          // Remove type when unchecked
           return prevSelectedTypes.filter((t) => t !== type);
         } else {
+          // Add type when checked
           return [...prevSelectedTypes, type];
         }
       });
     };
 
-    const shuffleArray = (array) => {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    };
+    // const shuffleArray = (array) => {
+    //   for (let i = array.length - 1; i > 0; i--) {
+    //     const j = Math.floor(Math.random() * (i + 1));
+    //     [array[i], array[j]] = [array[j], array[i]];
+    //   }
+    //   return array;
+    // };
 
     return (
       <div>

@@ -99,7 +99,7 @@ export default function Hero() {
                   <span> {location.state}</span>
                 </div>
               ) : (
-                <span>{}</span>
+                <span>New,York</span>
               )}
             </div>
             <div className="flex gap-3 items-center">

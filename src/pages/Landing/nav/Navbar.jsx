@@ -7,7 +7,6 @@ import {
   navLinks,
 } from "@/components/constants/constants";
 import { Link, useNavigate } from "react-router-dom";
-import { getCurrentDate } from "@/lib/utils";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

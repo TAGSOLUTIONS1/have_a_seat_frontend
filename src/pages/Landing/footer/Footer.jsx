@@ -1,10 +1,23 @@
 import {
   footerLinks,
+  initialBookingState,
   socialMediaLinks,
 } from "@/components/constants/constants";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function Footer() {
+  const [formData, setFormData] = useState(initialBookingState);
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    localStorage.setItem("searchFormData", JSON.stringify(formData)); // Store form data before navigating
+    const route = `/restraunts?data=${encodeURIComponent(
+      JSON.stringify(formData)
+    )}`;
+
+    navigate(route);
+  };
   return (
     <div id="contact">
       {/* web*/}
@@ -15,12 +28,12 @@ function Footer() {
           <li>
             <a href="mailto:contact@haveaseaton.com">contact@haveaseaton.com</a>
           </li>
-          <Link
-            to="reservation"
+          <button
+            onClick={handleSearch}
             className="text-white rounded-lg bg-plum py-3 px-10 text-center cursor-pointer"
           >
             Book a Table
-          </Link>
+          </button>
         </ul>
         <ul className="flex flex-col gap-[1.25rem]">
           {footerLinks.map((link) => (
@@ -67,9 +80,12 @@ function Footer() {
           <li>
             <a href="mailto:contact@haveaseaton.com">contact@haveaseaton.com</a>
           </li>
-          <Link className="text-white rounded-lg w-[65%] bg-plum py-3 px-10 text-center cursor-pointer">
+          <button
+            onClick={handleSearch}
+            className="text-white rounded-lg w-[65%] bg-plum py-3 px-10 text-center cursor-pointer"
+          >
             Book a Table
-          </Link>
+          </button>
         </ul>
 
         {/* social media */}
@@ -100,10 +116,6 @@ function Footer() {
                 Copyright © HAVE A SEAT. All rights reserved.{" "}
               </p>
             </div>
-            {/* <div className="text-center hidden md:text-left flex items-center justify-center md:justify-between">
-              <span className="block">Powered by </span>
-              <img height="100" width="100" src={logo} alt="" />
-            </div> */}
           </div>
         </div>
       </div>
