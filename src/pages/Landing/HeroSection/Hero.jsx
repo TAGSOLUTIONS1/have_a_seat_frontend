@@ -39,23 +39,25 @@ export default function Hero() {
     if (!formData.location && !formData.term) {
       toast({
         title: "Input Required",
-        description: "Please Enter  a Location",
+        description: "Please Enter a Location",
         status: "error",
         duration: 9000,
         isClosable: true,
       });
       return;
     }
-
-    if (!formData.location) {
-      getCurrentLocation();
-      return;
-    }
+    // if current locaion not choose ny
+    // if (!formData.location) {
+    //   getCurrentLocation();
+    //   return;
+    // }
 
     localStorage.setItem("searchFormData", JSON.stringify(formData)); // Store form data before navigating
     const route = `/restraunts?data=${encodeURIComponent(
       JSON.stringify(formData)
     )}`;
+    console.log("formdata", formData);
+    console.log("route", route);
     navigate(route);
   };
 
@@ -66,7 +68,7 @@ export default function Hero() {
       return updatedData;
     });
   };
-  const getCurrentLocation = () => {};
+
   // const handleLocationUpdate = (location) => {
   //   setFormData((prevData) => {
   //     const updatedData = { ...prevData, location };
@@ -144,8 +146,8 @@ export default function Hero() {
                 </button>
               </div>
 
-              <div className="flex  text-[10px] md:text-base items-center">
-                <p className="max-w-sm m-auto">
+              <div className="flex  text-[10px]  md:text-base items-center">
+                <p className="max-w-sm m-auto font-pt">
                   It looks like you're in
                   <span> {location && location.city.trim().split(" ")[0]}</span>
                   {/* . Not correct? */}
@@ -161,7 +163,7 @@ export default function Hero() {
             </div>
 
             <div>
-              <p className="text-lg md:text-xl max-w-[575px] mx-auto text-center">
+              <p className=" font-pt text-lg md:text-xl max-w-[575px] mx-auto text-center">
                 Search, compare, and reserve at the best restaurants across
                 multiple platforms with ease
               </p>

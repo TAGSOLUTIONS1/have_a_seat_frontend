@@ -40,7 +40,9 @@ const RestaurantCards = memo(
     useEffect(() => {
       if (
         (yelpData && yelpData.length > 0 && selectedTypes.includes("yelp")) ||
-        (openTableData && openTableData.length > 0 && selectedTypes.includes("open_table")) ||
+        (openTableData &&
+          openTableData.length > 0 &&
+          selectedTypes.includes("open_table")) ||
         (resyData && resyData.length > 0 && selectedTypes.includes("resy"))
       ) {
         const mergedRestaurants = [];
@@ -54,10 +56,7 @@ const RestaurantCards = memo(
           );
         }
 
-        if (
-          openTableData &&
-          selectedTypes.includes("open_table")
-        ) {
+        if (openTableData && selectedTypes.includes("open_table")) {
           mergedRestaurants.push(
             ...openTableData.map((restaurant) => ({
               ...restaurant,
@@ -127,7 +126,8 @@ const RestaurantCards = memo(
                 price = null;
             }
           } else {
-            price = restaurant.priceBand?.priceBandId || restaurant.price_range_id;
+            price =
+              restaurant.priceBand?.priceBandId || restaurant.price_range_id;
           }
           return price != null && price == selectedPriceFilter;
         });
@@ -140,7 +140,11 @@ const RestaurantCards = memo(
           if (restaurant.restraunt_type === "yelp") {
             rating = Math.floor(parseFloat(restaurant.rating));
           } else if (restaurant.restraunt_type === "open_table") {
-            rating = Math.floor(parseFloat(restaurant.statistics?.reviews?.ratings?.overall?.rating));
+            rating = Math.floor(
+              parseFloat(
+                restaurant.statistics?.reviews?.ratings?.overall?.rating
+              )
+            );
           } else if (restaurant.restraunt_type === "resy") {
             rating = Math.floor(parseFloat(restaurant.rating?.average));
           }
@@ -152,13 +156,20 @@ const RestaurantCards = memo(
         filteredRestaurants = filteredRestaurants.filter((restaurant) => {
           let cuisine = null;
           if (restaurant.restraunt_type === "yelp") {
-            cuisine = restaurant?.categories?.map((category) => category.title.toLowerCase()).join(", ");
+            cuisine = restaurant?.categories
+              ?.map((category) => category.title.toLowerCase())
+              .join(", ");
           } else if (restaurant.restraunt_type === "open_table") {
             cuisine = restaurant?.primaryCuisine?.name?.toLowerCase();
           } else if (restaurant.restraunt_type === "resy") {
-            cuisine = restaurant?.cuisine?.map((cuisineItem) => cuisineItem.toLowerCase()).join(", ");
+            cuisine = restaurant?.cuisine
+              ?.map((cuisineItem) => cuisineItem.toLowerCase())
+              .join(", ");
           }
-          return cuisine != null && cuisine.includes(selectedCuisineFilter.toLowerCase());
+          return (
+            cuisine != null &&
+            cuisine.includes(selectedCuisineFilter.toLowerCase())
+          );
         });
       }
 
@@ -319,7 +330,10 @@ const RestaurantCards = memo(
                       <div className="flex justify-between text-sm items-center">
                         <div className="flex items-center">
                           <span>
-                            <strong>Booked {data.statistics.recentReservationCount} times today</strong>
+                            <strong>
+                              Booked {data.statistics.recentReservationCount}{" "}
+                              times today
+                            </strong>
                           </span>
                         </div>
                       </div>
@@ -333,7 +347,8 @@ const RestaurantCards = memo(
                           ) : data?.restraunt_type === "open_table" ? (
                             <div>
                               <p>
-                                {data?.address?.line1 && `${data?.address?.line1} `}
+                                {data?.address?.line1 &&
+                                  `${data?.address?.line1} `}
                                 {data?.address?.city}
                               </p>
                             </div>

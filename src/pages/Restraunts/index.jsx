@@ -56,8 +56,15 @@ const Search = () => {
     if (!loading) {
       const fetchDataFromApi = async (apiEndpoint, setData) => {
         let customFormData = formData;
-        if (apiEndpoint === "/api/v1/opentable/get_restaurants" && formData.term) {
-          customFormData = { ...formData, categories: formData.term, term: undefined };
+        if (
+          apiEndpoint === "/api/v1/opentable/get_restaurants" &&
+          formData.term
+        ) {
+          customFormData = {
+            ...formData,
+            categories: formData.term,
+            term: undefined,
+          };
         }
         const data = await fetchData(apiEndpoint, customFormData);
         setData(data);
@@ -100,9 +107,12 @@ const Search = () => {
               </button>
             </div>
             <Filters
-              selectedStarFilter={selectedStarFilter} setSelectedStarFilter={setSelectedStarFilter}
-              selectedPriceFilter={selectedPriceFilter} setSelectedPriceFilter={setSelectedPriceFilter}
-              selectedCuisineFilter={selectedCuisineFilter} setSelectedCuisineFilter={setSelectedCuisineFilter}
+              selectedStarFilter={selectedStarFilter}
+              setSelectedStarFilter={setSelectedStarFilter}
+              selectedPriceFilter={selectedPriceFilter}
+              setSelectedPriceFilter={setSelectedPriceFilter}
+              selectedCuisineFilter={selectedCuisineFilter}
+              setSelectedCuisineFilter={setSelectedCuisineFilter}
             />
           </div>
         )}
@@ -116,11 +126,14 @@ const Search = () => {
                   FILTERS
                 </strong>
               </h1>
-                <Filters
-                  selectedStarFilter={selectedStarFilter} setSelectedStarFilter={setSelectedStarFilter}
-                  selectedPriceFilter={selectedPriceFilter} setSelectedPriceFilter={setSelectedPriceFilter}
-                  selectedCuisineFilter={selectedCuisineFilter} setSelectedCuisineFilter={setSelectedCuisineFilter}
-                />
+              <Filters
+                selectedStarFilter={selectedStarFilter}
+                setSelectedStarFilter={setSelectedStarFilter}
+                selectedPriceFilter={selectedPriceFilter}
+                setSelectedPriceFilter={setSelectedPriceFilter}
+                selectedCuisineFilter={selectedCuisineFilter}
+                setSelectedCuisineFilter={setSelectedCuisineFilter}
+              />
             </div>
 
             <div className="w-full mb-10">

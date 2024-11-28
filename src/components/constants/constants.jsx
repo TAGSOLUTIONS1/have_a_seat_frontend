@@ -8,9 +8,9 @@ import pizza from "/assets/pizza.png";
 import search from "/assets/search.png";
 import calender from "/assets/calender.png";
 import arrows from "/assets/arrows.png";
-
 export const footerLinks = ["Home", "About", "Register", "Links"];
 import { Linkedin, Instagram, Facebook } from "lucide-react";
+import { getCurrentDate } from "@/lib/utils";
 export const socialMediaLinks = [
   {
     icon: <Instagram />,
@@ -27,16 +27,17 @@ export const socialMediaLinks = [
 ];
 export const stats = [
   {
-    heading: "Cuisine Types",
-    stat: "50+",
+    heading: "Restaurants Listed",
+    stat: "1k+",
   },
   {
     heading: "Reservations Monthly",
     stat: "2k+",
   },
+
   {
-    heading: "Restaurants Listed",
-    stat: "60+",
+    heading: "Cuisine Types",
+    stat: "50+",
   },
   {
     heading: "Happy Customers",
@@ -117,3 +118,14 @@ export const bestDeals = [
     text: "Delight your palate unbeatable offers for every appetite.",
   },
 ];
+
+export const initialBookingState = {
+  attributes: "reservation",
+  reservation_covers: 2,
+  persons: 2,
+  reservation_date: getCurrentDate(),
+  date: getCurrentDate(),
+  reservation_time: "19:00",
+  location: "New York, NY, United States of America",
+  term: "",
+};

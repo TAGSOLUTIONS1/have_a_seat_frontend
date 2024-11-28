@@ -18,6 +18,7 @@ module.exports = {
     fontFamily: {
       pt: ["PT Sans", "sans - serif"],
       cabinet: ["Cabinet Grotesk", "sans-serif"],
+      inter: ["Inter", "sans-serif"],
     },
     extend: {
       colors: {

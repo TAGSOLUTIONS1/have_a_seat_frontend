@@ -42,7 +42,7 @@ export default function Testimonials() {
         className="absolute top-[-35%] left-1/2 transform -translate-x-1/2 "
       /> */}
       {/* content */}
-      <div className="w-full md:max-w-[640px] m-auto flex flex-col gap-6">
+      <div className="w-full md:max-w-[640px] m-auto flex font-inter flex-col gap-6">
         <h1 className="text-[34px] w-[85%] md:w-full m-auto md:text-[44px] font-bold text-plum text-center">
           Stories from Our Guests
         </h1>

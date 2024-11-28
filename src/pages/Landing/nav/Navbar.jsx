@@ -2,20 +2,35 @@ import { useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
 import logo from "/assets/has_logo.png";
 import { Menu, X } from "lucide-react";
-import { navLinks } from "@/components/constants/constants";
-import { Link } from "react-router-dom";
+import {
+  initialBookingState,
+  navLinks,
+} from "@/components/constants/constants";
+import { Link, useNavigate } from "react-router-dom";
+import { getCurrentDate } from "@/lib/utils";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState(initialBookingState);
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
+  const handleSearch = () => {
+    localStorage.setItem("searchFormData", JSON.stringify(formData)); // Store form data before navigating
+    const route = `/restraunts?data=${encodeURIComponent(
+      JSON.stringify(formData)
+    )}`;
+
+    navigate(route);
+  };
   return (
     <div className="py-4">
       <nav className="px-5 md:px-20 flex justify-between items-center">
-        <div className="bg-white md:max-w-[150px] rounded-[32px] p-1 md:p-2 flex items-center justify-center cursor-pointer">
-          <img src={logo} alt="" className="w-20 h-8 md:w-32 md:h-12" />
+        <div className="bg-white md:max-w-[150px] rounded-[32px]  flex items-center justify-center cursor-pointer">
+          <img src={logo} alt="" className="w-20 h-8 md:w-36 md:h-16" />
         </div>
 
         <button
@@ -49,12 +64,12 @@ export default function Navbar() {
               <Link to="/contact">Contact</Link>
             </li>
             <li className="my-2">
-              <Link
-                to="/reservation"
+              <button
+                onClick={handleSearch}
                 className="px-4 py-2 text white border  rounded-lg text-white text-lg bg-plum "
               >
                 Book a Table
-              </Link>
+              </button>
             </li>
           </ul>
         </div>
@@ -62,7 +77,7 @@ export default function Navbar() {
         <div className="hidden md:flex gap-11">
           <ul className="flex gap-10">
             {navLinks.map((link) => (
-              <li key={link.to} className="my-2 cursor-pointer text-white">
+              <li key={link} className="my-2 cursor-pointer text-white">
                 <ScrollLink
                   to={link.to} // Matches the `id` of the target section
                   spy={true}
@@ -75,12 +90,12 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <Link
-            to="/reservation"
+          <button
+            onClick={handleSearch}
             className="px-4 py-2 text white border  rounded-lg text-white text-lg hover:bg-plum hover:text-white"
           >
             Book a Table
-          </Link>
+          </button>
         </div>
       </nav>
     </div>

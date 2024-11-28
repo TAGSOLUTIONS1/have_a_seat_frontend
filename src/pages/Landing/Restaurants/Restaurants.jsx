@@ -1,11 +1,25 @@
-import React from "react";
-import { hotels, resturantsList } from "@/components/constants/constants";
+import React, { useState } from "react";
+import {
+  hotels,
+  initialBookingState,
+  resturantsList,
+} from "@/components/constants/constants";
 import tick from "/assets/tick.png";
 import plate from "/assets/plate.png";
 import cal from "/assets/calender.png";
-
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+initialBookingState;
 function Restaurants() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState(initialBookingState);
+  const handleSearch = () => {
+    localStorage.setItem("searchFormData", JSON.stringify(formData)); // Store form data before navigating
+    const route = `/restraunts?data=${encodeURIComponent(
+      JSON.stringify(formData)
+    )}`;
+
+    navigate(route);
+  };
   return (
     <div className="bg-shipGrey relative">
       <div className="pb-[15rem] pt-[5rem] md:py-[10rem] px-5 md:px-[75px]">
@@ -22,10 +36,10 @@ function Restaurants() {
           </div>
           {/* content */}
           <div className="max-w-[555px] relative flex flex-col gap-9">
-            <div className=" text-[2.75rem] md:text-[4.25rem] font-extrabold">
+            <div className=" text-[2.75rem] md:text-[4.25rem] font-cabinet font-extrabold">
               Discover Dining Delights Across Top Platforms
             </div>
-            <div>
+            <div className="font-pt">
               <p className="text-xl">
                 Explore and book from an extensive selection of restaurants
                 sourced from top dining platforms, all through a single,
@@ -42,13 +56,13 @@ function Restaurants() {
             </ul>
 
             <div>
-              <Link
-                to="/reservation"
+              <button
+                onClick={handleSearch}
                 className="bg-frenchPink text-plum items-center max-w-fit flex gap-2 text-lg font-bold rounded-lg py-3 px-9 hover:bg-[#d5ccdb]"
               >
                 <img src={cal} alt="calender icon" className="h-5 w-5" />
                 Reserve Today
-              </Link>
+              </button>
             </div>
           </div>
         </div>
