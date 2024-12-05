@@ -24,7 +24,7 @@ const Reservation = () => {
       if (data !== null) {
         const decodedData = decodeURIComponent(data);
         finalData = JSON.parse(decodedData);
-        console.log(finalData , "finalData")
+        console.log(finalData, "finalData");
         setFormData(finalData);
       } else {
         console.error("Data parameter is null or undefined");
@@ -58,6 +58,7 @@ const Reservation = () => {
     };
 
     try {
+      console.log("booking info", bookingInfoParams);
       const response = await axios.get(
         `${Base_Url}/api/v1/yelp/get_restaurant_booking_info`,
         {
@@ -85,6 +86,7 @@ const Reservation = () => {
       ) : (
         <div className="flex flex-col justify-center items-center mb-24 ">
           <div className="w-3/4 mt-12">
+            {console.log("booking info before reservation form", bookingInfo)}
             <ReservationForm formData={formData} bookingInfo={bookingInfo} />
           </div>
           {formData && formData[0]?.alias ? (

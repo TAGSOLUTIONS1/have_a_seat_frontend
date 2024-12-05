@@ -28,7 +28,7 @@ function BestDeals() {
   };
 
   return (
-    <div className="px-6 py-10">
+    <div className="px-6 py-10" id="best deals">
       <div className="text-[2rem] font-inter md:text-[4.25rem] text-plum text-center font-bold">
         <h1>Today’s best deals</h1>
       </div>

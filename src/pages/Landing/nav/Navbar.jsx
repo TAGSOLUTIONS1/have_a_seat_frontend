@@ -6,7 +6,7 @@ import {
   initialBookingState,
   navLinks,
 } from "@/components/constants/constants";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,8 +28,13 @@ export default function Navbar() {
   return (
     <div className="py-4">
       <nav className="px-5 md:px-20 flex justify-between items-center">
-        <div className="bg-white md:max-w-[150px] rounded-[32px]  flex items-center justify-center cursor-pointer">
+        <div className="bg-white md:min-w-[170px] rounded-[32px]  flex items-center justify-center cursor-pointer">
           <img src={logo} alt="" className="w-20 h-8 md:w-36 md:h-16" />
+          {/* <div>
+            <span className="text-3xl self-center italic sm:text-4xl text-purple-600 font-semibold whitespace-nowrap custom-font">
+              Have a Seat
+            </span>
+          </div> */}
         </div>
 
         <button
@@ -53,15 +58,19 @@ export default function Navbar() {
           />
 
           <ul className="flex flex-col items-center text-center text-textColor py-10">
-            <li className="my-2 cursor-pointer hover:bg-plum hover:text-white text-link w-full p-2 decoration-secondary">
-              <Link to="/about">About</Link>
-            </li>
-            <li className="my-2 cursor-pointer hover:bg-plum hover:text-white text-link w-full p-2 decoration-secondary">
-              <Link to="/Menu">Menu</Link>
-            </li>
-            <li className="my-2 cursor-pointer hover:bg-plum hover:text-white text-link w-full p-2 decoration-secondary">
-              <Link to="/contact">Contact</Link>
-            </li>
+            {navLinks.map((link) => (
+              <li key={link} className="my-2 cursor-pointer text-plum">
+                <ScrollLink
+                  to={link.to} // Matches the `id` of the target section
+                  spy={true}
+                  smooth={true}
+                  duration={1500}
+                  activeClass="underline decoration-plum text-plum"
+                >
+                  {link.label} {/* Display the label */}
+                </ScrollLink>
+              </li>
+            ))}
             <li className="my-2">
               <button
                 onClick={handleSearch}

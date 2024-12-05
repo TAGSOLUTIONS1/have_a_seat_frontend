@@ -1,10 +1,12 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   footerLinks,
   initialBookingState,
   socialMediaLinks,
+  navLinks,
 } from "@/components/constants/constants";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 
 function Footer() {
   const [formData, setFormData] = useState(initialBookingState);
@@ -36,16 +38,44 @@ function Footer() {
           </button>
         </ul>
         <ul className="flex flex-col gap-[1.25rem]">
-          {footerLinks.map((link) => (
-            <li key={link} className="text-plum text-lg">
-              {link}
+          {navLinks.map((link) => (
+            <li key={link} className="my-2 cursor-pointer text-plum">
+              <ScrollLink
+                to={link.to} // Matches the `id` of the target section
+                spy={true}
+                smooth={true}
+                duration={1500}
+                activeClass="underline decoration-plum text-white"
+              >
+                {link.label} {/* Display the label */}
+              </ScrollLink>
             </li>
           ))}
         </ul>
 
         <ul className=" flex flex-col gap-[1.25rem]">
-          <li className="text-plum text-lg">License</li>
-          <li className="text-plum text-lg">Privacy Policy</li>
+          <li className="my-2 cursor-pointer text-plum">
+            <ScrollLink
+              to="testimonials"
+              spy={true}
+              smooth={true}
+              duration={1500}
+              activeClass="underline decoration-plum text-white"
+            >
+              Testimonials
+            </ScrollLink>
+          </li>
+          <li className="my-2 cursor-pointer text-plum">
+            <ScrollLink
+              to="best deals"
+              spy={true}
+              smooth={true}
+              duration={1500}
+              activeClass="underline decoration-plum text-white"
+            >
+              Best deals
+            </ScrollLink>
+          </li>
         </ul>
 
         {/* social media web*/}
@@ -61,19 +91,26 @@ function Footer() {
           </div>
         </ul>
       </div>
+
       {/* social media mobile */}
       <div className="md:hidden px-5 md:px-[75px] py-24 flex flex-col md:flex-row justify-between">
-        <div></div>
-
-        <ul className="flex flex-col gap-[1.25rem]">
-          {footerLinks.map((link) => (
-            <li key={link} className="text-plum text-lg">
-              {link}
+        <ul>
+          {navLinks.map((link) => (
+            <li key={link} className="my-2 cursor-pointer text-plum">
+              <ScrollLink
+                to={link.to} // Matches the `id` of the target section
+                spy={true}
+                smooth={true}
+                duration={1500}
+                activeClass="underline decoration-plum text-white"
+              >
+                {link.label} {/* Display the label */}
+              </ScrollLink>
             </li>
           ))}
-          <li className="text-plum text-lg">License</li>
-          <li className="text-plum text-lg">Privacy Policy</li>
         </ul>
+
+        <ul className="flex flex-col gap-[1.25rem]"></ul>
 
         <ul className="text-plum text-lg flex my-5 flex-col gap-[1.25rem]">
           <li className="font-bold">+1 (860) 960-0316</li>

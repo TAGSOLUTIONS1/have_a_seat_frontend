@@ -17,6 +17,7 @@ import Signup from "./pages/Signup";
 import UserHistory from "./components/AccountLinking/UserHistory";
 import UserStatistics from "./components/AccountLinking/UserStatistics";
 import Landing from "./pages/Landing/Landing";
+import MainLayout from "./components/Layout/Layout";
 
 function App() {
   const location = useLocation();
@@ -29,21 +30,23 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/about" element={<h1>About</h1>} />
-        <Route path="/register" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/resetpassword" element={<ResetPassword />} />
-        <Route path="/forget" element={<ForgetPassword />} />
-        <Route path="/verifyuser" element={<VerifyUser />} />
-        <Route path="/restraunts" element={<Search />} />
-        <Route path="/restaurant-detail" element={<RestrauntDetail />} />
-        <Route path="/reservation" element={<Reservation />} />
-        <Route path="/reservation-status" element={<ReservationStatus />} />
-        <Route path="/user-history" element={<UserHistory />} />
-        <Route path="/user-Statistics" element={<UserStatistics />} />
-        {/* <Route path="/account-links" element={<Protected Component={<AccountLinks />} />} /> */}
-        <Route path="/account-links" element={<Protected />}>
-          <Route path="/account-links" element={<AccountLinks />} />
+        <Route element={<MainLayout />}>
+          <Route path="/about" element={<h1>About</h1>} />
+          <Route path="/register" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/resetpassword" element={<ResetPassword />} />
+          <Route path="/forget" element={<ForgetPassword />} />
+          <Route path="/verifyuser" element={<VerifyUser />} />
+          <Route path="/restraunts" element={<Search />} />
+          <Route path="/restaurant-detail" element={<RestrauntDetail />} />
+          <Route path="/reservation" element={<Reservation />} />
+          <Route path="/reservation-status" element={<ReservationStatus />} />
+          <Route path="/user-history" element={<UserHistory />} />
+          <Route path="/user-Statistics" element={<UserStatistics />} />
+          {/* <Route path="/account-links" element={<Protected Component={<AccountLinks />} />} /> */}
+          <Route path="/account-links" element={<Protected />}>
+            <Route path="/account-links" element={<AccountLinks />} />
+          </Route>
         </Route>
       </Routes>
       {/* {showFooter && <Footer />} */}

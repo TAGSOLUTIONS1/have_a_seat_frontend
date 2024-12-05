@@ -21,7 +21,7 @@ function Restaurants() {
     navigate(route);
   };
   return (
-    <div className="bg-shipGrey relative">
+    <div className="bg-shipGrey relative" id="about">
       <div className="pb-[15rem] pt-[5rem] md:py-[10rem] px-5 md:px-[75px]">
         <div className=" w-[90%] m-auto md:w-full flex flex-col-reverse md:flex-row text-white gap-[100px]">
           {/* // images listing */}
