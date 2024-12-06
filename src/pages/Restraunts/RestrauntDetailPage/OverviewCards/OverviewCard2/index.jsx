@@ -69,12 +69,19 @@ const OverviewCard2 = ({ overviewCardsData }) => {
 
   const handleOpenTableReservation = (clickedData) => {
     // console.log(reservationCard?.restaurant?.restaurantId);
-    const restraunt_id = reservationCard?.restaurant?.restaurantId
-    const restaurantName = reservationCard?.restaurant?.name
-    const restaurantAddress = reservationCard?.restaurant?.address
-    const restaurantCuisines = reservationCard?.restaurant?.cuisines
-    const updatedNextData = [formData, clickedData, restraunt_id , restaurantName , restaurantAddress , restaurantCuisines];
-    
+    const restraunt_id = reservationCard?.restaurant?.restaurantId;
+    const restaurantName = reservationCard?.restaurant?.name;
+    const restaurantAddress = reservationCard?.restaurant?.address;
+    const restaurantCuisines = reservationCard?.restaurant?.cuisines;
+    const updatedNextData = [
+      formData,
+      clickedData,
+      restraunt_id,
+      restaurantName,
+      restaurantAddress,
+      restaurantCuisines,
+    ];
+
     setNextData(updatedNextData);
     const route = `/reservation?data=${encodeURIComponent(
       JSON.stringify(updatedNextData)
@@ -123,12 +130,13 @@ const OverviewCard2 = ({ overviewCardsData }) => {
     setLoading(true);
     // console.log(reservationCard?.restaurant?.restaurantId)
     const openTableTimeParams = {
-      restaurant_id: reservationCard?.restaurant?.restaurantId,
       date: formData?.reservation_date,
       time: formData?.reservation_time,
       persons: formData?.reservation_covers,
+      restaurant_id: reservationCard?.restaurant?.restaurantId,
     };
     try {
+      console.log("opentbaletime params", openTableTimeParams);
       const response = await axios.get(
         `${Base_Url}/api/v1/opentable/get_restaurant_timings?`,
         {
@@ -188,21 +196,21 @@ const OverviewCard2 = ({ overviewCardsData }) => {
         <div>
           {overviewCardsData?.alias ? (
             isDataLoaded ? (
-              Array.isArray(timeSlots) && timeSlots.length > 0  ? (
+              Array.isArray(timeSlots) && timeSlots.length > 0 ? (
                 timeSlots
-                .filter(data => !isNaN(data.timestamp)) 
-                .map((data, index) => (
-                  <button
-                    key={index}
-                    className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                    onClick={() => handleYelpReservation(data)}
-                  >
-                    {new Date(data.timestamp * 1000).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </button>
-                ))
+                  .filter((data) => !isNaN(data.timestamp))
+                  .map((data, index) => (
+                    <button
+                      key={index}
+                      className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                      onClick={() => handleYelpReservation(data)}
+                    >
+                      {new Date(data.timestamp * 1000).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </button>
+                  ))
               ) : (
                 <p className="text-lg text-red-600">No slots available.</p>
               )
@@ -213,9 +221,8 @@ const OverviewCard2 = ({ overviewCardsData }) => {
             Array.isArray(openTableTimeSlots) &&
             openTableTimeSlots[0]?.availabilityDays[0]?.slots.length > 0 ? (
               openTableTimeSlots[0]?.availabilityDays[0]?.slots
-              .filter(data => !isNaN(data.timeOffsetMinutes))
-              .map(
-                (data, index) => (
+                .filter((data) => !isNaN(data.timeOffsetMinutes))
+                .map((data, index) => (
                   <button
                     key={index}
                     className="bg-purple-600 text-white p-3 m-1 rounded-lg"
@@ -226,8 +233,7 @@ const OverviewCard2 = ({ overviewCardsData }) => {
                       formData?.reservation_time
                     )}
                   </button>
-                )
-              )
+                ))
             ) : (
               <p className="text-lg text-red-600">No slots available.</p>
             )

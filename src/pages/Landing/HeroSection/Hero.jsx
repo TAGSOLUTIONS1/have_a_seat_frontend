@@ -10,6 +10,7 @@ import GeoApiAuto from "@/components/home/HomeAutoComplete";
 import { useToast } from "@/components/ui/use-toast";
 import { getCurrentDate } from "@/lib/utils";
 import TermApiAuto from "@/components/home/HometermAutoComplete";
+import { initialBookingState } from "@/components/constants/constants";
 
 export default function Hero() {
   const { location } = useLocation();
@@ -36,28 +37,38 @@ export default function Hero() {
   };
 
   const handleSearch = () => {
-    if (!formData.location && !formData.term) {
-      toast({
-        title: "Input Required",
-        description: "Please Enter a Location",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      });
-      return;
-    }
+    // if (!formData.location && !formData.term) {
+    //   toast({
+    //     title: "Input Required",
+    //     description: "Please Enter a Location",
+    //     status: "error",
+    //     duration: 9000,
+    //     isClosable: true,
+    //   });
+    //   return;
+    // }
     // if current locaion not choose ny
     // if (!formData.location) {
     //   getCurrentLocation();
     //   return;
     // }
+    let route;
+    if (!formData.location) {
+      localStorage.setItem(
+        "searchFormData",
+        JSON.stringify(initialBookingState)
+      ); // Store form data before navigating
+      route = `/restraunts?data=${encodeURIComponent(
+        JSON.stringify(initialBookingState)
+      )}`;
+    } else {
+      localStorage.setItem("searchFormData", JSON.stringify(formData)); // Store form data before navigating
+      route = `/restraunts?data=${encodeURIComponent(
+        JSON.stringify(formData)
+      )}`;
+    }
+    console.log("form data", formData);
 
-    localStorage.setItem("searchFormData", JSON.stringify(formData)); // Store form data before navigating
-    const route = `/restraunts?data=${encodeURIComponent(
-      JSON.stringify(formData)
-    )}`;
-    console.log("formdata", formData);
-    console.log("route", route);
     navigate(route);
   };
 
@@ -124,7 +135,7 @@ export default function Hero() {
               <div className="bg-lightGrey rounded-[3rem] md:py-2 flex gap-1 justify-between md:gap-3 md:px-5">
                 <div className="md:flex gap-1">
                   <div
-                    className={` hidden md:block text-base md:text-lg text-black rounded-full border-2 ${
+                    className={`  text-base md:text-lg text-black rounded-full border-2 ${
                       error ? "border-red-500" : "border-gray-200"
                     } focus:border-gray-200 focus:outline-none`}
                   >
@@ -134,7 +145,7 @@ export default function Hero() {
                     />
                   </div>
                   <div
-                    className={`  text-base md:text-lg text-black rounded-full border-2 ${
+                    className={`hidden md:block  text-base md:text-lg text-black rounded-full border-2 ${
                       error ? "border-red-500" : "border-gray-200"
                     } focus:border-gray-200 focus:outline-none`}
                   >
@@ -149,8 +160,14 @@ export default function Hero() {
               <div className="flex  text-[10px]  md:text-base items-center">
                 <p className="max-w-sm m-auto font-pt">
                   It looks like you're in
-                  <span> {location && location.city.trim().split(" ")[0]}</span>
-                  {/* . Not correct? */}
+                  {location ? (
+                    <>
+                      <span> {location.city.trim().split(" ")[0]},</span>
+                      <span> {location.state}</span>
+                    </>
+                  ) : (
+                    <span>New,York</span>
+                  )}
                 </p>
                 {/* <div
                   className="flex gap-1 cursor-pointer"

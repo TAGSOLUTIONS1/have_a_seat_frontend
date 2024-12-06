@@ -17,7 +17,9 @@ const ReservationForm = ({ formData, bookingInfo }) => {
       .matches(/^\d+$/, "Phone number must contain only digits")
       .length(10, "Phone number must be 10 digits")
       .required("Phone number is required"),
-    email: Yup.string().email("Invalid email address").required("Email is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
   });
 
   // Initialize form values
@@ -30,7 +32,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
 
   useEffect(() => {
     // Retrieve data from local storage
-    const userData = localStorage.getItem('userData');
+    const userData = localStorage.getItem("userData");
     if (userData) {
       const parsedData = JSON.parse(userData);
       const newValues = {
@@ -78,9 +80,17 @@ const ReservationForm = ({ formData, bookingInfo }) => {
   return (
     <div className="flex bg-white p-8 rounded shadow-md">
       <div className="w-full md:w-2/3 lg:w-2/3 community-service-hours-form">
-        <h2 className="text-3xl font-bold text-center pb-8">Reservation Form</h2>
-        <form onSubmit={formik.handleSubmit} className="flex flex-col space-y-2">
-          <label htmlFor="first_name" className="text-sm font-medium text-gray-700">
+        <h2 className="text-3xl font-bold text-center pb-8">
+          Reservation Form
+        </h2>
+        <form
+          onSubmit={formik.handleSubmit}
+          className="flex flex-col space-y-2"
+        >
+          <label
+            htmlFor="first_name"
+            className="text-sm font-medium text-gray-700"
+          >
             First Name:
           </label>
           <input
@@ -95,7 +105,10 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             <div className="text-red-500">{formik.errors.first_name}</div>
           ) : null}
 
-          <label htmlFor="last_name" className="text-sm font-medium text-gray-700">
+          <label
+            htmlFor="last_name"
+            className="text-sm font-medium text-gray-700"
+          >
             Last Name:
           </label>
           <input
@@ -148,15 +161,15 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             >
               Make a Reservation
             </button>
-            
-            <button
+
+            {/* <button
               type="button"
               className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white w-full md:w-1/3 lg:w-1/3 align-center bg-purple-600 hover:bg-purple-800 mt-4"
               style={{ minWidth: "100px" }}
               onClick={formik.handleReset}
             >
               Cancel Reservation
-            </button>
+            </button> */}
           </div>
         </form>
       </div>

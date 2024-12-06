@@ -4,6 +4,9 @@ import open1 from "/assets/opentable-1.png";
 import open2 from "/assets/opentable-2.png";
 import yelp from "/assets/yelp.png";
 import testImg from "/assets/testi-img.jpg";
+import testImg2 from "/assets/test2.jpg";
+import testImg3 from "/assets/test3.jpg";
+
 import pizza from "/assets/pizza.png";
 import search from "/assets/search.png";
 import calender from "/assets/calender.png";
@@ -53,12 +56,12 @@ export const resturantsList = [
 
 export const testimonials = [
   {
-    heading: "The best experience we ever had",
+    heading: "A game-changer for travel planning",
     review:
-      "This platform simplifies dining out by merging all top reservation sites into one—easy comparisons, quick bookings. Last week, it helped me book a sold-out brunch effortlessly!",
-    name: "Samantha Reed",
-    address: "Los Angeles, CA",
-    img: testImg,
+      " This app brings together all top hotel platforms, letting you compare prices and book instantly. Last month, I snagged a luxury suite at half price—so convenient!",
+    name: "Michael Tran",
+    address: "Austin, TX",
+    img: testImg2,
   },
   {
     heading: "The best experience we ever had",
@@ -69,12 +72,12 @@ export const testimonials = [
     img: testImg,
   },
   {
-    heading: "The best experience we ever had",
+    heading: "The ultimate event organizer",
     review:
-      "This platform simplifies dining out by merging all top reservation sites into one—easy comparisons, quick bookings. Last week, it helped me book a sold-out brunch effortlessly!",
-    name: "Samantha Reed",
-    address: "Los Angeles, CA",
-    img: testImg,
+      "This platform combines ticketing sites into one, making it seamless to find the best seats. Just last weekend, I scored front-row tickets to a concert in minutes!",
+    name: "Emily Lopez",
+    address: "New York, NY",
+    img: testImg3,
   },
 ];
 

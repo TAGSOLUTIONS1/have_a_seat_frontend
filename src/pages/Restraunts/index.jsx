@@ -94,32 +94,33 @@ const Search = () => {
         </div>
 
         {isSidebarOpen && (
-          <div
-            className="fixed inset-0 z-50 bg-white shadow-lg p-4 lg:hidden overflow-auto"
-            style={{ width: "250px" }}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h1 className="text-xl">
-                <strong>Filters</strong>
-              </h1>
-              <button className="text-2xl" onClick={toggleSidebar}>
-                &times;
-              </button>
-            </div>
-            <Filters
-              selectedStarFilter={selectedStarFilter}
-              setSelectedStarFilter={setSelectedStarFilter}
-              selectedPriceFilter={selectedPriceFilter}
-              setSelectedPriceFilter={setSelectedPriceFilter}
-              selectedCuisineFilter={selectedCuisineFilter}
-              setSelectedCuisineFilter={setSelectedCuisineFilter}
-            />
-          </div>
+          // <div
+          //   className="fixed inset-0 z-50 bg-white shadow-lg p-4 lg:hidden overflow-auto"
+          //   style={{ width: "250px" }}
+          // >
+          //   <div className="flex justify-between items-center mb-4">
+          //     <h1 className="text-xl">
+          //       <strong>Filters</strong>
+          //     </h1>
+          //     <button className="text-2xl" onClick={toggleSidebar}>
+          //       &times;
+          //     </button>
+          //   </div>
+          //   <Filters
+          //     selectedStarFilter={selectedStarFilter}
+          //     setSelectedStarFilter={setSelectedStarFilter}
+          //     selectedPriceFilter={selectedPriceFilter}
+          //     setSelectedPriceFilter={setSelectedPriceFilter}
+          //     selectedCuisineFilter={selectedCuisineFilter}
+          //     setSelectedCuisineFilter={setSelectedCuisineFilter}
+          //   />
+          // </div>
+          <></>
         )}
 
         {yelpData ? (
           <>
-            <div className="hidden lg:block w-full md:w-1/3 lg:w-1/3 md:sticky lg:sticky top-0">
+            {/* <div className="hidden lg:block w-full md:w-1/3 lg:w-1/3 md:sticky lg:sticky top-0">
               <h1 className="text-xl items-center text-center justify-center">
                 <strong>
                   <Sliders size={24} className="inline-block mr-2" />
@@ -134,7 +135,7 @@ const Search = () => {
                 selectedCuisineFilter={selectedCuisineFilter}
                 setSelectedCuisineFilter={setSelectedCuisineFilter}
               />
-            </div>
+            </div> */}
 
             <div className="w-full mb-10">
               <RestrautCards

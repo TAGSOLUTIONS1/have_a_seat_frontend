@@ -1,5 +1,5 @@
+import { getStateFromApi } from "@/lib/utils";
 import React, { useState, useEffect } from "react";
-
 const LocationTracker = ({ onLocationUpdate }) => {
   const [currentState, setCurrentState] = useState("");
   const [initialState, setInitialState] = useState("");
@@ -16,8 +16,8 @@ const LocationTracker = ({ onLocationUpdate }) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
       );
       const { latitude, longitude } = position.coords;
-      const state = await getStateFromApi(latitude, longitude);
-      setInitialState(state);
+      const res = await getStateFromApi(latitude, longitude);
+      setInitialState(res.state);
       setIsLocationFetched(true);
     } catch (error) {
       console.error("Error getting initial state:", error);
@@ -32,28 +32,20 @@ const LocationTracker = ({ onLocationUpdate }) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
       );
       const { latitude, longitude } = position.coords;
-      const state = await getStateFromApi(latitude, longitude);
-      setCurrentState(state);
+      const res = await getStateFromApi(latitude, longitude);
+      setCurrentState(res);
       setIsStateUpdated(true);
-      onLocationUpdate(state);
+      onLocationUpdate(res.city);
     } catch (error) {
       console.error("Error getting current location:", error);
     }
-  };
-
-  const getStateFromApi = async (lat, lon) => {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
-    );
-    const data = await response.json();
-    return data.address.state || "Unknown Location";
   };
 
   return (
     <div className="flex items-center justify-center space-x-2">
       <div id="location" className="text-xs md:text-sm lg:text-sm">
         {isStateUpdated
-          ? `Your location has now been set to ${currentState}.`
+          ? `Your location has now been set to  ${currentState.state}.`
           : `It looks like you're in ${initialState}. Not correct?`}
       </div>
       <img src="/logo.png" alt="Location Icon" className="w-6 h-6" />

@@ -9,26 +9,52 @@ import SafetyPrecautions from "./SafetyPrecautions";
 import SeatingOptions from "./SeatingOptions";
 import TopRated from "./TopRated";
 
-const Filters =({ selectedStarFilter, setSelectedStarFilter , selectedPriceFilter , setSelectedPriceFilter, selectedCuisineFilter, setSelectedCuisineFilter }) => {
+const Filters = ({
+  selectedStarFilter,
+  setSelectedStarFilter,
+  selectedPriceFilter,
+  setSelectedPriceFilter,
+  selectedCuisineFilter,
+  setSelectedCuisineFilter,
+}) => {
   return (
     <div>
-      <Experiences  selectedStarFilter={selectedStarFilter} setSelectedStarFilter={setSelectedStarFilter}
-        />
-      <PriceFilters  selectedPriceFilter={selectedPriceFilter} setSelectedPriceFilter={setSelectedPriceFilter}
+      <Experiences
+        selectedStarFilter={selectedStarFilter}
+        setSelectedStarFilter={setSelectedStarFilter}
       />
-      <Cuisine  selectedCuisineFilter={selectedCuisineFilter} setSelectedCuisineFilter={setSelectedCuisineFilter}
+      <PriceFilters
+        selectedPriceFilter={selectedPriceFilter}
+        setSelectedPriceFilter={setSelectedPriceFilter}
       />
-      </div>
+      <Cuisine
+        selectedCuisineFilter={selectedCuisineFilter}
+        setSelectedCuisineFilter={setSelectedCuisineFilter}
+      />
+    </div>
   );
 };
 
 export default Filters;
 
-
-      {/* <DiningOptions /> */}
-      {/* <SeatingOptions /> */}
-      {/* <Regions /> */}
-      {/* <Neighbourhood /> */}
-      {/* <TopRated /> */}
-      {/* <SafetyPrecautions /> */}
-      {/* <Ameneties /> */}
+{
+  /* <DiningOptions /> */
+}
+{
+  /* <SeatingOptions /> */
+}
+{
+  /* <Regions /> */
+}
+{
+  /* <Neighbourhood /> */
+}
+{
+  /* <TopRated /> */
+}
+{
+  /* <SafetyPrecautions /> */
+}
+{
+  /* <Ameneties /> */
+}
