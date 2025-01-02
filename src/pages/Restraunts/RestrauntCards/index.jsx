@@ -2,7 +2,86 @@ import React, { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchLocationV2 from "@/components/searchLocationRestaurant";
 const initialTypes = ["yelp", "open_table", "resy"];
+import { AiFillStar, AiOutlineStar, AiTwotoneStar } from "react-icons/ai";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
+const images = [
+  "/assets/slider_img_1.png",
+  "/assets/slider_img_2.png",
+  "/assets/slider_img_3.png",
+];
+
+const timeSlots = ["4:30", "5:15", "3:30", "6:45", "10:15", "11:30"];
+const CustomPrevArrow = ({ onClick }) => (
+  <div
+    onClick={onClick}
+    className="absolute left-[10px]  top-1/2 transform  bg-white rounded-full w-5 h-5  flex items-center justify-center cursor-pointer shadow-lg z-10"
+  >
+    <ChevronLeft className="text-gray text-base" />
+  </div>
+);
+
+const CustomNextArrow = ({ onClick }) => (
+  <div
+    onClick={onClick}
+    className="absolute right-2  top-1/2 transform  bg-white rounded-full w-5 h-5  flex items-center justify-center cursor-pointer shadow-lg z-10"
+  >
+    <ChevronRight className="text-gray text-base" />
+  </div>
+);
+
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: true,
+  adaptiveHeight: true,
+  nextArrow: <CustomNextArrow />,
+  prevArrow: <CustomPrevArrow />,
+};
+const reviews = [
+  {
+    name: "Laura K., Miami",
+    date: "30 August 2024",
+    review:
+      "This is easily one of the best spots I've been to in recent years. I go to man...",
+    rating: 5,
+  },
+  {
+    name: "Samantha R., Los Angeles",
+    date: "10 September 2024",
+    review:
+      "I came here for a team dinner with colleagues. The restaurant is in a renovated ...",
+    rating: 4.5,
+  },
+  {
+    name: "Mark H., Houston",
+    date: "11 October 2024",
+    review:
+      "Backroom was beautiful & moody. Sitting in the front wouldn't be such a vibe. S...",
+    rating: 4,
+  },
+];
+
+// Helper function to render stars
+const renderStars = (rating) => {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    if (i <= rating) {
+      stars.push(<AiFillStar key={i} className="text-yellow-500" />);
+    } else if (i - rating === 0.5) {
+      stars.push(<AiTwotoneStar key={i} className="text-yellow-500" />);
+    } else {
+      stars.push(<AiOutlineStar key={i} className="text-gray-400" />);
+    }
+  }
+  return stars;
+};
 const RestaurantCards = memo(
   ({
     yelpData,
@@ -258,7 +337,6 @@ const RestaurantCards = memo(
         </div>
 
         {/* Filtered Restaurants List */}
-        {console.log("resturant cardss", filteredRestaurants)}
         <div>
           {filteredRestaurants?.map((data, index) => (
             <Link

@@ -18,6 +18,7 @@ import UserHistory from "./components/AccountLinking/UserHistory";
 import UserStatistics from "./components/AccountLinking/UserStatistics";
 import Landing from "./pages/Landing/Landing";
 import MainLayout from "./components/Layout/Layout";
+import RestaurantDetailsV2 from "./pages/Restraunts/ResturantDetailV2/RestaurantDetailsV2";
 
 function App() {
   const location = useLocation();
@@ -38,7 +39,7 @@ function App() {
           <Route path="/forget" element={<ForgetPassword />} />
           <Route path="/verifyuser" element={<VerifyUser />} />
           <Route path="/restraunts" element={<Search />} />
-          <Route path="/restaurant-detail" element={<RestrauntDetail />} />
+          <Route path="/restaurant-detail" element={<RestaurantDetailsV2 />} />
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/reservation-status" element={<ReservationStatus />} />
           <Route path="/user-history" element={<UserHistory />} />
