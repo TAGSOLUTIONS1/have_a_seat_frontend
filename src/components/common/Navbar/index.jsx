@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { LucideLoader, User } from "lucide-react";
 import SideNav from "../SideNav";
 import "./nav.css";
+import { navLinks } from "@/components/constants/constants";
 
 const Navbar = () => {
   const { logout, authState } = useAuth();
@@ -29,12 +30,15 @@ const Navbar = () => {
                 className="h-16 w-24 sm:h-20 sm:w-24  md:h-20 md:w-32"
                 alt="have A seat Logo"
               />
-              <span className="text-3xl self-center italic sm:text-4xl text-purple-600 font-semibold whitespace-nowrap custom-font">
-                Have a Seat
-              </span>
             </Link>
           </div>
           <SideNav />
+
+          <ul className=" hidden lg:flex gap-10">
+            {navLinks.map((link, index) => (
+              <li className="cursor-pointer">{link.label}</li>
+            ))}
+          </ul>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
             {authState?.loading ? (
               <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
@@ -45,37 +49,27 @@ const Navbar = () => {
                     <ul className="flex ">
                       <li className="p-4">
                         <Button
-                          className={cn("rounded-full ")}
+                          className={cn("rounded-full border border-plum ")}
                           variant="outline"
                           asChild
                         >
-                          <Link to="/login">Login</Link>
+                          <Link to="/login" className="text-plum">
+                            Login
+                          </Link>
                         </Button>
                       </li>
                       <hr className="border-gray-200" />
                       <li className="p-4">
                         <Button className={cn("rounded-full")} asChild>
-                          <Link to="/register">Register</Link>
+                          <Link to="/register">Register Now</Link>
                         </Button>
                       </li>
                     </ul>
                   </div>
                 ) : (
-                  <div className="flex space-x-2">
+                  <div className="flex items-center space-x-2">
                     <div>
                       <ul className="flex">
-                        <li className="pt-5 pr-2 mt-2 decoration-solid text-purple-600 text-sm">
-                          {authState.user?.email}
-                        </li>
-                        <li className="pt-4">
-                          <Button
-                            className={cn("rounded-full bg-purple-600 ")}
-                            asChild
-                            onClick={handleLogout}
-                          >
-                            <Link to="/">Logout</Link>
-                          </Button>
-                        </li>
                         <li className="p-4">
                           <Button
                             className={cn("rounded-full bg-purple-600 ")}
@@ -86,10 +80,13 @@ const Navbar = () => {
                         </li>
                       </ul>
                     </div>
-                    <div className="relative w-[12%] h-[10%] mt-4 bg-purple-600 rounded-full p-2">
-                      <Link to="account-links">
-                        <User className="cursor-pointer text-white w-6 h-6" />
-                      </Link>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src="/assets/tooltip.png"
+                        alt=""
+                        className="w-10 h-10 rounded-full"
+                      />
+                      <span>{authState.user?.first_name}</span>
                     </div>
                   </div>
                 )}

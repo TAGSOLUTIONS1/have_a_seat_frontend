@@ -6,25 +6,31 @@ import yelp from "/assets/yelp.png";
 import testImg from "/assets/testi-img.jpg";
 import testImg2 from "/assets/test2.jpg";
 import testImg3 from "/assets/test3.jpg";
-
+import twt from "/assets/twitter.png";
+import fb from "/assets/fb.png";
+import linkedin from "/assets/linkedin.png";
+import insta from "/assets/insta.png";
 import pizza from "/assets/pizza.png";
 import search from "/assets/search.png";
 import calender from "/assets/calender.png";
 import arrows from "/assets/arrows.png";
 export const footerLinks = ["Home", "About", "Register", "Links"];
-import { Linkedin, Instagram, Facebook } from "lucide-react";
 import { getCurrentDate } from "@/lib/utils";
 export const socialMediaLinks = [
   {
-    icon: <Instagram />,
-    link: "https://www.instagram.com/haveaseat.us/",
-  },
-  {
-    icon: <Facebook />,
+    icon: fb,
     link: "https://www.facebook.com/profile.php?id=61565129417366",
   },
   {
-    icon: <Linkedin />,
+    icon: twt,
+    link: "https://www.linkedin.com/company/have-a-seat-official/ ",
+  },
+  {
+    icon: insta,
+    link: "https://www.instagram.com/haveaseat.us/",
+  },
+  {
+    icon: linkedin,
     link: "https://www.linkedin.com/company/have-a-seat-official/ ",
   },
 ];
@@ -110,7 +116,13 @@ export const navLinks = [
   { to: "why", label: "Why Us" },
   { to: "contact", label: "Contact" },
 ];
-
+export const FooterLinks = [
+  { to: "about", label: "About" },
+  { to: "why", label: "Why Us" },
+  { to: "contact", label: "Contact" },
+  { to: "Testimonials", label: "Testimonials" },
+  { to: "Best deals", label: "Best Deals" },
+];
 export const bestDeals = [
   {
     img: "/assets/speOffer1.png",

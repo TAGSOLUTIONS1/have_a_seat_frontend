@@ -1,5 +1,8 @@
 import { getStateFromApi } from "@/lib/utils";
 import React, { useState, useEffect } from "react";
+import { FaRegEdit } from "react-icons/fa";
+import { IoIosSend } from "react-icons/io";
+
 const LocationTracker = ({ onLocationUpdate }) => {
   const [currentState, setCurrentState] = useState("");
   const [initialState, setInitialState] = useState("");
@@ -42,24 +45,27 @@ const LocationTracker = ({ onLocationUpdate }) => {
   };
 
   return (
-    <div className="flex items-center justify-center space-x-2">
-      <div id="location" className="text-xs md:text-sm lg:text-sm">
-        {isStateUpdated
-          ? `Your location has now been set to  ${currentState.state}.`
-          : `It looks like you're in ${initialState}. Not correct?`}
+    <div className="text-center">
+      <div>
+        <p>
+          <IoIosSend className="inline" /> It looks like you are in
+          {initialState && (
+            <span className="bg-[#e8d3f5] relative rounded-full ml-3 pr-8 pl-4 py-1 text-plum">
+              {initialState}
+
+              <img
+                className="w-4 absolute right-1 top-2 h-4 inline cursor-pointer"
+                src="/assets/edit.png"
+                alt=""
+                onClick={(e) => {
+                  e.preventDefault();
+                  getCurrentLocation();
+                }}
+              />
+            </span>
+          )}
+        </p>
       </div>
-      <img src="/logo.png" alt="Location Icon" className="w-6 h-6" />
-      <a
-        href="#"
-        id="location-action"
-        className="text-red-500 hover:text-red-700 text-xs md:text-sm lg:text-sm"
-        onClick={(e) => {
-          e.preventDefault();
-          getCurrentLocation();
-        }}
-      >
-        {isStateUpdated ? "Update Location" : "Get Current Location"}
-      </a>
     </div>
   );
 };

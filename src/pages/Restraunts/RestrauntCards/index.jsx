@@ -180,69 +180,85 @@ const RestaurantCards = memo(
 
     return (
       <div>
-        <div className="border-2 border-gray-200 rounded-lg shadow-sm bg-white">
+        <div className=" border-gray-200 rounded-lg shadow-sm bg-white">
           <SearchLocationV2 />
         </div>
 
-        <div className="flex flex-col small:flex-row items-center p-1 mb-2 mt-2 justify-center text-center border-2 rounded-lg shadow-sm">
-          <div className="flex flex-row justify-center md:flex-row sm:items-center sm:justify-center">
-            <div className="flex justify-between sm:mr-4 sm:mb-0">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="checkbox1"
-                  name="checkbox1"
-                  checked={selectedTypes.includes("resy")}
-                  className="h-4 w-4 rounded-full sm:h-6 sm:w-6 mr-1"
-                  onChange={() => handleCheckboxChange("resy")}
-                />
-              </div>
-              <img
-                src="/assets/resy_logo_new.png"
-                alt="Resy Logo"
-                className="w-20 h-8 sm:w-32 sm:h-12 md:w-36 lg:w-36 mr-1 rounded-full"
-              />
+        <div className="p-10">
+          <div className="flex items-center gap-10">
+            <div className="flex-grow bg-[#39353C] h-[1px]"></div>
+            <div>
+              <h1 className="text-center text-3xl">Select Platforms</h1>
             </div>
-
-            <div className="flex justify-center sm:mr-4 sm:mb-0">
-              <div className="flex items-center mr-2 sm:mr-4">
-                <input
-                  type="checkbox"
-                  id="checkbox3"
-                  name="checkbox3"
-                  checked={selectedTypes.includes("yelp")}
-                  className="h-4 w-4 rounded-full sm:h-6 sm:w-6 text-purple-600"
-                  onChange={() => handleCheckboxChange("yelp")}
-                />
-              </div>
-              <img
-                src="/assets/yelp_logo_new.png"
-                alt="Yelp Logo"
-                className="w-20 h-7 sm:w-32 sm:h-14 md:w-36 lg:w-36"
-              />
-            </div>
+            <div className="flex-grow bg-[#39353C] h-[1px]"></div>
           </div>
+          <div className="flex flex-col sm:flex-row items-center py-5 mb-2 mt-2 justify-center text-center">
+            <div className="flex justify-center sm:items-center gap-10 sm:justify-center">
+              {/* Yelp */}
+              <div className="flex gap-3 items-center">
+                <label className="relative">
+                  <input
+                    type="checkbox"
+                    id="checkbox3"
+                    name="checkbox3"
+                    checked={selectedTypes.includes("yelp")}
+                    onChange={() => handleCheckboxChange("yelp")}
+                    className="hidden peer"
+                  />
+                  <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer rounded-full flex items-center justify-center peer-checked:before:content-['✔'] peer-checked:before:text-white peer-checked:before:text-xl peer-checked:bg-plum"></span>
+                </label>
+                <img
+                  src="/assets/yelp_logo_new.png"
+                  alt="Yelp Logo"
+                  className="w-20 h-7 sm:w-32 sm:h-14 md:w-40"
+                />
+              </div>
 
-          <div className="flex justify-center sm:mr-4 sm:mb-0">
-            <div className="flex items-center mr-2 sm:mr-4">
-              <input
-                type="checkbox"
-                id="checkbox2"
-                name="checkbox2"
-                checked={selectedTypes.includes("open_table")}
-                className="h-4 w-4 rounded-full sm:h-6 sm:w-6"
-                onChange={() => handleCheckboxChange("open_table")}
-              />
+              {/* Resy */}
+              <div className="flex gap-3 items-center">
+                <label className="relative">
+                  <input
+                    type="checkbox"
+                    id="checkbox1"
+                    name="checkbox1"
+                    checked={selectedTypes.includes("resy")}
+                    onChange={() => handleCheckboxChange("resy")}
+                    className="hidden peer"
+                  />
+                  <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer rounded-full flex items-center justify-center peer-checked:before:content-['✔'] peer-checked:before:text-white peer-checked:before:text-xl peer-checked:bg-plum"></span>
+                </label>
+                <img
+                  src="/assets/resy_logo_new.png"
+                  alt="Resy Logo"
+                  className="w-20 h-8 sm:w-32 sm:h-12 md:w-40 rounded-md"
+                />
+              </div>
+
+              {/* OpenTable */}
+              <div className="flex gap-3 items-center">
+                <label className="relative">
+                  <input
+                    type="checkbox"
+                    id="checkbox2"
+                    name="checkbox2"
+                    checked={selectedTypes.includes("open_table")}
+                    onChange={() => handleCheckboxChange("open_table")}
+                    className="hidden peer"
+                  />
+                  <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer rounded-full flex items-center justify-center peer-checked:before:content-['✔'] peer-checked:before:text-white peer-checked:before:text-xl peer-checked:bg-plum"></span>
+                </label>
+                <img
+                  src="/assets/opentable.png"
+                  alt="Open Table Logo"
+                  className="w-22 h-7 sm:w-32 sm:h-14 md:w-40"
+                />
+              </div>
             </div>
-            <img
-              src="/assets/opentable.png"
-              alt="Open Table Logo"
-              className="w-20 h-7 sm:w-32 sm:h-14 md:w-36 lg:w-36"
-            />
           </div>
         </div>
 
         {/* Filtered Restaurants List */}
+        {console.log("resturant cardss", filteredRestaurants)}
         <div>
           {filteredRestaurants?.map((data, index) => (
             <Link
@@ -269,136 +285,129 @@ const RestaurantCards = memo(
               }}
             >
               <div className="bg-white w-full mb-2 p-10  shadow-xl rounded-2xl flex flex-col md:flex-row lg:flex-row card text-grey-darkest">
-              <div className="w-full md:w-1/3 lg:w-1/3 md:h-[15rem] lg:h-[20rem]">
-              <img
-                  className="h-1/3 md:h-full lg:h-full w-full rounded-2xl object-cover"
-                  src={
-                    data?.restraunt_type === "yelp"
-                      ? data?.image_url
-                      : data?.restraunt_type === "resy" &&
-                        Array.isArray(data?.images) &&
-                        data?.images.length > 0
-                      ? data?.images[0]
-                      : data?.photos?.profile?.medium?.url
-                  }
-                  alt={data?.name}
-                />
-              </div>
+                <div className="w-full md:w-1/3 lg:w-1/3 md:h-[15rem] lg:h-[20rem]">
+                  <img
+                    className="h-1/3 md:h-full lg:h-full w-full rounded-2xl object-cover"
+                    src={
+                      data?.restraunt_type === "yelp"
+                        ? data?.image_url
+                        : data?.restraunt_type === "resy" &&
+                          Array.isArray(data?.images) &&
+                          data?.images.length > 0
+                        ? data?.images[0]
+                        : data?.photos?.profile?.medium?.url
+                    }
+                    alt={data?.name}
+                  />
+                  {console.log("open table phtotos", data?.photos)}
+                </div>
                 <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col px-2  select-none">
                   <div className=" p-5 flex-1">
-                    <h1 className="text-xl  font-bold mb-1 text-grey-darkest">
-                      <strong>
-                        {data?.name?.length > 50
-                          ? `${data?.name?.slice(0, 50)}...`
-                          : data?.name}
-                      </strong>
+                    <h1 className="text-3xl mb-1 font-semibold text-grey-darkest">
+                      {data?.name?.length > 50
+                        ? `${data?.name?.slice(0, 50)}...`
+                        : data?.name}
                     </h1>
-                  
-                   <div  className="text-grey-darkest py-10 flex flex-col space-y-6">
-                   <div>
-                 
-                    <h4 className="font-semibold flex gap-3 items-center text-[1.25rem]"> 
-                      <img src="/assets/ratings.png" alt="ratings logo" className="h-5 w-5"/>
-                     <span>Ratings:</span>
-                     
-                   </h4>
-                
-                   <i className="fas fa-map-marker-alt mr-1 text-grey-dark"></i>
-                   {data.restraunt_type === "yelp"
-                     ? data?.rating
-                     : data.restraunt_type === "open_table"
-                     ? data?.statistics?.reviews?.ratings?.overall?.rating
-                     : data.restraunt_type === "resy"
-                     ? data?.rating?.average
-                     : null}
-                   <span className="text-sm sm:text-base">/5</span>
-                 </div>
 
-               
-                 
-                   <div className="stext-base">
-                   <h4 className="font-semibold flex gap-3 items-center text-[1.25rem]">
-                     <img src="/assets/address.png" alt="address logo" className="h-5 w-5"  />
-                     <span>Address:</span>
-                     </h4>
-                     <div>
-                       {data.restraunt_type === "yelp" ? (
-                         <p>{data?.location?.display_address}</p>
-                       ) : data?.restraunt_type === "open_table" ? (
-                         <div>
-                           <p>
-                             {data?.address?.line1 &&
-                               `${data?.address?.line1} `}
-                             {data?.address?.city}
-                           </p>
-                         </div>
-                       ) : data?.restraunt_type === "resy" ? (
-                         <div>
-                           {data?.locality && `${data?.locality} `}
-                           {data?.location?.name}
-                         </div>
-                       ) : null}
-                     </div>
-                   </div>
-                   <div className="pr-2 text-base">
-                   <h4 className="font-semibold flex gap-3 items-center text-[1.25rem]">
-                     <img src="/assets/contact.png" alt="address logo" className="h-5 w-5"  />
-                     <span>Contact:</span>
-                     </h4>
-                     <div>
-                       {data.restraunt_type === "yelp" ? (
-                         <p>{data?.location?.display_address}</p>
-                       ) : data?.restraunt_type === "open_table" ? (
-                         <div>
-                           <p>
-                             {data?.address?.line1 &&
-                               `${data?.address?.line1} `}
-                             {data?.address?.city}
-                           </p>
-                         </div>
-                       ) : data?.restraunt_type === "resy" ? (
-                         <div>
-                           {data?.locality && `${data?.locality} `}
-                           {data?.location?.name}
-                         </div>
-                       ) : null}
-                     </div>
-                   </div>
+                    <div className="text-grey-darkest py-8 flex flex-col space-y-4">
+                      <div>
+                        <h4 className="font-semibold flex gap-3 items-center text-[1.25rem]">
+                          <img
+                            src="/assets/ratings.png"
+                            alt="ratings logo"
+                            className="h-5 w-5"
+                          />
+                          <span>Ratings:</span>
+                        </h4>
 
+                        <p className="px-8">
+                          {" "}
+                          {data.restraunt_type === "yelp"
+                            ? data?.rating
+                            : data.restraunt_type === "open_table"
+                            ? data?.statistics?.reviews?.ratings?.overall
+                                ?.rating
+                            : data.restraunt_type === "resy"
+                            ? data?.rating?.average
+                            : null}
+                          <span className="text-sm sm:text-base">/5</span>
+                        </p>
+                      </div>
 
-
-                
-                   </div>
+                      <div className="stext-base">
+                        <h4 className="font-semibold flex gap-3 items-center text-[1.25rem]">
+                          <img
+                            src="/assets/address.png"
+                            alt="address logo"
+                            className="h-5 w-5"
+                          />
+                          <span>Address:</span>
+                        </h4>
+                        <p className="px-8">
+                          {data.restraunt_type === "yelp" ? (
+                            <p>{data?.location?.display_address}</p>
+                          ) : data?.restraunt_type === "open_table" ? (
+                            <div>
+                              <p>
+                                {data?.address?.line1 &&
+                                  `${data?.address?.line1} `}
+                                {data?.address?.city}
+                              </p>
+                            </div>
+                          ) : data?.restraunt_type === "resy" ? (
+                            <div>
+                              {data?.locality && `${data?.locality} `}
+                              {data?.location?.name}
+                            </div>
+                          ) : null}
+                        </p>
+                      </div>
+                      <div className="pr-2 text-base">
+                        <h4 className="font-semibold flex gap-3 items-center text-[1.25rem]">
+                          <img
+                            src="/assets/contact.png"
+                            alt="address logo"
+                            className="h-5 w-5"
+                          />
+                          <span>Contact:</span>
+                        </h4>
+                        <p className="px-8">
+                          {data.restraunt_type === "yelp"
+                            ? data?.display_phone
+                            : data.restraunt_type === "open_table"
+                            ? data?.contactInformation?.formattedPhoneNumber
+                            : data.restraunt_type === "resy"
+                            ? data?.contact?.phone_number
+                            : null}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="hidden md:block lg:block  border-gray-300  my-6"></div>
                 <div className="w-full flex justify-center items-center md:w-[150px] lg:w-[150px] mx-auto md:mx-6 lg:mx-6">
                   <div className="flex flex-col justify-between h-full">
-                  <img
-                  src={
-                    data.restraunt_type === "yelp"
-                      ? "/assets/yelp_logo_new.png"
-                      : data.restraunt_type === "open_table"
-                      ? "/assets/opentable.png"
-                      : data.restraunt_type === "resy"
-                      ? "/assets/resy_logo_new.png"
-                      : ""
-                  }
-                  
-                        alt={`${data.restraunt_type} logo`}
-                        width={100}
-                        height={64}
-                        className="mb-2"
-                        
-                      />
-                  
+                    <img
+                      src={
+                        data.restraunt_type === "yelp"
+                          ? "/assets/yelp_logo_new.png"
+                          : data.restraunt_type === "open_table"
+                          ? "/assets/opentable.png"
+                          : data.restraunt_type === "resy"
+                          ? "/assets/resy_logo_new.png"
+                          : ""
+                      }
+                      alt={`${data.restraunt_type} logo`}
+                      width={100}
+                      height={64}
+                      className="mb-2"
+                    />
 
-                  <div className="flex-grow"></div>
+                    <div className="flex-grow"></div>
                     <div className="bg-grey-lighter  flex items-center justify-between transition hover:bg-grey-light cursor-pointer mt-2">
-                      <button className="rounded-full py-3 px-5 bg-purple-600 text-white ">
-
-                                Reserve a Table                     
-                          </button>
+                      <button className="rounded-full p-3 bg-purple-600 text-white ">
+                        Reserve a Table
+                      </button>
                       <i className="fas fa-chevron-right"></i>
                     </div>
                   </div>

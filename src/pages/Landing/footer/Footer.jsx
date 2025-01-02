@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "/assets/has_logo.png";
 import {
-  footerLinks,
+  FooterLinks,
   initialBookingState,
   socialMediaLinks,
-  navLinks,
 } from "@/components/constants/constants";
 import { Link as ScrollLink } from "react-scroll";
+import { Mail, Phone } from "lucide-react";
 
 function Footer() {
   const [formData, setFormData] = useState(initialBookingState);
@@ -21,138 +22,103 @@ function Footer() {
     navigate(route);
   };
   return (
-    <div id="contact">
+    <div id="contact" className="bg-[#F5EDFC] px-5 md:px-[75px]">
       {/* web*/}
-      <div className=" hidden md:flex px-5 md:px-[75px] py-24  flex-col md:flex-row justify-between">
+      <div className=" hidden md:flex  py-24  flex-col md:flex-row justify-between">
+        <img
+          src={logo}
+          alt="have a seat logo"
+          className="h-[12rem] w-[20rem]"
+        />
         <div></div>
-        <ul className="text-plum text-lg flex flex-col gap-[1.25rem]">
-          <li className="font-bold">+1 (860) 960-0316</li>
-          <li>
-            <a href="mailto:contact@haveaseaton.com">contact@haveaseaton.com</a>
-          </li>
-          <button
-            onClick={handleSearch}
-            className="text-white rounded-lg bg-plum py-3 px-10 text-center cursor-pointer"
-          >
-            Book a Table
-          </button>
-        </ul>
-        <ul className="flex flex-col gap-[1.25rem]">
-          {navLinks.map((link) => (
-            <li key={link} className="my-2 cursor-pointer text-plum">
-              <ScrollLink
-                to={link.to} // Matches the `id` of the target section
-                spy={true}
-                smooth={true}
-                duration={1500}
-                activeClass="underline decoration-plum text-white"
-              >
-                {link.label} {/* Display the label */}
-              </ScrollLink>
-            </li>
-          ))}
-        </ul>
-
-        <ul className=" flex flex-col gap-[1.25rem]">
-          <li className="my-2 cursor-pointer text-plum">
-            <ScrollLink
-              to="testimonials"
-              spy={true}
-              smooth={true}
-              duration={1500}
-              activeClass="underline decoration-plum text-white"
-            >
-              Testimonials
-            </ScrollLink>
-          </li>
-          <li className="my-2 cursor-pointer text-plum">
-            <ScrollLink
-              to="best deals"
-              spy={true}
-              smooth={true}
-              duration={1500}
-              activeClass="underline decoration-plum text-white"
-            >
-              Best deals
-            </ScrollLink>
-          </li>
-        </ul>
+        <div>
+          <h1 className="text-plum text-2xl font-bold mb-2">Home</h1>
+          <ul className="flex flex-col gap-2">
+            {FooterLinks.map((link) => (
+              <li key={link} className="cursor-pointer text-black">
+                <ScrollLink
+                  to={link.to} // Matches the `id` of the target section
+                  spy={true}
+                  smooth={true}
+                  duration={1500}
+                  activeClass="underline decoration-plum text-white"
+                >
+                  {link.label} {/* Display the label */}
+                </ScrollLink>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {/* social media web*/}
         <ul className=" text-plum text-lg flex flex-col gap-[1.25rem]">
-          <li>Social media</li>
+          <li className="text-2xl font-bold">Social media</li>
 
-          <div className="flex gap-2">
-            {socialMediaLinks.map((link) => (
-              <Link key={link} to={link.link} className="text-plum text-lg">
-                {link.icon}
-              </Link>
-            ))}
-          </div>
+          <ul className="flex flex-col gap-5">
+            <li className="flex items-center gap-3 text-sm">
+              <img src="/assets/phone.png" />{" "}
+              <span className="text-black">+1 (860) 960-0316</span>
+            </li>
+            <li className="flex items-center gap-3 text-sm">
+              <img src="/assets/mail.png" />
+              <a href="mailto:contact@haveaseaton.com" className="text-black">
+                contact@haveaseaton.com
+              </a>
+            </li>
+          </ul>
         </ul>
       </div>
 
-      {/* social media mobile */}
-      <div className="md:hidden px-5 md:px-[75px] py-24 flex flex-col md:flex-row justify-between">
-        <ul>
-          {navLinks.map((link) => (
-            <li key={link} className="my-2 cursor-pointer text-plum">
-              <ScrollLink
-                to={link.to} // Matches the `id` of the target section
-                spy={true}
-                smooth={true}
-                duration={1500}
-                activeClass="underline decoration-plum text-white"
-              >
-                {link.label} {/* Display the label */}
-              </ScrollLink>
-            </li>
-          ))}
-        </ul>
+      {/* newsletter */}
 
-        <ul className="flex flex-col gap-[1.25rem]"></ul>
+      <div className="flex flex-col gap-4 md:gap-0 md:flex-row justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold ">Join Our Newsletter</h2>
+          <p className=" text-sm my-1">
+            Only updates and special offers. No spams.
+          </p>
+        </div>
 
-        <ul className="text-plum text-lg flex my-5 flex-col gap-[1.25rem]">
-          <li className="font-bold">+1 (860) 960-0316</li>
-          <li>
-            <a href="mailto:contact@haveaseaton.com">contact@haveaseaton.com</a>
-          </li>
+        <form className=" flex flex-col gap-4 md:gap-0 md:flex-row justify-center items-center">
+          <div className="relative ">
+            <Mail className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="email"
+              placeholder="Enter your email address..."
+              className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            />
+          </div>
           <button
-            onClick={handleSearch}
-            className="text-white rounded-lg w-[65%] bg-plum py-3 px-10 text-center cursor-pointer"
+            type="submit"
+            className="ml-4 px-6 py-2 rounded-full bg-purple-600 text-white font-medium hover:bg-purple-700 transition"
           >
-            Book a Table
+            Subscribe →
           </button>
-        </ul>
-
-        {/* social media */}
-        <ul className=" text-plum text-lg flex flex-col gap-[1.25rem]">
-          <li>Social media</li>
-          <li className="flex gap-[22px] ">
-            {socialMediaLinks.map((item, index) => (
-              <a
-                key={item}
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center"
-              >
-                {item.icon}
-              </a>
-            ))}
-          </li>
-        </ul>
+        </form>
       </div>
 
       {/* copyrigths */}
-      <div className="border-t-2 border-purple-200 py-4 md:py-0 md:px-[75px]">
-        <div className="w-[80%] m-auto md:w-full">
-          <div className="text-center md:text-left md:flex text-lg justify-between items-center">
+      <div className=" py-4">
+        <div className=" border-t-2 border-black m-auto md:w-full">
+          <div className="text-center md:text-left flex flex-col gap-4 md:gap-0 md:flex-row text-base justify-between items-center py-5">
             <div>
-              <p className="text-plum ">
-                Copyright © HAVE A SEAT. All rights reserved.{" "}
-              </p>
+              <p className=" ">Copyright © HaveaSeat. All rights reserved. </p>
             </div>
+            <ul>
+              <li className="flex gap-[22px] ">
+                {socialMediaLinks.map((item, index) => (
+                  <a
+                    key={item}
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center"
+                  >
+                    <img src={item.icon} alt="" />
+                  </a>
+                ))}
+              </li>
+            </ul>
           </div>
         </div>
       </div>

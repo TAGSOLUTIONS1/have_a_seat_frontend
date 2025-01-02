@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
+import { User, Phone, Mail } from "lucide-react";
 
 const ReservationForm = ({ formData, bookingInfo }) => {
   const { authState } = useAuth();
@@ -78,109 +79,127 @@ const ReservationForm = ({ formData, bookingInfo }) => {
   }, [initialValues]);
 
   return (
-    <div className="flex bg-white p-8 rounded shadow-md">
-      <div className="w-full md:w-2/3 lg:w-2/3 community-service-hours-form">
-        <h2 className="text-3xl font-bold text-center pb-8">
-          Reservation Form
-        </h2>
-        <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col space-y-2"
-        >
-          <label
-            htmlFor="first_name"
-            className="text-sm font-medium text-gray-700"
-          >
-            First Name:
-          </label>
-          <input
-            type="text"
-            id="first_name"
-            name="first_name"
-            required
-            className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
-            {...formik.getFieldProps("first_name")}
-          />
-          {formik.touched.first_name && formik.errors.first_name ? (
-            <div className="text-red-500">{formik.errors.first_name}</div>
-          ) : null}
-
-          <label
-            htmlFor="last_name"
-            className="text-sm font-medium text-gray-700"
-          >
-            Last Name:
-          </label>
-          <input
-            type="text"
-            id="last_name"
-            name="last_name"
-            required
-            className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
-            {...formik.getFieldProps("last_name")}
-          />
-          {formik.touched.last_name && formik.errors.last_name ? (
-            <div className="text-red-500">{formik.errors.last_name}</div>
-          ) : null}
-
-          <label htmlFor="phone" className="text-sm font-medium text-gray-700">
-            Number:
-          </label>
-          <input
-            type="text"
-            id="phone"
-            name="phone"
-            required
-            className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
-            {...formik.getFieldProps("phone")}
-          />
-          {formik.touched.phone && formik.errors.phone ? (
-            <div className="text-red-500">{formik.errors.phone}</div>
-          ) : null}
-
-          <label htmlFor="email" className="text-sm font-medium text-gray-700">
-            Email:
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            className="w-full px-3 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
-            {...formik.getFieldProps("email")}
-          />
-          {formik.touched.email && formik.errors.email ? (
-            <div className="text-red-500">{formik.errors.email}</div>
-          ) : null}
-
-          <div className="flex flex-col md:flex-row lg:flex-row items-center justify-center md:space-x-4 lg:space-x-4 ">
-            <button
-              type="submit"
-              className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white w-full md:w-2/3 lg:w-2/3 align-center bg-purple-600 hover:bg-purple-800 mt-4"
-              style={{ minWidth: "100px" }}
-            >
-              Make a Reservation
-            </button>
-
-            {/* <button
-              type="button"
-              className="inline-flex justify-center items-center px-4 py-2 text-base font-medium rounded-md text-white w-full md:w-1/3 lg:w-1/3 align-center bg-purple-600 hover:bg-purple-800 mt-4"
-              style={{ minWidth: "100px" }}
-              onClick={formik.handleReset}
-            >
-              Cancel Reservation
-            </button> */}
+    <div className=" rounded-lg shadow-md  text-[#39353C] flex items-center justify-center  px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 p-6 bg-white ">
+        <div className="text-center">
+          <div className="flex items-center justify-center w-16 p-2 h-16 mx-auto bg-plum rounded-full">
+            <img src="/assets/reserve.png" alt="from reseveration photo" />
           </div>
+          <h2 className="mt-4 text-xl md:text-[3rem] font-bold ">
+            Reservation Form
+          </h2>
+          <p className="mt-4 text-base md:text-lg">
+            Fill in the information to reserve.
+          </p>
+        </div>
+        <form className="mt-8 space-y-8" onSubmit={formik.handleSubmit}>
+          {/* Name Input */}
+          <div className="relative">
+            <label
+              htmlFor="first_name"
+              className="block ml-6 text-sm font-medium text-gray-700 my-2"
+            >
+              First Name
+            </label>
+            <User className="absolute top-12 left-[1.75rem] transform -translate-y-1/2 " />
+            <input
+              type="text"
+              placeholder="Optional"
+              className="w-full pl-10 pr-4 py-2 ml-6 text-sm border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              id="first_name"
+              {...formik.getFieldProps("first_name")}
+            />
+            {formik.touched.first_name && formik.errors.first_name ? (
+              <div className="mt-1 h-5 ml-10  text-red-500">
+                {formik.errors.first_name}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="relative">
+            <label
+              htmlFor="last_name"
+              className="block ml-6 text-sm font-medium text-gray-700 my-2"
+            >
+              Last Name
+            </label>
+            <User className="absolute top-12 left-[1.75rem] transform -translate-y-1/2 " />
+            <input
+              type="text"
+              placeholder="Optional"
+              className="w-full pl-10 pr-4 py-2 ml-6 text-sm border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              id="last_name"
+              {...formik.getFieldProps("last_name")}
+            />
+            {formik.touched.last_name && formik.errors.last_name ? (
+              <div className=" mt-1 h-5 ml-10  text-red-500">
+                {formik.errors.last_name}
+              </div>
+            ) : null}
+          </div>
+
+          {/* Contact Number Input */}
+          <div className="relative">
+            <label
+              htmlFor="phone"
+              className="block ml-6 text-sm font-medium my-2 text-gray-700"
+            >
+              Contact Number
+            </label>
+            <Phone className="absolute top-12 left-[1.75rem] transform -translate-y-1/2 " />
+            <input
+              type="text"
+              placeholder="Required"
+              className="w-full pl-10 pr-4 py-2 ml-6 px-2 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              required
+              id="phone"
+              {...formik.getFieldProps("phone")}
+            />
+            {formik.touched.phone && formik.errors.phone && (
+              <p className="mt-1 h-5 ml-10 text-sm text-red-500">
+                {formik.errors.phone}
+              </p>
+            )}
+          </div>
+
+          {/* Email Address Input */}
+          <div className="relative">
+            <label
+              htmlFor="email"
+              className="block ml-6 text-sm font-medium my-2 text-gray-700"
+            >
+              Email Address
+            </label>
+            <Mail className="absolute top-12 left-[1.75rem] transform -translate-y-1/2 " />
+            <input
+              type="email"
+              placeholder="Required"
+              className="w-full pl-10 pr-4 py-2 px-2 ml-6 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              required
+              id="email"
+              {...formik.getFieldProps("email")}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <p className="mt-1 h-5 ml-10 text-sm text-red-500">
+                {formik.errors.email}
+              </p>
+            )}
+          </div>
+
+          <p className="text-sm text-gray-600 text-center">
+            After completion of the form you will receive a confirmation of your
+            reservation by <span className="font-bold">e-mail</span> or{" "}
+            <span className="font-bold">text message.</span>
+          </p>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full py-3 mt-4 rounded-full bg-purple-600 text-white font-medium hover:bg-purple-700 transition"
+          >
+            Book a Table →
+          </button>
         </form>
-      </div>
-      <div className="md:w-2/5 lg:w-2/5 hidden md:block lg:block md:px-24 lg:px-24 px-0">
-        <img
-          src="/assets/bookingImage.svg"
-          className="mt-32"
-          width={"250px"}
-          height={"350px"}
-          alt=""
-        />
       </div>
     </div>
   );
