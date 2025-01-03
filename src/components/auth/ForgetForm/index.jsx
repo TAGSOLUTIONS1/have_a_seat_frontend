@@ -4,9 +4,8 @@
 
 // import { useToast } from "@/components/ui/use-toast";
 
-
 // const ForgetForm = () => {
-  
+
 //   const { toast } = useToast();
 //     const [email , setEmail] = useState("")
 
@@ -16,7 +15,7 @@
 //           const currentDate = new Date();
 //           const date = currentDate.toString();
 //           const response = await axios.post(
-//             "https://3.101.103.14/api/v1/auth/forgot-password",
+//             "https://have-a-seatonline.com/api/v1/auth/forgot-password",
 //             {
 //               email,
 //             }
@@ -44,7 +43,6 @@
 //         }
 //       };
 
-      
 //   return (
 //     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mt-10">
 //       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
@@ -83,16 +81,16 @@
 
 // export default ForgetForm
 
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useToast } from '@/components/ui/use-toast';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { ForgetSchema } from '@/lib/utils';
+import React, { useState } from "react";
+import axios from "axios";
+import { useToast } from "@/components/ui/use-toast";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { ForgetSchema } from "@/lib/utils";
 
 const ForgetForm = () => {
   const { toast } = useToast();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
   const {
     register,
@@ -107,7 +105,7 @@ const ForgetForm = () => {
       const currentDate = new Date();
       const date = currentDate.toString();
       const response = await axios.post(
-        'https://3.101.103.14/api/v1/auth/forgot-password',
+        "https://have-a-seatonline.com/api/v1/auth/forgot-password",
         {
           email: data.email,
         }
@@ -116,22 +114,22 @@ const ForgetForm = () => {
       if (response.status === 202) {
         // console.log(response);
         toast({
-          title: 'Check Your Email to Reset your Password',
+          title: "Check Your Email to Reset your Password",
           description: date,
         });
-        setEmail('');
+        setEmail("");
       } else {
         // console.log('reset failed');
         toast({
-          title: 'Error occurred while resetting password',
-          description: 'Please try Again later',
+          title: "Error occurred while resetting password",
+          description: "Please try Again later",
         });
       }
     } catch (error) {
-      console.error('Error occurred while resetting password:', error);
+      console.error("Error occurred while resetting password:", error);
       toast({
-        title: 'Error occurred while resetting password',
-        description: 'Please try Again later',
+        title: "Error occurred while resetting password",
+        description: "Please try Again later",
       });
     }
   };
@@ -143,7 +141,10 @@ const ForgetForm = () => {
           Forgot Password
         </h1>
 
-        <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="space-y-4 md:space-y-6"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="flex items-center mb-4">
             <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
             <div className="flex-grow">
@@ -151,13 +152,15 @@ const ForgetForm = () => {
                 type="email"
                 id="email"
                 className={`border border-gray-300 rounded w-full py-2 px-3 ${
-                  errors.email ? 'border-red-500' : ''
+                  errors.email ? "border-red-500" : ""
                 }`}
                 placeholder="Existing Email"
-                {...register('email')}
+                {...register("email")}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </p>
               )}
             </div>
           </div>

@@ -39,7 +39,7 @@ function App() {
           <Route path="/forget" element={<ForgetPassword />} />
           <Route path="/verifyuser" element={<VerifyUser />} />
           <Route path="/restraunts" element={<Search />} />
-          <Route path="/restaurant-detail" element={<RestaurantDetailsV2 />} />
+          <Route path="/restaurant-detail" element={<RestrauntDetail />} />
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/reservation-status" element={<ReservationStatus />} />
           <Route path="/user-history" element={<UserHistory />} />

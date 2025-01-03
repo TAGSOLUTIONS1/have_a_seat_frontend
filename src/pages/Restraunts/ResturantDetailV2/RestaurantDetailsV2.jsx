@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AiFillStar, AiOutlineStar, AiTwotoneStar } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 const images = [
@@ -80,7 +80,40 @@ const renderStars = (rating) => {
   }
   return stars;
 };
-export default function RestaurantDetailsV2() {
+export default function RestaurantDetailsV2({ restrauntDetail }) {
+  const [pictures, setPictures] = useState();
+  useEffect(() => {
+    console.log("keys", Object.keys(restrauntDetail));
+
+    if (Object.keys(restrauntDetail).length !== 0) {
+      setPictures(restrauntDetail);
+    }
+  }, [restrauntDetail]);
+
+  let imageUrls = [];
+  if (pictures?.alias) {
+    imageUrls = pictures?.photos || [];
+  } else if (pictures?.restaurant) {
+    const galleryPhotos = pictures?.restaurant?.photos?.gallery?.photos;
+    if (galleryPhotos && galleryPhotos.length > 0) {
+      imageUrls = galleryPhotos.map((photo) => {
+        const firstThumbnailUrl = photo.thumbnails[2]?.url;
+        return firstThumbnailUrl;
+      });
+    }
+  } else {
+    imageUrls = pictures?.images;
+  }
+  const getAdjacentIndex = (offset) => {
+    let index = currentImageIndex + offset;
+    if (index < 0) {
+      index = imageUrls?.length - 1;
+    } else if (index >= imageUrls?.length) {
+      index = 0;
+    }
+    return index;
+  };
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("All Day");
   const [selectedGuests, setSelectedGuests] = useState(2);
@@ -109,7 +142,7 @@ export default function RestaurantDetailsV2() {
                   <h4 className="font-semibold text-[1.25rem]">
                     <span>Ratings:</span>
                   </h4>
-                  <p className="">
+                  <p className="text-sm sm:text-base min-h-[40px]">
                     4<span className="text-sm sm:text-base">/5</span>
                   </p>
                 </div>
@@ -125,7 +158,9 @@ export default function RestaurantDetailsV2() {
                   <h4 className="font-semibold  text-[1.25rem]">
                     <span>Cuisine:</span>
                   </h4>
-                  <p className="">Alfredo Fettuccine, Redo Lamborghini</p>
+                  <p className="text-sm sm:text-base min-h-[40px]">
+                    Alfredo Fettuccine, Redo Lamborghini
+                  </p>
                 </div>
               </div>
             </div>
@@ -141,20 +176,22 @@ export default function RestaurantDetailsV2() {
                   <h4 className="font-semibold text-[1.25rem]">
                     <span>Address:</span>
                   </h4>
-                  <p className="">126W 13th StNew York, NY10011</p>
+                  <p className="text-sm sm:text-base min-h-[40px]">
+                    126W 13th StNew York, NY10011
+                  </p>
                 </div>
               </div>
-              <div className="flex gap-4 items-start">
+              <div className="flex gap gap-4">
                 <img
                   src="/assets/contact.png"
-                  alt="contact logo"
+                  alt="address logo"
                   className="h-5 w-5 mt-[6px]"
                 />
-                <div className="flex-col gap-2">
+                <div className="flex flex-col gap-2">
                   <h4 className="font-semibold text-[1.25rem]">
                     <span>Contact:</span>
                   </h4>
-                  <p className="">090078601</p>
+                  <p className="text-sm sm:text-base min-h-[40px]">090078601</p>
                 </div>
               </div>
             </div>
@@ -162,19 +199,35 @@ export default function RestaurantDetailsV2() {
         </div>
 
         {/* Slider */}
-        <div className="">
-          <Slider {...settings}>
-            {images.map((src, index) => (
+        {/* <div className="">
+          {imageUrls.length > 0 ? (
+            <Slider {...settings}>
               <div key={index} className="rounded-lg w-full relative">
                 <img
-                  src={src}
-                  alt={`Slide ${index + 1}`}
+                  src={imageUrls[getAdjacentIndex(-1)]}
+                  alt={`Image ${getAdjacentIndex(-1) + 1}`}
                   className="h-[250px] md:h-[370px] lg:h-[450px] w-full object-cover rounded-lg"
                 />
               </div>
-            ))}
-          </Slider>
-        </div>
+              <div key={index} className="rounded-lg w-full relative">
+                <img
+                  src={imageUrls[currentImageIndex]}
+                  alt={`Image ${currentImageIndex + 1}`}
+                  className="h-[250px] md:h-[370px] lg:h-[450px] w-full object-cover rounded-lg"
+                />
+              </div>
+              <div key={index} className="rounded-lg w-full relative">
+                <img
+                  src={imageUrls[getAdjacentIndex(1)]}
+                  alt={`Image ${getAdjacentIndex(1) + 1}`}
+                  className="h-[250px] md:h-[370px] lg:h-[450px] w-full object-cover rounded-lg"
+                />
+              </div>
+            </Slider>
+          ) : (
+            "No images availabe"
+          )}
+        </div> */}
       </div>
       <div className="py-10">
         <h1 className="text-xl font-bold mb-10">Make a Reservation</h1>

@@ -12,6 +12,7 @@ import Reviews from "./Reviews";
 import TimingHours from "./TimingHours";
 
 import { ResyRestrauntDetail } from "@/mockData";
+import RestaurantDetailsV2 from "../ResturantDetailV2/RestaurantDetailsV2";
 
 const RestrauntDetail = () => {
   const [restrauntDetail, setRestrauntDetail] = useState({});
@@ -127,12 +128,15 @@ const RestrauntDetail = () => {
               }}
             ></div>
           </section>
-          <section>
-            <OverviewCards restrauntDetail={restrauntDetail} />
-          </section>
+
+          <RestaurantDetailsV2 restrauntDetail={restrauntDetail} />
           <section>
             <Pictures restrauntDetail={restrauntDetail} />
           </section>
+          {/* <section>
+            <OverviewCards restrauntDetail={restrauntDetail} />
+          </section>
+       
           {restrauntDetail?.alias ? null : (
             <section>
               <Menu restrauntDetail={restrauntDetail} />
@@ -148,7 +152,7 @@ const RestrauntDetail = () => {
                 <Reviews restrauntDetail={restrauntDetail} />
               </section>
             </>
-          )}
+          )} */}
         </>
       )}
     </div>

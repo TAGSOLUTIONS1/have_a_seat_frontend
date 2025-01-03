@@ -399,7 +399,6 @@ const RestaurantCards = memo(
                         </h4>
 
                         <p className="px-8">
-                          {" "}
                           {data.restraunt_type === "yelp"
                             ? data?.rating
                             : data.restraunt_type === "open_table"

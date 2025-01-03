@@ -1,52 +1,49 @@
-import React , {useState} from 'react'
+import React, { useState } from "react";
 
 import axios from "axios";
 
 import { useToast } from "@/components/ui/use-toast";
 
-
 const VerifyUserForm = () => {
-  
   const { toast } = useToast();
-    const [token , setToken] = useState("")
+  const [token, setToken] = useState("");
 
-    // console.log(token)
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-          const currentDate = new Date();
-          const date = currentDate.toString();
-          const response = await axios.post(
-            "https://3.101.103.14/api/v1/auth/verify",
-            {
-              token,
-            }
-          );
-          if (response.status === 200) {
-            // console.log(response)
-            toast({
-              title: "Check Your Email to Reset your Password",
-              description: date,
-            });
-            setEmail("")
-          } else {
-            // console.log("reset failed");
-            toast({
-              title: "Error occurred while resetting password",
-              description: "Please try Again later",
-            });
-          }
-        } catch (error) {
-          console.error("Error occurred while resetting password:", error);
-          toast({
-            title: "Error occurred while resetting password",
-            description: "Please try Again later",
-          });
+  // console.log(token)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const currentDate = new Date();
+      const date = currentDate.toString();
+      const response = await axios.post(
+        "https://have-a-seatonline.com/api/v1/auth/verify",
+        {
+          token,
         }
-      };
+      );
+      if (response.status === 200) {
+        // console.log(response)
+        toast({
+          title: "Check Your Email to Reset your Password",
+          description: date,
+        });
+        setEmail("");
+      } else {
+        // console.log("reset failed");
+        toast({
+          title: "Error occurred while resetting password",
+          description: "Please try Again later",
+        });
+      }
+    } catch (error) {
+      console.error("Error occurred while resetting password:", error);
+      toast({
+        title: "Error occurred while resetting password",
+        description: "Please try Again later",
+      });
+    }
+  };
 
-      
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mt-10">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
@@ -64,7 +61,7 @@ const VerifyUserForm = () => {
                 className="border border-gray-300 rounded w-full py-2 px-3"
                 placeholder="token"
                 value={token}
-                onChange={(e) =>setToken(e.target.value )}
+                onChange={(e) => setToken(e.target.value)}
               />
             </div>
           </div>
@@ -80,7 +77,7 @@ const VerifyUserForm = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default VerifyUserForm
+export default VerifyUserForm;
