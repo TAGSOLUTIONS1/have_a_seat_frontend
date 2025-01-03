@@ -12,9 +12,13 @@ import { ResetSchema } from "@/lib/utils";
 const ResetForm = () => {
   const { toast } = useToast();
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [paramsToken, setParamsToken] = useState();
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(ResetSchema),
   });
 
@@ -33,7 +37,7 @@ const ResetForm = () => {
       const currentDate = new Date();
       const date = currentDate.toString();
       const response = await axios.post(
-        "https://3.101.103.14/api/v1/auth/reset-password",
+        "https://have-a-seatonline.com/api/v1/auth/reset-password",
         {
           token: paramsToken,
           password: data.newPassword,
@@ -44,7 +48,7 @@ const ResetForm = () => {
           title: "The password has been successfully reset.",
           description: date,
         });
-        navigate("/")
+        navigate("/");
         // console.log(response);
       } else {
         console.error("reset failed");
@@ -54,7 +58,6 @@ const ResetForm = () => {
     }
   };
 
-
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mt-10">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
@@ -62,19 +65,26 @@ const ResetForm = () => {
           Reset Password
         </h1>
 
-        <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="space-y-4 md:space-y-6"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="flex items-center mb-4">
             <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
             <div className="flex-grow">
               <input
                 type="password"
                 id="new_password"
-                className={`border border-gray-300 rounded w-full py-2 px-3 ${errors.newPassword ? 'border-red-500' : ''}`}
+                className={`border border-gray-300 rounded w-full py-2 px-3 ${
+                  errors.newPassword ? "border-red-500" : ""
+                }`}
                 placeholder="Enter New Password"
-                {...register('newPassword')}
+                {...register("newPassword")}
               />
               {errors.newPassword && (
-                <p className="text-red-500 text-sm mt-1">{errors.newPassword.message}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.newPassword.message}
+                </p>
               )}
             </div>
           </div>

@@ -14,7 +14,7 @@ const groupByType = (suggestions) => {
 const fetchSuggestions = async (term, setSuggestions) => {
   try {
     const response = await axios.get(
-      `https://3.101.103.14/api/v1/opentable/autocomplete?term=${encodeURIComponent(
+      `https://have-a-seatonline.com/api/v1/opentable/autocomplete?term=${encodeURIComponent(
         term
       )}`
     );

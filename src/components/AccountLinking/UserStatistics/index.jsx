@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
@@ -27,7 +22,7 @@ const UserStatistics = () => {
   const getUserStatistics = async () => {
     try {
       const response = await axios.get(
-        `https://3.101.103.14/api/v1/reservation/statistics/`,
+        `https://have-a-seatonline.com/api/v1/reservation/statistics/`,
         {
           headers: {
             Authorization: `Bearer ${authState?.accessToken}`,
@@ -68,7 +63,10 @@ const UserStatistics = () => {
 
   // Fetching and calculating data from the API response
   const totalReservations = statistics?.number_of_reservations_per_year
-    ? Object.values(statistics.number_of_reservations_per_year).reduce((a, b) => a + b, 0)
+    ? Object.values(statistics.number_of_reservations_per_year).reduce(
+        (a, b) => a + b,
+        0
+      )
     : 0;
 
   const totalCancellations = 0; // Replace with actual cancellation data if available

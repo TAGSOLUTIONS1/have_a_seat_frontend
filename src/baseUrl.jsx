@@ -1,4 +1,4 @@
-// export const Base_Url = "https://3.101.103.14";
-export const Base_Url = "https://3.101.103.14";
-// https://3.101.103.14
-// https://3.101.103.14
+// export const Base_Url = "https://have-a-seatonline.com";
+export const Base_Url = "https://have-a-seatonline.com";
+// https://have-a-seatonline.com
+// https://have-a-seatonline.com
