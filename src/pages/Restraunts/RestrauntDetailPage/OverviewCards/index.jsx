@@ -18,6 +18,7 @@ const OverviewCard = ({ restrauntDetail }) => {
         <div className=" row-span-1 md:col-span-4 lg:col-span-4 mr-4">
           <OverviewCard1 overviewCardsData={overviewCardsData} />
         </div>
+
         <div className=" md:absolute lg:absolute md:w-[23%] md:top-0 md:left-[63%] lg:w-[23%] lg:top-0 lg:left-[63%] row-span-1 md:col-span-2 sticky lg:row-span-2 top-0">
           {/* // slots timings */}
           <OverviewCard2 overviewCardsData={overviewCardsData} />

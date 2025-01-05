@@ -3,7 +3,7 @@ import { DollarSign, MessageSquare, Star, Utensils } from "lucide-react";
 import { ResyRestrauntDetail } from "@/mockData";
 
 const OverviewCard1 = ({ overviewCardsData }) => {
-  // console.log(overviewCardsData);
+  console.log("over view cards", overviewCardsData);
 
   const getRandomKey = (obj) => {
     const keys = Object.keys(obj);
@@ -99,7 +99,9 @@ const OverviewCard1 = ({ overviewCardsData }) => {
                   {overviewCardsData?.categories[0]?.title}
                 </span>
                 <span className="hidden sm:inline">
-                  {overviewCardsData?.categories.map((category) => category.title).join(", ")}
+                  {overviewCardsData?.categories
+                    .map((category) => category.title)
+                    .join(", ")}
                 </span>
               </>
             ) : overviewCardsData?.restaurant ? (
@@ -110,7 +112,9 @@ const OverviewCard1 = ({ overviewCardsData }) => {
                   {overviewCardsData?.cuisine[0]}
                 </span>
                 <span className="hidden sm:inline">
-                  {overviewCardsData?.cuisine.map((cuisineItem) => cuisineItem).join(", ")}
+                  {overviewCardsData?.cuisine
+                    .map((cuisineItem) => cuisineItem)
+                    .join(", ")}
                 </span>
               </>
             )}
@@ -133,8 +137,7 @@ const OverviewCard1 = ({ overviewCardsData }) => {
         ) : (
           <>
             {overviewCardsData?.neighborhood} ,{" "}
-            {overviewCardsData?.location.name} , {" "}
-            {overviewCardsData?.country}
+            {overviewCardsData?.location.name} , {overviewCardsData?.country}
           </>
         )}
       </p>
@@ -144,8 +147,8 @@ const OverviewCard1 = ({ overviewCardsData }) => {
           ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
           : overviewCardsData?.restaurant
           ? convertHtmlToText(overviewCardsData?.restaurant?.description)
-          :"Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."}
-           {/* randomTemplate?.content["en-us"]?.about?.body */}
+          : "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."}
+        {/* randomTemplate?.content["en-us"]?.about?.body */}
       </p>
     </div>
   );

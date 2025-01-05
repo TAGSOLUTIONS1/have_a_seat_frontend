@@ -13,6 +13,8 @@ import TimingHours from "./TimingHours";
 
 import { ResyRestrauntDetail } from "@/mockData";
 import RestaurantDetailsV2 from "../ResturantDetailV2/RestaurantDetailsV2";
+import Slider from "../ResturantDetailV2/Slider";
+import ImageSlider from "../ResturantDetailV2/Slider";
 
 const RestrauntDetail = () => {
   const [restrauntDetail, setRestrauntDetail] = useState({});
@@ -129,19 +131,19 @@ const RestrauntDetail = () => {
             ></div>
           </section>
 
-          <RestaurantDetailsV2 restrauntDetail={restrauntDetail} />
+          {/* <RestaurantDetailsV2 restrauntDetail={restrauntDetail} /> */}
           <section>
             <Pictures restrauntDetail={restrauntDetail} />
           </section>
-          {/* <section>
+          <section>
             <OverviewCards restrauntDetail={restrauntDetail} />
           </section>
-       
-          {restrauntDetail?.alias ? null : (
+
+          {/* {restrauntDetail?.alias ? null : (
             <section>
               <Menu restrauntDetail={restrauntDetail} />
             </section>
-          )}
+          )} */}
 
           {restrauntDetail?.region ? null : (
             <>
@@ -152,7 +154,7 @@ const RestrauntDetail = () => {
                 <Reviews restrauntDetail={restrauntDetail} />
               </section>
             </>
-          )} */}
+          )}
         </>
       )}
     </div>
