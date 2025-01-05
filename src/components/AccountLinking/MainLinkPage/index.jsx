@@ -17,7 +17,7 @@ const MainLinkingPage = () => {
     email: "",
     password: "",
   });
-  
+
   const storageToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const MainLinkingPage = () => {
         },
       };
       const response = await axios.get(
-        "https://3.101.103.14/api/v1/users/me",
+        "https://have-a-seatonline.com/api/v1/users/me",
         config
       );
       if (response.status === 200) {
@@ -77,7 +77,7 @@ const MainLinkingPage = () => {
       };
 
       const response = await axios.patch(
-        "https://3.101.103.14/api/v1/users/me",
+        "https://have-a-seatonline.com/api/v1/users/me",
         editedData,
         config
       );

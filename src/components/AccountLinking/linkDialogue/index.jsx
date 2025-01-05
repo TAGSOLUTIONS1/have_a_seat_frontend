@@ -41,7 +41,11 @@ const LinkDialogue = () => {
   };
 
   const handleTockClick = () => {
-    openModalWindow("https://www.exploretock.com/signup?continue=%2F", 1000, 550);
+    openModalWindow(
+      "https://www.exploretock.com/signup?continue=%2F",
+      1000,
+      550
+    );
   };
 
   const handleGoogleClick = () => {
@@ -49,7 +53,11 @@ const LinkDialogue = () => {
   };
 
   const handleToastTabClick = () => {
-    openModalWindow("https://auth.toasttab.com/u/login/identifier?state=hKFo2SBqOVdWc2NOaFdtWFRfYTlTbG5Hb3NWSWVFM1dVYmEwSqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEczalgyQm9ud0JRbzh4UkQ0bGpTVHJYZnJVR19ndlVFo2NpZNkgVUd2eWtZdzh3U1VwNWptbUhqVk5pcUtWcGswYjU2SWU", 1000, 550);
+    openModalWindow(
+      "https://auth.toasttab.com/u/login/identifier?state=hKFo2SBqOVdWc2NOaFdtWFRfYTlTbG5Hb3NWSWVFM1dVYmEwSqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEczalgyQm9ud0JRbzh4UkQ0bGpTVHJYZnJVR19ndlVFo2NpZNkgVUd2eWtZdzh3U1VwNWptbUhqVk5pcUtWcGswYjU2SWU",
+      1000,
+      550
+    );
   };
 
   useEffect(() => {
@@ -83,7 +91,7 @@ const LinkDialogue = () => {
   //   const cookieData = { type: "cookieData", cookies };
 
   //   window.parent.postMessage(cookieData, "*");
-  
+
   // Function to handle checkbox changes
   const handleCheckboxChange = (type) => {
     const updatedTypes = {
@@ -94,7 +102,7 @@ const LinkDialogue = () => {
 
     // Update the restaurant type in the backend
     const accessToken = localStorage.getItem("accessToken");
-    fetch("https://3.101.103.14/api/v1/users/me", {
+    fetch("https://have-a-seatonline.com/api/v1/users/me", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -108,7 +116,10 @@ const LinkDialogue = () => {
         },
       }),
     }).then((response) => response.json());
-    localStorage.setItem("user", JSON.stringify({ link_restaurant: updatedTypes }));
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ link_restaurant: updatedTypes })
+    );
   };
 
   return (
@@ -138,28 +149,28 @@ const LinkDialogue = () => {
             </label>
           </div>
 
-            <div
-              className="relative border-2 rounded-lg flex-1 pt-12 p-4"
-              onClick={() => handleCheckboxChange("yelp")}
-            >
-              <label htmlFor="checkbox2" className="cursor-pointer">
-                <img
-                  src="assets/yelp_logo_new.png"
-                  alt="Yelp"
-                  className="w-full h-auto object-contain rounded-md"
+          <div
+            className="relative border-2 rounded-lg flex-1 pt-12 p-4"
+            onClick={() => handleCheckboxChange("yelp")}
+          >
+            <label htmlFor="checkbox2" className="cursor-pointer">
+              <img
+                src="assets/yelp_logo_new.png"
+                alt="Yelp"
+                className="w-full h-auto object-contain rounded-md"
+              />
+              <div className="absolute top-2 right-2">
+                <input
+                  type="checkbox"
+                  id="checkbox2"
+                  name="checkbox"
+                  style={{ width: "20px", height: "20px" }}
+                  checked={selectedTypes.yelp}
+                  onChange={() => handleCheckboxChange("yelp")}
                 />
-                <div className="absolute top-2 right-2">
-                  <input
-                    type="checkbox"
-                    id="checkbox2"
-                    name="checkbox"
-                    style={{ width: "20px", height: "20px" }}
-                    checked={selectedTypes.yelp}
-                    onChange={() => handleCheckboxChange("yelp")}
-                  />
-                </div>
-              </label>
-            </div>
+              </div>
+            </label>
+          </div>
 
           <div
             className="relative border-2 flex-1 rounded-lg pt-12 p-4"
@@ -250,7 +261,6 @@ const LinkDialogue = () => {
           className="sm:max-w-[1300px]"
           style={{ height: "calc(100vh - 48px)" }}
         >
-          
           {/* {restrauntType === "yelp" ? (
             <iframe
               //   ref={iframeRef}
