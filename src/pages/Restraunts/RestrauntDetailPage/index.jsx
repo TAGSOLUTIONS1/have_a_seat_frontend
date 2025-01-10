@@ -7,14 +7,13 @@ import Loader from "@/components/Loader";
 import Menu from "./Menu";
 import OverviewCards from "./OverviewCards";
 import OverviewCard2 from "./OverviewCards/OverviewCard2";
-import Pictures from "./Pictures";
 import Reviews from "./Reviews";
 import TimingHours from "./TimingHours";
 
 import { ResyRestrauntDetail } from "@/mockData";
 import RestaurantDetailsV2 from "../ResturantDetailV2/RestaurantDetailsV2";
-import Slider from "../ResturantDetailV2/Slider";
 import ImageSlider from "../ResturantDetailV2/Slider";
+import Pictures from "./Pictures";
 
 const RestrauntDetail = () => {
   const [restrauntDetail, setRestrauntDetail] = useState({});
@@ -105,7 +104,7 @@ const RestrauntDetail = () => {
         <Loader />
       ) : (
         <>
-          <section
+          {/* <section
             className="max-w-full p-4"
             style={{
               display: "flex",
@@ -129,15 +128,15 @@ const RestrauntDetail = () => {
                 // marginLeft: "30px",
               }}
             ></div>
-          </section>
+          </section> */}
 
-          {/* <RestaurantDetailsV2 restrauntDetail={restrauntDetail} /> */}
-          <section>
+          <RestaurantDetailsV2 restrauntDetail={restrauntDetail} />
+          {/* <section>
             <Pictures restrauntDetail={restrauntDetail} />
           </section>
           <section>
             <OverviewCards restrauntDetail={restrauntDetail} />
-          </section>
+          </section> */}
 
           {/* {restrauntDetail?.alias ? null : (
             <section>
@@ -147,12 +146,12 @@ const RestrauntDetail = () => {
 
           {restrauntDetail?.region ? null : (
             <>
-              <section>
+              {/* <section>
                 <TimingHours restrauntDetail={restrauntDetail} />
-              </section>
-              <section>
+              </section> */}
+              {/* <section>
                 <Reviews restrauntDetail={restrauntDetail} />
-              </section>
+              </section> */}
             </>
           )}
         </>

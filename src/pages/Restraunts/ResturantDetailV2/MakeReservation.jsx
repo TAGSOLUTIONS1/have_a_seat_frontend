@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { Base_Url } from "@/baseUrl";
-import DatePicker from "./Date";
-import PersonCard from "./Person";
-import Time from "./Time";
 import { LucideLoader } from "lucide-react";
-
-const OverviewCard2 = ({ overviewCardsData }) => {
+import DatePicker from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Date";
+import Time from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Time";
+import PersonCard from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Person";
+export default function MakeReservation({ restrauntDetail }) {
   const [reservationCard, setReservationCard] = useState();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,9 +24,9 @@ const OverviewCard2 = ({ overviewCardsData }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setReservationCard(overviewCardsData);
-    // console.log(overviewCardsData)
-  }, [overviewCardsData]);
+    setReservationCard(restrauntDetail);
+    // console.log(restrauntDetail)
+  }, [restrauntDetail]);
 
   useEffect(() => {
     // console.log(nextData);
@@ -157,52 +155,61 @@ const OverviewCard2 = ({ overviewCardsData }) => {
 
   return (
     <>
-      <h1 className="m-2 text-center text-lg">
-        <strong>Make a reservation</strong>
+      <h1 className=" font-bold my-10 text-2xl sm:text-3xl lg:text-4xl">
+        Make a Reservation
       </h1>
-      <div className="p-6 border rounded-lg ">
-        <DatePicker setFormData={setFormData} />
+      <div className="  rounded-lg ">
+        <div className="flex gap-2 items-center">
+          <div className="flex-grow">
+            <DatePicker setFormData={setFormData} />
+          </div>
 
-        <Time setFormData={setFormData} />
+          <div className="flex-grow">
+            <Time setFormData={setFormData} />
+          </div>
 
-        <PersonCard setFormData={setFormData} />
-
-        <div>
+          <div className="flex-grow">
+            <PersonCard setFormData={setFormData} />
+          </div>
           <button
             onClick={handleTimeSlots}
-            className="w-full bg-purple-600 mt-4 text-white rounded-lg py-2 focus:outline-none"
+            className=" bg-purple-600 p-2 text-white rounded-lg  focus:outline-none"
           >
             Find a time
           </button>
+        </div>
+        <div>
           {error && error !== null ? (
             <p className="text-red-500 text-sm mt-1">{error}</p>
           ) : null}
-          <hr className="mt-4 mb-4" />
-          <h1 className="mt-4 text-lg mb-4 font-bold">Time Slots</h1>
+
           {loading ? (
             <LucideLoader className="w-6 h-6 justify-center animate-spin align-middle mx-auto" />
           ) : (
-            <div>
-              {overviewCardsData?.alias ? (
+            <div className="py-10">
+              {restrauntDetail?.alias ? (
                 isDataLoaded ? (
                   Array.isArray(timeSlots) && timeSlots.length > 0 ? (
-                    timeSlots
-                      .filter((data) => !isNaN(data.timestamp))
-                      .map((data, index) => (
-                        <button
-                          key={index}
-                          className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                          onClick={() => handleYelpReservation(data)}
-                        >
-                          {new Date(data.timestamp * 1000).toLocaleTimeString(
-                            [],
-                            {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
-                          )}
-                        </button>
-                      ))
+                    <>
+                      <h3 className="text-xl font-bold mb-4">Time Slots</h3>
+                      {timeSlots
+                        .filter((data) => !isNaN(data.timestamp))
+                        .map((data, index) => (
+                          <button
+                            key={index}
+                            className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                            onClick={() => handleYelpReservation(data)}
+                          >
+                            {new Date(data.timestamp * 1000).toLocaleTimeString(
+                              [],
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )}
+                          </button>
+                        ))}
+                    </>
                   ) : (
                     <p className="text-lg text-red-600">No slots available.</p>
                   )
@@ -212,20 +219,23 @@ const OverviewCard2 = ({ overviewCardsData }) => {
               ) : isDataLoaded ? (
                 Array.isArray(openTableTimeSlots) &&
                 openTableTimeSlots[0]?.availabilityDays[0]?.slots.length > 0 ? (
-                  openTableTimeSlots[0]?.availabilityDays[0]?.slots
-                    .filter((data) => !isNaN(data.timeOffsetMinutes))
-                    .map((data, index) => (
-                      <button
-                        key={index}
-                        className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                        onClick={() => handleOpenTableReservation(data)}
-                      >
-                        {convertOffsetToTime(
-                          data.timeOffsetMinutes,
-                          formData?.reservation_time
-                        )}
-                      </button>
-                    ))
+                  <>
+                    <h3 className="text-xl font-bold mb-4">Time Slots</h3>
+                    {openTableTimeSlots[0]?.availabilityDays[0]?.slots
+                      .filter((data) => !isNaN(data.timeOffsetMinutes))
+                      .map((data, index) => (
+                        <button
+                          key={index}
+                          className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                          onClick={() => handleOpenTableReservation(data)}
+                        >
+                          {convertOffsetToTime(
+                            data.timeOffsetMinutes,
+                            formData?.reservation_time
+                          )}
+                        </button>
+                      ))}
+                  </>
                 ) : (
                   <p className="text-lg text-red-600">No slots available.</p>
                 )
@@ -238,6 +248,4 @@ const OverviewCard2 = ({ overviewCardsData }) => {
       </div>
     </>
   );
-};
-
-export default OverviewCard2;
+}

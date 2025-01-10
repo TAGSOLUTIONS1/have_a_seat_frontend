@@ -1,0 +1,131 @@
+import React from "react";
+import { useEffect, useState } from "react";
+
+import axios from "axios";
+import { Base_Url } from "@/baseUrl";
+import { AiFillStar, AiOutlineStar, AiTwotoneStar } from "react-icons/ai";
+import DetailRating from "../RestrauntDetailPage/Reviews/Rating";
+import Comments from "../RestrauntDetailPage/Reviews/Comments";
+const reviews = [
+  {
+    name: "Laura K., Miami",
+    date: "30 August 2024",
+    review:
+      "This is easily one of the best spots I've been to in recent years. I go to man...",
+    rating: 5,
+  },
+  {
+    name: "Samantha R., Los Angeles",
+    date: "10 September 2024",
+    review:
+      "I came here for a team dinner with colleagues. The restaurant is in a renovated ...",
+    rating: 4.5,
+  },
+  {
+    name: "Mark H., Houston",
+    date: "11 October 2024",
+    review:
+      "Backroom was beautiful & moody. Sitting in the front wouldn't be such a vibe. S...",
+    rating: 4,
+  },
+];
+
+// Helper function to render stars
+const renderStars = (rating) => {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    if (i <= rating) {
+      stars.push(<AiFillStar key={i} className="text-yellow-500" />);
+    } else if (i - rating === 0.5) {
+      stars.push(<AiTwotoneStar key={i} className="text-yellow-500" />);
+    } else {
+      stars.push(<AiOutlineStar key={i} className="text-gray-400" />);
+    }
+  }
+  return stars;
+};
+const convertHtmlToText = (html) => {
+  // Create a temporary element
+  var tempElement = document.createElement("div");
+
+  // Set the HTML content
+  tempElement.innerHTML = html;
+
+  // Append the temporary element to the document body
+  document.body.appendChild(tempElement);
+
+  // Extract text content
+  var textContent = tempElement.textContent || tempElement.innerText;
+
+  // Remove the temporary element
+  document.body.removeChild(tempElement);
+
+  return textContent;
+};
+
+export default function Reviews({ restrauntDetail }) {
+  const [reviewsData, setReviewsData] = useState();
+  const [yelpReviews, setYelpReviews] = useState();
+
+  useEffect(() => {
+    if (Object.keys(restrauntDetail).length !== 0) {
+      setReviewsData(restrauntDetail);
+    }
+  }, [restrauntDetail]);
+
+  const fetchReviews = async (alias) => {
+    try {
+      const response = await axios.get(
+        `${Base_Url}/api/v1/yelp/get_restaurant_reviews/${alias}`
+      );
+      setYelpReviews(response.data.data);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (restrauntDetail?.alias) {
+      fetchReviews(restrauntDetail?.alias);
+    } else {
+      null;
+    }
+  }, [restrauntDetail?.restaurant_flag]);
+
+  return (
+    <div className=" py-8 lg:flex gap-10">
+      {/* About Section */}
+      <div className="lg:w-1/2">
+        <h2 className="text-2xl font-bold mb-4">
+          About{" "}
+          {restrauntDetail?.alias
+            ? restrauntDetail?.name
+            : restrauntDetail?.restaurant
+            ? restrauntDetail?.restaurant?.name
+            : restrauntDetail?.name}
+        </h2>
+        <p className="text-gray-700">
+          {restrauntDetail?.alias
+            ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
+            : restrauntDetail?.restaurant
+            ? convertHtmlToText(restrauntDetail?.restaurant?.description)
+            : "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."}
+          {/* randomTemplate?.content["en-us"]?.about?.body */}
+        </p>
+      </div>
+      {/* Reviews Section */}
+      <div className="lg:w-1/2 mt-8 lg:mt-0 shadow-lg p-4 rounded-lg">
+        <h2 className="text-2xl font-bold mb-4">Reviews</h2>
+        <div className="space-y-4">
+          {restrauntDetail?.restaurant ? (
+            <DetailRating reviewsData={reviewsData} />
+          ) : null}
+
+          {restrauntDetail?.restaurant ? <hr className="mb-4 mt-4" /> : null}
+
+          <Comments reviewsData={reviewsData} yelpReviews={yelpReviews} />
+        </div>
+      </div>
+    </div>
+  );
+}

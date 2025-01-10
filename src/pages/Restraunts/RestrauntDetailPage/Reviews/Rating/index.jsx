@@ -6,24 +6,24 @@ const DetailRating = ({ reviewsData }) => {
   const generateStars = (rating) => {
     const fullStars = Math.floor(rating);
     const decimalPart = rating - fullStars;
-  
+
     const stars = [];
-  
+
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<Star key={i} className="mx-1" fill="#9F7AEA" size={20} />);
+      stars.push(<Star key={i} className="mx-1" fill="	#FFD700" size={20} />);
     }
-  
+
     if (decimalPart >= 0.5) {
-      stars.push(<Star key="half" className="mx-1" fill="#9F7AEA" size={20} />);
+      stars.push(<Star key="half" className="mx-1" fill="	#FFD700" size={20} />);
     } else if (decimalPart > 0) {
       stars.push(<Star key="empty" className="mx-1" size={20} />);
     }
-  
+
     const remainingStars = 5 - stars.length;
     for (let i = 0; i < remainingStars; i++) {
       stars.push(<Star key={`empty-${i}`} className="mx-1" size={20} />);
     }
-  
+
     return stars;
   };
 
@@ -34,7 +34,7 @@ const DetailRating = ({ reviewsData }) => {
           <strong> What people say about us</strong>
         </h1>
         <hr className="mb-4 mt-4" />
-        <p className="mt-2 ">Overall ratings and reviews</p>
+        <p className="mt-2 font-semibold ">Overall ratings and reviews</p>
         <p className="text-sm mt-2">
           Reviews can only be made by diners who have been at this restraunt.
         </p>
@@ -95,10 +95,6 @@ const DetailRating = ({ reviewsData }) => {
           <p className="text-center mt-3">Value</p>
         </div>
         <div className="border-l border-gray-300 h-16 mx-4"></div>
-      </div>
-      <div className=" flex p-2 mt-2">
-        <Volume2 size={18} className="mt-1" />
-        <span className="mx-2">Moderate</span>
       </div>
     </div>
   );

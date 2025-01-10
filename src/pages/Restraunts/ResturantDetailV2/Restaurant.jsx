@@ -1,40 +1,21 @@
 import React from "react";
 
 export default function Restaurant({ restrauntDetail }) {
-  const getRandomKey = (obj) => {
-    const keys = Object.keys(obj);
-    const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    // console.log(randomKey);
-    return randomKey;
-  };
+  // const getRandomKey = (obj) => {
+  //   const keys = Object.keys(obj);
+  //   const randomKey = keys[Math.floor(Math.random() * keys.length)];
+  //   // console.log(randomKey);
+  //   return randomKey;
+  // };
 
-  // Getting a random key from restrauntDetail.templates
-  const randomTemplateKey = restrauntDetail?.templates
-    ? getRandomKey(restrauntDetail.templates)
-    : null;
+  // // Getting a random key from restrauntDetail.templates
+  // const randomTemplateKey = restrauntDetail?.templates
+  //   ? getRandomKey(restrauntDetail.templates)
+  //   : null;
 
-  // Getting the corresponding object based on the random key
-  const randomTemplate =
-    randomTemplateKey && restrauntDetail?.templates[randomTemplateKey];
-
-  const convertHtmlToText = (html) => {
-    // Create a temporary element
-    var tempElement = document.createElement("div");
-
-    // Set the HTML content
-    tempElement.innerHTML = html;
-
-    // Append the temporary element to the document body
-    document.body.appendChild(tempElement);
-
-    // Extract text content
-    var textContent = tempElement.textContent || tempElement.innerText;
-
-    // Remove the temporary element
-    document.body.removeChild(tempElement);
-
-    return textContent;
-  };
+  // // Getting the corresponding object based on the random key
+  // const randomTemplate =
+  //   randomTemplateKey && restrauntDetail?.templates[randomTemplateKey];
 
   return (
     <div className="py-4 sm:py-10 flex flex-col">
@@ -58,7 +39,18 @@ export default function Restaurant({ restrauntDetail }) {
                 <span>Ratings:</span>
               </h4>
               <p className="text-sm sm:text-base min-h-[40px]">
-                4<span className="text-sm sm:text-base">/5</span>
+                {console.log(
+                  "data resturant detail in restaurant",
+                  restrauntDetail
+                )}
+                {restrauntDetail?.rating
+                  ? restrauntDetail.rating
+                  : restrauntDetail?.restaurant?.statistics?.reviews?.ratings
+                      ?.overall?.rating
+                  ? restrauntDetail?.restaurant?.statistics?.reviews?.ratings
+                      ?.overall.rating
+                  : "No rating available"}
+                <span className="text-sm sm:text-base">/5</span>
               </p>
             </div>
           </div>
@@ -138,7 +130,21 @@ export default function Restaurant({ restrauntDetail }) {
               <h4 className="font-semibold text-[1.25rem]">
                 <span>Contact:</span>
               </h4>
-              <p className="text-sm sm:text-base min-h-[40px]">090078601</p>
+              <p className="text-sm sm:text-base min-h-[40px]">
+                {restrauntDetail?.phone ? (
+                  <>{restrauntDetail?.phone}</>
+                ) : restrauntDetail?.restaurant?.contactInformation
+                    ?.formattedPhoneNumber ? (
+                  <>
+                    {
+                      restrauntDetail?.restaurant?.contactInformation
+                        ?.formattedPhoneNumber
+                    }
+                  </>
+                ) : (
+                  <></>
+                )}
+              </p>
             </div>
           </div>
         </div>
