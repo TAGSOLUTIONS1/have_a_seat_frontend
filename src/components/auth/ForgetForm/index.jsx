@@ -136,25 +136,28 @@ const ForgetForm = () => {
 
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mt-10">
-      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
-        <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 md:mb-10">
+      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 flex flex-col gap-10">
+       <div className="text-center flex flex-col gap-4">
+       <h1 className=" text-4xl md:text-5xl font-bold">
           Forgot Password
         </h1>
-
+          <p>Don’t worry, we can restore it for you</p>
+       </div>
         <form
           className="space-y-4 md:space-y-6"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex items-center mb-4">
             <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
-            <div className="flex-grow">
+            <div className="flex-grow flex flex-col gap-2">
+              <span>Email Address</span>
               <input
                 type="email"
                 id="email"
-                className={`border border-gray-300 rounded w-full py-2 px-3 ${
+                className={`border border-gray-300 rounded-full w-full py-2 px-3 ${
                   errors.email ? "border-red-500" : ""
                 }`}
-                placeholder="Existing Email"
+                placeholder=""
                 {...register("email")}
               />
               {errors.email && (
@@ -170,7 +173,7 @@ const ForgetForm = () => {
               type="submit"
               className="w-[97%] ml-[3%] text-white bg-purple-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
-              Reset PASSWORD
+              Reset Password
             </button>
           </div>
         </form>
