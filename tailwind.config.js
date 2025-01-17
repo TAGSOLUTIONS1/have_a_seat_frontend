@@ -2,10 +2,10 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./pages/**/*.{js,jsx}",
+    "./components/**/*.{js,jsx}",
+    "./app/**/*.{js,jsx}",
+    "./src/**/*.{js,jsx}",
   ],
   theme: {
     container: {
@@ -15,9 +15,18 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      pt: ["PT Sans", "sans - serif"],
+      cabinet: ["Cabinet Grotesk", "sans-serif"],
+      inter: ["Inter", "sans-serif"],
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
+        plum: "#9235E2",
+        lightGrey: "#F5EDFC",
+        shipGrey: "#39353C",
+        frenchPink: "#E5D2F1",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -69,6 +78,9 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      screens: {
+        small: "400px",
       },
     },
   },

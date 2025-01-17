@@ -1,0 +1,52 @@
+import { useState } from "react";
+import bookingVideo from "/assets/videos/bookingVideo.mp4";
+import { useNavigate } from "react-router-dom";
+import { initialBookingState } from "@/components/constants/constants";
+
+function BookRestaurant() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState(initialBookingState);
+  const handleSearch = () => {
+    localStorage.setItem("searchFormData", JSON.stringify(formData)); // Store form data before navigating
+    const route = `/restraunts?data=${encodeURIComponent(
+      JSON.stringify(formData)
+    )}`;
+
+    navigate(route);
+  };
+  return (
+    <div className=" hidden md:block relative w-full h-[900px]  ">
+      {/* Video Background */}
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        src={bookingVideo}
+        autoPlay
+        loop
+        muted
+      />
+
+      {/* Content Over Video */}
+      <div className="relative px-[75px] py-[100px] z-10 h-full bg-black/50">
+        <div className="max-w-2xl flex gap-[2.5rem] flex-col">
+          <h1 className="text-[4rem] font-cabinet text-white font-bold">
+            Dine Smarter, Reserve Faster
+          </h1>
+          <p className="text-lg font-pt  text-white">
+            Explore the best restaurants, enjoy exclusive deals, and book your
+            next dining experience with just a few clicks.
+          </p>
+          <div className="flex items-center gap-10">
+            <button
+              onClick={handleSearch}
+              className=" max-w-[205px] py-3 px-10 text-center cursor-pointer rounded-lg bg-lightGrey text-plum hover:bg-plum hover:text-lightGrey font-bold rounde"
+            >
+              Book a Table
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default BookRestaurant;

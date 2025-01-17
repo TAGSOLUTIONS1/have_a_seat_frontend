@@ -1,8 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
-
+@import url("https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Actor&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url("https://fonts.cdnfonts.com/css/cabinet-grotesk");
+@import url("https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Actor&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -26,7 +27,7 @@
     --ring: 262.1 83.3% 57.8%;
     --radius: 0.5rem;
   }
- 
+
   .dark {
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
@@ -54,5 +55,45 @@
   * {
     @apply box-border m-0 p-0;
   }
- 
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Edge */
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Style the input field */
+.geoapify-autocomplete-input {
+  color: #9235e2;
+  background: transparent;
+}
+
+/* Focused state of input field */
+
+/* Style for the suggestions list */
+.geoapify-autocomplete-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 8px;
+  border-radius: 8px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for individual suggestion items */
+.geoapify-autocomplete-item {
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for suggestion items */
+.geoapify-autocomplete-item:hover {
+  background-color: #f0f0f0;
 }
