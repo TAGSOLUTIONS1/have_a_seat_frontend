@@ -6,7 +6,7 @@ const ForgetPassword = () => {
       <div className="container">
         <div className="flex justify-center">
           <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
-            <div className="bg-white rounded-lg shadow-lg p-7 md:p-10">
+            <div className=" md:p-10">
             <ForgetForm />
             </div>
           </div>

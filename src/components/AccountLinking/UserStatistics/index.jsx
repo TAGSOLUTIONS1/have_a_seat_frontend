@@ -74,7 +74,7 @@ const UserStatistics = () => {
   const outdoorReservations = statistics?.indoor_vs_outdoor?.outdoor || 0;
 
   const data = {
-    // labels: ["Total Reservations: ", "Cancellations: "],
+    labels: ["Total Reservations: ", "Cancellations: "],
     datasets: [
       {
         label: "Reservation Rate",
@@ -85,7 +85,7 @@ const UserStatistics = () => {
   };
 
   const data2 = {
-    // labels: ["Indoor", "Outdoor"],
+    labels: ["Indoor", "Outdoor"],
     datasets: [
       {
         label: "Indoor vs Outdoor",

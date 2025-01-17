@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LucideLoader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { Mail, Lock } from "lucide-react";
 
 const LoginForm = () => {
   const { login, handleError } = useAuth();
@@ -47,25 +48,31 @@ const LoginForm = () => {
     }
   };
   return (
-    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
-      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
-        <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 md:mb-10">
-          Login
+    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto ">
+      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mx-auto flex flex-col gap-3">
+      <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
+
+       <div className="flex flex-col gap-4 my-10 text-center">
+       <h1 className=" text-4xl md:text-5xl font-bold ">
+        Welcome Back
         </h1>
+        <p>Let’s sign in to your account and get started</p>
+       </div>
         <form
           className="space-y-4 md:space-y-6"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex items-center mb-4">
-            <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
-            <div className="flex-grow">
+            <div className="flex-grow relative flex flex-col gap-3">
+              <span>Email Address</span>
+              <Mail className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
               <input
                 type="email"
                 id="username"
                 className={`border ${
-                  errors.username ? "border-red-500" : "border-gray-300"
-                } rounded w-full py-2 px-3`}
-                placeholder="Your Email"
+                  errors.username ? "border-red-500" : "border-gray-300 rounded-full"
+                } rounded w-full py-2 px-3 pl-12`}
+             
                 {...register("username")}
               />
               {errors.username && (
@@ -75,17 +82,18 @@ const LoginForm = () => {
               )}
             </div>
           </div>
+    
+            <div className="flex-grow flex relative flex-col gap-2">
+              <span>Password</span>
+              <Lock className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
 
-          <div className="flex items-center mb-4">
-            <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
-            <div className="flex-grow">
               <input
                 type="password"
                 id="password"
                 className={`border ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                } rounded w-full py-2 px-3`}
-                placeholder="Password"
+                  errors.password ? "border-red-500" : "border-gray-300 rounded-full"
+                } rounded w-full py-2 pr-4 pl-12`}
+               
                 {...register("password")}
               />
               {errors.password && (
@@ -94,34 +102,38 @@ const LoginForm = () => {
                 </p>
               )}
             </div>
-          </div>
-
-          <div className="flex w-full justify-center">
-            <Button
+  <div className="flex-grow">
+           <Button
               type="submit"
               variant="default"
-              className={cn("rounded-md w-[97%] ml-[3%] text-xl") }
+              className={cn("rounded-full w-full text-xl mt-2") }
             >
               {loading ? (
                 <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
               ) : (
-                "Login"
+                "Sign In"
               )}
             </Button>
-          </div>
+  </div>
+      
 
-          <p className="text-center">
+         
+        </form>
+    
+<div  className="my-4">
+  
+<p className="text-center">
             <a href="/forget" className="underline text-purple-600">
               Forgot password
             </a>
           </p>
           <p className="text-center">
-            New to Restaurant?{" "}
+            Don't have an account?{" "}
             <Link to="/register" className="underline  text-purple-600">
-              Click to Register
+              Sign Up
             </Link>
           </p>
-        </form>
+</div>
       </div>
     </div>
   );

@@ -16,7 +16,6 @@ export default function Landing() {
       <WhyChooseUs />
       <Restaurants />
       <Stats />
-      <BestDeals />
       <Testimonials />
       <ContactForm />
       
