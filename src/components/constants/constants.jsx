@@ -16,6 +16,12 @@ import calender from "/assets/calender.png";
 import arrows from "/assets/arrows.png";
 export const footerLinks = ["Home", "About", "Register", "Links"];
 import { getCurrentDate } from "@/lib/utils";
+export const getCurrentTime = () => {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
+};
 export const socialMediaLinks = [
   {
     icon: fb,
@@ -111,10 +117,10 @@ export const whyUs = [
 ];
 
 export const navLinks = [
-  { to: "home", label: "Home" },
-  { to: "about", label: "About" },
-  { to: "why", label: "Why Us" },
-  { to: "contact", label: "Contact" },
+  { to: "/", label: "Home" },
+  { to: "/", label: "About" },
+  { to: "/", label: "Why Us" },
+  { to: "/", label: "Contact" },
 ];
 export const FooterLinks = [
   { to: "about", label: "About" },
@@ -140,7 +146,7 @@ export const initialBookingState = {
   persons: 2,
   reservation_date: getCurrentDate(),
   date: getCurrentDate(),
-  reservation_time: "19:00",
+  reservation_time: getCurrentTime(),
   location: "New York, NY, United States of America",
   term: "",
 };

@@ -23,20 +23,6 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
       </div>
       <MakeReservation restrauntDetail={restrauntDetail} />
 
-      {/* time slots */}
-      {/* <div className="py-5">
-        <h4 className="text-2xl font-bold">Time Slots</h4>
-        <div className="flex gap-5 flex-wrap py-10">
-          {timeSlots.map((time, index) => (
-            <button
-              key={index}
-              className="bg-plum hover:bg-purple-700 text-white rounded-md py-2 px-6"
-            >
-              {time}
-            </button>
-          ))}
-        </div>
-      </div> */}
       {/* reviews */}
       <Reviews restrauntDetail={restrauntDetail} />
     </div>

@@ -25,12 +25,12 @@ const DatePicker = ({ setFormData }) => {
   return (
     <div>
       <Popover>
-        <div className="text-black">
+        <div className="text-black border-r-2">
           <PopoverTrigger asChild>
             <Button
               variant={"outline"}
               className={cn(
-                "w-full justify-start text-left font-normal",
+                "w-full justify-start text-left font-normal bg-transparent border-none",
                 !date && "text-muted-foreground"
               )}
             >
@@ -43,7 +43,7 @@ const DatePicker = ({ setFormData }) => {
               mode="single"
               selected={date}
               onSelect={setDate} // Update date on selection
-              initialFocus
+             
             />
           </PopoverContent>
         </div>

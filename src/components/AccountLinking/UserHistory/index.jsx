@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { Base_Url } from "@/baseUrl";
 import Loader from "@/components/Loader";
 import { useToast } from "@/components/ui/use-toast";
+import ReservationsHistory from "@/pages/Restraunts/ResturantDetailV2/ReservationsHistory";
 
 const UserHistory = () => {
   const { authState } = useAuth();
@@ -327,10 +328,11 @@ const UserHistory = () => {
   if (error) {
     return <div>{error}</div>;
   }
-
+console.log("reservations history", reservations)
   return (
-    <div className="bg-white min-h-screen p-6 pt-24 lg:py-28 lg:x-24 sm:px-6 lg:px-8">
-      <div className="max-w-[1300px] bg-gray-100 mx-auto lg:px-24 lg:py-24 p-6 rounded-lg">
+    <>
+    <div className="bg-white min-h-screen p-6 pt-24 lg:py-28 lg:x-24 sm:px-6 lg:px-24">
+      {/* <div className="max-w-[1300px] bg-gray-100 mx-auto lg:px-24 lg:py-24 p-6 rounded-lg">
         <div className="flex flex-col md:flex-row justify-between items-center mb-16">
           <h1 className="text-3xl font-bold text-purple-600 flex items-center justify-center">
             All Reservations
@@ -459,7 +461,7 @@ const UserHistory = () => {
         </div>
       </div>
 
-      {/* Review Modal */}
+    
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
@@ -497,7 +499,7 @@ const UserHistory = () => {
         </div>
       </Modal>
 
-      {/* Cancel Modal */}
+     
       <Modal
         isOpen={cancelModalOpen}
         onRequestClose={() => setCancelModalOpen(false)}
@@ -525,7 +527,7 @@ const UserHistory = () => {
         </div>
       </Modal>
 
-      {/* Already Cancelled Modal */}
+
       <Modal
         isOpen={alreadyCancelledModalOpen}
         onRequestClose={() => setAlreadyCancelledModalOpen(false)}
@@ -547,7 +549,7 @@ const UserHistory = () => {
         </div>
       </Modal>
 
-      {/* Delete Confirmation Modal */}
+      
       <Modal
         isOpen={deleteModalOpen}
         onRequestClose={() => setDeleteModalOpen(false)}
@@ -573,8 +575,11 @@ const UserHistory = () => {
             </button>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
+      <ReservationsHistory reservations={reservations} />
     </div>
+    
+    </>
   );
 };
 

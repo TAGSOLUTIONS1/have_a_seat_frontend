@@ -4,16 +4,10 @@ import { useLocation } from "react-router-dom";
 
 import { Base_Url } from "@/baseUrl";
 import Loader from "@/components/Loader";
-import Menu from "./Menu";
-import OverviewCards from "./OverviewCards";
-import OverviewCard2 from "./OverviewCards/OverviewCard2";
-import Reviews from "./Reviews";
-import TimingHours from "./TimingHours";
+
 
 import { ResyRestrauntDetail } from "@/mockData";
 import RestaurantDetailsV2 from "../ResturantDetailV2/RestaurantDetailsV2";
-import ImageSlider from "../ResturantDetailV2/Slider";
-import Pictures from "./Pictures";
 
 const RestrauntDetail = () => {
   const [restrauntDetail, setRestrauntDetail] = useState({});
@@ -131,29 +125,7 @@ const RestrauntDetail = () => {
           </section> */}
 
           <RestaurantDetailsV2 restrauntDetail={restrauntDetail} />
-          {/* <section>
-            <Pictures restrauntDetail={restrauntDetail} />
-          </section>
-          <section>
-            <OverviewCards restrauntDetail={restrauntDetail} />
-          </section> */}
-
-          {/* {restrauntDetail?.alias ? null : (
-            <section>
-              <Menu restrauntDetail={restrauntDetail} />
-            </section>
-          )} */}
-
-          {restrauntDetail?.region ? null : (
-            <>
-              {/* <section>
-                <TimingHours restrauntDetail={restrauntDetail} />
-              </section> */}
-              {/* <section>
-                <Reviews restrauntDetail={restrauntDetail} />
-              </section> */}
-            </>
-          )}
+        
         </>
       )}
     </div>

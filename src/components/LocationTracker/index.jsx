@@ -1,6 +1,5 @@
 import { getStateFromApi } from "@/lib/utils";
 import React, { useState, useEffect } from "react";
-import { FaRegEdit } from "react-icons/fa";
 import { IoIosSend } from "react-icons/io";
 
 const LocationTracker = ({ onLocationUpdate }) => {
@@ -27,7 +26,7 @@ const LocationTracker = ({ onLocationUpdate }) => {
     }
   };
 
-  const getCurrentLocation = async () => {
+ const getCurrentLocation = async () => {
     if (!isLocationFetched) return;
 
     try {

@@ -30,8 +30,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        
         <Route element={<MainLayout />}>
+        <Route path="/" element={<Landing />} />
           <Route path="/about" element={<h1>About</h1>} />
           <Route path="/register" element={<Signup />} />
           <Route path="/login" element={<Login />} />
@@ -43,7 +44,7 @@ function App() {
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/reservation-status" element={<ReservationStatus />} />
           <Route path="/user-history" element={<UserHistory />} />
-          <Route path="/user-Statistics" element={<UserStatistics />} />
+          <Route path="/user-profile" element={<UserStatistics />} />
           {/* <Route path="/account-links" element={<Protected Component={<AccountLinks />} />} /> */}
           <Route path="/account-links" element={<Protected />}>
             <Route path="/account-links" element={<AccountLinks />} />

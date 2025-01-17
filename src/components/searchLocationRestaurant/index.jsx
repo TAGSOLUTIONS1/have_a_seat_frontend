@@ -6,6 +6,7 @@ import TermApiAuto from "../home/HometermAutoComplete";
 import LocationTracker from "@/components/LocationTracker";
 import { useToast } from "@/components/ui/use-toast";
 import { CiSearch } from "react-icons/ci";
+import { getCurrentTime } from "../constants/constants";
 
 const getCurrentDate = () => {
   const today = new Date();
@@ -19,15 +20,16 @@ const SearchLocationV2 = () => {
   const navigate = useNavigate();
   const { toast } = useToast(); // Initialize toast
   const [formData, setFormData] = useState({
-    attributes: "reservation",
-    reservation_covers: 2,
-    persons: 2,
-    reservation_date: getCurrentDate(),
-    date: getCurrentDate(),
-    reservation_time: "19:00",
-    location: "",
-    term: "",
-  });
+      attributes: "reservation",
+      reservation_covers: 2,
+      persons: 2,
+      reservation_date: getCurrentDate(),
+      date: getCurrentDate(),
+      reservation_time: getCurrentTime(),
+      location: "",
+      term: "",
+    });
+  
 
   const [error, setError] = useState(null);
 
@@ -77,34 +79,62 @@ const SearchLocationV2 = () => {
       return updatedData;
     });
   };
+  const handleInputChange = (field, value) => {
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, [field]: value };
+      localStorage.setItem("searchFormData", JSON.stringify(updatedData));
+      return updatedData;
+    });
+  };
 
   return (
     <div className="flex flex-col gap-4 p-4 bg-white">
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="relative w-full flex items-center md:w-1/2 bg-[#F7F7F7] rounded-full px-4 ">
-          <img
-            src="/assets/MapPinArea.png"
-            alt="map pin area"
-            className="w-8 h-8"
-          />
-          <div className="grow">
-            <GeoApiAuto
-              getLocationData={getLocationData}
-              location={formData.location}
-            />
-          </div>
-        </div>
+      <div className="bg-lightGrey rounded-[3rem] flex-grow md:py-2 flex gap-1 justify-between md:gap-3 md:px-5">
+                  <div className="md:flex gap-1">
+                    <div
+                      className={`text-base md:text-lg text-black border-r-2 ${
+                        error ? "border-red-500" : "border-gray-200"
+                      } focus:border-gray-200 focus:outline-none`}
+                    >
+                      <GeoApiAuto
+                        getLocationData={getLocationData}
+                        location={formData.location}
+                      />
+                    </div>
+                    <div
+                      className={`hidden md:block text-base md:text-lg text-black border-r-2 ${
+                        error ? "border-red-500" : "border-gray-200"
+                      } focus:border-gray-200 focus:outline-none`}
+                    >
+                      <TermApiAuto getTermData={handleTermChange} />
+                    </div>
+                  <div className="border-r-2">
+                  <input
+                      type="date"
+                      value={formData.date}
+                      onChange={(e) =>
+                        handleInputChange("date", e.target.value)
+                      }
+                      className="text-base md:text-lg cursor-pointer text-slate-400 px-4 py-2 focus:outline-none bg-transparent"
+                    />
+                  </div>
+                   <div>
+                   <input
+                      type="time"
+                      value={formData.reservation_time}
+                      onChange={(e) =>
+                        handleInputChange("reservation_time", e.target.value)
+                      }
+                      className="text-base md:text-lg text-slate-400 px-4 py-2 focus:outline-none bg-transparent"
+                    />
+                   </div>
+                  </div>
 
-        <div className="relative w-full flex items-center md:w-1/2 bg-[#F7F7F7] rounded-full px-4 p-2 ">
-          <img
-            src="/assets/cuisine.png"
-            alt="cuiine photo"
-            className="w-8 h-8"
-          />
-          <TermApiAuto getTermData={handleTermChange} term={formData.term} />
-        </div>
+                  
+                </div>
 
-        <div className=" flex items-center justify-center w-full md:w-1/3 ">
+        <div className=" flex items-center justify-center ">
           <Button
             className="text-sm md:text-xl relative rounded-full min-h-[65px] min-w-[250px] bg-plum"
             variant="default"
@@ -115,6 +145,7 @@ const SearchLocationV2 = () => {
             <span>Search</span>
           </Button>
         </div>
+        
       </div>
 
       <div className="mt-2">

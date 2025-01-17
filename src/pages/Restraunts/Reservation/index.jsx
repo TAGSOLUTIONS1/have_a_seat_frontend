@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
-
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-
 import { Base_Url } from "@/baseUrl";
-import PreviousData from "./PreviousData";
 import ReservationForm from "./ReservationForm";
-import YelpBookingInfo from "./YelpBookingInfo";
 import Loader from "@/components/Loader";
-
 const Reservation = () => {
   const [formData, setFormData] = useState();
   const [bookingInfo, setBookingInfo] = useState();
@@ -84,12 +79,25 @@ const Reservation = () => {
       {loading ? (
         <Loader />
       ) : (
+        <>
         <div className="flex flex-col justify-center items-center mb-24 ">
-          <div className="w-3/4 mt-12">
-            {console.log("booking info before reservation form", bookingInfo)}
+          <div className="w-2/4 mt-12">
             <ReservationForm formData={formData} bookingInfo={bookingInfo} />
           </div>
-          {formData && formData[0]?.alias ? (
+          
+        </div>
+        
+        </>
+      )}
+    </>
+  );
+};
+
+export default Reservation;
+
+
+
+{/* {formData && formData[0]?.alias ? (
             <div className="w-3/4  mt-28">
               <YelpBookingInfo bookingInfo={bookingInfo} />
             </div>
@@ -97,11 +105,4 @@ const Reservation = () => {
             <div className="w-3/4  mt-28">
               <PreviousData formData={formData} bookingInfo={bookingInfo} />
             </div>
-          )}
-        </div>
-      )}
-    </>
-  );
-};
-
-export default Reservation;
+          )} */}

@@ -19,6 +19,7 @@ module.exports = {
       pt: ["PT Sans", "sans - serif"],
       cabinet: ["Cabinet Grotesk", "sans-serif"],
       inter: ["Inter", "sans-serif"],
+      raleWay:"Raleway",
     },
     extend: {
       colors: {

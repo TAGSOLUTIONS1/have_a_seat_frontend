@@ -19,7 +19,7 @@ export default function Restaurant({ restrauntDetail }) {
 
   return (
     <div className="py-4 sm:py-10 flex flex-col">
-      <h1 className="font-bold text-3xl md:text-[2rem] lg:text-[3rem] mb-10 leading-[50px]">
+      <h1 className="font-bold text-3xl font-raleWay md:text-[2rem] lg:text-[3rem] mb-10 leading-[50px]">
         {restrauntDetail?.alias
           ? restrauntDetail?.name
           : restrauntDetail?.restaurant
@@ -32,17 +32,14 @@ export default function Restaurant({ restrauntDetail }) {
             <img
               src="/assets/ratings.png"
               alt="ratings logo"
-              className="h-5 w-5 mt-[6px]"
+              className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
             />
             <div className="flex flex-col gap-2">
-              <h4 className="font-semibold text-[1.25rem]">
+              <h4 className="font-semibold  md:text-[1.25rem]">
                 <span>Ratings:</span>
               </h4>
               <p className="text-sm sm:text-base min-h-[40px]">
-                {console.log(
-                  "data resturant detail in restaurant",
-                  restrauntDetail
-                )}
+              
                 {restrauntDetail?.rating
                   ? restrauntDetail.rating
                   : restrauntDetail?.restaurant?.statistics?.reviews?.ratings
@@ -59,10 +56,10 @@ export default function Restaurant({ restrauntDetail }) {
             <img
               src="/assets/cuisine.png"
               alt="cuisine logo"
-              className="h-5 w-5 mt-[6px]"
+              className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
             />
             <div className="flex flex-col gap-2">
-              <h4 className="font-semibold  text-[1.25rem]">
+              <h4 className="font-semibold md:text-[1.25rem]">
                 <span>Cuisine:</span>
               </h4>
               <p className="text-sm sm:text-base min-h-[40px]">
@@ -94,10 +91,10 @@ export default function Restaurant({ restrauntDetail }) {
             <img
               src="/assets/address.png"
               alt="address logo"
-              className="h-5 w-5 mt-[6px]"
+              className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
             />
             <div className="flex flex-col gap-2">
-              <h4 className="font-semibold text-[1.25rem]">
+              <h4 className="font-semibo md:text-[1.25rem]">
                 <span>Address:</span>
               </h4>
               <p className="text-sm sm:text-base min-h-[40px]">
@@ -124,10 +121,10 @@ export default function Restaurant({ restrauntDetail }) {
             <img
               src="/assets/contact.png"
               alt="address logo"
-              className="h-5 w-5 mt-[6px]"
+              className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
             />
             <div className="flex flex-col gap-2">
-              <h4 className="font-semibold text-[1.25rem]">
+              <h4 className="font-semibo md:text-[1.25rem]">
                 <span>Contact:</span>
               </h4>
               <p className="text-sm sm:text-base min-h-[40px]">

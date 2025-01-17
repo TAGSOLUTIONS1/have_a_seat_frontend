@@ -22,7 +22,7 @@ function Footer() {
     navigate(route);
   };
   return (
-    <div id="contact" className="bg-[#F5EDFC] px-5 md:px-[75px]">
+    <div id="contact" className="bg-[#F5EDFC] py-5 md:py-0 px-5 md:px-[75px]">
       {/* web*/}
       <div className=" hidden md:flex  py-24  flex-col md:flex-row justify-between">
         <img
@@ -41,7 +41,7 @@ function Footer() {
                   spy={true}
                   smooth={true}
                   duration={1500}
-                  activeClass="underline decoration-plum text-white"
+                 
                 >
                   {link.label} {/* Display the label */}
                 </ScrollLink>
@@ -71,15 +71,15 @@ function Footer() {
 
       {/* newsletter */}
 
-      <div className="flex flex-col gap-4 md:gap-0 md:flex-row justify-between items-center">
+      <div className="flex flex-col gap-6 md:gap-0 md:flex-row justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold ">Join Our Newsletter</h2>
-          <p className=" text-sm my-1">
+          <h2 className="text-2xl font-bold text-center md:text-left ">Join Our Newsletter</h2>
+          <p className=" text-sm my-2">
             Only updates and special offers. No spams.
           </p>
         </div>
 
-        <form className=" flex flex-col gap-4 md:gap-0 md:flex-row justify-center items-center">
+        <form className=" flex flex-col gap-6 md:gap-0 md:flex-row justify-center items-center">
           <div className="relative ">
             <Mail className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
             <input

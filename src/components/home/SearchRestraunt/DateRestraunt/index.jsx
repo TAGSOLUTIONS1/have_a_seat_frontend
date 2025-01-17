@@ -33,7 +33,6 @@ const DatePicker = ({ setFormData }) => {
   return (
     <div>
       <Popover>
-        <h2 className="my-2">Date</h2>
         <div className="text-black">
           <PopoverTrigger asChild>
             <Button
@@ -44,7 +43,7 @@ const DatePicker = ({ setFormData }) => {
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "PPP") : <span>Pick a date</span>}
+              {date ? format(date, "PPP") : ""}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">

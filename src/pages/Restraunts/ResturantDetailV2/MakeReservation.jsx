@@ -158,22 +158,25 @@ export default function MakeReservation({ restrauntDetail }) {
       <h1 className=" font-bold my-10 text-2xl sm:text-3xl lg:text-4xl">
         Make a Reservation
       </h1>
-      <div className="  rounded-lg ">
-        <div className="flex gap-2 items-center">
+      <div className="  ">
+        <div className="flex gap-2 items-end bg-slate-50 px-5 py-2 rounded-full ">
           <div className="flex-grow">
+            <span className="ml-4">Date</span>
             <DatePicker setFormData={setFormData} />
           </div>
 
           <div className="flex-grow">
+            <span className="ml-3">Time</span>
             <Time setFormData={setFormData} />
           </div>
 
           <div className="flex-grow">
+            <span className="ml-3">Guests</span>
             <PersonCard setFormData={setFormData} />
           </div>
           <button
             onClick={handleTimeSlots}
-            className=" bg-purple-600 p-2 text-white rounded-lg  focus:outline-none"
+            className=" bg-purple-600 p-2 text-white rounded-full  focus:outline-none"
           >
             Find a time
           </button>

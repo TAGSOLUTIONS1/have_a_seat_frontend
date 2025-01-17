@@ -7,6 +7,7 @@ import BestDeals from "./bestDeals/BestDeals";
 import Testimonials from "./testimonials/Testimonials";
 import WhyChooseUs from "./whyChooseUs/WhyChooseUs";
 import Hero from "./HeroSection/Hero";
+import ContactForm from "./contactForm/ContactForm";
 
 export default function Landing() {
   return (
@@ -17,8 +18,8 @@ export default function Landing() {
       <Stats />
       <BestDeals />
       <Testimonials />
-      <BookRestaurant />
-      <Footer />
+      <ContactForm />
+      
     </div>
   );
 }
