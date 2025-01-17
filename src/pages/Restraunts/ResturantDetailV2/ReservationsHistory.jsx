@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 export default function ReservationsHistory({reservations}) {
     const now = new Date();
@@ -12,8 +13,12 @@ export default function ReservationsHistory({reservations}) {
 <>
 
 <div className="my-4">
-    <h1 className='font-bold text-3xl my-4'>Up Coming Rservations</h1>
-{upcomingReservations.map((reservation) =>(
+    <div className="flex justify-between items-center"><h1 className='font-bold text-3xl my-4'>Up Coming Rservations</h1>
+    <Link className='bg-plum p-3 rounded-full text-white' to="/user-profile">
+    Go to your Dining History
+    </Link>
+    </div>
+{upcomingReservations.length >1? upcomingReservations.map((reservation) =>(
     <div className="bg-white w-full mb-2 p-10  shadow-xl rounded-2xl flex flex-col md:flex-row lg:flex-row card text-grey-darkest">
    <div className="w-full md:w-1/3 lg:w-1/3 md:h-[15rem] lg:h-[20rem] flex rounded-lg items-center justify-center bg-[#F5EDFC] relative overflow-hidden">
     
@@ -110,8 +115,8 @@ export default function ReservationsHistory({reservations}) {
       </div>
     </div>
   </div>
-  ))
-}
+  )): <h4 className='text-lg text-plum font-raleWay italic p-5 '>No Up Coming Reservation</h4>}
+
 </div>
 <div className='my-12 py-10'>
 <h1 className='font-bold text-3xl my-4'>Past Reservations</h1>

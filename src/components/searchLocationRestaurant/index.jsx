@@ -90,10 +90,11 @@ const SearchLocationV2 = () => {
   return (
     <div className="flex flex-col gap-4 p-4 bg-white">
       <div className="flex flex-col md:flex-row gap-4">
-      <div className="bg-lightGrey rounded-[3rem] flex-grow md:py-2 flex gap-1 justify-between md:gap-3 md:px-5">
-                  <div className="md:flex gap-1">
+      <div className="bg-lightGrey rounded-sm md:rounded-[3rem] md:py-2 md:flex gap-1 justify-between md:gap-3 md:px-5">
+                  <div className=" flex flex-col gap-1 md:flex-row ">
+                    
                     <div
-                      className={`text-base md:text-lg text-black border-r-2 ${
+                      className={`text-base md:text-lg w-full px-2 text-black border-r-2 ${
                         error ? "border-red-500" : "border-gray-200"
                       } focus:border-gray-200 focus:outline-none`}
                     >
@@ -103,45 +104,60 @@ const SearchLocationV2 = () => {
                       />
                     </div>
                     <div
-                      className={`hidden md:block text-base md:text-lg text-black border-r-2 ${
+                      className={` text-base md:text-lg w-full px-2 text-black border-r-2 ${
                         error ? "border-red-500" : "border-gray-200"
                       } focus:border-gray-200 focus:outline-none`}
                     >
                       <TermApiAuto getTermData={handleTermChange} />
                     </div>
-                  <div className="border-r-2">
-                  <input
-                      type="date"
-                      value={formData.date}
-                      onChange={(e) =>
-                        handleInputChange("date", e.target.value)
-                      }
-                      className="text-base md:text-lg cursor-pointer text-slate-400 px-4 py-2 focus:outline-none bg-transparent"
-                    />
-                  </div>
-                   <div>
-                   <input
-                      type="time"
-                      value={formData.reservation_time}
-                      onChange={(e) =>
-                        handleInputChange("reservation_time", e.target.value)
-                      }
-                      className="text-base md:text-lg text-slate-400 px-4 py-2 focus:outline-none bg-transparent"
-                    />
-                   </div>
+                    <div className=" border-r-2 w-full px-2">
+                      <input
+                        type="date"
+                        value={formData.date}
+                        onChange={(e) =>
+                          handleInputChange("date", e.target.value)
+                        }
+                        className="text-base md:text-lg :w-full text-slate-400 px-4 py-2 focus:outline-none bg-transparent"
+                      />
+                    </div>
+                    <div className=" border-r-2 w-full px-2">
+                      <input
+                        type="time"
+                        value={formData.reservation_time}
+                        onChange={(e) =>
+                          handleInputChange("reservation_time", e.target.value)
+                        }
+                        className="text-base md:text-lg w-full text-slate-400 px-4 py-2 focus:outline-none bg-transparent"
+                      />
+                    </div>
+                    <div className=" border-r-2 w-full px-2">
+                      <select
+                        value={formData.persons}
+                        onChange={(e) =>
+                          handleInputChange("persons", e.target.value)
+                        }
+                        className="text-base md:text-lg w-full text-slate-400 px-4 py-2 focus:outline-none bg-transparent"
+                      >
+                        {[...Array(10)].map((_, i) => (
+                          <option key={i + 1} value={i + 1}>
+                            {i + 1} Person{i > 0 ? "s" : ""}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
-                  
+             
                 </div>
 
         <div className=" flex items-center justify-center ">
           <Button
-            className="text-sm md:text-xl relative rounded-full min-h-[65px] min-w-[250px] bg-plum"
+            className="text-sm md:text-xl relative rounded-full w-full md:min-h-[65px] md:min-w-[250px] bg-plum"
             variant="default"
             size="lg"
             onClick={handleSearch}
           >
-            <CiSearch className="absolute left-14 text-2xl" />
+            <CiSearch className="absolute left-14 text-2xl hidden md:block" />
             <span>Search</span>
           </Button>
         </div>

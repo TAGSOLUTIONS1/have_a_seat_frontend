@@ -53,7 +53,7 @@ const LocationTracker = ({ onLocationUpdate }) => {
               {initialState}
 
               <img
-                className="w-4 absolute right-1 top-2 h-4 inline cursor-pointer"
+                className="w-4 absolute right-1 top-[2px] md:top-2 h-4 inline cursor-pointer"
                 src="/assets/edit.png"
                 alt=""
                 onClick={(e) => {

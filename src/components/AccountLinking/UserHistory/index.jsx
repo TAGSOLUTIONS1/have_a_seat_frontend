@@ -332,6 +332,9 @@ console.log("reservations history", reservations)
   return (
     <>
     <div className="bg-white min-h-screen p-6 pt-24 lg:py-28 lg:x-24 sm:px-6 lg:px-24">
+      {/* the below componenets were old reservaton history dashoboard */}
+
+      
       {/* <div className="max-w-[1300px] bg-gray-100 mx-auto lg:px-24 lg:py-24 p-6 rounded-lg">
         <div className="flex flex-col md:flex-row justify-between items-center mb-16">
           <h1 className="text-3xl font-bold text-purple-600 flex items-center justify-center">

@@ -74,12 +74,12 @@ const UserStatistics = () => {
   const outdoorReservations = statistics?.indoor_vs_outdoor?.outdoor || 0;
 
   const data = {
-    labels: ["Total Reservations", "Percentage of Cancellation"],
+    labels: ["Total Reservations: ", "Cancellations: "],
     datasets: [
       {
         label: "Reservation Rate",
         data: [totalReservations, totalCancellations],
-        backgroundColor: ["#E0B0FF", "#CBC3E3"],
+        backgroundColor: ["#E0B0FF", "#464249"],
       },
     ],
   };
@@ -90,7 +90,7 @@ const UserStatistics = () => {
       {
         label: "Indoor vs Outdoor",
         data: [indoorReservations, outdoorReservations],
-        backgroundColor: ["#E0B0FF", "#CBC3E3"],
+        backgroundColor: ["#E0B0FF", "#464249"],
       },
     ],
   };
@@ -113,68 +113,54 @@ const UserStatistics = () => {
   return (
     <div className="bg-white min-h-screen p-6 pt-24 lg:py-28 lg:x-24 sm:px-6 lg:px-8">
       <div className="max-w-[1300px] bg-gray-100 mx-auto lg:px-24 lg:py-24 p-6 rounded-lg ">
-        <h1 className="text-3xl font-bold text-purple-600 mb-16 text-center">
-          {authState?.user?.first_name}'s Dining History
+        <h1 className="text-3xl  mb-16 text-center font-raleWay">
+          <span className="font-bold">{authState?.user?.first_name}'s Dining History</span>
+          <span>   Here's How You’ve Been Dining!</span>
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-14">
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-purple-600 mb-4">
+        <div className="grid grid-cols-1 font-raleWay md:grid-cols-2">
+          {/* left child */}
+          <div className=" px-6  bg-white rounded-xl shadow-md">
+            
+              <h2 className="text-2xl flex py-6 justify-between
+               items-center font-bold text-plum">
                 Reservations This Year
+                <span className="font-extrabold text-black">{currentYearReservations}</span>
               </h2>
-              <div className="flex items-center justify-between">
-                <div className="text-xl font-normal text-purple-600">
-                  {currentYearReservations}
-                </div>
-              </div>
-              <hr className="my-4 border-t-2 border-purple-300" />
-              <h2 className="text-2xl font-semibold text-purple-600">
+              
+             
+            <div className="py-6 border-t-2">
+            <h2 className="text-2xl font-bold text-plum">
                 Other Reservations
               </h2>
               <p className="mb-4">
                 All past and future reservations except for those made this
                 year.
               </p>
-
-              <div>
-                {historyReservations.map(([year, count]) => (
-                  <div key={year} className="flex items-center justify-between">
-                    <div className="text-xl font-normal text-purple-600">
-                      {count}
-                    </div>
-                    <div className="text-sm text-gray-500">{year}</div>
-                    <hr className="my-4 border-t-2 border-purple-300" />
-                  </div>
-                ))}
-              </div>
             </div>
-
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-purple-600">
+            <div className=" border-t-2 py-6">
+              <h2 className="text-2xl flex justify-between items-center font-bold text-plum">
                 Average Time
+                <span className="text-black font-extrabold">{formatTimeBetweenReservationAndDate(
+                    statistics?.average_time_between_reservation_and_date || 7
+                  )}</span>
               </h2>
-              <p className="mb-4">
-                The time between making a reservation and the day of the
-                reservation.
+              <p className="">
+              On Average, You Book {formatTimeBetweenReservationAndDate(
+                    statistics?.average_time_between_reservation_and_date +2
+                  )}  Days in Advance!
               </p>
-              <div className="flex items-center justify-between">
-                <div className="text-lg font-normal text-purple-600">
-                  {formatTimeBetweenReservationAndDate(
-                    statistics?.average_time_between_reservation_and_date
-                  )}
-                </div>
-              </div>
+             
             </div>
 
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-purple-600 mb-4">
+            <div className=" border-t-2 py-6">
+              <h2 className="text-2xl font-bold text-plum">
                 Average Star Rating
               </h2>
               <div className="flex items-center justify-between">
-                <div className="text-xl font-normal text-purple-600">
+                <div className=" font-normal">
                   {statistics?.average_star_rating === 0
-                    ? "You haven't rated any restaurants yet."
+                    ? "You haven't rated any restaurants yet"
                     : statistics?.average_star_rating}
                 </div>
               </div>
@@ -182,70 +168,67 @@ const UserStatistics = () => {
           </div>
 
           <div className="w-[70%] mx-auto">
-            <h2 className="text-2xl font-semibold text-center text-purple-600 mb-6">
+            <h2 className="text-3xl font-bold text-center font-raleWay text-plum mb-6">
               Number of Reservations and Cancellations
             </h2>
             <Doughnut data={data} />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 mt-24 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 mt-24 font-raleWay md:grid-cols-2 gap-6">
           <div className="w-[70%] mx-auto">
-            <h2 className="text-2xl font-semibold text-center text-purple-600 mb-6">
-              Indoor vs Outdoor
+            <h2 className="text-2xl font-bold text-center text-plum mb-6">
+            Number of Reservations and Cancellations
             </h2>
             <Doughnut data={data2} />
           </div>
 
-          <div className="space-y-14">
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-purple-600 mb-4">
+          <div className=" px-6 bg-white font-raleWay rounded-xl shadow-md">
+            <div className="py-6 flex flex-col gap-3">
+              <h2 className="text-2xl flex justify-between items-center font-bold text-plum">
                 Average Number of Diners
+                <span className="text-black">{Math.floor(statistics?.average_number_of_diners) || 0}</span>
               </h2>
-              <div className="flex items-center justify-between">
-                <div className="text-xl font-bold text-purple-600">
-                  {statistics?.average_number_of_diners || 0}
-                </div>
-              </div>
+             <p>On average, you dine with {Math.floor(statistics?.average_number_of_diners)}  people <br /> per reservation.</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-purple-600 mb-4">
-                {authState?.user?.first_name}'s Favourite Foods
+            <div className="flex flex-col py-6 border-t-2 gap-3">
+              <h2 className="text-2xl font-bold text-plum">
+                Your go to Cuisines
               </h2>
-              <div className="flex items-center mt-6 space-x-2">
-                {statistics?.most_common_cuisine_types?.map((item, index) => (
+              <div className="flex items-center space-x-4">
+              
+              {statistics?.most_common_cuisine_types?.map((item, index) => (
                   <div
                     key={index}
-                    className="text-xl font-bold text-white bg-purple-600 px-4 py-2 rounded-full"
+                    className="text-xl font-bold text-white bg-plum px-4 py-1 rounded-lg"
                   >
                     {item}
                   </div>
                 ))}
+
+                <a className="text-purple-400 cursor-pointer underline leading-none">Discover more of what you love near you!</a>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-purple-600 mb-4">
-                Total Number of Reviews
+            <div className=" py-6 border-t-2">
+              <h2 className="text-2xl font-bold flex justify-between items-center text-plum mb-4">
+              Total Reviews Given
+              <span className="text-black">{statistics?.number_of_reviews_left || 0}</span>
               </h2>
-              <div className="flex items-center justify-between">
-                <div className="text-xl font-bold text-purple-600">
-                  {statistics?.number_of_reviews_left || 0}
-                </div>
-              </div>
+             <p>Help others with your dining insights</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg mt-24 shadow-lg p-6">
+        <div className="bg-white rounded-lg mt-24  shadow-lg p-6">
           <div className="flex flex-col sm:flex-row justify-between">
-            <div>
+            <div className="font-raleWay">
               <h2
-                className="text-2xl cursor-pointer font-semibold text-purple-600 mb-4"
+                className="text-2xl cursor-pointer font-bold text-plum mb-4"
                 onClick={() => setShowGlobe(!showGlobe)}
               >
-                Top 3 Dining Areas
+              Your Most Loved Dining Locations
               </h2>
               <div
                 className="flex mt-6 cursor-pointer items-center space-x-2"
@@ -254,7 +237,7 @@ const UserStatistics = () => {
                 {statistics?.average_locations?.map((item, index) => (
                   <div
                     key={index}
-                    className="text-xl font-bold text-white bg-purple-600 px-4 py-2 rounded-full"
+                    className="text-xl font-bold text-white bg-purple-600 px-4 py-1 rounded-lg"
                   >
                     {item}
                   </div>
@@ -264,18 +247,16 @@ const UserStatistics = () => {
             <div>
               <div
                 onClick={() => setShowGlobe(!showGlobe)}
-                className="text-xl cursor-pointer p-2 px-3 mt-8 font-bold text-white bg-purple-600 rounded-full"
+       
               >
-                <p className="flex justify-center space-x-2 items-center">
-                  <div>{showGlobe ? "Close" : "Preview"} </div>
-                  {showGlobe ? (
-                    <EyeOff size={18} className="text-white" />
-                  ) : (
-                    <Eye size={18} className="text-white" />
-                  )}
+                <p className="flex items-center gap-2 text-lg max-w-fit cursor-pointer py-1 px-3 mt-8 font-semibold text-white bg-purple-600 rounded-lg">
+                  <img src="/assets/location.png" alt="preview img" className="h-4 w-4" />
+                 Preview
                 </p>
+                <a href="" className="underline my-2 block text-purple-500">Explore more in these locations</a>
               </div>
             </div>
+            
           </div>
         </div>
 

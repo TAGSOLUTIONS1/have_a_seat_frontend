@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { User,Lock, Mail } from "lucide-react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -84,11 +85,15 @@ const SignupForm = () => {
     }
   };
   return (
-    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12">
-      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1">
-        <h1 className="text-center text-4xl md:text-5xl font-bold mb-8 md:mb-10">
-          Sign up
+    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto font-raleWay lg:p-40">
+      <div className=" mx-auto flex flex-col gap-3">
+        <div className="flex flex-col gap-3 ">
+          <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
+        <h1 className="text-center text-4xl md:text-5xl font-bold ">
+        Let’s Create Your Account.
         </h1>
+        <p className="text-center">Sign up for free and get started quickly.</p>
+        </div>
         <Form {...form}>
           <form
             className="flex flex-col space-y-4 md:space-y-5"
@@ -98,28 +103,35 @@ const SignupForm = () => {
               control={form.control}
               name="first_name"
               render={({ field }) => (
-                <FormItem>
+                <div className="relative">
+                  <FormItem>
+                  <span>First Name</span>
+                   <User className="absolute top-9 left-3 " />
                   <FormControl>
                     <Input
-                      placeholder="First name"
-                      className={cn("py-6 px-4 text-lg")}
+                      
+                      className={cn("py-6 px-4 text-lg rounded-full pl-10")}
                       {...field}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
+                </div>
               )}
               defaultValue=""
             />
+            <div className="relative">
             <FormField
               control={form.control}
               name="last_name"
               render={({ field }) => (
                 <FormItem>
+                  <span>Last Name</span>
+                  <User className="absolute top-9 left-3 " />
                   <FormControl>
                     <Input
-                      placeholder="Last name"
-                      className={cn("py-6 px-4 text-lg")}
+                     
+                      className={cn("py-6 px-4 text-lg rounded-full pl-10")}
                       {...field}
                     />
                   </FormControl>
@@ -128,15 +140,20 @@ const SignupForm = () => {
               )}
               defaultValue=""
             />
-            <FormField
+            </div>
+          <div className="relative">
+          <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
+                  <span>Email</span>
+                  <Mail className="absolute top-9 left-3 " />
+
                   <FormControl>
                     <Input
-                      placeholder="Enter email"
-                      className={cn("py-6 px-4 text-lg")}
+                   
+                      className={cn("py-6 px-4 text-lg rounded-full pl-10")}
                       {...field}
                     />
                   </FormControl>
@@ -145,16 +162,21 @@ const SignupForm = () => {
               )}
               defaultValue=""
             />
-            <FormField
+          </div>
+        <div className="relative">
+        <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
+                  <span>password</span>
+                  <Lock className="absolute top-9 left-3 " />
+
                   <FormControl>
                     <Input
-                      placeholder="Enter password"
+                     
                       type="password"
-                      className={cn("py-6 px-4 text-lg")}
+                      className={cn("py-6 px-4 text-lg rounded-full pl-10")}
                       {...field}
                     />
                   </FormControl>
@@ -163,15 +185,16 @@ const SignupForm = () => {
               )}
               defaultValue=""
             />
+        </div>
             <Button
               type="submit"
               variant="default"
-              className={cn("rounded-md w-full mt-8 text-xl")}
+              className={cn(" w-full mt-8 text-xl rounded-full")}
             >
               {loading ? (
                 <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
               ) : (
-                "Create an account"
+                "Sign Up"
               )}
             </Button>
           </form>

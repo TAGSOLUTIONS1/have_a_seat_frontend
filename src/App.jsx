@@ -33,7 +33,6 @@ function App() {
         
         <Route element={<MainLayout />}>
         <Route path="/" element={<Landing />} />
-          <Route path="/about" element={<h1>About</h1>} />
           <Route path="/register" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
