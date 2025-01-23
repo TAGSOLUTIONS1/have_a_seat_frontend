@@ -91,6 +91,9 @@ module.exports = {
       screens: {
         small: "400px",
       },
+      boxShadow:{
+        cardshadow:"6px 6px 54px 0px #0000000D",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

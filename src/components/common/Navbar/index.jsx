@@ -70,19 +70,19 @@ const Navbar = () => {
                     <ul className="flex">
                       <li className="p-4">
                         <Button
-                          className={cn("rounded-full border border-plum")}
+                          className={cn("rounded-full border border-plum text-base font-agrandir font-bold")}
                           variant="outline"
                           asChild
                         >
-                          <Link to="/login" className="text-plum">
-                            Login
+                          <Link to="/login" className="text-plum text-base font-agrandir font-bold">
+                            Sign In
                           </Link>
                         </Button>
                       </li>
                       <hr className="border-gray-200" />
                       <li className="p-4">
-                        <Button className={cn("rounded-full" , "bg-plum")} asChild>
-                          <Link to="/register">Register Now</Link>
+                        <Button className={cn("rounded-full" , "bg-plum text-base font-agrandir font-bold")} asChild>
+                          <Link to="/register">Book a Table</Link>
                         </Button>
                       </li>
                     </ul>
