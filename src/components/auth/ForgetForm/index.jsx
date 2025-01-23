@@ -149,7 +149,7 @@ const ForgetForm = () => {
       <span className="mt-1">
       <ChevronLeft />
         </span>
-        <Link to="/login" className="underline">
+        <Link to="/login" className="text-center font-agrandir font-bold text-sm text-plum">
        
         Back to login screen
         </Link></p>

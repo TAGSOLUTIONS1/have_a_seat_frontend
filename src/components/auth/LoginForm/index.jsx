@@ -11,6 +11,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
 import { PiEyeLight, PiEyeSlash } from "react-icons/pi";
+import { PiSignIn } from "react-icons/pi";
+
 const LoginForm = () => {
   const { login, handleError } = useAuth();
   const navigate = useNavigate();
@@ -120,6 +122,14 @@ const LoginForm = () => {
                 </p>
               )}
             </div>
+            <div  className="">
+            <p className="text-end">
+                <a href="/forget" className="text-plum font-roboto font-medium text-sm">
+                  Forgot password
+                </a>
+              </p>
+            </div>
+
           <div className="flex-grow">
            <Button
               type="submit"
@@ -131,27 +141,21 @@ const LoginForm = () => {
               ) : (
                 "Sign In"
               )}
+              <PiSignIn size={20} className="mx-2" />
             </Button>
   </div>
-      
+      <div className="my-4">
+          <p className="text-center font-agrandir font-bold text-sm">
+              Don't have an account?{" "}
+              <Link to="/register" className="text-plum">
+                Sign Up
+              </Link>
+            </p>
+
+      </div>
 
          
         </form>
-    
-<div  className="my-4">
-  
-<p className="text-center">
-            <a href="/forget" className="underline text-purple-600">
-              Forgot password
-            </a>
-          </p>
-          <p className="text-center">
-            Don't have an account?{" "}
-            <Link to="/register" className="underline  text-purple-600">
-              Sign Up
-            </Link>
-          </p>
-</div>
       </div>
     </div>
   );

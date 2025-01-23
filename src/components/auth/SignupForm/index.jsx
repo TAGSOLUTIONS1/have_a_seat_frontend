@@ -20,7 +20,7 @@ import { register } from "@/services/auth";
 
 import { ToastAction } from "@radix-ui/react-toast";
 import { LucideLoader } from "lucide-react";
-import { PiEyeLight, PiEyeSlash } from "react-icons/pi";
+import { PiEyeLight, PiEyeSlash, PiSignIn } from "react-icons/pi";
 
 const SignupForm = () => {
   const navigate = useNavigate()
@@ -212,12 +212,13 @@ const SignupForm = () => {
               ) : (
                 "Sign Up"
               )}
+              <PiSignIn size={20} className="mx-2"></PiSignIn>
             </Button>
           </form>
 
-          <p className="text-center mt-4">
+          <p className="text-center font-agrandir font-bold text-sm mt-4">
             Already have an account?{" "}
-            <a href="/login" className="underline text-primary text-lg">
+            <a href="/login" className="text-plum">
               Click to login
             </a>
           </p>
