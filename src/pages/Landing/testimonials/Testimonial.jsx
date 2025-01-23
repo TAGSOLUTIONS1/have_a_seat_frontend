@@ -38,9 +38,9 @@ const Testimonial = () => {
     <div className="testimonial-section text-center p-8">
       {/* Testimonial Display */}
       <div className="testimonial-text mb-2">
-        <p className="text-xl font-raleWay  mb-2 max-w-xs mx-auto min-h-[100px]">{testimonials[activeIndex].text}</p>
-        <h4 className="font-semibold">{testimonials[activeIndex].name}</h4>
-        <p className="text-gray-500">{testimonials[activeIndex].location}</p>
+        <p className="text-grayblu font-agrandir font-normal tracking-[-1.3%] text-2xl mb-2 max-w-[35%] mx-auto min-h-[100px]">{testimonials[activeIndex].text}</p>
+        <p className="font-extrabold text-blu text-lg font-jakarta">{testimonials[activeIndex].name}</p>
+        <p className="text-grayblu text-sm font-agrandir font-medium">{testimonials[activeIndex].location}</p>
       </div>
 
       {/* Avatar Navigation */}
@@ -50,7 +50,7 @@ const Testimonial = () => {
             key={index}
             src={testimonial.img}
             alt={testimonial.name}
-            className={`w-9 h-9 rounded-full cursor-pointer ${
+            className={`w-9 h-9 rounded-full cursor-pointer object-cover ${
               index === activeIndex
                 ? " transform scale-110"
                 : "opacity-50"

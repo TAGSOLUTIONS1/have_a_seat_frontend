@@ -22,6 +22,7 @@ module.exports = {
       raleWay:"Raleway",
       roboto: ['Roboto', 'sans-serif'],
       agrandir: ['Agrandir', 'sans-serif'],
+      jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
     },
     extend: {
       colors: {
@@ -31,6 +32,8 @@ module.exports = {
         txtcolor:"#202224",
         stepclr:"#39353C99",
         bgGray: "#FBF9FD",
+        grayblu:"#475569",
+        blu:"#1E293B",
         shipGrey: "#39353C",
         frenchPink: "#E5D2F1",
         input: "hsl(var(--input))",
