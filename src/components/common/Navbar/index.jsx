@@ -40,7 +40,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-white sticky top-0 start-0 px-0 sm:px-4 md:px-4 lg:px-4 xl:px-4 2xl:px-4 z-20">
+      <nav className="bg-bgGray sticky top-0 start-0 px-0 sm:px-4 md:px-4 lg:px-4 xl:px-4 2xl:px-4 z-20">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
           <div className="flex items-center rtl:space-x-reverse">
             <Link className="flex" to="/">
@@ -55,7 +55,7 @@ const Navbar = () => {
 
           <ul className="hidden lg:flex gap-10">
             {navLinks.map((link, index) => (
-              <a href={link.to}><li key={index} className="cursor-pointer">
+              <a href={link.to}><li key={index} className="font-agrandir font-medium text-lg cursor-pointer">
               {link.label}
             </li></a>
             ))}

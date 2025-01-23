@@ -86,14 +86,12 @@ const SignupForm = () => {
   };
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto font-raleWay lg:p-40">
-      <div className=" mx-auto flex flex-col gap-3">
-        <div className="flex flex-col gap-3 ">
-          <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
-        <h1 className="text-center text-4xl md:text-5xl font-bold ">
-        Let’s Create Your Account.
-        </h1>
-        <p className="text-center">Sign up for free and get started quickly.</p>
-        </div>
+      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mx-auto flex flex-col gap-3">
+      <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
+          <div className="flex flex-col gap-4 text-center">
+          <p className="text-4xl font-agrandir md:text-5xl font-bold text-txtcolor">Let’s Create Your Account.</p>
+          <p className="text-base font-roboto font-normal text-txtcolor">Sign up for free and get started quickly.</p>
+          </div>
         <Form {...form}>
           <form
             className="flex flex-col space-y-4 md:space-y-5"
@@ -105,7 +103,7 @@ const SignupForm = () => {
               render={({ field }) => (
                 <div className="relative">
                   <FormItem>
-                  <span>First Name</span>
+                  <p className="text-txtcolor text-sm font-medium font-roboto">First Name</p>
                    <User className="absolute top-9 left-3 " />
                   <FormControl>
                     <Input
@@ -126,7 +124,7 @@ const SignupForm = () => {
               name="last_name"
               render={({ field }) => (
                 <FormItem>
-                  <span>Last Name</span>
+                  <p className="text-txtcolor text-sm font-medium font-roboto">Last Name</p>
                   <User className="absolute top-9 left-3 " />
                   <FormControl>
                     <Input
@@ -147,7 +145,7 @@ const SignupForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <span>Email</span>
+                  <p className="text-txtcolor text-sm font-medium font-roboto">Email</p>
                   <Mail className="absolute top-9 left-3 " />
 
                   <FormControl>
@@ -169,7 +167,7 @@ const SignupForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <span>password</span>
+                  <p className="text-txtcolor text-sm font-medium font-roboto">Password</p>
                   <Lock className="absolute top-9 left-3 " />
 
                   <FormControl>

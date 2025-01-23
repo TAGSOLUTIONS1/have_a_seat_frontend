@@ -20,12 +20,16 @@ module.exports = {
       cabinet: ["Cabinet Grotesk", "sans-serif"],
       inter: ["Inter", "sans-serif"],
       raleWay:"Raleway",
+      roboto: ['Roboto', 'sans-serif'],
+      agrandir: ['Agrandir', 'sans-serif'],
     },
     extend: {
       colors: {
         border: "hsl(var(--border))",
         plum: "#9235E2",
         lightGrey: "#F5EDFC",
+        txtcolor:'#202224',
+        bgGray: "#FBF9FD",
         shipGrey: "#39353C",
         frenchPink: "#E5D2F1",
         input: "hsl(var(--input))",

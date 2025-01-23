@@ -52,11 +52,9 @@ const LoginForm = () => {
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mx-auto flex flex-col gap-3">
       <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
 
-       <div className="flex flex-col gap-4 my-10 text-center">
-       <h1 className=" text-4xl md:text-5xl font-bold ">
-        Welcome Back
-        </h1>
-        <p>Let’s sign in to your account and get started</p>
+       <div className="flex flex-col gap-4 text-center">
+        <p className="text-4xl font-agrandir md:text-5xl font-bold text-txtcolor">Welcome Back</p>
+        <p className="text-base font-roboto font-normal text-txtcolor">Let’s sign in to your account and get started</p>
        </div>
         <form
           className="space-y-4 md:space-y-6"
@@ -64,7 +62,7 @@ const LoginForm = () => {
         >
           <div className="flex items-center mb-4">
             <div className="flex-grow relative flex flex-col gap-3">
-              <span>Email Address</span>
+              <p className="text-txtcolor text-sm font-medium font-roboto">Email Address</p>
               <Mail className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
               <input
                 type="email"
@@ -84,7 +82,7 @@ const LoginForm = () => {
           </div>
     
             <div className="flex-grow flex relative flex-col gap-2">
-              <span>Password</span>
+            <p className="text-txtcolor text-sm font-medium font-roboto">Password</p>
               <Lock className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
 
               <input
@@ -102,7 +100,7 @@ const LoginForm = () => {
                 </p>
               )}
             </div>
-  <div className="flex-grow">
+          <div className="flex-grow">
            <Button
               type="submit"
               variant="default"

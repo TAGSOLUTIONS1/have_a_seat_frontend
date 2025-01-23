@@ -59,22 +59,20 @@ const ForgetForm = () => {
   };
 
   return (
-    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mt-10 mx-auto">
-      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 flex flex-col gap-10 mx-auto">
-       <div className="text-center flex flex-col gap-4">
-        <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
-       <h1 className=" text-4xl md:text-5xl font-bold">
-          Forgot Password
-        </h1>
-          <p>Don’t worry, we can restore it for you</p>
-       </div>
+    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto">
+      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mx-auto flex flex-col gap-3">
+      <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
+        <div className="flex flex-col gap-4 text-center">
+          <p className="text-4xl font-agrandir md:text-5xl font-bold text-txtcolor"> Forgot Password</p>
+          <p className="text-base font-roboto font-normal text-txtcolor">Don’t worry, we can restore it for you</p>
+        </div>
         <form
           className="space-y-4 md:space-y-6"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="flex flex-col gap-4 mx-auto p-10">
+          <div className="flex flex-col gap-4 mx-auto">
             <div className="flex-grow relative flex flex-col gap-2">
-              <span>Email Address</span>
+            <p className="text-txtcolor text-sm font-medium font-roboto">Email Address</p>
               <Mail className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
 
               <input
@@ -93,7 +91,7 @@ const ForgetForm = () => {
               )}
             </div>
             <div className="flex-grow flex relative flex-col gap-2">
-              <span>Password</span>
+            <p className="text-txtcolor text-sm font-medium font-roboto">Password</p>
               <Lock className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
 
               <input

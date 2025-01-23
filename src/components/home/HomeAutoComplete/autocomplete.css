@@ -1,14 +1,17 @@
 
 .geoapify-autocomplete-input {
   border: none;
-  border-radius: 5px;
+  padding: 0px 0px;
+  font-size: 14px;
+  font-weight: 400;
+  /* border-radius: 5px;
   font-size: 18px;
   padding: 12px 16px;
   max-width: 300px; 
   margin: 0.5rem 0;
   white-space: nowrap; 
   overflow: hidden; 
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; */
 }
 
 .geoapify-autocomplete-input::placeholder {
