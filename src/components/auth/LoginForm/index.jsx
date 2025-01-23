@@ -10,7 +10,7 @@ import { LucideLoader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
-
+import { PiEyeLight, PiEyeSlash } from "react-icons/pi";
 const LoginForm = () => {
   const { login, handleError } = useAuth();
   const navigate = useNavigate();
@@ -47,8 +47,20 @@ const LoginForm = () => {
       setLoading(false);
     }
   };
+
+  const [showpassword ,SetShowPasword]=useState(false);
+  const handleShowPassword =() =>{
+    if (showpassword===true)
+    {
+      SetShowPasword(false);
+    }
+    else{
+      SetShowPasword(true);
+    }
+    
+  }
   return (
-    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto ">
+    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto lg:p-40">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mx-auto flex flex-col gap-3">
       <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
 
@@ -63,7 +75,7 @@ const LoginForm = () => {
           <div className="flex items-center mb-4">
             <div className="flex-grow relative flex flex-col gap-3">
               <p className="text-txtcolor text-sm font-medium font-roboto">Email Address</p>
-              <Mail className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
+              <Mail size={22} className="absolute top-10 left-3 " />
               <input
                 type="email"
                 id="username"
@@ -83,10 +95,18 @@ const LoginForm = () => {
     
             <div className="flex-grow flex relative flex-col gap-2">
             <p className="text-txtcolor text-sm font-medium font-roboto">Password</p>
-              <Lock className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
+              <Lock size={22} className="absolute top-9 left-3 " />
+                {showpassword===true ? (
+                    <PiEyeLight size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
+                  ) : 
+                  (
+                    <PiEyeSlash size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
+                  )
+  
+                  }
 
               <input
-                type="password"
+                type={showpassword ? "text" : "password"}
                 id="password"
                 className={`border ${
                   errors.password ? "border-red-500" : "border-gray-300 rounded-full"
@@ -104,7 +124,7 @@ const LoginForm = () => {
            <Button
               type="submit"
               variant="default"
-              className={cn("rounded-full w-full text-xl mt-2") }
+              className={cn("rounded-full w-full bg-plum text-xl mt-2") }
             >
               {loading ? (
                 <LucideLoader className="w-6 h-6 mr-2 animate-spin" />

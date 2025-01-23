@@ -20,17 +20,28 @@ import { register } from "@/services/auth";
 
 import { ToastAction } from "@radix-ui/react-toast";
 import { LucideLoader } from "lucide-react";
+import { PiEyeLight, PiEyeSlash } from "react-icons/pi";
 
 const SignupForm = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
-
+  const [showpassword ,SetShowPasword]=useState(false);
   const form = useForm({
     resolver: yupResolver(SignupSchema),
   });
 
   const { toast } = useToast();
 
+  const handleShowPassword =() =>{
+    if (showpassword===true)
+    {
+      SetShowPasword(false);
+    }
+    else{
+      SetShowPasword(true);
+    }
+    
+  }
   const onSubmit = async (data) => {
     try {
       setLoading(true);
@@ -85,7 +96,7 @@ const SignupForm = () => {
     }
   };
   return (
-    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto font-raleWay lg:p-40">
+    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto lg:p-40">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mx-auto flex flex-col gap-3">
       <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
           <div className="flex flex-col gap-4 text-center">
@@ -104,7 +115,7 @@ const SignupForm = () => {
                 <div className="relative">
                   <FormItem>
                   <p className="text-txtcolor text-sm font-medium font-roboto">First Name</p>
-                   <User className="absolute top-9 left-3 " />
+                   <User size={22} className="absolute top-8 left-3 " />
                   <FormControl>
                     <Input
                       
@@ -125,7 +136,7 @@ const SignupForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <p className="text-txtcolor text-sm font-medium font-roboto">Last Name</p>
-                  <User className="absolute top-9 left-3 " />
+                  <User size={22} className="absolute top-8 left-3 " />
                   <FormControl>
                     <Input
                      
@@ -146,7 +157,7 @@ const SignupForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <p className="text-txtcolor text-sm font-medium font-roboto">Email</p>
-                  <Mail className="absolute top-9 left-3 " />
+                  <Mail size={22} className="absolute top-8 left-3 " />
 
                   <FormControl>
                     <Input
@@ -168,12 +179,19 @@ const SignupForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <p className="text-txtcolor text-sm font-medium font-roboto">Password</p>
-                  <Lock className="absolute top-9 left-3 " />
+                  <Lock size={22} className="absolute top-8 left-3 " />
+                  {showpassword===true ? (
+                    <PiEyeLight size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
+                  ) : 
+                  (
+                    <PiEyeSlash size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
+                  )
+
+                  }
 
                   <FormControl>
                     <Input
-                     
-                      type="password"
+                      type={showpassword ? "text" : "password"} 
                       className={cn("py-6 px-4 text-lg rounded-full pl-10")}
                       {...field}
                     />
@@ -187,7 +205,7 @@ const SignupForm = () => {
             <Button
               type="submit"
               variant="default"
-              className={cn(" w-full mt-8 text-xl rounded-full")}
+              className={cn(" w-full mt-8 bg-plum text-xl rounded-full")}
             >
               {loading ? (
                 <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
