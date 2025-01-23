@@ -39,7 +39,7 @@ const Time = ({ setFormData }) => {
 
   return (
     <Select value={selectedTime} onValueChange={handleTimeSelection}>
-      <div className="text-black border-r-2 ">
+      <div className="text-black ">
         <SelectTrigger className="w-full bg-transparent border-none ">
           <SelectValue placeholder="Select time" />
         </SelectTrigger>

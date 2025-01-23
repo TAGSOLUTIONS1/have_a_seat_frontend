@@ -25,7 +25,7 @@ const DatePicker = ({ setFormData }) => {
   return (
     <div>
       <Popover>
-        <div className="text-black border-r-2">
+        <div className="text-black">
           <PopoverTrigger asChild>
             <Button
               variant={"outline"}

@@ -34,6 +34,8 @@ module.exports = {
         bgGray: "#FBF9FD",
         grayblu:"#475569",
         blu:"#1E293B",
+        grayhead:"#343434",
+        graysublabel:"#707070",
         shipGrey: "#39353C",
         frenchPink: "#E5D2F1",
         input: "hsl(var(--input))",

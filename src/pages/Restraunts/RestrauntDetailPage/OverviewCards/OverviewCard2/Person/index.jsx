@@ -24,7 +24,7 @@ const PersonCard = ({ setFormData }) => {
 
   return (
     <Select value={selectedPersons} onValueChange={handleSelectChange} >
-      <div className="text-black border-r-2">
+      <div className="text-black">
         <SelectTrigger className="w-full bg-transparent border-none">
           <SelectValue placeholder="Select Person" />
         </SelectTrigger>

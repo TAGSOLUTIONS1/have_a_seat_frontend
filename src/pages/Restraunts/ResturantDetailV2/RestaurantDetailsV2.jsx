@@ -14,7 +14,7 @@ const timeSlots = ["4:30", "5:15", "3:30", "6:45", "10:15", "11:30"];
 
 export default function RestaurantDetailsV2({ restrauntDetail }) {
   return (
-    <div className="p-10 md:p-[6rem]">
+    <div className="p-10 md:p-[6rem] max-w-[1600px] mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 md:gap-20">
         {/* Restaurant details */}
         <Restaurant restrauntDetail={restrauntDetail} />

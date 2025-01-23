@@ -118,9 +118,9 @@ export const whyUs = [
 
 export const navLinks = [
   { to: "/", label: "Home" },
-  { to: "#about", label: "About" },
-  { to: "#why", label: "Why Us" },
-  { to: "#contact", label: "Contact" },
+  { to: "/#about", label: "About" },
+  { to: "/#why", label: "Why Us" },
+  { to: "/#contact", label: "Contact" },
 ];
 export const FooterLinks = [
   { to: "about", label: "About" },
