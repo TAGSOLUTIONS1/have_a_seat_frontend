@@ -79,16 +79,17 @@ const ReservationForm = ({ formData, bookingInfo }) => {
   }, [initialValues]);
 
   return (
-    <div className=" rounded-lg shadow-md  text-[#39353C] flex items-center justify-center  px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 p-6 bg-white ">
+    <div className="bg-white rounded-[30px] border-[0.5px] border-[#B9B9B9] shadow-md text-[#39353C] 
+    flex items-center justify-center p-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 ">
         <div className="text-center">
-          <div className="flex items-center justify-center w-16 p-2 h-16 mx-auto bg-plum rounded-full">
+          <div className="flex items-center justify-center w-32 p-2 h-32 mx-auto bg-plum rounded-full">
             <img src="/assets/reserve.png" alt="from reseveration photo" />
           </div>
-          <h2 className="mt-4 text-xl md:text-[3rem] font-bold ">
+          <h2 className="mt-8 text-shipGrey font-agrandir text-4xl md:text-5xl font-bold ">
             Reservation Form
           </h2>
-          <p className="mt-4 text-base md:text-lg">
+          <p className="mt-4 text-base md:text-xl font-normal font-agrandir">
             Fill in the information to reserve.
           </p>
         </div>
@@ -97,20 +98,20 @@ const ReservationForm = ({ formData, bookingInfo }) => {
           <div className="relative">
             <label
               htmlFor="first_name"
-              className="block ml-6 text-sm font-medium text-gray-700 my-2"
+              className="block ml-6 font-roboto text-shipGrey font-normal text-base my-2"
             >
               First Name
             </label>
-            <User className="absolute top-12 left-[1.75rem] transform -translate-y-1/2 " />
+            <User  className="absolute top-[52px] left-[2.25rem] transform -translate-y-1/2 " />
             <input
               type="text"
-              placeholder="Optional"
-              className="w-full pl-10 pr-4 py-2 ml-6 text-sm border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="Required"
+              className="w-full pl-10 pr-4 py-2 ml-7 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               id="first_name"
               {...formik.getFieldProps("first_name")}
             />
             {formik.touched.first_name && formik.errors.first_name ? (
-              <div className="mt-1 h-5 ml-10  text-red-500">
+              <div className="mt-1 h-5 ml-10 text-sm text-red-500">
                 {formik.errors.first_name}
               </div>
             ) : null}
@@ -119,20 +120,20 @@ const ReservationForm = ({ formData, bookingInfo }) => {
           <div className="relative">
             <label
               htmlFor="last_name"
-              className="block ml-6 text-sm font-medium text-gray-700 my-2"
+              className="block ml-6 font-roboto text-shipGrey font-normal text-base my-2"
             >
               Last Name
             </label>
-            <User className="absolute top-12 left-[1.75rem] transform -translate-y-1/2 " />
+            <User  className="absolute top-[52px] left-[2.25rem] transform -translate-y-1/2 "/>
             <input
               type="text"
-              placeholder="Optional"
-              className="w-full pl-10 pr-4 py-2 ml-6 text-sm border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="Required"
+              className="w-full pl-10 pr-4 py-2 ml-7 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               id="last_name"
               {...formik.getFieldProps("last_name")}
             />
             {formik.touched.last_name && formik.errors.last_name ? (
-              <div className=" mt-1 h-5 ml-10  text-red-500">
+              <div className=" mt-1 h-5 ml-10 text-sm text-red-500">
                 {formik.errors.last_name}
               </div>
             ) : null}
@@ -142,15 +143,15 @@ const ReservationForm = ({ formData, bookingInfo }) => {
           <div className="relative">
             <label
               htmlFor="phone"
-              className="block ml-6 text-sm font-medium my-2 text-gray-700"
+              className="block ml-6 font-roboto text-shipGrey font-normal text-base my-2"
             >
               Contact Number
             </label>
-            <Phone className="absolute top-12 left-[1.75rem] transform -translate-y-1/2 " />
+            <Phone  className="absolute top-[54px] left-[2.25rem] transform -translate-y-1/2 " />
             <input
               type="text"
               placeholder="Required"
-              className="w-full pl-10 pr-4 py-2 ml-6 px-2 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 ml-7 px-2 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               required
               id="phone"
               {...formik.getFieldProps("phone")}
@@ -166,15 +167,15 @@ const ReservationForm = ({ formData, bookingInfo }) => {
           <div className="relative">
             <label
               htmlFor="email"
-              className="block ml-6 text-sm font-medium my-2 text-gray-700"
+              className="block ml-6 font-roboto text-shipGrey font-normal text-base my-2"
             >
               Email Address
             </label>
-            <Mail className="absolute top-12 left-[1.75rem] transform -translate-y-1/2 " />
+            <Mail className="absolute top-[54px] left-[2.25rem] transform -translate-y-1/2 " />
             <input
               type="email"
               placeholder="Required"
-              className="w-full pl-10 pr-4 py-2 px-2 ml-6 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 px-2 ml-7 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               required
               id="email"
               {...formik.getFieldProps("email")}
@@ -186,7 +187,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             )}
           </div>
 
-          <p className="text-sm text-gray-600 text-center">
+          <p className="text-sm text-graysublabel font-normal font-roboto">
             After completion of the form you will receive a confirmation of your
             reservation by <span className="font-bold">e-mail</span> or{" "}
             <span className="font-bold">text message.</span>
@@ -195,7 +196,7 @@ const ReservationForm = ({ formData, bookingInfo }) => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 mt-4 rounded-full bg-purple-600 text-white font-medium hover:bg-purple-700 transition"
+            className="w-full py-3 mt-4 rounded-full bg-plum text-white font-medium hover:bg-purple-700 transition"
           >
             Book a Table →
           </button>

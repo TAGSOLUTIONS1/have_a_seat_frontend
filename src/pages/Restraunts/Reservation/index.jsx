@@ -80,8 +80,8 @@ const Reservation = () => {
         <Loader />
       ) : (
         <>
-        <div className="flex flex-col justify-center items-center mb-24 ">
-          <div className="w-2/4 mt-12">
+        <div className="flex flex-col justify-center items-center bg-bgGray">
+          <div className="w-2/4 mt-12 mb-24">
             <ReservationForm formData={formData} bookingInfo={bookingInfo} />
           </div>
           
