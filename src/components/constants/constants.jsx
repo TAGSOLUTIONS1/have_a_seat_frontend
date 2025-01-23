@@ -56,7 +56,7 @@ export const stats = [
   },
   {
     heading: "Happy Customers",
-    stat: "1K+",
+    stat: "1k+",
   },
 ];
 export const hotels = [resy, eatable, open1, yelp, open2, resy];
