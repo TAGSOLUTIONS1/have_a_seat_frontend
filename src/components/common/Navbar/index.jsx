@@ -81,7 +81,7 @@ const Navbar = () => {
                       </li>
                       <hr className="border-gray-200" />
                       <li className="p-4">
-                        <Button className={cn("rounded-full")} asChild>
+                        <Button className={cn("rounded-full" , "bg-plum")} asChild>
                           <Link to="/register">Register Now</Link>
                         </Button>
                       </li>
@@ -92,7 +92,7 @@ const Navbar = () => {
                     <ul className="flex">
                       <li className="p-4">
                         <Button
-                          className={cn("rounded-full bg-purple-600")}
+                          className={cn("rounded-full bg-plum")}
                           asChild
                         >
                           <Link to="/user-history">Reservations</Link>
