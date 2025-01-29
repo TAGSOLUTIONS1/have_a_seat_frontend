@@ -110,6 +110,8 @@ const UserStatistics = () => {
     }
   };
 
+  console.log("~~ my profile statistics ,  " , statistics);
+
   return (
     <div className="bg-bgGray">
     <div className="p-20 max-w-[1600px] mx-auto">
@@ -249,13 +251,13 @@ const UserStatistics = () => {
             <div>
               <div
                 onClick={() => setShowGlobe(!showGlobe)}
-       
+                className="font-agrandir"
               >
-                <p className="flex items-center gap-2 text-lg max-w-fit cursor-pointer py-1 px-3 mt-8 font-semibold text-white bg-plum rounded-lg">
+                <p className="flex mb-4 items-center gap-2 text-lg max-w-fit cursor-pointer py-1 px-3 font-semibold text-white bg-plum rounded-lg">
                   <img src="/assets/location.png" alt="preview img" className="h-4 w-4" />
                  Preview
                 </p>
-                <a href="" className="underline my-2 block text-plum font-agrandir text-xl font-normal">Explore more in these locations</a>
+                <a href="" className="underline mt-7 block text-plum font-agrandir text-xl font-normal">Explore more in these locations</a>
               </div>
             </div>
             

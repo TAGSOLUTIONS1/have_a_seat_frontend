@@ -23,6 +23,7 @@ module.exports = {
       roboto: ['Roboto', 'sans-serif'],
       agrandir: ['Agrandir', 'sans-serif'],
       jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+      poppins:['"Poppins"', 'sans-serif']
     },
     extend: {
       colors: {
@@ -33,6 +34,7 @@ module.exports = {
         stepclr:"#39353C99",
         bgGray: "#FBF9FD",
         grayblu:"#475569",
+        ftext:"#3E3E3E",
         blu:"#1E293B",
         grayhead:"#343434",
         graysublabel:"#707070",
@@ -95,6 +97,7 @@ module.exports = {
       },
       boxShadow:{
         cardshadow:"6px 6px 54px 0px #0000000D",
+        spanshadow:"0px 0px 0px 4px #9235E240"
       },
     },
   },

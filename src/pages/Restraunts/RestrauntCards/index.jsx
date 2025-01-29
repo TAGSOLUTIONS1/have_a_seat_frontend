@@ -1,6 +1,8 @@
 import React, { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchLocationV2 from "@/components/searchLocationRestaurant";
+import { FaCheck } from "react-icons/fa6";
+
 const initialTypes = ["yelp", "open_table", "resy"];
 
 const RestaurantCards = memo(
@@ -160,7 +162,8 @@ const RestaurantCards = memo(
     };
 
  
-
+    // console.log("~~ filtered restaurannts " , filteredRestaurants);
+    console.log("~~ set selected type" , selectedTypes.includes("yelp"));
     return (
       <div>
         <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-14 bg-white">
@@ -189,10 +192,14 @@ const RestaurantCards = memo(
                     className="hidden peer"
                   />
                   <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer 
-                  rounded-full flex items-center justify-center 
-                  peer-checked:before:content-['✔'] peer-checked:before:text-white peer-checked:before:text-xl"
+                  rounded-full flex items-center justify-center shadow-spanshadow"
                   >
+                    {selectedTypes.includes("yelp") && <FaCheck size={23} color="#ffffff" />}
+
                   </span>
+                  {/* <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer shadow-spanshadow
+                   rounded-full flex items-center justify-center
+                   peer-checked:before:content-['✔'] peer-checked:before:text-white peer-checked:before:text-xl "></span> */}
                 </label>
                 <img
                   src="/assets/yelp_logo_new.png"
@@ -212,7 +219,11 @@ const RestaurantCards = memo(
                     onChange={() => handleCheckboxChange("resy")}
                     className="hidden peer"
                   />
-                  <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum  cursor-pointer rounded-full flex items-center justify-center peer-checked:before:content-['✔'] peer-checked:before:text-white peer-checked:before:text-xl "></span>
+                  <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer rounded-full shadow-spanshadow
+                  flex items-center justify-center 
+                  ">
+                      {selectedTypes.includes("resy") && <FaCheck size={23} color="#ffffff" />}
+                  </span>
                 </label>
                 <img
                   src="/assets/resylogo.png"
@@ -232,7 +243,11 @@ const RestaurantCards = memo(
                     onChange={() => handleCheckboxChange("open_table")}
                     className="hidden peer"
                   />
-                  <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer rounded-full flex items-center justify-center peer-checked:before:content-['✔'] peer-checked:before:text-white peer-checked:before:text-xl "></span>
+                  <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer rounded-full shadow-spanshadow
+                  flex items-center justify-center 
+                  ">
+                    {selectedTypes.includes("open_table") && <FaCheck size={23} color="#ffffff" />}
+                  </span>
                 </label>
                 <img
                   src="/assets/opentablelogo.png"
@@ -337,19 +352,19 @@ const RestaurantCards = memo(
                         </p>
                         <p className="px-8 font-roboto font-normal text-base text-shipGrey">
                           {data.restraunt_type === "yelp" ? (
-                            <p>{data?.location?.display_address}</p>
+                            <p>{data?.location?.display_address?.join(' ')}</p>
                           ) : data?.restraunt_type === "open_table" ? (
                             <div>
                               <p>
                                 {data?.address?.line1 &&
                                   `${data?.address?.line1} `}
-                                {data?.address?.city}
+                                  <span> {data?.address?.city}</span>
                               </p>
                             </div>
                           ) : data?.restraunt_type === "resy" ? (
                             <div>
                               {data?.locality && `${data?.locality} `}
-                              {data?.location?.name}
+                              <span> {data?.location?.name}</span>
                             </div>
                           ) : null}
                         </p>
