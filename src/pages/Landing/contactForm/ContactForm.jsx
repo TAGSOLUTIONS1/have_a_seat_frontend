@@ -1,3 +1,4 @@
+import { AiOutlineMail } from "react-icons/ai";
 import BookRestaurant from "../BookResturant/BookRestaurant";
 
 export default function ContactForm() {
@@ -5,44 +6,50 @@ export default function ContactForm() {
    <div className="bg-[#F5EDFC]">
     <BookRestaurant />
      <div className="flex items-center px-20 md:px-40 justify-center  p-6">       
-      <div className=" max-w-lg py-10 mx-auto">
-        <h1 className="text-center text-3xl md:text-6xl font-bold font-raleWay text-gray-900">
-          Have <span className="text-purple-500">Queries</span> or <span className="text-purple-500">Suggestions?</span>
-        </h1>
-        <p className="text-center font-raleWay font-bold my-3 mt-4 md:mt-12 text-2xl md:text-4xl">Get in touch</p>
-        <p className="text-center my-4">You can reach us at anytime.</p>
+      <div className="py-10 mx-auto">
+        <p className="text-[38px] md:text-7xl font-bold font-agrandir text-center text-shipGrey">  
+          Have <span className="text-plum">Queries</span> or <br></br> <span className="text-plum">Suggestions?</span>
+        </p>
+        <div className="flex flex-col items-center gap-1 my-14">
+        <p className="text-center font-agrandir text-shipGrey font-bold text-2xl md:text-5xl mt-9">Get in touch</p>
+        <p className="text-center font-roboto font-normal text-shipGrey text-xl md:text-2xl">You can reach us at anytime.</p>
+        </div>
 
         <form className="  space-y-4">
           <div className="flex flex-col md:flex-row gap-4">
             <input
               type="text"
               placeholder="First name"
-              className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="flex-1 p-4 px-7 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
             <input
               type="text"
               placeholder="Last name"
-              className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
+              className="flex-1 p-4 px-7 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
           </div>
-          <div className="relative">
-            <input
-              type="email"
-              placeholder="Your email"
-              className="w-full p-3 pl-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
-            />
-            <span className="absolute left-3 top-3 text-gray-400">
-              📧
-            </span>
-          </div>
+          <div className="relative flex items-center">
+              <AiOutlineMail
+                size={20}
+                color="#9235E2"
+                className="absolute left-4 top-1/2 transform -translate-y-1/2"
+              />
+              <input
+                type="email"
+                placeholder="Your email"
+                className="w-full p-4 px-7 pl-12 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
+              />
+            </div>
+
           <textarea
             placeholder="How can we help?"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="w-full p-4 px-7 rounded-[32px] focus:outline-none focus:ring-2 focus:ring-purple-400"
             rows="4"
           ></textarea>
           <button
             type="submit"
-            className="w-full bg-purple-500 text-white py-3 rounded-full hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="w-full bg-plum text-white py-3 rounded-full hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400
+            text-[22px] font-roboto font-medium"
           >
             Submit
           </button>

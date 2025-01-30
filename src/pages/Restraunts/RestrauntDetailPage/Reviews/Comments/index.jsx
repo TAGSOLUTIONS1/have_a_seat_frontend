@@ -41,9 +41,9 @@ const Comments = ({ reviewsData, yelpReviews }) => {
           displayedReviews.map((data, index) => (
             <div className="" key={index}>
               <div className=" flex justify-between items-center">
-                <h1 className="text-black text-sm font-bold">
+                <p className="text-shipGrey text-base font-agrandir font-bold">
                   {data?.user?.initials}
-                </h1>
+                </p>
                 <div className="flex justify-center">
                   {[...Array(data?.rating?.overall)].map((_, starIndex) => (
                     <Star
@@ -66,9 +66,9 @@ const Comments = ({ reviewsData, yelpReviews }) => {
             <div>
               <div className="rounded-lg border" key={index}>
                 <div className=" flex justify-between items-center p-3 ">
-                  <h1 className="text-black text-sm font-bold">
+                <p className="text-shipGrey text-base font-agrandir font-bold">
                     {data.user.name}
-                  </h1>
+                  </p>
                   <div className="flex justify-center">
                     {[...Array(data?.rating)].map((_, starIndex) => (
                       <Star
@@ -82,7 +82,7 @@ const Comments = ({ reviewsData, yelpReviews }) => {
                 </div>
                 <hr />
                 <div className="px-3 py-5">
-                  <p>{truncateText(data.text)}</p>
+                  <p className="text-shipGrey text-sm font-agrandir font-normal">{truncateText(data.text)}</p>
                 </div>
               </div>
             </div>

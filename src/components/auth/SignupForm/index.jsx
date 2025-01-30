@@ -20,17 +20,28 @@ import { register } from "@/services/auth";
 
 import { ToastAction } from "@radix-ui/react-toast";
 import { LucideLoader } from "lucide-react";
+import { PiEyeLight, PiEyeSlash, PiSignIn } from "react-icons/pi";
 
 const SignupForm = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
-
+  const [showpassword ,SetShowPasword]=useState(false);
   const form = useForm({
     resolver: yupResolver(SignupSchema),
   });
 
   const { toast } = useToast();
 
+  const handleShowPassword =() =>{
+    if (showpassword===true)
+    {
+      SetShowPasword(false);
+    }
+    else{
+      SetShowPasword(true);
+    }
+    
+  }
   const onSubmit = async (data) => {
     try {
       setLoading(true);
@@ -85,15 +96,13 @@ const SignupForm = () => {
     }
   };
   return (
-    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto font-raleWay lg:p-40">
-      <div className=" mx-auto flex flex-col gap-3">
-        <div className="flex flex-col gap-3 ">
-          <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
-        <h1 className="text-center text-4xl md:text-5xl font-bold ">
-        Let’s Create Your Account.
-        </h1>
-        <p className="text-center">Sign up for free and get started quickly.</p>
-        </div>
+    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto lg:p-40">
+      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mx-auto flex flex-col gap-3">
+      <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
+          <div className="flex flex-col gap-4 text-center">
+          <p className="text-4xl font-agrandir md:text-5xl font-bold text-txtcolor">Let’s Create Your Account.</p>
+          <p className="text-base font-roboto font-normal text-txtcolor">Sign up for free and get started quickly.</p>
+          </div>
         <Form {...form}>
           <form
             className="flex flex-col space-y-4 md:space-y-5"
@@ -105,8 +114,8 @@ const SignupForm = () => {
               render={({ field }) => (
                 <div className="relative">
                   <FormItem>
-                  <span>First Name</span>
-                   <User className="absolute top-9 left-3 " />
+                  <p className="text-txtcolor text-sm font-medium font-roboto">First Name</p>
+                   <User size={22} className="absolute top-8 left-3 " />
                   <FormControl>
                     <Input
                       
@@ -126,8 +135,8 @@ const SignupForm = () => {
               name="last_name"
               render={({ field }) => (
                 <FormItem>
-                  <span>Last Name</span>
-                  <User className="absolute top-9 left-3 " />
+                  <p className="text-txtcolor text-sm font-medium font-roboto">Last Name</p>
+                  <User size={22} className="absolute top-8 left-3 " />
                   <FormControl>
                     <Input
                      
@@ -147,8 +156,8 @@ const SignupForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <span>Email</span>
-                  <Mail className="absolute top-9 left-3 " />
+                  <p className="text-txtcolor text-sm font-medium font-roboto">Email</p>
+                  <Mail size={22} className="absolute top-8 left-3 " />
 
                   <FormControl>
                     <Input
@@ -169,13 +178,20 @@ const SignupForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <span>password</span>
-                  <Lock className="absolute top-9 left-3 " />
+                  <p className="text-txtcolor text-sm font-medium font-roboto">Password</p>
+                  <Lock size={22} className="absolute top-8 left-3 " />
+                  {showpassword===true ? (
+                    <PiEyeLight size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
+                  ) : 
+                  (
+                    <PiEyeSlash size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
+                  )
+
+                  }
 
                   <FormControl>
                     <Input
-                     
-                      type="password"
+                      type={showpassword ? "text" : "password"} 
                       className={cn("py-6 px-4 text-lg rounded-full pl-10")}
                       {...field}
                     />
@@ -189,19 +205,20 @@ const SignupForm = () => {
             <Button
               type="submit"
               variant="default"
-              className={cn(" w-full mt-8 text-xl rounded-full")}
+              className={cn(" w-full mt-8 bg-plum text-xl rounded-full")}
             >
               {loading ? (
                 <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
               ) : (
                 "Sign Up"
               )}
+              <PiSignIn size={20} className="mx-2"></PiSignIn>
             </Button>
           </form>
 
-          <p className="text-center mt-4">
+          <p className="text-center font-agrandir font-bold text-sm mt-4">
             Already have an account?{" "}
-            <a href="/login" className="underline text-primary text-lg">
+            <a href="/login" className="text-plum">
               Click to login
             </a>
           </p>

@@ -155,30 +155,30 @@ export default function MakeReservation({ restrauntDetail }) {
 
   return (
     <>
-      <h1 className=" font-bold my-10 text-2xl sm:text-3xl lg:text-4xl">
+      <h1 className=" font-bold my-10 text-4xl font-agrandir text-shipGrey sm:text-3xl lg:text-4xl">
         Make a Reservation
       </h1>
       <div className="  ">
-        <div className="flex gap-2 items-end bg-slate-50 px-5 py-2 rounded-full ">
-          <div className="flex-grow">
-            <span className="ml-4">Date</span>
+        <div className="flex gap-2 items-center border-[0.4px] border-[#B9B9B9] bg-white px-5 py-2 rounded-full ">
+          <div className="flex-grow border-r-2">
+            <span className="ml-4 font-roboto text-xl text-grayhead font-normal">Date</span>
             <DatePicker setFormData={setFormData} />
           </div>
 
-          <div className="flex-grow">
-            <span className="ml-3">Time</span>
+          <div className="flex-grow border-r-2">
+            <span className="ml-4 font-roboto text-xl text-grayhead font-normal">Time</span>
             <Time setFormData={setFormData} />
           </div>
 
-          <div className="flex-grow">
-            <span className="ml-3">Guests</span>
+          <div className="flex-grow border-r-2">
+            <span className="ml-4 font-roboto text-xl text-grayhead font-normal">Guests</span>
             <PersonCard setFormData={setFormData} />
           </div>
           <button
             onClick={handleTimeSlots}
-            className=" bg-purple-600 p-2 text-white rounded-full  focus:outline-none"
+            className=" bg-plum p-2 text-white rounded-full  focus:outline-none"
           >
-            Find a time
+            Find a Table
           </button>
         </div>
         <div>
@@ -194,13 +194,13 @@ export default function MakeReservation({ restrauntDetail }) {
                 isDataLoaded ? (
                   Array.isArray(timeSlots) && timeSlots.length > 0 ? (
                     <>
-                      <h3 className="text-xl font-bold mb-4">Time Slots</h3>
+                      <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
                       {timeSlots
                         .filter((data) => !isNaN(data.timestamp))
                         .map((data, index) => (
                           <button
                             key={index}
-                            className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                            className="bg-plum text-white font-semibold font-roboto text-base p-2 px-3 m-1 rounded-lg"
                             onClick={() => handleYelpReservation(data)}
                           >
                             {new Date(data.timestamp * 1000).toLocaleTimeString(
@@ -223,7 +223,7 @@ export default function MakeReservation({ restrauntDetail }) {
                 Array.isArray(openTableTimeSlots) &&
                 openTableTimeSlots[0]?.availabilityDays[0]?.slots.length > 0 ? (
                   <>
-                    <h3 className="text-xl font-bold mb-4">Time Slots</h3>
+                    <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
                     {openTableTimeSlots[0]?.availabilityDays[0]?.slots
                       .filter((data) => !isNaN(data.timeOffsetMinutes))
                       .map((data, index) => (

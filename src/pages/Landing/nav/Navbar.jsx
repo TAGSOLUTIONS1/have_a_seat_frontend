@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
 import logo from "/assets/has_logo.png";
+import newlogo from "/assets/haveaseatlogo.png";
 import { Menu, X } from "lucide-react";
 import {
   initialBookingState,

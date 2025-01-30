@@ -77,7 +77,7 @@ const TermApiAuto = ({ getTermData, term: initialTerm }) => {
         onChange={handleTermChange}
         onBlur={handleBlur}
         placeholder="Restaurant"
-        className="w-full p-3 ml-2 mr-2 rounded border-none focus:outline-none bg-transparent text-plum"
+        className="w-full rounded border-none focus:outline-none bg-transparent text-plum"
       />
       {suggestions.length > 0 && (
         <div className="absolute bg-white border border-gray-200 mt-1 w-full rounded-lg shadow-lg z-10 left-0 max-h-80 overflow-y-auto">

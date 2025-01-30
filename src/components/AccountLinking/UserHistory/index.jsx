@@ -331,7 +331,8 @@ const UserHistory = () => {
 console.log("reservations history", reservations)
   return (
     <>
-    <div className="bg-white min-h-screen p-6 pt-24 lg:py-28 lg:x-24 sm:px-6 lg:px-24">
+    <div className="bg-bgGray ">
+    <div className="max-w-[1600px] mx-auto min-h-screen p-6 pt-24 lg:py-28 lg:x-24 sm:px-6 lg:px-24">
       {/* the below componenets were old reservaton history dashoboard */}
 
       
@@ -581,7 +582,7 @@ console.log("reservations history", reservations)
       </Modal> */}
       <ReservationsHistory reservations={reservations} />
     </div>
-    
+    </div>
     </>
   );
 };

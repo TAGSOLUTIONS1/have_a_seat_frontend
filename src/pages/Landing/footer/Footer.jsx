@@ -32,10 +32,10 @@ function Footer() {
         />
         <div></div>
         <div>
-          <h1 className="text-plum text-2xl font-bold mb-2">Home</h1>
+          <h1 className="text-plum text-2xl font-poppins font-bold mb-2">Home</h1>
           <ul className="flex flex-col gap-2">
             {FooterLinks.map((link) => (
-              <li key={link} className="cursor-pointer text-black">
+              <li key={link} className="cursor-pointer text-ftext text-base font-normal font-roboto">
                 <ScrollLink
                   to={link.to} // Matches the `id` of the target section
                   spy={true}
@@ -52,16 +52,16 @@ function Footer() {
 
         {/* social media web*/}
         <ul className=" text-plum text-lg flex flex-col gap-[1.25rem]">
-          <li className="text-2xl font-bold">Social media</li>
+          <li className="text-plum text-2xl font-poppins font-bold mb-2">Social media</li>
 
           <ul className="flex flex-col gap-5">
             <li className="flex items-center gap-3 text-sm">
               <img src="/assets/phone.png" />{" "}
-              <span className="text-black">+1 (860) 960-0316</span>
+              <span className="text-ftext text-base font-normal font-roboto">+1 (860) 960-0316</span>
             </li>
             <li className="flex items-center gap-3 text-sm">
               <img src="/assets/mail.png" />
-              <a href="mailto:contact@haveaseaton.com" className="text-black">
+              <a href="mailto:contact@haveaseaton.com" className="text-ftext text-base font-normal font-roboto">
                 contact@haveaseaton.com
               </a>
             </li>
@@ -71,21 +71,22 @@ function Footer() {
 
       {/* newsletter */}
 
-      <div className="flex flex-col gap-6 md:gap-0 md:flex-row justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-center md:text-left ">Join Our Newsletter</h2>
-          <p className=" text-sm my-2">
+      <div className="flex flex-col w-full gap-6 md:gap-0 md:flex-row justify-between items-center">
+        <div className="w-1/2">
+          <h2 className="text-3xl font-agrandir text-ftext font-bold text-center md:text-left ">Join Our Newsletter</h2>
+          <p className="text-xl text-grayblu font-roboto">
             Only updates and special offers. No spams.
           </p>
         </div>
 
-        <form className=" flex flex-col gap-6 md:gap-0 md:flex-row justify-center items-center">
-          <div className="relative ">
-            <Mail className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
+        <form className=" flex flex-col w-1/2 gap-6 md:gap-0 md:flex-row justify-end items-center text-end">
+          <div className="relative w-3/5">
+            <Mail size={20} className="absolute top-1/2 left-3 transform -translate-y-1/2 text-grayblu" />
             <input
               type="email"
               placeholder="Enter your email address..."
-              className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full text-grayblu pl-10 pr-4 py-2 rounded-full 
+              border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
           <button

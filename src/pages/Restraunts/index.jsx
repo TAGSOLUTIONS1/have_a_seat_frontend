@@ -82,6 +82,7 @@ const Search = () => {
 
   return (
     <>
+    <div className="w-full bg-bgGray">
       <div className="flex flex-col lg:flex-row max-w-[1300px] mx-auto justify-center p-4">
         <div className="lg:hidden">
           <button
@@ -152,6 +153,7 @@ const Search = () => {
         ) : (
           <Loader />
         )}
+      </div>
       </div>
     </>
   );

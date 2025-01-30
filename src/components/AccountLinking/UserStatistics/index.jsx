@@ -110,42 +110,44 @@ const UserStatistics = () => {
     }
   };
 
+  console.log("~~ my profile statistics ,  " , statistics);
+
   return (
-    <div className="bg-white min-h-screen p-6 pt-24 lg:py-28 lg:x-24 sm:px-6 lg:px-8">
-      <div className="max-w-[1300px] bg-gray-100 mx-auto lg:px-24 lg:py-24 p-6 rounded-lg ">
-        <h1 className="text-3xl  mb-16 text-center font-raleWay">
+    <div className="bg-bgGray">
+    <div className="p-20 max-w-[1600px] mx-auto">
+        <p className="text-4xl text-shipGrey font-agrandir font-normal">
           <span className="font-bold">{authState?.user?.first_name}'s Dining History</span>
           <span>   Here's How You’ve Been Dining!</span>
-        </h1>
+        </p>
 
-        <div className="grid grid-cols-1 font-raleWay md:grid-cols-2">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2">
           {/* left child */}
-          <div className=" px-6  bg-white rounded-xl shadow-md">
+          <div className="px-8 p-5 bg-white rounded-[30px] shadow-md">
             
-              <h2 className="text-2xl flex py-6 justify-between
-               items-center font-bold text-plum">
+              <p className="flex py-6 justify-between
+               items-center text-4xl font-bold font-agrandir text-plum">
                 Reservations This Year
-                <span className="font-extrabold text-black">{currentYearReservations}</span>
-              </h2>
+                <span className="font-extrabold text-shipGrey">{currentYearReservations}</span>
+              </p>
               
              
             <div className="py-6 border-t-2">
-            <h2 className="text-2xl font-bold text-plum">
+            <p className="text-4xl font-bold font-agrandir text-plum">
                 Other Reservations
-              </h2>
-              <p className="mb-4">
+              </p>
+              <p className="text-2xl font-normal font-agrandir text-shipGrey my-4">
                 All past and future reservations except for those made this
                 year.
               </p>
             </div>
             <div className=" border-t-2 py-6">
-              <h2 className="text-2xl flex justify-between items-center font-bold text-plum">
+              <p className="text-4xl font-bold font-agrandir text-plum flex justify-between items-center">
                 Average Time
-                <span className="text-black font-extrabold">{formatTimeBetweenReservationAndDate(
+                <span className="text-shipGrey font-extrabold">{formatTimeBetweenReservationAndDate(
                     statistics?.average_time_between_reservation_and_date || 7
                   )}</span>
-              </h2>
-              <p className="">
+              </p>
+              <p className="text-2xl font-normal font-agrandir text-shipGrey my-4">
               On Average, You Book {formatTimeBetweenReservationAndDate(
                     statistics?.average_time_between_reservation_and_date +2
                   )}  Days in Advance!
@@ -154,11 +156,11 @@ const UserStatistics = () => {
             </div>
 
             <div className=" border-t-2 py-6">
-              <h2 className="text-2xl font-bold text-plum">
+              <p className="text-4xl font-bold font-agrandir text-plum">
                 Average Star Rating
-              </h2>
+              </p>
               <div className="flex items-center justify-between">
-                <div className=" font-normal">
+                <div className="text-2xl font-normal font-agrandir text-shipGrey my-4">
                   {statistics?.average_star_rating === 0
                     ? "You haven't rated any restaurants yet"
                     : statistics?.average_star_rating}
@@ -168,68 +170,70 @@ const UserStatistics = () => {
           </div>
 
           <div className="w-[70%] mx-auto">
-            <h2 className="text-3xl font-bold text-center font-raleWay text-plum mb-6">
+            <p className="text-4xl font-bold font-agrandir text-plum mb-6">
               Number of Reservations and Cancellations
-            </h2>
+            </p>
             <Doughnut data={data} />
           </div>
         </div>
 
         <div className="grid grid-cols-1 mt-24 font-raleWay md:grid-cols-2 gap-6">
           <div className="w-[70%] mx-auto">
-            <h2 className="text-2xl font-bold text-center text-plum mb-6">
+            <p className="text-4xl font-bold font-agrandir text-center text-plum mb-6">
             Number of Reservations and Cancellations
-            </h2>
+            </p>
             <Doughnut data={data2} />
           </div>
 
-          <div className=" px-6 bg-white font-raleWay rounded-xl shadow-md">
+          <div className=" px-8 p-5 bg-white rounded-[30px] shadow-md">
             <div className="py-6 flex flex-col gap-3">
-              <h2 className="text-2xl flex justify-between items-center font-bold text-plum">
+              <p className="text-4xl font-bold font-agrandir text-plum flex justify-between items-center">
                 Average Number of Diners
-                <span className="text-black">{Math.floor(statistics?.average_number_of_diners) || 0}</span>
-              </h2>
-             <p>On average, you dine with {Math.floor(statistics?.average_number_of_diners)}  people <br /> per reservation.</p>
+                <span className="text-shipGrey">{Math.floor(statistics?.average_number_of_diners) || 0}</span>
+              </p>
+             <p className="text-2xl font-normal font-agrandir text-shipGrey my-4"
+             >On average, you dine with {Math.floor(statistics?.average_number_of_diners)}  people <br /> per reservation.</p>
             </div>
 
             <div className="flex flex-col py-6 border-t-2 gap-3">
-              <h2 className="text-2xl font-bold text-plum">
+              <p className="text-4xl font-bold font-agrandir text-plum">
                 Your go to Cuisines
-              </h2>
+              </p>
               <div className="flex items-center space-x-4">
               
               {statistics?.most_common_cuisine_types?.map((item, index) => (
                   <div
                     key={index}
-                    className="text-xl font-bold text-white bg-plum px-4 py-1 rounded-lg"
+                    className="text-xl font-roboto font-semibold text-white bg-plum px-5 p-2 rounded-lg"
                   >
                     {item}
                   </div>
                 ))}
 
-                <a className="text-purple-400 cursor-pointer underline leading-none">Discover more of what you love near you!</a>
+                <a className="text-plum font-agrandir text-xl font-normal cursor-pointer underline leading-none">Discover more of what you love near you!</a>
               </div>
             </div>
 
             <div className=" py-6 border-t-2">
-              <h2 className="text-2xl font-bold flex justify-between items-center text-plum mb-4">
+              <p className="text-4xl font-bold font-agrandir text-plum flex justify-between items-center mb-4">
               Total Reviews Given
-              <span className="text-black">{statistics?.number_of_reviews_left || 0}</span>
-              </h2>
-             <p>Help others with your dining insights</p>
+              <span className="text-shipGrey">{statistics?.number_of_reviews_left || 0}</span>
+              </p>
+             <p className="text-2xl font-normal font-agrandir text-shipGrey my-4">
+              Help others with your dining insights</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg mt-24  shadow-lg p-6">
+        <div className="bg-white rounded-[30px] mt-24 p-8">
           <div className="flex flex-col sm:flex-row justify-between">
-            <div className="font-raleWay">
-              <h2
-                className="text-2xl cursor-pointer font-bold text-plum mb-4"
+            <div className="font-agrandir">
+              <p
+                className="text-4xl cursor-pointer font-agrandir font-bold text-plum mb-4"
                 onClick={() => setShowGlobe(!showGlobe)}
               >
               Your Most Loved Dining Locations
-              </h2>
+              </p>
               <div
                 className="flex mt-6 cursor-pointer items-center space-x-2"
                 onClick={() => setShowGlobe(!showGlobe)}
@@ -237,7 +241,7 @@ const UserStatistics = () => {
                 {statistics?.average_locations?.map((item, index) => (
                   <div
                     key={index}
-                    className="text-xl font-bold text-white bg-purple-600 px-4 py-1 rounded-lg"
+                    className="text-xl font-medium text-white bg-plum font-roboto px-4 py-1 rounded-lg"
                   >
                     {item}
                   </div>
@@ -247,13 +251,13 @@ const UserStatistics = () => {
             <div>
               <div
                 onClick={() => setShowGlobe(!showGlobe)}
-       
+                className="font-agrandir"
               >
-                <p className="flex items-center gap-2 text-lg max-w-fit cursor-pointer py-1 px-3 mt-8 font-semibold text-white bg-purple-600 rounded-lg">
+                <p className="flex mb-4 items-center gap-2 text-lg max-w-fit cursor-pointer py-1 px-3 font-semibold text-white bg-plum rounded-lg">
                   <img src="/assets/location.png" alt="preview img" className="h-4 w-4" />
                  Preview
                 </p>
-                <a href="" className="underline my-2 block text-purple-500">Explore more in these locations</a>
+                <a href="" className="underline mt-7 block text-plum font-agrandir text-xl font-normal">Explore more in these locations</a>
               </div>
             </div>
             
@@ -268,7 +272,8 @@ const UserStatistics = () => {
             <hr className="my-4 border-t-2 border-purple-300" />
           </>
         )}
-      </div>
+
+    </div>
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ForgetSchema } from "@/lib/utils";
 import { Mail, Lock, ChevronLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PiEyeLight, PiEyeSlash } from "react-icons/pi";
 
 const ForgetForm = () => {
   const { toast } = useToast();
@@ -58,24 +59,34 @@ const ForgetForm = () => {
     }
   };
 
+  const [showpassword ,SetShowPasword]=useState(false);
+  const handleShowPassword =() =>{
+    if (showpassword===true)
+    {
+      SetShowPasword(false);
+    }
+    else{
+      SetShowPasword(true);
+    }
+    
+  }
+
   return (
-    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mt-10 mx-auto">
-      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 flex flex-col gap-10 mx-auto">
-       <div className="text-center flex flex-col gap-4">
-        <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
-       <h1 className=" text-4xl md:text-5xl font-bold">
-          Forgot Password
-        </h1>
-          <p>Don’t worry, we can restore it for you</p>
-       </div>
+    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto lg:p-40">
+      <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mx-auto flex flex-col gap-3">
+      <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
+        <div className="flex flex-col gap-4 text-center">
+          <p className="text-4xl font-agrandir md:text-5xl font-bold text-txtcolor"> Forgot Password</p>
+          <p className="text-base font-roboto font-normal text-txtcolor">Don’t worry, we can restore it for you</p>
+        </div>
         <form
           className="space-y-4 md:space-y-6"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="flex flex-col gap-4 mx-auto p-10">
+          <div className="flex flex-col gap-4 mx-auto">
             <div className="flex-grow relative flex flex-col gap-2">
-              <span>Email Address</span>
-              <Mail className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
+            <p className="text-txtcolor text-sm font-medium font-roboto">Email Address</p>
+                <Mail size={22} className="absolute top-9 left-3 " />
 
               <input
                 type="email"
@@ -93,11 +104,19 @@ const ForgetForm = () => {
               )}
             </div>
             <div className="flex-grow flex relative flex-col gap-2">
-              <span>Password</span>
-              <Lock className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
+            <p className="text-txtcolor text-sm font-medium font-roboto">Password</p>
+            <Lock size={22} className="absolute top-9 left-3 " />
+              {showpassword===true ? (
+                  <PiEyeLight size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
+                ) : 
+                (
+                  <PiEyeSlash size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
+                )
+
+                }
 
               <input
-                type="password"
+                type={showpassword ? "text" : "password"} 
                 id="password"
                 className={`border border-gray-300 rounded-full w-full py-2 px-3 pl-12${
                   errors.password ? "border-red-500" : ""
@@ -113,7 +132,8 @@ const ForgetForm = () => {
             </div>
             <button
               type="submit"
-              className="mt-4 text-white bg-purple-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              className="mt-4 text-white bg-plum hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 
+              font-medium rounded-full w-full text-xl px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
               Reset Password
             </button>
@@ -123,17 +143,19 @@ const ForgetForm = () => {
            
           
         </form>
-      </div>
-      <div className="text-center flex items-center justify-center  text-plum">
+
+        <div className="text-center my-4 flex items-center justify-center  text-plum">
      <p className="flex items-center gap-2"> 
       <span className="mt-1">
       <ChevronLeft />
         </span>
-        <Link to="/login" className="underline">
+        <Link to="/login" className="text-center font-agrandir font-bold text-sm text-plum">
        
         Back to login screen
         </Link></p>
       </div>
+      </div>
+      
     </div>
   );
 };

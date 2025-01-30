@@ -19,7 +19,7 @@ export default function Restaurant({ restrauntDetail }) {
 
   return (
     <div className="py-4 sm:py-10 flex flex-col">
-      <h1 className="font-bold text-3xl font-raleWay md:text-[2rem] lg:text-[3rem] mb-10 leading-[50px]">
+      <h1 className="font-bold text-6xl font-agrandir md:text-[2rem] lg:text-[3rem] mb-10 leading-[50px]">
         {restrauntDetail?.alias
           ? restrauntDetail?.name
           : restrauntDetail?.restaurant
@@ -35,10 +35,10 @@ export default function Restaurant({ restrauntDetail }) {
               className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
             />
             <div className="flex flex-col gap-2">
-              <h4 className="font-semibold  md:text-[1.25rem]">
-                <span>Ratings:</span>
-              </h4>
-              <p className="text-sm sm:text-base min-h-[40px]">
+              <p className="font-semibold  md:text-[1.25rem]">
+              <span className="font-roboto font-semibold text-xl text-shipGrey">Ratings:</span>
+              </p>
+              <p className="text-sm sm:text-base font-roboto font-normal min-h-[40px]">
               
                 {restrauntDetail?.rating
                   ? restrauntDetail.rating
@@ -59,10 +59,10 @@ export default function Restaurant({ restrauntDetail }) {
               className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
             />
             <div className="flex flex-col gap-2">
-              <h4 className="font-semibold md:text-[1.25rem]">
-                <span>Cuisine:</span>
-              </h4>
-              <p className="text-sm sm:text-base min-h-[40px]">
+              <p className="font-semibold md:text-[1.25rem]">
+                <span className="font-roboto font-semibold text-xl text-shipGrey">Cuisine:</span>
+              </p>
+              <p className="text-sm sm:text-base font-roboto font-normal min-h-[40px]">
                 {restrauntDetail?.alias ? (
                   <>
                     {/* {restrauntDetail?.categories[0]?.title} */}
@@ -94,10 +94,10 @@ export default function Restaurant({ restrauntDetail }) {
               className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
             />
             <div className="flex flex-col gap-2">
-              <h4 className="font-semibo md:text-[1.25rem]">
-                <span>Address:</span>
-              </h4>
-              <p className="text-sm sm:text-base min-h-[40px]">
+              <p className="font-semibo md:text-[1.25rem]">
+              <span className="font-roboto font-semibold text-xl text-shipGrey">Address:</span>
+              </p>
+              <p className="text-sm sm:text-base font-roboto font-normal min-h-[40px]">
                 {restrauntDetail?.alias ? (
                   <>
                     {restrauntDetail?.location?.address1},
@@ -124,9 +124,9 @@ export default function Restaurant({ restrauntDetail }) {
               className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
             />
             <div className="flex flex-col gap-2">
-              <h4 className="font-semibo md:text-[1.25rem]">
-                <span>Contact:</span>
-              </h4>
+              <p className="font-semibo md:text-[1.25rem]">
+              <span className="font-roboto font-semibold text-xl text-shipGrey">Contact:</span>
+              </p>
               <p className="text-sm sm:text-base min-h-[40px]">
                 {restrauntDetail?.phone ? (
                   <>{restrauntDetail?.phone}</>

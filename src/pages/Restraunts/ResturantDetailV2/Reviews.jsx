@@ -96,7 +96,7 @@ export default function Reviews({ restrauntDetail }) {
     <div className=" py-8 lg:flex gap-10">
       {/* About Section */}
       <div className="lg:w-1/2">
-        <h2 className="text-2xl font-bold mb-4">
+        <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-4">
           About{" "}
           {restrauntDetail?.alias
             ? restrauntDetail?.name
@@ -104,7 +104,7 @@ export default function Reviews({ restrauntDetail }) {
             ? restrauntDetail?.restaurant?.name
             : restrauntDetail?.name}
         </h2>
-        <p className="text-gray-700">
+        <p className="text-shipGrey font-roboto text-xl font-normal">
           {restrauntDetail?.alias
             ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
             : restrauntDetail?.restaurant
@@ -114,8 +114,8 @@ export default function Reviews({ restrauntDetail }) {
         </p>
       </div>
       {/* Reviews Section */}
-      <div className="lg:w-1/2 mt-8 lg:mt-0 shadow-lg p-4 rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">Reviews</h2>
+      <div className="lg:w-1/2 mt-8 lg:mt-0 border-[0.4px] border-[#B9B9B9] shadow-lg bg-white p-5 rounded-[30px]">
+        <h2 className="text-4xl text-shipGrey font-agrandir font-bold mb-4">Reviews</h2>
         <div className="space-y-4">
           {restrauntDetail?.restaurant ? (
             <DetailRating reviewsData={reviewsData} />

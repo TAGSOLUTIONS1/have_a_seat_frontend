@@ -56,7 +56,7 @@ export const stats = [
   },
   {
     heading: "Happy Customers",
-    stat: "1K+",
+    stat: "1k+",
   },
 ];
 export const hotels = [resy, eatable, open1, yelp, open2, resy];
@@ -118,9 +118,9 @@ export const whyUs = [
 
 export const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/", label: "About" },
-  { to: "/", label: "Why Us" },
-  { to: "/", label: "Contact" },
+  { to: "/#about", label: "About" },
+  { to: "/#why", label: "Why Us" },
+  { to: "/#contact", label: "Contact" },
 ];
 export const FooterLinks = [
   { to: "about", label: "About" },

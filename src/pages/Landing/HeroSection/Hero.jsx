@@ -10,6 +10,10 @@ import { getCurrentDate } from "@/lib/utils";
 import TermApiAuto from "@/components/home/HometermAutoComplete";
 import { getCurrentTime, initialBookingState } from "@/components/constants/constants";
 import LocationTracker from "@/components/LocationTracker";
+import { MdLocationOn } from "react-icons/md";
+import { MdOutlineRestaurantMenu } from "react-icons/md";
+import { BsCalendarDateFill } from "react-icons/bs";
+import { IoTime } from "react-icons/io5";
 
 export default function Hero() {
   const { location } = useLocation();
@@ -103,56 +107,76 @@ export default function Hero() {
           <div className="md:px-20">
             <div className="flex w-[90%] m-auto md:w-full flex-col gap-4 md:gap-8 py-4 md:py-20 text-white">
               <div className="max-w-4xl mx-auto flex flex-col gap-4">
-                <h1 className="text-3xl md:text-[4.5rem] leading-none font-raleWay font-bold text-white text-center max-w-[990px] mx-auto">
+                <h1 className="font-agrandir text-3xl md:text-[4.5rem] leading-none font-bold text-white text-center max-w-[990px] mx-auto">
                   All Your Favorite Tables, One Simple Booking
                 </h1>
-                <p className="text-center max-w-2xl mx-auto text-base md:text-2xl">
-                  Search, compare, and reserve at the best restaurants across
-                  multiple platforms with ease
+                <p className="text-center max-w-2xl mx-auto text-base md:text-2xl font-roboto">
+                Search, compare, and reserve at the best restaurants across multiple platforms with ease
                 </p>
               </div>
               <div className="max-w-[990px] mx-auto flex flex-col gap-2">
+                
                 <div className="bg-lightGrey rounded-sm md:rounded-[3rem] md:py-2 md:flex gap-1 justify-between md:gap-3 md:px-5">
-                  <div className=" flex flex-col gap-1 md:flex-row ">
+                  <div className=" flex flex-col justify-between text-center gap-1 md:flex-row ">
                     
                     <div
-                      className={`text-base md:text-lg w-full px-2 text-black border-r-2 ${
+                      className={`flex items-center text-base font-roboto font-normal w-full text-black border-r-2 ${
                         error ? "border-red-500" : "border-gray-200"
                       } focus:border-gray-200 focus:outline-none`}
                     >
+                      <MdLocationOn size={28} color="#9235E2"
+                      className="flex-shrink-0 mx-2"
+                      ></MdLocationOn>
                       <GeoApiAuto
                         getLocationData={getLocationData}
                         location={formData.location}
                       />
                     </div>
                     <div
-                      className={` text-base md:text-lg w-full px-2 text-black border-r-2 ${
+                      className={`flex items-center text-sm font-roboto font-normal w-full text-black border-r-2 ${
                         error ? "border-red-500" : "border-gray-200"
                       } focus:border-gray-200 focus:outline-none`}
                     >
+                      <MdOutlineRestaurantMenu size={28} color="#9235E2"
+                      className="flex-shrink-0 mx-2"/>
                       <TermApiAuto getTermData={handleTermChange} />
                     </div>
-                    <div className=" border-r-2 w-full px-2">
+
+                    <div className="flex items-center border-r-2 w-full">
+                    <BsCalendarDateFill size={24} color="#9235E2"
+                      className="flex-shrink-0 mx-2" />
+
                       <input
                         type="date"
                         value={formData.date}
-                        onChange={(e) =>
-                          handleInputChange("date", e.target.value)
-                        }
-                        className="text-base md:text-lg :w-full text-slate-400 px-4 py-2 focus:outline-none bg-transparent"
+                        onChange={(e) => handleInputChange("date", e.target.value)}
+                        className="text-sm font-roboto font-normal w-full text-slate-400 focus:outline-none bg-transparent"
                       />
+                      <style jsx>{`
+                        input[type="date"]::-webkit-calendar-picker-indicator {
+                          opacity: 0;
+                        }
+                      `}</style>
                     </div>
-                    <div className=" border-r-2 w-full px-2">
+
+                    <div className="flex items-center border-r-2 w-full">
+                    <IoTime size={24} color="#9235E2"
+                      className="flex-shrink-0 mx-2" />
                       <input
                         type="time"
                         value={formData.reservation_time}
                         onChange={(e) =>
                           handleInputChange("reservation_time", e.target.value)
                         }
-                        className="text-base md:text-lg w-full text-slate-400 px-4 py-2 focus:outline-none bg-transparent"
+                        className="text-sm font-roboto font-normal w-full text-slate-400 focus:outline-none bg-transparent"
                       />
+                       <style jsx>{`
+                        input[type="time"]::-webkit-calendar-picker-indicator {
+                          opacity: 0;
+                        }
+                      `}</style>
                     </div>
-                    <div className=" border-r-2 w-full px-2">
+                    {/* <div className=" border-r-2 w-full px-2">
                       <select
                         value={formData.persons}
                         onChange={(e) =>
@@ -166,18 +190,18 @@ export default function Hero() {
                           </option>
                         ))}
                       </select>
-                    </div>
+                    </div> */}
                   </div>
 
                <div className="flex items-center justify-center">
-               <button className="bg-plum   mr-1 md:mt-0 p-2 md:p-4 w-1/2 md:w-full my-2 md:my-0 rounded-full">
+               <button className="bg-plum mr-1 md:mt-0 p-2 md:p-4 w-1/2 md:w-full my-2 md:my-0 rounded-full">
                     <Search
                       className="w-3 h-3 md:h-5 md:w-5"
                       onClick={handleSearch}
                     />
                   </button>
                </div>
-                </div>
+              </div>
 
                 <div className="flex text-[10px] md:text-base items-center">
                   <div className="max-w-sm m-auto font-pt my-3 flex">

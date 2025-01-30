@@ -10,6 +10,8 @@ import { LucideLoader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
+import { PiEyeLight, PiEyeSlash } from "react-icons/pi";
+import { PiSignIn } from "react-icons/pi";
 
 const LoginForm = () => {
   const { login, handleError } = useAuth();
@@ -47,16 +49,26 @@ const LoginForm = () => {
       setLoading(false);
     }
   };
+
+  const [showpassword ,SetShowPasword]=useState(false);
+  const handleShowPassword =() =>{
+    if (showpassword===true)
+    {
+      SetShowPasword(false);
+    }
+    else{
+      SetShowPasword(true);
+    }
+    
+  }
   return (
-    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto ">
+    <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto lg:p-40">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mx-auto flex flex-col gap-3">
       <img src="/assets/has_logo.png" alt="" className="h-40 w-50 mx-auto" />
 
-       <div className="flex flex-col gap-4 my-10 text-center">
-       <h1 className=" text-4xl md:text-5xl font-bold ">
-        Welcome Back
-        </h1>
-        <p>Let’s sign in to your account and get started</p>
+       <div className="flex flex-col gap-4 text-center">
+        <p className="text-4xl font-agrandir md:text-5xl font-bold text-txtcolor">Welcome Back</p>
+        <p className="text-base font-roboto font-normal text-txtcolor">Let’s sign in to your account and get started</p>
        </div>
         <form
           className="space-y-4 md:space-y-6"
@@ -64,8 +76,8 @@ const LoginForm = () => {
         >
           <div className="flex items-center mb-4">
             <div className="flex-grow relative flex flex-col gap-3">
-              <span>Email Address</span>
-              <Mail className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
+              <p className="text-txtcolor text-sm font-medium font-roboto">Email Address</p>
+              <Mail size={22} className="absolute top-10 left-3 " />
               <input
                 type="email"
                 id="username"
@@ -84,11 +96,19 @@ const LoginForm = () => {
           </div>
     
             <div className="flex-grow flex relative flex-col gap-2">
-              <span>Password</span>
-              <Lock className="absolute top-14 left-[1.1rem] transform -translate-y-1/2 " />
+            <p className="text-txtcolor text-sm font-medium font-roboto">Password</p>
+              <Lock size={22} className="absolute top-9 left-3 " />
+                {showpassword===true ? (
+                    <PiEyeLight size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
+                  ) : 
+                  (
+                    <PiEyeSlash size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
+                  )
+  
+                  }
 
               <input
-                type="password"
+                type={showpassword ? "text" : "password"}
                 id="password"
                 className={`border ${
                   errors.password ? "border-red-500" : "border-gray-300 rounded-full"
@@ -102,38 +122,40 @@ const LoginForm = () => {
                 </p>
               )}
             </div>
-  <div className="flex-grow">
+            <div  className="">
+            <p className="text-end">
+                <a href="/forget" className="text-plum font-roboto font-medium text-sm">
+                  Forgot password
+                </a>
+              </p>
+            </div>
+
+          <div className="flex-grow">
            <Button
               type="submit"
               variant="default"
-              className={cn("rounded-full w-full text-xl mt-2") }
+              className={cn("rounded-full w-full bg-plum text-xl mt-2") }
             >
               {loading ? (
                 <LucideLoader className="w-6 h-6 mr-2 animate-spin" />
               ) : (
                 "Sign In"
               )}
+              <PiSignIn size={20} className="mx-2" />
             </Button>
   </div>
-      
+      <div className="my-4">
+          <p className="text-center font-agrandir font-bold text-sm">
+              Don't have an account?{" "}
+              <Link to="/register" className="text-plum">
+                Sign Up
+              </Link>
+            </p>
+
+      </div>
 
          
         </form>
-    
-<div  className="my-4">
-  
-<p className="text-center">
-            <a href="/forget" className="underline text-purple-600">
-              Forgot password
-            </a>
-          </p>
-          <p className="text-center">
-            Don't have an account?{" "}
-            <Link to="/register" className="underline  text-purple-600">
-              Sign Up
-            </Link>
-          </p>
-</div>
       </div>
     </div>
   );

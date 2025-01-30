@@ -40,13 +40,13 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-white sticky top-0 start-0 px-0 sm:px-4 md:px-4 lg:px-4 xl:px-4 2xl:px-4 z-20">
+      <nav className="bg-bgGray sticky top-0 start-0 px-2 sm:px-4 md:px-4 lg:px-4 xl:px-4 2xl:px-4 z-20">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-          <div className="flex items-center rtl:space-x-reverse">
+          <div className="flex items-center rtl:space-x-reverse mt-3">
             <Link className="flex" to="/">
               <img
-                src="/assets/static_logo.png"
-                className="h-16 w-24 sm:h-20 sm:w-24 md:h-20 md:w-32"
+                src="/assets/haveaseatlogo.png"
+                className="h-16 w-20 sm:h-16 sm:w-20 md:h-20 md:w-24"
                 alt="Have A Seat Logo"
               />
             </Link>
@@ -55,7 +55,7 @@ const Navbar = () => {
 
           <ul className="hidden lg:flex gap-10">
             {navLinks.map((link, index) => (
-              <a href={link.to}><li key={index} className="cursor-pointer">
+              <a href={link.to}><li key={index} className="font-agrandir font-medium text-lg cursor-pointer">
               {link.label}
             </li></a>
             ))}
@@ -70,19 +70,19 @@ const Navbar = () => {
                     <ul className="flex">
                       <li className="p-4">
                         <Button
-                          className={cn("rounded-full border border-plum")}
+                          className={cn("rounded-full border border-plum text-base font-agrandir font-bold")}
                           variant="outline"
                           asChild
                         >
-                          <Link to="/login" className="text-plum">
-                            Login
+                          <Link to="/login" className="text-plum text-base font-agrandir font-bold">
+                            Sign In
                           </Link>
                         </Button>
                       </li>
                       <hr className="border-gray-200" />
                       <li className="p-4">
-                        <Button className={cn("rounded-full")} asChild>
-                          <Link to="/register">Register Now</Link>
+                        <Button className={cn("rounded-full" , "bg-plum text-base font-agrandir font-bold")} asChild>
+                          <Link to="/register">Book a Table</Link>
                         </Button>
                       </li>
                     </ul>
@@ -92,7 +92,7 @@ const Navbar = () => {
                     <ul className="flex">
                       <li className="p-4">
                         <Button
-                          className={cn("rounded-full bg-purple-600")}
+                          className={cn("rounded-full bg-plum")}
                           asChild
                         >
                           <Link to="/user-history">Reservations</Link>
