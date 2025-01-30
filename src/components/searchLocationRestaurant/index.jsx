@@ -11,6 +11,8 @@ import { MdLocationOn } from "react-icons/md";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { BsCalendarDateFill } from "react-icons/bs";
 import { IoTime } from "react-icons/io5";
+import { CgArrowsExchangeV } from "react-icons/cg";
+import { CgArrowsExchangeAltV } from "react-icons/cg";
 
 const getCurrentDate = () => {
   const today = new Date();
@@ -30,8 +32,11 @@ const SearchLocationV2 = () => {
       reservation_date: getCurrentDate(),
       date: getCurrentDate(),
       reservation_time: getCurrentTime(),
+      restaurant_name:"",
+      cuisine_type:"",
       location: "",
       term: "",
+      rating:"hightolow",
     });
   
 
@@ -170,8 +175,6 @@ const SearchLocationV2 = () => {
                       </select>
                     </div>
                   </div>
-
-             
                 </div>
 
         <div className=" flex items-center justify-center ">
@@ -190,6 +193,51 @@ const SearchLocationV2 = () => {
 
       <div className="mt-2">
         <LocationTracker onLocationUpdate={handleLocationUpdate} />
+      </div>
+
+<div className="flex flex-row gap-5">
+  some extra filters
+       <div className="flex items-center border-plum border-2 w-40">
+        <input
+         type="text"
+         placeholder="resturant name"
+         value={formData.restaurant_name}
+         onChange={(e) =>
+           handleInputChange("restaurant_name", e.target.value)
+         }
+         className="text-sm font-roboto font-normal w-full border-plum text-slate-400 bg-transparent"
+         ></input>
+      </div>
+      <div className="flex items-center border-plum border-2 w-40">
+        <input
+         type="text"
+         placeholder=" cuisine type"
+         value={formData.cuisine_type}
+         onChange={(e) =>
+           handleInputChange("cuisine_type", e.target.value)
+         }
+         className="text-sm font-roboto font-normal w-full border-plum text-slate-400 bg-transparent"
+         ></input>
+      </div>
+      <p>Filter by ratings </p>
+      <div className="flex flex-row items-center border-plum border-2 rounded-md hover:bg-gray-200 ">
+
+
+        {formData.rating === "lowtohigh" ? (
+          <CgArrowsExchangeV 
+            onClick={() => handleInputChange("rating", "hightolow")}  
+            color="#9235e2" 
+            size={20} 
+          />
+        ) : (
+          <CgArrowsExchangeAltV 
+            onClick={() => handleInputChange("rating", "lowtohigh")}  
+            color="#9235e2" 
+            size={20} 
+          />
+        )}
+      </div>
+
       </div>
     </div>
   );

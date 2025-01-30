@@ -139,6 +139,29 @@ const RestaurantCards = memo(
         });
       }
 
+
+      //////// extra filters 
+      // if (formData.cuisine_type != ""){
+      //   const inputText = normalizeString(formData?.cuisine_type || "");
+    
+      // const primaryCuisine = restaurant?.primaryCuisine?.name 
+      //   ? normalizeString(restaurant.primaryCuisine.name) 
+      //   : "";
+    
+      // return (
+      //   (restaurant?.categories?.some(category => 
+      //     normalizeString(category.title).includes(inputText)
+      //   )) || primaryCuisine.includes(inputText)
+      // );
+      // }
+      // if (formData.restaurant_name != "")
+      // {
+      //   const restaurantName = normalizeString(restaurant.name);
+      //   const inputText = normalizeString(formData?.restaurant_name || "");
+      
+      //   return restaurantName.includes(inputText) || inputText.includes(restaurantName);
+      // }
+
       setFilteredRestaurants(filteredRestaurants);
     }, [
       selectedStarFilter,
@@ -161,9 +184,94 @@ const RestaurantCards = memo(
       });
     };
 
- 
-    // console.log("~~ filtered restaurannts " , filteredRestaurants);
-    console.log("~~ set selected type" , selectedTypes.includes("yelp"));
+    // extra filters for restaurant name , cuisine type , ratings order
+    console.log("~~ filtered restaurannts " , filteredRestaurants);
+
+    const normalizeString = (str) => 
+      str.toLowerCase().replace(/[^a-z0-9]/g, ''); 
+    
+    const matchingRestaurants = filteredRestaurants.filter(restaurant => {
+      const restaurantName = normalizeString(restaurant.name);
+      const inputText = normalizeString(formData?.restaurant_name || "");
+    
+      return restaurantName.includes(inputText) || inputText.includes(restaurantName);
+    });
+    
+   
+    const matchingcuisine = filteredRestaurants.filter(restaurant => {
+      const inputText = normalizeString(formData?.cuisine_type || "");
+    
+      const primaryCuisine = restaurant?.primaryCuisine?.name 
+        ? normalizeString(restaurant.primaryCuisine.name) 
+        : "";
+    
+      return (
+        (restaurant?.categories?.some(category => 
+          normalizeString(category.title).includes(inputText)
+        )) || primaryCuisine.includes(inputText)
+      );
+    });
+
+    const loworderedRestaurants = filteredRestaurants.sort((a, b) => {
+      const ratingA = a?.rating || a?.statistics?.reviews?.ratings?.overall?.rating;
+      const ratingB = b?.rating || b?.statistics?.reviews?.ratings?.overall?.rating;
+    
+      if (ratingA === undefined || ratingA === null) return 1;  
+      if (ratingB === undefined || ratingB === null) return -1; 
+    
+      if (ratingA > ratingB) return 1;
+      if (ratingA < ratingB) return -1;
+      return 0; 
+    });
+
+    const highorderedRestaurants = filteredRestaurants.sort((a, b) => {
+      const ratingA = a?.rating || a?.statistics?.reviews?.ratings?.overall?.rating;
+      const ratingB = b?.rating || b?.statistics?.reviews?.ratings?.overall?.rating;
+    
+      if (ratingA === undefined || ratingA === null) return 1;  
+      if (ratingB === undefined || ratingB === null) return -1; 
+    
+      if (ratingA > ratingB) return -1;
+      if (ratingA < ratingB) return 1;
+      return 0; 
+    });
+    
+    
+    // useEffect(()=>{
+    //     console.log("yes" , formData);
+    //   if (formData.rating==="lowtohigh")
+    //   {
+    //     setFilteredRestaurants(loworderedRestaurants)
+    //   }
+    //   else if (formData.rating==="hightolow")
+    //   {
+    //     setFilteredRestaurants(highorderedRestaurants)
+    //   }
+    //   else if (formData.cuisine_type !== "")
+    //   {
+    //     setFilteredRestaurants(matchingcuisine)
+    //   }
+    //   else (
+    //     setFilteredRestaurants(matchingRestaurants)
+    //   )
+
+    // },[formData.cuisine_type , formData.restaurant_name , formData.rating])
+
+    // useEffect(() => {
+    //   console.log("~~matching cuisines :", matchingcuisine);
+    // }, [matchingcuisine]); 
+
+        // useEffect(() => {
+    //   console.log("~~Matching restaurants:", matchingRestaurants);
+    // }, [matchingRestaurants]);
+
+    // useEffect(() => {
+    //     console.log("~~low to high rated restaurants:", loworderedRestaurants);
+    //   }, [loworderedRestaurants]);
+    
+    // console.log("~~ set selected type" , selectedTypes.includes("yelp"));
+    // console.log("~~ form data is " , formData);
+
     return (
       <div>
         <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-14 bg-white">
@@ -197,9 +305,6 @@ const RestaurantCards = memo(
                     {selectedTypes.includes("yelp") && <FaCheck size={23} color="#ffffff" />}
 
                   </span>
-                  {/* <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer shadow-spanshadow
-                   rounded-full flex items-center justify-center
-                   peer-checked:before:content-['✔'] peer-checked:before:text-white peer-checked:before:text-xl "></span> */}
                 </label>
                 <img
                   src="/assets/yelp_logo_new.png"
