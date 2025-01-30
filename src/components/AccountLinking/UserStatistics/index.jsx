@@ -110,7 +110,7 @@ const UserStatistics = () => {
     }
   };
 
-  console.log("~~ my profile statistics ,  " , statistics);
+  // console.log("~~ my profile statistics ,  " , statistics);
 
   return (
     <div className="bg-bgGray">

@@ -163,7 +163,7 @@ const RestaurantCards = memo(
 
  
     // console.log("~~ filtered restaurannts " , filteredRestaurants);
-    console.log("~~ set selected type" , selectedTypes.includes("yelp"));
+    // console.log("~~ set selected type" , selectedTypes.includes("yelp"));
     return (
       <div>
         <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-14 bg-white">
