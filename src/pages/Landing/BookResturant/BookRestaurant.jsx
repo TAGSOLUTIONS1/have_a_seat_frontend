@@ -37,15 +37,18 @@ function BookRestaurant() {
               Dine Smarter, <br /> Reserve Faster
             </p>
             <p className="text-3xl font-roboto font-normal text-white">
-              Explore the best restaurants, enjoy exclusive deals, and book <br></br> your
-              next dining experience with just a few clicks.
+              <li>Compare the options, pick the one you love, and just book your table</li>
+              <li>Tons of listings and endless options</li>
+            </p>
+            <p className="text-3xl font-roboto font-normal text-white">
+            So let’s get seated, greeted, and treated with great food <br></br> because you’ve got better things to do than wait.
             </p>
             <div className="flex items-center mx-auto my-4">
               <button
                 onClick={handleSearch}
                 className="max-w-[205px] py-3 px-10 text-center cursor-pointer rounded-full bg-lightGrey text-plum hover:bg-plum hover:text-lightGrey font-agrandir text-base font-bold"
               >
-                Book a Table
+                Book my Table
               </button>
             </div>
           </div>

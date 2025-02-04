@@ -2,9 +2,14 @@ import React, { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchLocationV2 from "@/components/searchLocationRestaurant";
 import { FaCheck } from "react-icons/fa6";
+import { ImFilter } from "react-icons/im";
+import { IoIosStarOutline } from "react-icons/io";
+import { IoIosStar } from "react-icons/io";
 
 const initialTypes = ["yelp", "open_table", "resy"];
-
+const ratingtypes = ["5" , "4" , "3" , "2" , "1"];
+const cuisinestypes=["Italian" , "Mediterranean" , "Mexican" , "Chinese" , "Thai"];
+const Reviewedtype=["most" , "least"];
 const RestaurantCards = memo(
   ({
     yelpData,
@@ -185,7 +190,45 @@ const RestaurantCards = memo(
     };
 
     // extra filters for restaurant name , cuisine type , ratings order
-    console.log("~~ filtered restaurannts " , filteredRestaurants);
+    const [ratings,setRatings]=useState(ratingtypes);
+    const handleratingschange =(type)=>{
+      setRatings((ratingtypes)=>{
+        if (ratingtypes.includes(type))
+        {
+          return ratingtypes.filter((t) => t!==type);
+        }
+        else{
+          return [...ratingtypes, type];
+        }
+      });
+    };
+    const [cuisinefilter,setCusinefilter]=useState(cuisinestypes);
+    const handlecuisinetypechange=(type)=>{
+      setCusinefilter((cuisinestypes) => {
+        if (cuisinestypes.includes(type))
+        {
+          return cuisinestypes.filter((t)=>t!==type);
+        }
+        else{
+          [...cuisinestypes , type]
+        }
+      });
+    };
+
+    const [reviewedFilter,setReviewdFilter]=useState(Reviewedtype);
+    const handlereviewtypechange=(type)=>{
+      setReviewdFilter((Reviewedtype) => {
+        if (Reviewedtype.includes(type))
+        {
+          return Reviewedtype.filter((t)=>t!==type);
+        }
+        else{
+          [...Reviewedtype , type]
+        }
+      });
+    };
+
+    console.log("~~ filtered restaurannts " , ratings , cuisinefilter , reviewedFilter);
 
     const normalizeString = (str) => 
       str.toLowerCase().replace(/[^a-z0-9]/g, ''); 
@@ -373,8 +416,287 @@ const RestaurantCards = memo(
         </div>
 
         {/* Filtered Restaurants List */}
-        <div>
-          {matchingRestaurants?.map((data, index) => (
+       <div className="mt-10 px-8 flex gap-7">
+        <div className="bg-plum p-5 min-w-80 h-[700px] rounded-3xl border-2 border-[#B9B9B9]">
+          <div className="flex gap-4 items-center">
+          <ImFilter color="#ffffff"></ImFilter>
+          <p className="font-agrandir text-xl font-bold text-white">Filter By</p>
+          </div>
+
+          <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+
+            <p className="font-agrandir text-xs font-bold text-white uppercase">Restaurant Rating</p>
+            <div className="my-7 flex flex-col gap-3">
+                <div className="flex gap-2 items-center">
+                <label className="">
+                    <input
+                      type="checkbox"
+                      id="checkboxr1"
+                      name="checkboxr1"
+                      checked={ratingtypes.includes("5")}
+                      onChange={()=> handleratingschange("5")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                    >
+                      {ratings.includes("5") && <FaCheck size={13} color="#9235e2" />}
+                      
+                    </span>
+                  </label>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                </div>
+                <div className="flex gap-2 items-center">
+
+                  <label className="">
+                    <input
+                      type="checkbox"
+                      id="checkboxr1"
+                      name="checkboxr1"
+                      checked={ratingtypes.includes("4")}
+                      onChange={()=> handleratingschange("4")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                    >
+                      {ratings.includes("4") && <FaCheck size={13} color="#9235e2" />}
+
+                    </span>
+                  </label>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <label className="">
+                    <input
+                      type="checkbox"
+                      id="checkboxr1"
+                      name="checkboxr1"
+                      checked={ratingtypes.includes("3")}
+                      onChange={()=> handleratingschange("3")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                    >
+                      {ratings.includes("3") && <FaCheck size={13} color="#9235e2" />}
+
+                    </span>
+                  </label>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <label className="">
+                    <input
+                      type="checkbox"
+                      id="checkboxr1"
+                      name="checkboxr1"
+                      checked={ratingtypes.includes("2")}
+                      onChange={()=> handleratingschange("2")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                    >
+                      {ratings.includes("2") && <FaCheck size={13} color="#9235e2" />}
+
+                    </span>
+                  </label>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <label className="">
+                    <input
+                      type="checkbox"
+                      id="checkboxr1"
+                      name="checkboxr1"
+                      checked={ratingtypes.includes("1")}
+                      onChange={()=> handleratingschange("1")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                    >
+                      {ratings.includes("1") && <FaCheck size={13} color="#9235e2" />}
+
+                    </span>
+                  </label>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                </div>
+            </div>
+            
+            <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+
+           <div className="flex flex-col gap-3">
+           <p className="font-agrandir text-xs font-bold text-white uppercase">Reviews</p>
+           <div className="flex gap-4 items-center">
+           <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={Reviewedtype.includes("most")}
+                onChange={()=> handlereviewtypechange("most")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {reviewedFilter.includes("most") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Most Reviewed</p>
+          </div>
+          <div className="flex gap-4 items-center">
+          <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={Reviewedtype.includes("least")}
+                onChange={()=> handlereviewtypechange("least")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {reviewedFilter.includes("least") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Least Reviewed</p>
+          </div>
+           </div>
+
+           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+
+            <div className="flex flex-col gap-3">
+            <p className="font-agrandir text-xs font-bold text-white uppercase">Cuisines</p>
+            <div className="flex gap-4 items-center">
+            <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={cuisinestypes.includes("Italian")}
+                onChange={()=> handlecuisinetypechange("Italian")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {cuisinefilter.includes("Italian") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Italian</p>
+            </div>
+            <div className="flex gap-4 items-center">
+            <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={cuisinestypes.includes("Mediterranean")}
+                onChange={()=> handlecuisinetypechange("Mediterranean")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {cuisinefilter.includes("Mediterranean") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Mediterranean</p>
+            </div>
+
+            <div className="flex gap-4 items-center">
+            <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={cuisinestypes.includes("Mexican")}
+                onChange={()=> handlecuisinetypechange("Mexican")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {cuisinefilter.includes("Mexican") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Mexican</p>
+            </div>
+
+            <div className="flex gap-4 items-center">
+            <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={cuisinestypes.includes("Chinese")}
+                onChange={()=> handlecuisinetypechange("Chinese")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {cuisinefilter.includes("Chinese") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Chinese</p>
+            </div>
+
+            <div className="flex gap-4 items-center">
+            <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={cuisinestypes.includes("Thai")}
+                onChange={()=> handlecuisinetypechange("Thai")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {cuisinefilter.includes("Thai") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Thai</p>
+            </div>
+            <p className="font-roboto font-medium text-sm text-white underline cursor-pointer">Show More</p>
+            </div>
+
+        </div>
+        <div className="">
+          {filteredRestaurants?.map((data, index) => (
             <Link
               key={index}
               to={{
@@ -530,6 +852,7 @@ const RestaurantCards = memo(
             </Link>
           ))}
         </div>
+       </div>
       </div>
     );
   }

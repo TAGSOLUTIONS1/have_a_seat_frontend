@@ -4,23 +4,23 @@ const StepComponent = () => {
   const steps = [
     {
       icon: <img src="/assets/sl.png" className=" h-5 md:h-7" alt="Search Icon" />,
-      title: "Search Anywhere",
-      description: "Find restaurants, cuisines, or locations quickly",
+      title: "Find It Fast",
+      description: "Restaurants, cuisines or locations. Everything’s just a tap away.",
     },
     {
       icon: <img src="/assets/compare.png" className=" h-5 md:h-7" alt="Compare Icon" />,
-      title: "Compare Easily",
-      description: "Compare ratings and prices instantly",
+      title: "Compare Without the Stress ",
+      description: "Ratings, menus, slots. All sorted in seconds.",
     },
     {
       icon: <img src="/assets/reserve.png" className=" h-5 md:h-7" alt="Reserve Icon" />,
-      title: "Reserve Instantly",
-      description: "Book directly and securely with a click",
+      title: "Book & Reserve Instantly",
+      description: "Just One click and Your seat’s ready.",
     },
     {
       icon: <img src="/assets/enjoy.png" className=" h-5 md:h-7" alt="Enjoy Icon" />,
-      title: "Enjoy Dining",
-      description: "Dine and share your experience",
+      title: " Eat, Chill, Repeat",
+      description: "No wait, no worries. Just good food and your vibes",
     },
   ];
 
@@ -54,7 +54,7 @@ const StepComponent = () => {
             </div>
           </div>
         ))}
-        <button className="p-3 px-6 bg-plum text-white text-base font-bold font-agrandir rounded-full">Show Restaurants Near Me</button>
+        <button className="p-3 px-6 bg-plum text-white text-base font-bold font-agrandir rounded-full">Search Restaurants Near Me</button>
       </div>
       
     </div>

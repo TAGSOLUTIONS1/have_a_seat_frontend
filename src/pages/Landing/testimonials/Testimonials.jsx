@@ -43,10 +43,7 @@ export default function Testimonials() {
           <span className="text-shipGrey">Stories From <span className="text-plum">Our Guests</span> </span> 
         </p>
         <p className="w-full md:w-[65%] text-xl font-normal font-roboto text-shipGrey text-center">
-          Our consistent positive feedback highlights the quality of our
-          <br></br>
-          service. Guests appreciate the seamless access to a wide array of
-          dining options.
+        So why do they choose us and what sets us apart? Let them tell you
         </p>
         <div className="w-[80%] md:w-full m-auto ">
           <div className="w-[200px]  m-auto  border-2 border-plum"></div>
