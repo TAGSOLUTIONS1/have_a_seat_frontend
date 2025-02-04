@@ -97,7 +97,7 @@ module.exports = {
       },
       boxShadow:{
         cardshadow:"6px 6px 54px 0px #0000000D",
-        spanshadow:"0px 0px 0px 4px #9235E240"
+        spanshadow:"0px 0px 0px 4px #FFFFFF40",
       },
     },
   },
