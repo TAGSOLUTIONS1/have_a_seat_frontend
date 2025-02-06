@@ -11,6 +11,8 @@ import { MdLocationOn } from "react-icons/md";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { BsCalendarDateFill } from "react-icons/bs";
 import { IoTime } from "react-icons/io5";
+import { CgArrowsExchangeV } from "react-icons/cg";
+import { CgArrowsExchangeAltV } from "react-icons/cg";
 
 const getCurrentDate = () => {
   const today = new Date();
@@ -30,8 +32,11 @@ const SearchLocationV2 = () => {
       reservation_date: getCurrentDate(),
       date: getCurrentDate(),
       reservation_time: getCurrentTime(),
+      restaurant_name:"",
+      cuisine_type:"",
       location: "",
       term: "",
+      rating:"hightolow",
     });
   
 
@@ -170,8 +175,6 @@ const SearchLocationV2 = () => {
                       </select>
                     </div>
                   </div>
-
-             
                 </div>
 
         <div className=" flex items-center justify-center ">

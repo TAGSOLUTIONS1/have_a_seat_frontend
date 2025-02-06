@@ -2,9 +2,14 @@ import React, { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchLocationV2 from "@/components/searchLocationRestaurant";
 import { FaCheck } from "react-icons/fa6";
+import { ImFilter } from "react-icons/im";
+import { IoIosStarOutline } from "react-icons/io";
+import { IoIosStar } from "react-icons/io";
 
 const initialTypes = ["yelp", "open_table", "resy"];
-
+const ratingtypes = ["5" , "4" , "3" , "2" , "1"];
+const cuisinestypes=["Italian" , "Mediterranean" , "Mexican" , "Chinese" , "Thai"];
+const Reviewedtype=["most" , "least"];
 const RestaurantCards = memo(
   ({
     yelpData,
@@ -139,6 +144,29 @@ const RestaurantCards = memo(
         });
       }
 
+
+      //////// extra filters 
+      // if (formData.cuisine_type != ""){
+      //   const inputText = normalizeString(formData?.cuisine_type || "");
+    
+      // const primaryCuisine = restaurant?.primaryCuisine?.name 
+      //   ? normalizeString(restaurant.primaryCuisine.name) 
+      //   : "";
+    
+      // return (
+      //   (restaurant?.categories?.some(category => 
+      //     normalizeString(category.title).includes(inputText)
+      //   )) || primaryCuisine.includes(inputText)
+      // );
+      // }
+      // if (formData.restaurant_name != "")
+      // {
+      //   const restaurantName = normalizeString(restaurant.name);
+      //   const inputText = normalizeString(formData?.restaurant_name || "");
+      
+      //   return restaurantName.includes(inputText) || inputText.includes(restaurantName);
+      // }
+
       setFilteredRestaurants(filteredRestaurants);
     }, [
       selectedStarFilter,
@@ -160,113 +188,387 @@ const RestaurantCards = memo(
         }
       });
     };
-
- 
-    // console.log("~~ filtered restaurannts " , filteredRestaurants);
-    // console.log("~~ set selected type" , selectedTypes.includes("yelp"));
     return (
       <div>
-        <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-14 bg-white">
-          <SearchLocationV2 />
-        </div>
-
-        <div className="p-8">
-          <div className="flex items-center gap-10">
-            <div className="flex-grow bg-[#39353C] h-[1px]"></div>
-            <div>
-              <h1 className="text-center font-bold font-agrandir text-shipGrey text-4xl">Select Platforms</h1>
-            </div>
-            <div className="flex-grow bg-[#39353C] h-[1px]"></div>
+        <div className="bg-plum px-24 pt-12 rounded-3xl">
+          <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-14 bg-white">
+            <SearchLocationV2 />
           </div>
-          <div className="flex flex-col gap-6 sm:flex-row items-center py-5 mb-2 mt-2 justify-center text-center">
-            <div className="flex justify-center sm:items-center gap-16 my-5 md:my-0 sm:justify-center">
-              {/* Yelp */}
-              <div className="flex gap-3 items-center">
-                <label className="relative">
-                  <input
-                    type="checkbox"
-                    id="checkbox3"
-                    name="checkbox3"
-                    checked={selectedTypes.includes("yelp")}
-                    onChange={() => handleCheckboxChange("yelp")}
-                    className="hidden peer"
-                  />
-                  <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer 
-                  rounded-full flex items-center justify-center shadow-spanshadow"
-                  >
-                    {selectedTypes.includes("yelp") && <FaCheck size={23} color="#ffffff" />}
 
-                  </span>
-                  {/* <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer shadow-spanshadow
-                   rounded-full flex items-center justify-center
-                   peer-checked:before:content-['✔'] peer-checked:before:text-white peer-checked:before:text-xl "></span> */}
-                </label>
-                <img
-                  src="/assets/yelp_logo_new.png"
-                  alt="Yelp Logo"
-                  className="w-20 h-7 sm:w-32 sm:h-14 md:w-40"
-                />
+          <div className="p-8">
+            <div className="flex items-center gap-10">
+              <div className="flex-grow bg-[#39353C] h-[1px]"></div>
+              <div>
+                <h1 className="text-center font-bold font-agrandir text-shipGrey text-4xl">Select Platforms</h1>
               </div>
+              <div className="flex-grow bg-[#39353C] h-[1px]"></div>
+            </div>
+            <div className="flex flex-col gap-6 sm:flex-row items-center py-5 mb-2 mt-2 justify-center text-center">
+              <div className="flex justify-center sm:items-center gap-16 my-5 md:my-0 sm:justify-center">
+                {/* Yelp */}
+                <div className="flex gap-3 items-center">
+                  <label className="relative">
+                    <input
+                      type="checkbox"
+                      id="checkbox3"
+                      name="checkbox3"
+                      checked={selectedTypes.includes("yelp")}
+                      onChange={() => handleCheckboxChange("yelp")}
+                      className="hidden peer"
+                    />
+                    <span className="w-8 h-8 sm:w-10 sm:h-10 bg-white cursor-pointer 
+                    rounded-full flex items-center justify-center shadow-spanshadow"
+                    >
+                      {selectedTypes.includes("yelp") && <FaCheck size={23} color="#9235e2" />}
 
-              {/* Resy */}
-              <div className="flex gap-3 items-center">
-                <label className="relative">
-                  <input
-                    type="checkbox"
-                    id="checkbox1"
-                    name="checkbox1"
-                    checked={selectedTypes.includes("resy")}
-                    onChange={() => handleCheckboxChange("resy")}
-                    className="hidden peer"
+                    </span>
+                  </label>
+                  <img
+                    src="/assets/yelp_logo_new.png"
+                    alt="Yelp Logo"
+                    className="w-20 h-7 sm:w-32 sm:h-14 md:w-40"
                   />
-                  <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer rounded-full shadow-spanshadow
-                  flex items-center justify-center 
-                  ">
-                      {selectedTypes.includes("resy") && <FaCheck size={23} color="#ffffff" />}
-                  </span>
-                </label>
-                <img
-                  src="/assets/resylogo.png"
-                  alt="Resy Logo"
-                  className="w-26 h-6 sm:w-32 sm:h-12 md:w-40 rounded-md object-cover"
-                />
-              </div>
+                </div>
 
-              {/* OpenTable */}
-              <div className="flex gap-3 items-center">
-                <label className="relative">
-                  <input
-                    type="checkbox"
-                    id="checkbox2"
-                    name="checkbox2"
-                    checked={selectedTypes.includes("open_table")}
-                    onChange={() => handleCheckboxChange("open_table")}
-                    className="hidden peer"
+                {/* Resy */}
+                <div className="flex gap-3 items-center">
+                  <label className="relative">
+                    <input
+                      type="checkbox"
+                      id="checkbox1"
+                      name="checkbox1"
+                      checked={selectedTypes.includes("resy")}
+                      onChange={() => handleCheckboxChange("resy")}
+                      className="hidden peer"
+                    />
+                    <span className="w-8 h-8 sm:w-10 sm:h-10 bg-white cursor-pointer rounded-full shadow-spanshadow
+                    flex items-center justify-center 
+                    ">
+                        {selectedTypes.includes("resy") && <FaCheck size={23} color="#9235e2" />}
+                    </span>
+                  </label>
+                  <img
+                    src="/assets/resylogo.png"
+                    alt="Resy Logo"
+                    className="w-26 h-6 sm:w-32 sm:h-12 md:w-40 rounded-md object-cover"
                   />
-                  <span className="w-8 h-8 sm:w-10 sm:h-10 bg-plum cursor-pointer rounded-full shadow-spanshadow
-                  flex items-center justify-center 
-                  ">
-                    {selectedTypes.includes("open_table") && <FaCheck size={23} color="#ffffff" />}
-                  </span>
-                </label>
-                <img
-                  src="/assets/opentablelogo.png"
-                  alt="Open Table Logo"
-                  className="w-22 h-7 sm:w-32 sm:h-14 md:w-40 object-fit"
-                />
+                </div>
+
+                {/* OpenTable */}
+                <div className="flex gap-3 items-center">
+                  <label className="relative">
+                    <input
+                      type="checkbox"
+                      id="checkbox2"
+                      name="checkbox2"
+                      checked={selectedTypes.includes("open_table")}
+                      onChange={() => handleCheckboxChange("open_table")}
+                      className="hidden peer"
+                    />
+                    <span className="w-8 h-8 sm:w-10 sm:h-10 bg-white cursor-pointer rounded-full shadow-spanshadow
+                    flex items-center justify-center 
+                    ">
+                      {selectedTypes.includes("open_table") && <FaCheck size={23} color="#9235e2" />}
+                    </span>
+                  </label>
+                  <img
+                    src="/assets/opentablelogo.png"
+                    alt="Open Table Logo"
+                    className="w-22 h-7 sm:w-32 sm:h-14 md:w-40 object-fit"
+                  />
+                </div>
+
               </div>
+              <div className="my-4 md:my-0">
+                <p className="text-base font-bold font-roboto text-shipGrey"> 
+                <img src="/assets/send.png" alt="" className="inline mx-1" /> 
+              <a href="" className="underline">Get notified when a new platform is added!</a></p></div>
 
             </div>
-            <div className="my-4 md:my-0">
-              <p className="text-base font-bold font-roboto text-shipGrey"> 
-              <img src="/assets/send.png" alt="" className="inline mx-1" /> 
-            <a href="" className="underline">Get notified when a new platform is added!</a></p></div>
-
           </div>
         </div>
 
         {/* Filtered Restaurants List */}
-        <div>
+       <div className="mt-10 px-8 flex gap-7">
+        <div className="bg-plum p-5 min-w-80 h-[700px] rounded-3xl border-2 border-[#B9B9B9]">
+          <div className="flex gap-4 items-center">
+          <ImFilter color="#ffffff"></ImFilter>
+          <p className="font-agrandir text-xl font-bold text-white">Filter By</p>
+          </div>
+
+          <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+
+            <p className="font-agrandir text-xs font-bold text-white uppercase">Restaurant Rating</p>
+            <div className="my-7 flex flex-col gap-3">
+                <div className="flex gap-2 items-center">
+                <label className="">
+                    <input
+                      type="checkbox"
+                      id="checkboxr1"
+                      name="checkboxr1"
+                      checked={ratingtypes.includes("5")}
+                      onChange={()=> handleratingschange("5")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                    >
+                      {ratings.includes("5") && <FaCheck size={13} color="#9235e2" />}
+                      
+                    </span>
+                  </label>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                </div>
+                <div className="flex gap-2 items-center">
+
+                  <label className="">
+                    <input
+                      type="checkbox"
+                      id="checkboxr1"
+                      name="checkboxr1"
+                      checked={ratingtypes.includes("4")}
+                      onChange={()=> handleratingschange("4")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                    >
+                      {ratings.includes("4") && <FaCheck size={13} color="#9235e2" />}
+
+                    </span>
+                  </label>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <label className="">
+                    <input
+                      type="checkbox"
+                      id="checkboxr1"
+                      name="checkboxr1"
+                      checked={ratingtypes.includes("3")}
+                      onChange={()=> handleratingschange("3")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                    >
+                      {ratings.includes("3") && <FaCheck size={13} color="#9235e2" />}
+
+                    </span>
+                  </label>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <label className="">
+                    <input
+                      type="checkbox"
+                      id="checkboxr1"
+                      name="checkboxr1"
+                      checked={ratingtypes.includes("2")}
+                      onChange={()=> handleratingschange("2")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                    >
+                      {ratings.includes("2") && <FaCheck size={13} color="#9235e2" />}
+
+                    </span>
+                  </label>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <label className="">
+                    <input
+                      type="checkbox"
+                      id="checkboxr1"
+                      name="checkboxr1"
+                      checked={ratingtypes.includes("1")}
+                      onChange={()=> handleratingschange("1")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                    >
+                      {ratings.includes("1") && <FaCheck size={13} color="#9235e2" />}
+
+                    </span>
+                  </label>
+                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
+                </div>
+            </div>
+            
+            <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+
+           <div className="flex flex-col gap-3">
+           <p className="font-agrandir text-xs font-bold text-white uppercase">Reviews</p>
+           <div className="flex gap-4 items-center">
+           <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={Reviewedtype.includes("most")}
+                onChange={()=> handlereviewtypechange("most")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {reviewedFilter.includes("most") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Most Reviewed</p>
+          </div>
+          <div className="flex gap-4 items-center">
+          <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={Reviewedtype.includes("least")}
+                onChange={()=> handlereviewtypechange("least")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {reviewedFilter.includes("least") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Least Reviewed</p>
+          </div>
+           </div>
+
+           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+
+            <div className="flex flex-col gap-3">
+            <p className="font-agrandir text-xs font-bold text-white uppercase">Cuisines</p>
+            <div className="flex gap-4 items-center">
+            <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={cuisinestypes.includes("Italian")}
+                onChange={()=> handlecuisinetypechange("Italian")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {cuisinefilter.includes("Italian") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Italian</p>
+            </div>
+            <div className="flex gap-4 items-center">
+            <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={cuisinestypes.includes("Mediterranean")}
+                onChange={()=> handlecuisinetypechange("Mediterranean")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {cuisinefilter.includes("Mediterranean") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Mediterranean</p>
+            </div>
+
+            <div className="flex gap-4 items-center">
+            <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={cuisinestypes.includes("Mexican")}
+                onChange={()=> handlecuisinetypechange("Mexican")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {cuisinefilter.includes("Mexican") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Mexican</p>
+            </div>
+
+            <div className="flex gap-4 items-center">
+            <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={cuisinestypes.includes("Chinese")}
+                onChange={()=> handlecuisinetypechange("Chinese")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {cuisinefilter.includes("Chinese") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Chinese</p>
+            </div>
+
+            <div className="flex gap-4 items-center">
+            <label className="">
+              <input
+                type="checkbox"
+                id="checkboxr1"
+                name="checkboxr1"
+                checked={cuisinestypes.includes("Thai")}
+                onChange={()=> handlecuisinetypechange("Thai")}
+                className="hidden peer"
+              />
+              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+              flex items-center justify-center"
+              >
+                {cuisinefilter.includes("Thai") && <FaCheck size={13} color="#9235e2" />}
+                
+              </span>
+            </label>
+            <p className="font-roboto font-medium text-sm text-white">Thai</p>
+            </div>
+            <p className="font-roboto font-medium text-sm text-white underline cursor-pointer">Show More</p>
+            </div>
+
+        </div>
+        <div className="">
           {filteredRestaurants?.map((data, index) => (
             <Link
               key={index}
@@ -423,6 +725,7 @@ const RestaurantCards = memo(
             </Link>
           ))}
         </div>
+       </div>
       </div>
     );
   }

@@ -108,10 +108,10 @@ export default function Hero() {
             <div className="flex w-[90%] m-auto md:w-full flex-col gap-4 md:gap-8 py-4 md:py-20 text-white">
               <div className="max-w-4xl mx-auto flex flex-col gap-4">
                 <h1 className="font-agrandir text-3xl md:text-[4.5rem] leading-none font-bold text-white text-center max-w-[990px] mx-auto">
-                  All Your Favorite Tables, One Simple Booking
+                Why stress over endless sites when you can “Have a Seat” in seconds?
                 </h1>
                 <p className="text-center max-w-2xl mx-auto text-base md:text-2xl font-roboto">
-                Search, compare, and reserve at the best restaurants across multiple platforms with ease
+                Search, compare, and reserve at the best restaurants across multiple platforms in the US.
                 </p>
               </div>
               <div className="max-w-[990px] mx-auto flex flex-col gap-2">

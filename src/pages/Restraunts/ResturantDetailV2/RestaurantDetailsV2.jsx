@@ -14,17 +14,19 @@ const timeSlots = ["4:30", "5:15", "3:30", "6:45", "10:15", "11:30"];
 
 export default function RestaurantDetailsV2({ restrauntDetail }) {
   return (
-    <div className="p-10 md:p-[6rem] max-w-[1600px] mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-20">
+    <div className="max-w-[1600px] mx-auto">
+      <div className="p-10 bg-plum md:p-[5rem] grid grid-cols-1 md:grid-cols-2 md:gap-20">
         {/* Restaurant details */}
         <Restaurant restrauntDetail={restrauntDetail} />
         {/* Slider */}
         <ImageSlider restrauntDetail={restrauntDetail} />
       </div>
+      <div className="px-10 pb-10 md:pb-[5rem] md:px-[5rem]">
       <MakeReservation restrauntDetail={restrauntDetail} />
 
       {/* reviews */}
       <Reviews restrauntDetail={restrauntDetail} />
+      </div>
     </div>
   );
 }

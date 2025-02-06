@@ -120,7 +120,7 @@ const UserStatistics = () => {
           <span>   Here's How You’ve Been Dining!</span>
         </p>
 
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* left child */}
           <div className="px-8 p-5 bg-white rounded-[30px] shadow-md">
             
@@ -142,7 +142,7 @@ const UserStatistics = () => {
             </div>
             <div className=" border-t-2 py-6">
               <p className="text-4xl font-bold font-agrandir text-plum flex justify-between items-center">
-                Average Time
+                  Average Booking Lead Time
                 <span className="text-shipGrey font-extrabold">{formatTimeBetweenReservationAndDate(
                     statistics?.average_time_between_reservation_and_date || 7
                   )}</span>
@@ -169,7 +169,7 @@ const UserStatistics = () => {
             </div>
           </div>
 
-          <div className="w-[70%] mx-auto">
+          <div className="px-8 p-14 bg-white rounded-[30px] shadow-md">
             <p className="text-4xl font-bold font-agrandir text-plum mb-6">
               Number of Reservations and Cancellations
             </p>
@@ -178,9 +178,9 @@ const UserStatistics = () => {
         </div>
 
         <div className="grid grid-cols-1 mt-24 font-raleWay md:grid-cols-2 gap-6">
-          <div className="w-[70%] mx-auto">
-            <p className="text-4xl font-bold font-agrandir text-center text-plum mb-6">
-            Number of Reservations and Cancellations
+          <div className="px-8 p-14 bg-white rounded-[30px] shadow-md">
+            <p className="text-4xl font-bold font-agrandir text-plum mb-6">
+            Number of Indoor and Outdoor Reservations
             </p>
             <Doughnut data={data2} />
           </div>

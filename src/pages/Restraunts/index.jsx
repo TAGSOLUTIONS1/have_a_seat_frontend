@@ -83,7 +83,7 @@ const Search = () => {
   return (
     <>
     <div className="w-full bg-bgGray">
-      <div className="flex flex-col lg:flex-row max-w-[1300px] mx-auto justify-center p-4">
+      <div className="flex flex-col lg:flex-row max-w-[1550px] mx-auto justify-center p-4">
         <div className="lg:hidden">
           <button
             className="lg:block bg-white text-black-600 px-2 py-1 rounded-full border-gray-300 shadow-md"
