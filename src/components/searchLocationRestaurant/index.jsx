@@ -194,7 +194,6 @@ const SearchLocationV2 = () => {
       <div className="mt-2">
         <LocationTracker onLocationUpdate={handleLocationUpdate} />
       </div>
-
     </div>
   );
 };
