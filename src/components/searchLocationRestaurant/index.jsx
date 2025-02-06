@@ -195,50 +195,6 @@ const SearchLocationV2 = () => {
         <LocationTracker onLocationUpdate={handleLocationUpdate} />
       </div>
 
-<div className="flex flex-row gap-5">
-  some extra filters
-       <div className="flex items-center border-plum border-2 w-40">
-        <input
-         type="text"
-         placeholder="resturant name"
-         value={formData.restaurant_name}
-         onChange={(e) =>
-           handleInputChange("restaurant_name", e.target.value)
-         }
-         className="text-sm font-roboto font-normal w-full border-plum text-slate-400 bg-transparent"
-         ></input>
-      </div>
-      <div className="flex items-center border-plum border-2 w-40">
-        <input
-         type="text"
-         placeholder=" cuisine type"
-         value={formData.cuisine_type}
-         onChange={(e) =>
-           handleInputChange("cuisine_type", e.target.value)
-         }
-         className="text-sm font-roboto font-normal w-full border-plum text-slate-400 bg-transparent"
-         ></input>
-      </div>
-      <p>Filter by ratings </p>
-      <div className="flex flex-row items-center border-plum border-2 rounded-md hover:bg-gray-200 ">
-
-
-        {formData.rating === "lowtohigh" ? (
-          <CgArrowsExchangeV 
-            onClick={() => handleInputChange("rating", "hightolow")}  
-            color="#9235e2" 
-            size={20} 
-          />
-        ) : (
-          <CgArrowsExchangeAltV 
-            onClick={() => handleInputChange("rating", "lowtohigh")}  
-            color="#9235e2" 
-            size={20} 
-          />
-        )}
-      </div>
-
-      </div>
     </div>
   );
 };
