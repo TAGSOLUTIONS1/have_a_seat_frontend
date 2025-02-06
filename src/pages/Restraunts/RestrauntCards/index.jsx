@@ -290,7 +290,7 @@ const RestaurantCards = memo(
 
         {/* Filtered Restaurants List */}
        <div className="mt-10 px-8 flex gap-7">
-        <div className="bg-plum p-5 min-w-80 h-[700px] rounded-3xl border-2 border-[#B9B9B9]">
+        <div className="bg-plum p-5 w-96 h-[700px] rounded-3xl border-2 border-[#B9B9B9]">
           <div className="flex gap-4 items-center">
           <ImFilter color="#ffffff"></ImFilter>
           <p className="font-agrandir text-xl font-bold text-white">Filter By</p>
