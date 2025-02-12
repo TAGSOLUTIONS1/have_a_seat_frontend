@@ -8,11 +8,15 @@ import Testimonials from "./testimonials/Testimonials";
 import WhyChooseUs from "./whyChooseUs/WhyChooseUs";
 import Hero from "./HeroSection/Hero";
 import ContactForm from "./contactForm/ContactForm";
+import Slider from "./SuperFast/Slider";
+import JuglingSites from "./JugglingSites/JuglingSites";
 
 export default function Landing() {
   return (
     <div>
       <Hero />
+      <Slider></Slider>
+      <JuglingSites></JuglingSites>
       <WhyChooseUs />
       <Restaurants />
       <Stats />

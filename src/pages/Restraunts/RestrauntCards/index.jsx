@@ -175,22 +175,18 @@ const RestaurantCards = memo(
       shuffledRestaurants,
     ]);
 
-
-
     const handleCheckboxChange = (type) => {
       setSelectedTypes((prevSelectedTypes) => {
         if (prevSelectedTypes.includes(type)) {
-          // Remove type when unchecked
           return prevSelectedTypes.filter((t) => t !== type);
         } else {
-          // Add type when checked
           return [...prevSelectedTypes, type];
         }
       });
     };
 
     // extra filters for restaurant name , cuisine type , ratings order
-    const [ratings,setRatings]=useState(ratingtypes);
+    const [ratings,setRatings]=useState([]);
     const handleratingschange =(type)=>{
       setRatings((ratingtypes)=>{
         if (ratingtypes.includes(type))
@@ -202,34 +198,31 @@ const RestaurantCards = memo(
         }
       });
     };
-    const [cuisinefilter,setCusinefilter]=useState(cuisinestypes);
-    const handlecuisinetypechange=(type)=>{
-      setCusinefilter((cuisinestypes) => {
-        if (cuisinestypes.includes(type))
-        {
-          return cuisinestypes.filter((t)=>t!==type);
+    const [cuisinefilter,setCusinefilter]=useState([]);
+    const handlecuisinetypechange = (type) => {
+      setCusinefilter((prev) => {
+        if (prev.includes(type)) {
+          return prev.filter((t) => t !== type);
+        } else {
+          return [...prev, type];  
         }
-        else{
-          [...cuisinestypes , type]
+      });
+    };
+    
+   
+    const [reviewedFilter,setReviewdFilter]=useState([]);
+    const handlereviewtypechange = (type) => {
+      setReviewdFilter((prev) => {
+        if (prev.includes(type)) {
+          return prev.filter((t) => t !== type);
+        } else {
+          return [...prev, type]; 
         }
       });
     };
 
-    const [reviewedFilter,setReviewdFilter]=useState(Reviewedtype);
-    const handlereviewtypechange=(type)=>{
-      setReviewdFilter((Reviewedtype) => {
-        if (Reviewedtype.includes(type))
-        {
-          return Reviewedtype.filter((t)=>t!==type);
-        }
-        else{
-          [...Reviewedtype , type]
-        }
-      });
-    };
-
-    console.log("~~ filtered restaurannts " , ratings , cuisinefilter , reviewedFilter);
-
+    // console.log("~~ filtered restaurannts " , ratings , reviewedFilter , cuisinefilter);
+    const [showmore , setShowmore]=useState(false);
     const normalizeString = (str) => 
       str.toLowerCase().replace(/[^a-z0-9]/g, ''); 
     
@@ -242,78 +235,96 @@ const RestaurantCards = memo(
     
    
     const matchingcuisine = filteredRestaurants.filter(restaurant => {
-      const inputText = normalizeString(formData?.cuisine_type || "");
+      const normalizedCuisines = cuisinefilter.map(normalizeString);
     
       const primaryCuisine = restaurant?.primaryCuisine?.name 
         ? normalizeString(restaurant.primaryCuisine.name) 
         : "";
     
       return (
-        (restaurant?.categories?.some(category => 
-          normalizeString(category.title).includes(inputText)
-        )) || primaryCuisine.includes(inputText)
+        restaurant?.categories?.some(category => 
+          normalizedCuisines.includes(normalizeString(category.title))
+        ) || normalizedCuisines.includes(primaryCuisine)
       );
     });
+    
+    useEffect(() => {
+      let updatedRestaurants = [...filteredRestaurants];
+    
+      if (cuisinefilter.length > 0) {
+        updatedRestaurants = matchingcuisine;
+      }
+      else if (reviewedFilter.length > 0) {
+        if (reviewedFilter.includes("most")) {
+          updatedRestaurants = [...copiedRestaurants].sort((a, b) => {
+            const reviewsA = (a.statistics?.reviews?.allTimeTextReviewCount ?? a.review_count ?? 0);
+            const reviewsB = (b.statistics?.reviews?.allTimeTextReviewCount ?? b.review_count ?? 0);
+            return reviewsB - reviewsA; // Sort descending (most reviewed first)
+          });
+        } 
+        else {
+          updatedRestaurants = [...copiedRestaurants].sort((a, b) => {
+            const reviewsA = (a.statistics?.reviews?.allTimeTextReviewCount ?? a.review_count ?? 0);
+            const reviewsB = (b.statistics?.reviews?.allTimeTextReviewCount ?? b.review_count ?? 0);
+            return reviewsA - reviewsB; // Sort ascending (least reviewed first)
+          });
+        }
+      }
+      if (ratings.length > 0) {
+        updatedRestaurants = copiedRestaurants
+        .filter((restaurant) => {
+          const restaurantRating = restaurant?.statistics?.reviews?.ratings?.overall?.rating ?? restaurant?.rating ?? 0;
+    
+          return ratings.some((selectedRating) => restaurantRating <= parseInt(selectedRating));
+        })
+        .sort((a, b) => {
+          const ratingA = a?.statistics?.reviews?.ratings?.overall?.rating ?? a?.rating ?? 0;
+          const ratingB = b?.statistics?.reviews?.ratings?.overall?.rating ?? b?.rating ?? 0;
+          return ratingB - ratingA;
+        });
+      }
+    
+      setCopiedRestaurants(updatedRestaurants);
+    }, [cuisinefilter , reviewedFilter , ratings , selectedTypes]);
+    
+    // console.log("filtered " , filteredRestaurants);
 
-    const loworderedRestaurants = filteredRestaurants.sort((a, b) => {
-      const ratingA = a?.rating || a?.statistics?.reviews?.ratings?.overall?.rating;
-      const ratingB = b?.rating || b?.statistics?.reviews?.ratings?.overall?.rating;
-    
-      if (ratingA === undefined || ratingA === null) return 1;  
-      if (ratingB === undefined || ratingB === null) return -1; 
-    
-      if (ratingA > ratingB) return 1;
-      if (ratingA < ratingB) return -1;
-      return 0; 
-    });
+    const [allCuisines, setAllCuisines] = useState([]);
+    const [copiedRestaurants, setCopiedRestaurants] = useState([]);
 
-    const highorderedRestaurants = filteredRestaurants.sort((a, b) => {
-      const ratingA = a?.rating || a?.statistics?.reviews?.ratings?.overall?.rating;
-      const ratingB = b?.rating || b?.statistics?.reviews?.ratings?.overall?.rating;
+    useEffect(() => {
+      const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
+      setCopiedRestaurants(copiedRestaurantsData);
+    }, []);
     
-      if (ratingA === undefined || ratingA === null) return 1;  
-      if (ratingB === undefined || ratingB === null) return -1; 
-    
-      if (ratingA > ratingB) return -1;
-      if (ratingA < ratingB) return 1;
-      return 0; 
-    });
-    
-    
-    // useEffect(()=>{
-    //     console.log("yes" , formData);
-    //   if (formData.rating==="lowtohigh")
-    //   {
-    //     setFilteredRestaurants(loworderedRestaurants)
-    //   }
-    //   else if (formData.rating==="hightolow")
-    //   {
-    //     setFilteredRestaurants(highorderedRestaurants)
-    //   }
-    //   else if (formData.cuisine_type !== "")
-    //   {
-    //     setFilteredRestaurants(matchingcuisine)
-    //   }
-    //   else (
-    //     setFilteredRestaurants(matchingRestaurants)
-    //   )
+    const fillallcuisines = () => {
+      const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
+      setCopiedRestaurants(copiedRestaurantsData);
+        
+      const extractedCuisines = new Set(cuisinestypes);
+  
+      filteredRestaurants.forEach((restaurant) => {
+        if (restaurant.primaryCuisine?.name) {
+          extractedCuisines.add(restaurant.primaryCuisine.name);
+        }
+        if (restaurant.categories) {
+          restaurant.categories.forEach((category) => extractedCuisines.add(category.title));
+        }
+      });
+  
+      setAllCuisines([...extractedCuisines]);
+      setShowmore(true);
+    };
+  
+    const displayedCuisines = showmore ? allCuisines : cuisinestypes;
 
-    // },[formData.cuisine_type , formData.restaurant_name , formData.rating])
-
-    // useEffect(() => {
-    //   console.log("~~matching cuisines :", matchingcuisine);
-    // }, [matchingcuisine]); 
-
-        // useEffect(() => {
-    //   console.log("~~Matching restaurants:", matchingRestaurants);
-    // }, [matchingRestaurants]);
-
-    // useEffect(() => {
-    //     console.log("~~low to high rated restaurants:", loworderedRestaurants);
-    //   }, [loworderedRestaurants]);
-    
-    // console.log("~~ set selected type" , selectedTypes.includes("yelp"));
-    // console.log("~~ form data is " , formData);
+    const clearfilters=()=>{
+      const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
+      setCopiedRestaurants(copiedRestaurantsData);
+      setCusinefilter([]);
+      setRatings([]);
+      setReviewdFilter([]);
+    }
 
     return (
       <div>
@@ -416,132 +427,49 @@ const RestaurantCards = memo(
 
         {/* Filtered Restaurants List */}
        <div className="mt-10 px-8 flex gap-7">
-        <div className="bg-plum p-5 w-96 h-[700px] rounded-3xl border-2 border-[#B9B9B9]">
-          <div className="flex gap-4 items-center">
-          <ImFilter color="#ffffff"></ImFilter>
-          <p className="font-agrandir text-xl font-bold text-white">Filter By</p>
+        <div className="bg-plum p-5 w-96 h-auto rounded-3xl border-2 border-[#B9B9B9]">
+          <div className="flex justify-between">
+            <div className="flex gap-4 items-center">
+            <ImFilter color="#ffffff"></ImFilter>
+            <p className="font-agrandir text-xl font-bold text-white">Filter By</p>
+            </div>
+            <div className="bg-purple-100 justify-end px-4 p-1 rounded-3xl">
+              <p className="font-agrandir text-sm font-bold cursor-pointer text-plum" onClick={clearfilters}>Clear</p>
+            </div>
           </div>
 
           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
 
             <p className="font-agrandir text-xs font-bold text-white uppercase">Restaurant Rating</p>
             <div className="my-7 flex flex-col gap-3">
-                <div className="flex gap-2 items-center">
+            {ratingtypes.map((rating) => (
+              <div key={rating} className="flex gap-2 items-center">
                 <label className="">
-                    <input
-                      type="checkbox"
-                      id="checkboxr1"
-                      name="checkboxr1"
-                      checked={ratingtypes.includes("5")}
-                      onChange={()=> handleratingschange("5")}
-                      className="hidden peer"
-                    />
-                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-                    flex items-center justify-center"
-                    >
-                      {ratings.includes("5") && <FaCheck size={13} color="#9235e2" />}
-                      
-                    </span>
-                  </label>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                </div>
-                <div className="flex gap-2 items-center">
+                  <input
+                    type="checkbox"
+                    id={`checkbox-${rating}`} // Unique ID
+                    name={`checkbox-${rating}`}
+                    checked={ratings.includes(rating)}
+                    onChange={() => handleratingschange(rating)}
+                    className="hidden peer"
+                  />
+                  <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                  flex items-center justify-center"
+                  >
+                    {ratings.includes(rating) && <FaCheck size={13} color="#9235e2" />}
+                  </span>
+                </label>
 
-                  <label className="">
-                    <input
-                      type="checkbox"
-                      id="checkboxr1"
-                      name="checkboxr1"
-                      checked={ratingtypes.includes("4")}
-                      onChange={()=> handleratingschange("4")}
-                      className="hidden peer"
-                    />
-                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-                    flex items-center justify-center"
-                    >
-                      {ratings.includes("4") && <FaCheck size={13} color="#9235e2" />}
-
-                    </span>
-                  </label>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <label className="">
-                    <input
-                      type="checkbox"
-                      id="checkboxr1"
-                      name="checkboxr1"
-                      checked={ratingtypes.includes("3")}
-                      onChange={()=> handleratingschange("3")}
-                      className="hidden peer"
-                    />
-                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-                    flex items-center justify-center"
-                    >
-                      {ratings.includes("3") && <FaCheck size={13} color="#9235e2" />}
-
-                    </span>
-                  </label>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
-                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <label className="">
-                    <input
-                      type="checkbox"
-                      id="checkboxr1"
-                      name="checkboxr1"
-                      checked={ratingtypes.includes("2")}
-                      onChange={()=> handleratingschange("2")}
-                      className="hidden peer"
-                    />
-                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-                    flex items-center justify-center"
-                    >
-                      {ratings.includes("2") && <FaCheck size={13} color="#9235e2" />}
-
-                    </span>
-                  </label>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
-                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
-                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <label className="">
-                    <input
-                      type="checkbox"
-                      id="checkboxr1"
-                      name="checkboxr1"
-                      checked={ratingtypes.includes("1")}
-                      onChange={()=> handleratingschange("1")}
-                      className="hidden peer"
-                    />
-                    <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-                    flex items-center justify-center"
-                    >
-                      {ratings.includes("1") && <FaCheck size={13} color="#9235e2" />}
-
-                    </span>
-                  </label>
-                  <IoIosStar color="#FFCC00" size={18}></IoIosStar>
-                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
-                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
-                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
-                  <IoIosStarOutline color="#ffffff" size={18}></IoIosStarOutline>
-                </div>
+                {/* Render stars dynamically */}
+                {[...Array(5)].map((_, index) => (
+                  index < parseInt(rating) ? (
+                    <IoIosStar key={index} color="#FFCC00" size={18} />
+                  ) : (
+                    <IoIosStarOutline key={index} color="#ffffff" size={18} />
+                  )
+                ))}
+              </div>
+            ))}
             </div>
             
             <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
@@ -592,110 +520,37 @@ const RestaurantCards = memo(
 
             <div className="flex flex-col gap-3">
             <p className="font-agrandir text-xs font-bold text-white uppercase">Cuisines</p>
-            <div className="flex gap-4 items-center">
-            <label className="">
-              <input
-                type="checkbox"
-                id="checkboxr1"
-                name="checkboxr1"
-                checked={cuisinestypes.includes("Italian")}
-                onChange={()=> handlecuisinetypechange("Italian")}
-                className="hidden peer"
-              />
-              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-              flex items-center justify-center"
-              >
-                {cuisinefilter.includes("Italian") && <FaCheck size={13} color="#9235e2" />}
-                
-              </span>
-            </label>
-            <p className="font-roboto font-medium text-sm text-white">Italian</p>
-            </div>
-            <div className="flex gap-4 items-center">
-            <label className="">
-              <input
-                type="checkbox"
-                id="checkboxr1"
-                name="checkboxr1"
-                checked={cuisinestypes.includes("Mediterranean")}
-                onChange={()=> handlecuisinetypechange("Mediterranean")}
-                className="hidden peer"
-              />
-              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-              flex items-center justify-center"
-              >
-                {cuisinefilter.includes("Mediterranean") && <FaCheck size={13} color="#9235e2" />}
-                
-              </span>
-            </label>
-            <p className="font-roboto font-medium text-sm text-white">Mediterranean</p>
-            </div>
 
-            <div className="flex gap-4 items-center">
-            <label className="">
-              <input
-                type="checkbox"
-                id="checkboxr1"
-                name="checkboxr1"
-                checked={cuisinestypes.includes("Mexican")}
-                onChange={()=> handlecuisinetypechange("Mexican")}
-                className="hidden peer"
-              />
-              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-              flex items-center justify-center"
-              >
-                {cuisinefilter.includes("Mexican") && <FaCheck size={13} color="#9235e2" />}
-                
-              </span>
-            </label>
-            <p className="font-roboto font-medium text-sm text-white">Mexican</p>
-            </div>
+            {displayedCuisines.map((cuisine) => (
+              <div key={cuisine} className="flex gap-4 items-center">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={cuisinefilter.includes(cuisine)}
+                    onChange={() => handlecuisinetypechange(cuisine)}
+                    className="hidden peer"
+                  />
+                  <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                  >
+                    {cuisinefilter.includes(cuisine) && <FaCheck size={13} color="#9235e2" />}
+                  </span>
+                </label>
+                <p className="font-roboto font-medium text-sm text-white">{cuisine}</p>
+              </div>
+            ))}
 
-            <div className="flex gap-4 items-center">
-            <label className="">
-              <input
-                type="checkbox"
-                id="checkboxr1"
-                name="checkboxr1"
-                checked={cuisinestypes.includes("Chinese")}
-                onChange={()=> handlecuisinetypechange("Chinese")}
-                className="hidden peer"
-              />
-              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-              flex items-center justify-center"
+              <p
+                className="font-roboto font-medium text-sm text-white underline cursor-pointer"
+                onClick={ showmore ? ()=>{setShowmore(false)} : fillallcuisines}
               >
-                {cuisinefilter.includes("Chinese") && <FaCheck size={13} color="#9235e2" />}
-                
-              </span>
-            </label>
-            <p className="font-roboto font-medium text-sm text-white">Chinese</p>
-            </div>
-
-            <div className="flex gap-4 items-center">
-            <label className="">
-              <input
-                type="checkbox"
-                id="checkboxr1"
-                name="checkboxr1"
-                checked={cuisinestypes.includes("Thai")}
-                onChange={()=> handlecuisinetypechange("Thai")}
-                className="hidden peer"
-              />
-              <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-              flex items-center justify-center"
-              >
-                {cuisinefilter.includes("Thai") && <FaCheck size={13} color="#9235e2" />}
-                
-              </span>
-            </label>
-            <p className="font-roboto font-medium text-sm text-white">Thai</p>
-            </div>
-            <p className="font-roboto font-medium text-sm text-white underline cursor-pointer">Show More</p>
+                {showmore ? "Show Less" : "Show More"}
+              </p>
             </div>
 
         </div>
         <div className="">
-          {filteredRestaurants?.map((data, index) => (
+          {copiedRestaurants?.map((data, index) => (
             <Link
               key={index}
               to={{
