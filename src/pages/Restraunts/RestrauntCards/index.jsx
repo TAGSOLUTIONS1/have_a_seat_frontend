@@ -233,7 +233,7 @@ const RestaurantCards = memo(
       return restaurantName.includes(inputText) || inputText.includes(restaurantName);
     });
     
-   
+    const [copiedRestaurants, setCopiedRestaurants] = useState([]);
     const matchingcuisine = filteredRestaurants.filter(restaurant => {
       const normalizedCuisines = cuisinefilter.map(normalizeString);
     
@@ -249,53 +249,97 @@ const RestaurantCards = memo(
     });
     
     useEffect(() => {
-      let updatedRestaurants = [...filteredRestaurants];
-    
-      if (cuisinefilter.length > 0) {
-        updatedRestaurants = matchingcuisine;
-      }
-      else if (reviewedFilter.length > 0) {
-        if (reviewedFilter.includes("most")) {
-          updatedRestaurants = [...copiedRestaurants].sort((a, b) => {
-            const reviewsA = (a.statistics?.reviews?.allTimeTextReviewCount ?? a.review_count ?? 0);
-            const reviewsB = (b.statistics?.reviews?.allTimeTextReviewCount ?? b.review_count ?? 0);
-            return reviewsB - reviewsA; // Sort descending (most reviewed first)
-          });
-        } 
-        else {
-          updatedRestaurants = [...copiedRestaurants].sort((a, b) => {
-            const reviewsA = (a.statistics?.reviews?.allTimeTextReviewCount ?? a.review_count ?? 0);
-            const reviewsB = (b.statistics?.reviews?.allTimeTextReviewCount ?? b.review_count ?? 0);
-            return reviewsA - reviewsB; // Sort ascending (least reviewed first)
-          });
-        }
-      }
-      if (ratings.length > 0) {
-        updatedRestaurants = copiedRestaurants
-        .filter((restaurant) => {
-          const restaurantRating = restaurant?.statistics?.reviews?.ratings?.overall?.rating ?? restaurant?.rating ?? 0;
-    
-          return ratings.some((selectedRating) => restaurantRating <= parseInt(selectedRating));
-        })
-        .sort((a, b) => {
-          const ratingA = a?.statistics?.reviews?.ratings?.overall?.rating ?? a?.rating ?? 0;
-          const ratingB = b?.statistics?.reviews?.ratings?.overall?.rating ?? b?.rating ?? 0;
-          return ratingB - ratingA;
+      let updatedRestaurants = [...shuffledRestaurants]; // Start with merged & shuffled data
+      
+      // Apply Price Filter
+      if (selectedPriceFilter != null) {
+        updatedRestaurants = updatedRestaurants.filter((restaurant) => {
+          let price = null;
+          if (restaurant.restraunt_type === "yelp") {
+            price = restaurant.price ? restaurant.price.length : null;
+          } else {
+            price = restaurant.priceBand?.priceBandId || restaurant.price_range_id;
+          }
+          return price != null && price == selectedPriceFilter;
         });
       }
     
-      setCopiedRestaurants(updatedRestaurants);
-    }, [cuisinefilter , reviewedFilter , ratings , selectedTypes]);
+      // Apply Star Rating Filter
+      if (selectedStarFilter != null) {
+        updatedRestaurants = updatedRestaurants.filter((restaurant) => {
+          let rating = null;
+          if (restaurant.restraunt_type === "yelp") {
+            rating = Math.floor(parseFloat(restaurant.rating));
+          } else if (restaurant.restraunt_type === "open_table") {
+            rating = Math.floor(parseFloat(restaurant.statistics?.reviews?.ratings?.overall?.rating));
+          } else if (restaurant.restraunt_type === "resy") {
+            rating = Math.floor(parseFloat(restaurant.rating?.average));
+          }
+          return rating != null && rating === selectedStarFilter;
+        });
+      }
     
+      // Apply Cuisine Filter
+      if (cuisinefilter.length > 0) {
+        updatedRestaurants = updatedRestaurants.filter((restaurant) => {
+          const normalizedCuisines = cuisinefilter.map((cuisine) => cuisine.toLowerCase());
+          let restaurantCuisine = "";
+    
+          if (restaurant.restraunt_type === "yelp") {
+            restaurantCuisine = restaurant.categories?.map(cat => cat.title.toLowerCase()) || [];
+          } else if (restaurant.restraunt_type === "open_table") {
+            restaurantCuisine = [restaurant.primaryCuisine?.name?.toLowerCase()];
+          } else if (restaurant.restraunt_type === "resy") {
+            restaurantCuisine = restaurant.cuisine?.map(c => c.toLowerCase()) || [];
+          }
+    
+          return restaurantCuisine.some(cuisine => normalizedCuisines.includes(cuisine));
+        });
+      }
+    
+      // Apply Review Filter
+      if (reviewedFilter.includes("most")) {
+        updatedRestaurants = updatedRestaurants.sort((a, b) => {
+          const reviewsA = (a.statistics?.reviews?.allTimeTextReviewCount ?? a.review_count ?? 0);
+          const reviewsB = (b.statistics?.reviews?.allTimeTextReviewCount ?? b.review_count ?? 0);
+          return reviewsB - reviewsA; // Sort descending
+        });
+      } else if (reviewedFilter.includes("least")) {
+        updatedRestaurants = updatedRestaurants.sort((a, b) => {
+          const reviewsA = (a.statistics?.reviews?.allTimeTextReviewCount ?? a.review_count ?? 0);
+          const reviewsB = (b.statistics?.reviews?.allTimeTextReviewCount ?? b.review_count ?? 0);
+          return reviewsA - reviewsB; // Sort ascending
+        });
+      }
+    
+      // Apply Rating Sort Filter
+      if (ratings.length > 0) {
+        updatedRestaurants = updatedRestaurants
+          .filter(restaurant => {
+            const restaurantRating = restaurant?.statistics?.reviews?.ratings?.overall?.rating ?? restaurant?.rating ?? 0;
+            return ratings.some(selectedRating => restaurantRating <= parseInt(selectedRating));
+          })
+          .sort((a, b) => {
+            const ratingA = a?.statistics?.reviews?.ratings?.overall?.rating ?? a?.rating ?? 0;
+            const ratingB = b?.statistics?.reviews?.ratings?.overall?.rating ?? b?.rating ?? 0;
+            return ratingB - ratingA;
+          });
+      }
+    
+      setFilteredRestaurants(updatedRestaurants);
+    }, [selectedTypes, selectedPriceFilter, selectedStarFilter, cuisinefilter, reviewedFilter, ratings, shuffledRestaurants]);
+    
+    console.log("filters " , cuisinefilter ,reviewedFilter ,ratings)
     // console.log("filtered " , filteredRestaurants);
 
     const [allCuisines, setAllCuisines] = useState([]);
-    const [copiedRestaurants, setCopiedRestaurants] = useState([]);
+
 
     useEffect(() => {
       const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
       setCopiedRestaurants(copiedRestaurantsData);
-    }, []);
+    }, [filteredRestaurants]);
+    
     
     const fillallcuisines = () => {
       const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
@@ -316,6 +360,7 @@ const RestaurantCards = memo(
       setShowmore(true);
     };
   
+    
     const displayedCuisines = showmore ? allCuisines : cuisinestypes;
 
     const clearfilters=()=>{
@@ -324,8 +369,7 @@ const RestaurantCards = memo(
       setCusinefilter([]);
       setRatings([]);
       setReviewdFilter([]);
-    }
-
+    }    
     return (
       <div>
         <div className="bg-plum px-24 pt-12 rounded-3xl">
