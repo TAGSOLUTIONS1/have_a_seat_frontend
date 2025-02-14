@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BsCalendarDateFill } from 'react-icons/bs';
 import { FaChevronDown } from 'react-icons/fa6';
 import { IoIosPeople } from 'react-icons/io';
 import { MdLocationOn, MdOutlineRestaurantMenu } from 'react-icons/md';
-
+import { getCurrentTime, initialBookingState } from "@/components/constants/constants";
 const content = [
     {
       src: '/assets/sliderhost1.png',
@@ -21,7 +22,7 @@ const content = [
       cuisine: 'Mexican',
       datetime: '2024-02-21 20:00',
       diners: '4 People',
-      color: '#FF6B6B', // Coral Red
+      color: '#9235E2', // Coral Red
     },
     {
       src: '/assets/sliderhost3.png',
@@ -30,7 +31,7 @@ const content = [
       cuisine: 'Japanese',
       datetime: '2024-02-22 18:30',
       diners: '3 People',
-      color: '#4ECDC4', // Teal
+      color: '#9235E2', // Teal
     },
     {
       src: '/assets/sliderhost1.png',
@@ -39,7 +40,7 @@ const content = [
       cuisine: 'French',
       datetime: '2024-02-23 19:45',
       diners: '5 People',
-      color: '#FFD93D', // Mustard Yellow
+      color: '#9235E2', // Mustard Yellow
     },
     {
       src: '/assets/sliderhost2.png',
@@ -48,7 +49,7 @@ const content = [
       cuisine: 'Seafood',
       datetime: '2024-02-24 20:15',
       diners: '2 People',
-      color: '#1A535C', // Dark Cyan
+      color: '#9235E2', // Dark Cyan
     },
     {
       src: '/assets/sliderhost3.png',
@@ -57,7 +58,7 @@ const content = [
       cuisine: 'Thai',
       datetime: '2024-02-25 18:00',
       diners: '6 People',
-      color: '#FF9F1C', // Bright Orange
+      color: '#9235E2', // Bright Orange
     },
   ];
   
@@ -74,7 +75,21 @@ const content = [
     }, []);
   
     const currentContent = content[currentSlide];
-  
+    const navigate = useNavigate();
+    
+      const handleSearch = () => {
+        let route;
+          localStorage.setItem(
+            "searchFormData",
+            JSON.stringify(initialBookingState)
+          );
+          route = `/restraunts?data=${encodeURIComponent(
+            JSON.stringify(initialBookingState)
+          )}`;
+
+        navigate(route);
+      };
+
     return (
       <section className="mx-auto relative" id="superfast">
         <div className="max-w-[1600px] mx-auto items-center relative">
@@ -161,6 +176,7 @@ const content = [
           <button
             type="button"
             className="mt-20 mx-auto bg-plum text-white hover:bg-primary-700 font-medium rounded-full text-xl p-2 px-5 text-center w-auto block"
+            onClick={handleSearch}
             >
             Reserve Today
             </button>

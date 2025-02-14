@@ -36,12 +36,12 @@ function BookRestaurant() {
             <p className="text-7xl font-bold font-agrandir text-white uppercase">
               Dine Smarter, <br /> Reserve Faster
             </p>
-            <p className="text-3xl font-roboto font-normal text-white">
+            <p className="text-xl font-roboto font-normal text-white">
               <li>Compare the options, pick the one you love, and just book your table</li>
               <li>Tons of listings and endless options</li>
             </p>
-            <p className="text-3xl font-roboto font-normal text-white">
-            So let’s get seated, greeted, and treated with great food <br></br> because you’ve got better things to do than wait.
+            <p className="text-xl font-roboto font-normal text-white">
+            So let’s get seated, greeted, and treated with great food because you’ve <br></br> got better things to do than wait.
             </p>
             <div className="flex items-center mx-auto my-4">
               <button
