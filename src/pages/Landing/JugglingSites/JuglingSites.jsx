@@ -7,11 +7,26 @@ import { Parallax, Mousewheel } from 'swiper/modules';
 import { IoIosArrowDown, IoIosArrowRoundDown } from 'react-icons/io';
 
 const contentData = [
-  { c1: `"How'd you book so easily? I'm always juggling sites!"` },
-  { c1: "That's what everyone asks when they see my weekend dining posts." },
-  { c1: `"Have a Seat" will show you exactly where (& when) you can go. No more browsing across multiple reservation platforms... It's that simple, easy, and next-level stuff..."` },
-  { c1: "You just gotta open the website, pick a restaurant, and get ready for some awesome food!" },
-  { c1: "Now THAT's what we call easy and smart dining!" },
+  { 
+    c1: `"How'd you book so easily? I'm always juggling sites!"`, 
+    c2: "" 
+  },
+  { 
+    c1: "That's what everyone asks when they see my weekend dining posts.", 
+    c2: "(Alex Kim)"
+  },
+  { 
+    c1: `"Have a Seat" will show you exactly where (& when) you can go.`, 
+    c2: "No more browsing across multiple reservation platforms... It's that simple, easy, and next-level stuff..." 
+  },
+  { 
+    c1: "You just gotta open the website, pick a restaurant, and get ready for some awesome food!", 
+    c2: "" 
+  },
+  { 
+    c1: "Now THAT's what we call easy and smart dining!", 
+    c2: "" 
+  }
 ];
 
 const JuglingSites = () => {
@@ -61,7 +76,6 @@ const JuglingSites = () => {
         </div>
       </div>
 
-      {/* Right Half Swiper */}
       <div className="w-2/3 h-full">
         <Swiper
           ref={swiperRef}
@@ -73,15 +87,34 @@ const JuglingSites = () => {
           className="w-full h-full"
         >
           {contentData.map((item, index) => (
-            <SwiperSlide key={index}>
-              <div
-                className="flex items-center justify-center h-full px-20 text-center"
-                data-swiper-parallax="-200"
-              >
-                <p className="text-4xl font-bold text-shipGrey font-agrandir">{item.c1}</p>
-              </div>
-            </SwiperSlide>
-          ))}
+        <SwiperSlide key={index}>
+          <div className="flex items-center justify-center h-full pl-10 md:pl-14 lg:pl-20 text-center" data-swiper-parallax="-200">
+            
+            <p className={`font-agrandir text-start ${
+                index === 0 ? "text-5xl font-bold text-shipGrey" :
+                index === 1 ? "text-3xl font-medium text-shipGrey" :
+                index === 2 ? "text-3xl font-bold text-shipGrey" :
+                index === 3 ? "text-3xl font-normal text-shipGrey" :
+                index === 4 ? "text-3xl font-bold text-plum" :
+                "text-3xl font-extrabold text-plum"
+              }`}>
+              {item.c1}
+              {item.c2 && (
+                <p className={`font-agrandir text-start ${
+                  index === 0 ? "" :
+                  index === 1 ? "text-lg font-bold text-shipGrey mt-2" :
+                  index === 2 ? "text-3xl font-normal text-shipGrey" :
+                  index === 3 ? "" :
+                  "text-3xl font-extrabold text-plum"
+                }`}>
+                {item.c2}
+              </p>
+            )}
+            </p>
+          </div>
+        </SwiperSlide>
+      ))}
+
         </Swiper>
       </div>
     </div>

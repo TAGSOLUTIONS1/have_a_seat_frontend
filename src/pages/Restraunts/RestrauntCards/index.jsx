@@ -329,7 +329,7 @@ const RestaurantCards = memo(
       setFilteredRestaurants(updatedRestaurants);
     }, [selectedTypes, selectedPriceFilter, selectedStarFilter, cuisinefilter, reviewedFilter, ratings, shuffledRestaurants]);
     
-    console.log("filters " , cuisinefilter ,reviewedFilter ,ratings)
+    // console.log("filters " , cuisinefilter ,reviewedFilter ,ratings)
     // console.log("filtered " , filteredRestaurants);
 
     const [allCuisines, setAllCuisines] = useState([]);

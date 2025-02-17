@@ -94,9 +94,9 @@ const content = [
       <section className="mx-auto relative" id="superfast">
         <div className="max-w-[1600px] mx-auto items-center relative">
           
-          <div className='flex flex-col gap-4 mx-auto text-center sm:w-2/3 md:w-1/2'>
-          <p className='text-shipGrey font-bold text-5xl font-agrandir'>Search smartly & reserve your table across top platforms</p>
-          <p className='text-plum font-black text-7xl font-agrandir italic'>Super fast</p>
+          <div className='flex flex-col gap-4 mx-auto text-center p-5 sm:p-0 w-full sm:w-2/3 lg:w-1/2'>
+          <p className='text-shipGrey font-bold text-3xl sm:text-4xl md:text-5xl font-agrandir'>Search smartly & reserve your table across top platforms</p>
+          <p className='text-plum font-black text-4xl sm:text-6xl md:text-7xl font-agrandir italic'>Super fast</p>
           <p className='text-shipGrey font-normal text-2xl font-roboto'>One search = All your favorite restaurants</p>
             </div>
   
