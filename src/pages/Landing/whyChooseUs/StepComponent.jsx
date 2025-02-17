@@ -27,7 +27,7 @@ const StepComponent = () => {
   return (
     <div>
       <div className="flex flex-col gap-5">
-      <p className="text-7xl font-agrandir font-bold text-shipGrey">Why Choose <span className="text-plum">Us</span></p>
+      <p className="text-5xl sm:text-6xl md:text-7xl font-agrandir font-bold text-shipGrey">Why Choose <span className="text-plum">Us</span></p>
       <p className="text-xl font-agrandir text-shipGrey">We make the dining experience simple and effortless.</p>
       </div>
     <div className="flex flex-col items-start gap-8 p-0 sm:p-4 mt-5 relative">
