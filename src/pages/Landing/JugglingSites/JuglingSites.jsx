@@ -58,10 +58,10 @@ const JuglingSites = () => {
   }, []);
 
   return (
-    <div className="w-full px-20 h-screen flex">
+    <div className="w-full px-5 sm:px-14 md:px-20 h-screen flex">
 
       {/* Fixed Left Image */}
-      <div className="w-1/3 h-full flex items-center justify-center bg-white">
+      <div className="w-1/3 h-full hidden sm:flex items-center justify-center bg-white">
         <div className='bg-plum rounded-[30px]'>
         <img
           src="/assets/swiper1.png"
@@ -76,7 +76,7 @@ const JuglingSites = () => {
         </div>
       </div>
 
-      <div className="w-2/3 h-full">
+      <div className="w-full sm:w-2/3 h-full">
         <Swiper
           ref={swiperRef}
           direction="vertical"
