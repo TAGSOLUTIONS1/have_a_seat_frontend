@@ -162,7 +162,7 @@ const content = [
               ))}
             </svg>
   
-            <img src="/assets/slidercreen1.png" alt="slider screen" className="relative z-0" />
+            <img src="/assets/slidercreen1.png" alt="slider screen" className="relative z-0 hidden sm:block" />
   
             {/* Dynamic Content */}
             <div className="flex flex-col gap-5 absolute left-[47.5%]">
