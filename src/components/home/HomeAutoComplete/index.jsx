@@ -19,18 +19,20 @@ const GeoApiAuto = ({ getLocationData, location }) => {
   };
 
   return (
+    <div className="autocomplete-scroller">
     <GeoapifyContext apiKey="a88698c29be445df993940c6904982f7">
       <GeoapifyGeocoderAutocomplete
         placeSelect={onPlaceSelect}
         suggestionsChange={onSuggestionChange}
         onUserInput={handleChange}
         placeholder="Location"
-        className="geoapify-autocomplete-input "
+        className="geoapify-autocomplete-input  "
         listClassName="geoapify-autocomplete-items  "
         itemClassName="geoapify-autocomplete-item "
         value={location}
       />
     </GeoapifyContext>
+    </div>
   );
 };
 

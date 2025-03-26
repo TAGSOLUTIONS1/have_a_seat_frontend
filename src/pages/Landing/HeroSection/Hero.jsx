@@ -119,14 +119,16 @@ export default function Hero() {
                 <div className="bg-lightGrey rounded-sm md:rounded-[3rem] md:py-2 md:flex gap-1 justify-between md:gap-3 md:px-5">
                   <div className=" flex flex-col justify-between text-center gap-1 md:flex-row ">
                     
+                <div className="text-center items-center my-auto">
+                <MdLocationOn size={28} color="#9235E2"
+                      className="flex-shrink-0"
+                      ></MdLocationOn>
+                </div>
                     <div
-                      className={`flex items-center text-base font-roboto font-normal w-full text-black border-r-2 ${
+                      className={`flex items-center text-base font-roboto font-normal z-50 w-full text-black border-r-2 ${
                         error ? "border-red-500" : "border-gray-200"
                       } focus:border-gray-200 focus:outline-none`}
                     >
-                      <MdLocationOn size={28} color="#9235E2"
-                      className="flex-shrink-0 mx-2"
-                      ></MdLocationOn>
                       <GeoApiAuto
                         getLocationData={getLocationData}
                         location={formData.location}

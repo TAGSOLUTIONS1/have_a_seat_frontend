@@ -75,8 +75,26 @@
 .geoapify-autocomplete-input {
   color: #9235e2;
   background: transparent;
+  width: 100%;
+  padding: 10px;
 }
 
+.autocomplete-wrapper {
+  position: relative; /* Ensures dropdown aligns correctly */
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Dropdown should appear outside the scrollable container */
+.geoapify-autocomplete-items {
+  position: absolute;
+  top: 100%; /* Positions the dropdown right below the input */
+  left: -20;
+  width: 110%;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index:1000,
+}
 /* Focused state of input field */
 
 /* Style for the suggestions list */
