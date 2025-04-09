@@ -121,6 +121,7 @@ export const navLinks = [
   { to: "/#about", label: "About" },
   { to: "/#why", label: "Why Us" },
   { to: "/#contact", label: "Contact" },
+  { to: "/privacy-policy", label: "Privacy Policy" },
 ];
 export const FooterLinks = [
   { to: "about", label: "About" },
