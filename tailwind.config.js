@@ -30,6 +30,7 @@ module.exports = {
         border: "hsl(var(--border))",
         plum: "#9235E2",
         lightGrey: "#F5EDFC",
+        policy:"#191919cc",
         txtcolor:"#202224",
         stepclr:"#39353C99",
         bgGray: "#FBF9FD",
