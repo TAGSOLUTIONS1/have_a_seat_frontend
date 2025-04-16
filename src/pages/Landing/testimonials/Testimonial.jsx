@@ -56,7 +56,7 @@ const Testimonial = () => {
     <div className="testimonial-section text-center p-8">
       {/* Testimonial Display */}
       <div className="testimonial-text">
-        <p className="text-grayblu font-agrandir font-normal tracking-[-1.3%] text-xl mb-2 max-w-[55%] mx-auto min-h-[220px]">{testimonials[activeIndex].text}</p>
+        <p className="text-grayblu font-agrandir font-normal tracking-[-1.3%] text-xl mb-2 max-w-[90%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[55%] mx-auto min-h-[220px]">{testimonials[activeIndex].text}</p>
         <p className="font-extrabold text-blu text-lg font-jakarta">{testimonials[activeIndex].name}</p>
         <p className="text-grayblu text-sm font-agrandir font-medium">{testimonials[activeIndex].location}</p>
       </div>

@@ -38,7 +38,7 @@ export default function Testimonials() {
   return (
     <div className="md:p-[120px] relative" id="testimonials">
      
-      <div className="w-full m-auto items-center flex flex-col gap-6 py-10">
+      <div className="w-full m-auto items-center flex flex-col gap-6 px-2 sm:px-0 py-10">
         <p className="text-[38px] w-[85%] md:w-full m-auto md:text-7xl font-bold font-agrandir text-center">
           <span className="text-shipGrey">Stories From <span className="text-plum">Our Guests</span> </span> 
         </p>
