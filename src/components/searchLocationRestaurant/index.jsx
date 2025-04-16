@@ -11,8 +11,6 @@ import { MdLocationOn } from "react-icons/md";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { BsCalendarDateFill } from "react-icons/bs";
 import { IoTime } from "react-icons/io5";
-import { CgArrowsExchangeV } from "react-icons/cg";
-import { CgArrowsExchangeAltV } from "react-icons/cg";
 
 const getCurrentDate = () => {
   const today = new Date();
@@ -24,25 +22,23 @@ const getCurrentDate = () => {
 
 const SearchLocationV2 = () => {
   const navigate = useNavigate();
-  const { toast } = useToast(); // Initialize toast
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
-      attributes: "reservation",
-      reservation_covers: 2,
-      persons: 2,
-      reservation_date: getCurrentDate(),
-      date: getCurrentDate(),
-      reservation_time: getCurrentTime(),
-      restaurant_name:"",
-      cuisine_type:"",
-      location: "",
-      term: "",
-      rating:"hightolow",
-    });
-  
+    attributes: "reservation",
+    reservation_covers: 2,
+    persons: 2,
+    reservation_date: getCurrentDate(),
+    date: getCurrentDate(),
+    reservation_time: getCurrentTime(),
+    restaurant_name: "",
+    cuisine_type: "",
+    location: "",
+    term: "",
+    rating: "hightolow",
+  });
 
   const [error, setError] = useState(null);
 
-  // Load data from localStorage on component mount
   useEffect(() => {
     const savedFormData = localStorage.getItem("searchFormData");
     if (savedFormData) {
@@ -88,6 +84,7 @@ const SearchLocationV2 = () => {
       return updatedData;
     });
   };
+
   const handleInputChange = (field, value) => {
     setFormData((prevData) => {
       const updatedData = { ...prevData, [field]: value };
@@ -97,102 +94,91 @@ const SearchLocationV2 = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col md:flex-row gap-4">
-      <div className="bg-lightGrey rounded-sm md:rounded-[3rem] md:py-2 md:flex gap-1 justify-between md:gap-3 md:px-5">
-                  <div className=" flex flex-col gap-1 md:flex-row ">
-                    
-                  <div
-                      className={`flex items-center text-base font-roboto font-normal w-full text-black border-r-2 ${
-                        error ? "border-red-500" : "border-gray-200"
-                      } focus:border-gray-200 focus:outline-none`}
-                    >
-                      <MdLocationOn size={28} color="#9235E2"
-                      className="flex-shrink-0 mx-2"
-                      ></MdLocationOn>
-                      <GeoApiAuto
-                        getLocationData={getLocationData}
-                        location={formData.location}
-                      />
-                    </div>
-                    <div
-                      className={`flex items-center text-lg font-roboto font-normal w-full text-black border-r-2 ${
-                        error ? "border-red-500" : "border-gray-200"
-                      } focus:border-gray-200 focus:outline-none`}
-                    >
-                      <MdOutlineRestaurantMenu size={28} color="#9235E2"
-                      className="flex-shrink-0 mx-2"/>
-                      <TermApiAuto getTermData={handleTermChange} />
-                    </div>
+    <div className="flex flex-col gap-4 w-full">
+      <div className="w-full max-w-[990px] mx-auto bg-lightGrey rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
+        {/* Location */}
+        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
+          <MdLocationOn size={24} color="#9235E2" className="mr-2" />
+          <div
+            className={`text-base font-roboto font-normal z-50 w-full text-black ${
+              error ? "border-red-500" : "border-gray-200"
+            } focus:border-gray-200 focus:outline-none`}
+          >
+            <GeoApiAuto
+              getLocationData={getLocationData}
+              location={formData.location}
+            />
+          </div>
+        </div>
 
-                    <div className="flex items-center border-r-2 w-full">
-                    <BsCalendarDateFill size={24} color="#9235E2"
-                      className="flex-shrink-0 mx-2" />
+        {/* Restaurant/Cuisine */}
+        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 text-black pr-2 flex-1">
+          <MdOutlineRestaurantMenu size={24} color="#9235E2" className="mr-2" />
+          <TermApiAuto getTermData={handleTermChange} />
+        </div>
 
-                      <input
-                        type="date"
-                        value={formData.date}
-                        onChange={(e) => handleInputChange("date", e.target.value)}
-                        className="text-lg font-roboto font-normal w-full text-slate-400 focus:outline-none bg-transparent"
-                      />
-                      <style jsx>{`
-                        input[type="date"]::-webkit-calendar-picker-indicator {
-                          opacity: 0;
-                        }
-                      `}</style>
-                    </div>
+        {/* Date */}
+        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
+          <BsCalendarDateFill size={20} color="#9235E2" className="mr-2" />
+          <input
+            type="date"
+            value={formData.date}
+            onChange={(e) => handleInputChange("date", e.target.value)}
+            className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+          />
+          <style jsx>{`
+            input[type="date"]::-webkit-calendar-picker-indicator {
+              opacity: 0;
+            }
+          `}</style>
+        </div>
 
-                    <div className="flex items-center border-r-2 w-full">
-                    <IoTime size={24} color="#9235E2"
-                      className="flex-shrink-0 mx-2" />
-                      <input
-                        type="time"
-                        value={formData.reservation_time}
-                        onChange={(e) =>
-                          handleInputChange("reservation_time", e.target.value)
-                        }
-                        className="text-lg font-roboto font-normal w-full text-slate-400 focus:outline-none bg-transparent"
-                      />
-                       <style jsx>{`
-                        input[type="time"]::-webkit-calendar-picker-indicator {
-                          opacity: 0;
-                        }
-                      `}</style>
-                    </div>
-                    <div className="flex items-center border-r-2 w-full">
-                      <select
-                        value={formData.persons}
-                        onChange={(e) =>
-                          handleInputChange("persons", e.target.value)
-                        }
-                        className="text-lg font-roboto font-normal w-full text-slate-400 focus:outline-none bg-transparent"
-                      >
-                        {[...Array(10)].map((_, i) => (
-                          <option key={i + 1} value={i + 1}>
-                            {i + 1} Person{i > 0 ? "s" : ""}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                </div>
+        {/* Time */}
+        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
+          <IoTime size={20} color="#9235E2" className="mr-2" />
+          <input
+            type="time"
+            value={formData.reservation_time}
+            onChange={(e) => handleInputChange("reservation_time", e.target.value)}
+            className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+          />
+          <style jsx>{`
+            input[type="time"]::-webkit-calendar-picker-indicator {
+              opacity: 0;
+            }
+          `}</style>
+        </div>
 
-        <div className=" flex items-center justify-center ">
-          <Button
-            className="text-lg md:text-xl relative rounded-full w-full md:min-h-[65px] md:min-w-[250px] bg-plum"
-            variant="default"
-            size="lg"
+        {/* Persons */}
+        <div className="flex items-center border-b md:border-b-0 border-gray-200 pr-2 flex-1">
+          <select
+            value={formData.persons}
+            onChange={(e) => handleInputChange("persons", e.target.value)}
+            className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+          >
+            {[...Array(10)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1} {i === 0 ? "Person" : "People"}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Search Button */}
+        <div className="flex items-center justify-center mt-2 md:mt-0">
+          <button
+            className="bg-plum hover:bg-purple-800 transition p-3 md:p-4 rounded-full text-white"
             onClick={handleSearch}
           >
-            <CiSearch className="absolute left-14 text-2xl hidden md:block" />
-            <span>Search</span>
-          </Button>
+            <CiSearch className="w-4 h-4 md:w-5 md:h-5" />
+          </button>
         </div>
-        
       </div>
 
-      <div className="mt-2">
-        <LocationTracker onLocationUpdate={handleLocationUpdate} />
+      <div className="flex text-[10px] md:text-base items-center justify-center">
+        <div className="max-w-sm m-auto font-pt my-3 flex">
+          <LocationTracker onLocationUpdate={handleLocationUpdate} />
+        </div>
       </div>
     </div>
   );
