@@ -372,23 +372,25 @@ const RestaurantCards = memo(
     }    
     return (
       <div>
-        <div className="bg-plum px-24 pt-12 rounded-3xl">
-          <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-14 bg-white">
+        <div className="bg-plum px-4 sm:px-8 lg:px-24 pt-8 sm:pt-12 rounded-3xl">
+        <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-6 sm:p-10 lg:p-14 bg-white">
             <SearchLocationV2 />
           </div>
 
-          <div className="p-8">
-            <div className="flex items-center gap-10">
+          <div className="p-4 sm:p-8">
+            <div className="flex items-center gap-4 sm:gap-10">
               <div className="flex-grow bg-[#39353C] h-[1px]"></div>
               <div>
-                <h1 className="text-center font-bold font-agrandir text-shipGrey text-4xl">Select Platforms</h1>
+                <h1 className="text-center font-bold font-agrandir text-shipGrey text-2xl sm:text-3xl lg:text-4xl">
+                  Select Platforms
+                </h1>
               </div>
               <div className="flex-grow bg-[#39353C] h-[1px]"></div>
             </div>
-            <div className="flex flex-col gap-6 sm:flex-row items-center py-5 mb-2 mt-2 justify-center text-center">
-              <div className="flex justify-center sm:items-center gap-16 my-5 md:my-0 sm:justify-center">
+            <div className="flex flex-col gap-6 xl:flex-row items-center py-5 mb-2 mt-2 justify-center text-center">
+              <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-8 md:gap-8 lg:gap-16 xl:gap-8 my-5 md:my-0">
                 {/* Yelp */}
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-2 sm:gap-3 items-center">
                   <label className="relative">
                     <input
                       type="checkbox"
@@ -398,9 +400,7 @@ const RestaurantCards = memo(
                       onChange={() => handleCheckboxChange("yelp")}
                       className="hidden peer"
                     />
-                    <span className="w-8 h-8 sm:w-10 sm:h-10 bg-white cursor-pointer 
-                    rounded-full flex items-center justify-center shadow-spanshadow"
-                    >
+                    <span className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-white cursor-pointer rounded-full flex items-center justify-center shadow-spanshadow">
                       {selectedTypes.includes("yelp") && <FaCheck size={23} color="#9235e2" />}
 
                     </span>
@@ -408,78 +408,87 @@ const RestaurantCards = memo(
                   <img
                     src="/assets/yelp_logo_new.png"
                     alt="Yelp Logo"
-                    className="w-20 h-7 sm:w-32 sm:h-14 md:w-40"
+                     className="w-28 h-auto sm:w-32 sm:h-14 md:w-40"
                   />
                 </div>
 
                 {/* Resy */}
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-2 sm:gap-3 items-center">
                   <label className="relative">
                     <input
                       type="checkbox"
-                      id="checkbox1"
-                      name="checkbox1"
                       checked={selectedTypes.includes("resy")}
                       onChange={() => handleCheckboxChange("resy")}
                       className="hidden peer"
                     />
-                    <span className="w-8 h-8 sm:w-10 sm:h-10 bg-white cursor-pointer rounded-full shadow-spanshadow
-                    flex items-center justify-center 
-                    ">
-                        {selectedTypes.includes("resy") && <FaCheck size={23} color="#9235e2" />}
+                    <span className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                      {selectedTypes.includes("resy") && (
+                        <FaCheck size={18} color="#9235e2" />
+                      )}
                     </span>
                   </label>
                   <img
                     src="/assets/resylogo.png"
                     alt="Resy Logo"
-                    className="w-26 h-6 sm:w-32 sm:h-12 md:w-40 rounded-md object-cover"
+                    className="w-24 h-auto sm:w-32 sm:h-14 md:w-40 rounded-md object-cover"
                   />
                 </div>
 
                 {/* OpenTable */}
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-2 sm:gap-3 items-center">
                   <label className="relative">
                     <input
                       type="checkbox"
-                      id="checkbox2"
-                      name="checkbox2"
                       checked={selectedTypes.includes("open_table")}
                       onChange={() => handleCheckboxChange("open_table")}
                       className="hidden peer"
                     />
-                    <span className="w-8 h-8 sm:w-10 sm:h-10 bg-white cursor-pointer rounded-full shadow-spanshadow
-                    flex items-center justify-center 
-                    ">
-                      {selectedTypes.includes("open_table") && <FaCheck size={23} color="#9235e2" />}
+                    <span className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                      {selectedTypes.includes("open_table") && (
+                        <FaCheck size={18} color="#9235e2" />
+                      )}
                     </span>
                   </label>
                   <img
                     src="/assets/opentablelogo.png"
                     alt="Open Table Logo"
-                    className="w-22 h-7 sm:w-32 sm:h-14 md:w-40 object-fit"
+                    className="w-28 h-auto sm:w-32 sm:h-14 md:w-40 object-fit"
                   />
                 </div>
 
               </div>
               <div className="my-4 md:my-0">
-                <p className="text-base font-bold font-roboto text-shipGrey"> 
-                <img src="/assets/send.png" alt="" className="inline mx-1" /> 
-              <a href="" className="underline">Get notified when a new platform is added!</a></p></div>
+                <p className="text-sm sm:text-base font-bold font-roboto text-shipGrey">
+                  <img
+                    src="/assets/send.png"
+                    alt=""
+                    className="inline mx-1 w-4 h-4"
+                  />
+                  <a href="" className="underline">
+                    Get notified when a new platform is added!
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Filtered Restaurants List */}
-       <div className="mt-10 px-8 flex gap-7">
-        <div className="bg-plum p-5 w-96 h-auto rounded-3xl border-2 border-[#B9B9B9]">
-          <div className="flex justify-between">
-            <div className="flex gap-4 items-center">
-            <ImFilter color="#ffffff"></ImFilter>
+        <div className="mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-7">
+        <div className="hidden lg:block bg-plum p-4 sm:p-5 w-full lg:w-80 xl:w-96 h-auto rounded-3xl border-2 border-[#B9B9B9]">
+              <div className="flex justify-between">
+                <div className="flex gap-2 sm:gap-4 items-center">
+                  <ImFilter color="#ffffff" />
             <p className="font-agrandir text-xl font-bold text-white">Filter By</p>
             </div>
-            <div className="bg-purple-100 justify-end px-4 p-1 rounded-3xl">
-              <p className="font-agrandir text-sm font-bold cursor-pointer text-plum" onClick={clearfilters}>Clear</p>
-            </div>
+            <div className="bg-purple-100 justify-end px-3 sm:px-4 py-1 rounded-3xl">
+                  <p
+                    className="font-agrandir text-xs sm:text-sm font-bold cursor-pointer text-plum"
+                    onClick={clearfilters}
+                  >
+                    Clear
+                  </p>
+                </div>
           </div>
 
           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
@@ -593,134 +602,162 @@ const RestaurantCards = memo(
             </div>
 
         </div>
-        <div className="">
-          {copiedRestaurants?.map((data, index) => (
-            <Link
-              key={index}
-              to={{
-                pathname: "/restaurant-detail",
-                search: `?${
-                  data?.restraunt_type === "yelp"
-                    ? "yelp_alias"
-                    : data?.restraunt_type === "open_table"
-                    ? "map_url"
-                    : data?.restraunt_type === "resy"
-                    ? "details"
-                    : null
-                }=${encodeURIComponent(
-                  data?.restraunt_type === "yelp"
-                    ? data?.alias
-                    : data?.restraunt_type === "open_table"
-                    ? data?.urls?.profileLink?.link
-                    : data?.restraunt_type === "resy"
-                    ? encodeURIComponent(JSON.stringify(data))
-                    : null
-                )}`,
-              }}
-            >
-              <div className="bg-white w-full mb-2 p-10 shadow-cardshadow rounded-[30px] flex flex-col md:flex-row lg:flex-row card">
-                <div className="w-full md:w-1/3 lg:w-1/3 md:h-[15rem] lg:h-[20rem]">
-                  <img
-                    className="h-1/3 md:h-full lg:h-full w-full rounded-2xl object-cover"
-                    src={
-                      data?.restraunt_type === "yelp"
-                        ? data?.image_url
-                        : data?.restraunt_type === "resy" &&
-                          Array.isArray(data?.images) &&
-                          data?.images.length > 0
-                        ? data?.images[0]
-                        : data?.photos?.profile?.medium?.url
-                    }
-                    alt={data?.name}
-                  />
-                  
-                </div>
-                <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col px-2  select-none">
-                  <div className=" p-5 flex-1">
-                    <p className="text-4xl font-agrandir mb-1 font-bold text-shipGrey">
-                      {data?.name?.length > 50
-                        ? `${data?.name?.slice(0, 50)}...`
-                        : data?.name}
-                    </p>
+        <div className="flex-1">
+            {copiedRestaurants?.map((data, index) => (
+              <Link
+                key={index}
+                to={{
+                  pathname: "/restaurant-detail",
+                  search: `?${
+                    data?.restraunt_type === "yelp"
+                      ? "yelp_alias"
+                      : data?.restraunt_type === "open_table"
+                      ? "map_url"
+                      : data?.restraunt_type === "resy"
+                      ? "details"
+                      : null
+                  }=${encodeURIComponent(
+                    data?.restraunt_type === "yelp"
+                      ? data?.alias
+                      : data?.restraunt_type === "open_table"
+                      ? data?.urls?.profileLink?.link
+                      : data?.restraunt_type === "resy"
+                      ? encodeURIComponent(JSON.stringify(data))
+                      : null
+                  )}`,
+                }}
+                className="block mb-4 sm:mb-6"
+              >
+                <div className="bg-white w-full p-4 sm:p-6 md:p-8 lg:p-10 shadow-cardshadow rounded-[20px] sm:rounded-[30px] flex flex-col md:flex-row">
+                  {/* Restaurant Image */}
+                  <div className="w-full md:w-1/3 lg:w-2/5 h-48 sm:h-56 md:h-64 lg:h-72 mb-4 md:mb-0 md:mr-6">
+                    <img
+                      className="w-full h-full rounded-xl sm:rounded-2xl object-cover"
+                      src={
+                        data?.restraunt_type === "yelp"
+                          ? data?.image_url
+                          : data?.restraunt_type === "resy" &&
+                            Array.isArray(data?.images) &&
+                            data?.images.length > 0
+                          ? data?.images[0]
+                          : data?.photos?.profile?.medium?.url
+                      }
+                      alt={data?.name}
+                    />
+                  </div>
 
-                    <div className="text-grey-darkest py-8 flex flex-col space-y-4">
-                      <div>
-                        <p className="font-semibold flex gap-3 items-center md:text-[1.25rem]">
-                          <img
-                            src="/assets/ratings.png"
-                            alt="ratings logo"
-                            className="h-4 w-4 md:h-5 md:w-5"
-                          />
-                          <span className="font-roboto font-semibold text-xl text-shipGrey">Ratings:</span>
-                        </p>
+                  {/* Restaurant Info */}
+                  <div className="flex-1 flex flex-col">
+                    <div className="flex-1">
+                      <p className="text-2xl sm:text-3xl md:text-4xl font-agrandir mb-1 sm:mb-2 font-bold text-shipGrey">
+                        {data?.name?.length > 50
+                          ? `${data?.name?.slice(0, 50)}...`
+                          : data?.name}
+                      </p>
 
-                        <p className="px-8 font-roboto font-normal text-base text-shipGrey">
-                          
-                          {data.restraunt_type === "yelp"
-                            ? data?.rating
-                            : data.restraunt_type === "open_table"
-                            ? data?.statistics?.reviews?.ratings?.overall
-                                ?.rating
-                            : data.restraunt_type === "resy"
-                            ? data?.rating?.average
-                            : null}
-                          <span className="text-sm sm:text-base">/5</span>
-                        </p>
-                      </div>
+                      <div className="text-grey-darkest py-4 sm:py-6 flex flex-col space-y-3 sm:space-y-4">
+                        {/* Ratings */}
+                        <div>
+                          <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                            <img
+                              src="/assets/ratings.png"
+                              alt="ratings logo"
+                              className="h-4 w-4 sm:h-5 sm:w-5"
+                            />
+                            <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                              Ratings:
+                            </span>
+                          </p>
+                          <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                            {data.restraunt_type === "yelp"
+                              ? data?.rating
+                              : data.restraunt_type === "open_table"
+                              ? data?.statistics?.reviews?.ratings?.overall
+                                  ?.rating
+                              : data.restraunt_type === "resy"
+                              ? data?.rating?.average
+                              : null}
+                            <span className="text-sm sm:text-base">/5</span>
+                          </p>
+                        </div>
 
-                      <div className="text-sm md:text-base">
-                        <p className="font-semibold flex gap-3 items-center md:text-[1.25rem]">
-                          <img
-                            src="/assets/address.png"
-                            alt="address logo"
-                            className="h-4 w-4 md:h-5 md:w-5"
-                          />
-                          <span className="font-roboto font-semibold text-xl text-shipGrey">Address:</span>
-                        </p>
-                        <p className="px-8 font-roboto font-normal text-base text-shipGrey">
-                          {data.restraunt_type === "yelp" ? (
-                            <p>{data?.location?.display_address?.join(' ')}</p>
-                          ) : data?.restraunt_type === "open_table" ? (
-                            <div>
-                              <p>
-                                {data?.address?.line1 &&
-                                  `${data?.address?.line1} `}
-                                  <span> {data?.address?.city}</span>
-                              </p>
-                            </div>
-                          ) : data?.restraunt_type === "resy" ? (
-                            <div>
-                              {data?.locality && `${data?.locality} `}
-                              <span> {data?.location?.name}</span>
-                            </div>
-                          ) : null}
-                        </p>
-                      </div>
-                      <div className="pr-2 text-sm md:text-base">
-                        <p className="font-semibold flex gap-3 items-center md:text-[1.25rem]">
-                          <img
-                            src="/assets/contact.png"
-                            alt="address logo"
-                            className="h-4 w-4 md:h-5 md:w-5"
-                          />
-                          <span className="font-roboto font-semibold text-xl text-shipGrey">Contact:</span>
-                        </p>
-                        <p className="px-8 font-roboto font-normal text-base text-shipGrey">
-                          {data.restraunt_type === "yelp"
-                            ? data?.display_phone
-                            : data.restraunt_type === "open_table"
-                            ? data?.contactInformation?.formattedPhoneNumber
-                            : data.restraunt_type === "resy"
-                            ? data?.contact?.phone_number
-                            : null}
-                        </p>
+                        {/* Address */}
+                        <div>
+                          <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                            <img
+                              src="/assets/address.png"
+                              alt="address logo"
+                              className="h-4 w-4 sm:h-5 sm:w-5"
+                            />
+                            <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                              Address:
+                            </span>
+                          </p>
+                          <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                            {data.restraunt_type === "yelp" ? (
+                              data?.location?.display_address?.join(" ")
+                            ) : data?.restraunt_type === "open_table" ? (
+                              <>
+                                {data?.address?.line1 && `${data?.address?.line1} `}
+                                <span> {data?.address?.city}</span>
+                              </>
+                            ) : data?.restraunt_type === "resy" ? (
+                              <>
+                                {data?.locality && `${data?.locality} `}
+                                <span> {data?.location?.name}</span>
+                              </>
+                            ) : null}
+                          </p>
+                        </div>
+
+                        {/* Contact */}
+                        <div>
+                          <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                            <img
+                              src="/assets/contact.png"
+                              alt="contact logo"
+                              className="h-4 w-4 sm:h-5 sm:w-5"
+                            />
+                            <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                              Contact:
+                            </span>
+                          </p>
+                          <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                            {data.restraunt_type === "yelp"
+                              ? data?.display_phone
+                              : data.restraunt_type === "open_table"
+                              ? data?.contactInformation?.formattedPhoneNumber
+                              : data.restraunt_type === "resy"
+                              ? data?.contact?.phone_number
+                              : null}
+                          </p>
+                        </div>
                       </div>
                     </div>
+
+                    {/* Reserve Button and Logo - Mobile */}
+                    <div className="md:hidden flex justify-between items-center mt-4">
+                      <img
+                        src={
+                          data.restraunt_type === "yelp"
+                            ? "/assets/yelp_logo_new.png"
+                            : data.restraunt_type === "open_table"
+                            ? "/assets/opentable.png"
+                            : data.restraunt_type === "resy"
+                            ? "/assets/resy_logo_new.png"
+                            : ""
+                        }
+                        alt={`${data.restraunt_type} logo`}
+                        className="h-8 sm:h-10"
+                      />
+                      <button className="rounded-full px-4 py-2 sm:px-5 sm:py-3 bg-plum text-white text-sm sm:text-base">
+                        Reserve a Table
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="hidden md:block lg:block  border-gray-300  my-6"></div>
-                <div className="w-full flex justify-center items-center md:w-[150px] lg:w-[150px] mx-auto md:mx-6 lg:mx-6">
-                  <div className="flex flex-col justify-between h-full">
+
+                  {/* Reserve Button and Logo - Desktop */}
+                  <div className="hidden md:flex flex-col justify-between items-center w-24 lg:w-32 ml-4 lg:ml-6">
                     <img
                       src={
                         data.restraunt_type === "yelp"
@@ -732,24 +769,16 @@ const RestaurantCards = memo(
                           : ""
                       }
                       alt={`${data.restraunt_type} logo`}
-                      width={100}
-                      height={64}
-                      className="mb-2"
+                      className="h-10 lg:h-14 mb-4"
                     />
-
-                    <div className="flex-grow"></div>
-                    <div className="bg-grey-lighter  flex items-center justify-between transition hover:bg-grey-light cursor-pointer mt-2">
-                      <button className="rounded-full p-3 px-4 bg-plum text-white ">
-                        Reserve a Table
-                      </button>
-                      <i className="fas fa-chevron-right"></i>
-                    </div>
+                    <button className="rounded-full px-4 py-2 lg:px-5 lg:py-3 bg-plum text-white text-sm lg:text-base">
+                      Reserve a Table
+                    </button>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            ))}
+          </div>
        </div>
       </div>
     );
