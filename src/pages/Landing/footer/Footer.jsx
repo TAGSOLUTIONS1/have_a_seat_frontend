@@ -72,15 +72,15 @@ function Footer() {
       {/* newsletter */}
 
       <div className="flex flex-col w-full gap-6 md:gap-0 md:flex-row justify-between items-center">
-        <div className="w-1/2">
+        <div className="w-[90%] text-center sm:text-left sm:w-1/2">
           <h2 className="text-3xl font-agrandir text-ftext font-bold text-center md:text-left ">Join Our Newsletter</h2>
           <p className="text-xl text-grayblu font-roboto">
             Only updates and special offers. No spams.
           </p>
         </div>
 
-        <form className=" flex flex-col w-1/2 gap-6 md:gap-0 md:flex-row justify-end items-center text-end">
-          <div className="relative w-3/5">
+        <form className=" flex flex-col md:w-1/2 gap-6 md:gap-0 md:flex-row justify-end items-center text-end">
+          <div className="relative w-full md:w-3/5">
             <Mail size={20} className="absolute top-1/2 left-3 transform -translate-y-1/2 text-grayblu" />
             <input
               type="email"
@@ -91,7 +91,7 @@ function Footer() {
           </div>
           <button
             type="submit"
-            className="ml-4 px-6 py-2 rounded-full bg-purple-600 text-white font-medium hover:bg-purple-700 transition"
+            className="ml-4 px-6 md:px-2 lg:px-6 py-2 rounded-full bg-purple-600 text-white font-medium hover:bg-purple-700 transition"
           >
             Subscribe →
           </button>
