@@ -19,11 +19,26 @@ const RestaurantCards = memo(
     selectedStarFilter,
     selectedPriceFilter,
     selectedCuisineFilter,
+    filters,
+    onFilterChange,
+    onRatingsChange,
+    onCuisineChange,
+    onReviewChange,
+    onShowMore,
+    onClearFilters
   }) => {
+    const { selectedTypes, ratings, cuisinefilter, reviewedFilter, showmore, allCuisines } = filters;
     const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
     const [filteredRestaurants, setFilteredRestaurants] = useState([]);
     const [searchTerm, setSearchTerm] = useState(formData?.term || "");
-    const [selectedTypes, setSelectedTypes] = useState(initialTypes);
+
+    const handleCheckboxChange = (type) => {
+      const newSelectedTypes = selectedTypes.includes(type)
+        ? selectedTypes.filter(t => t !== type)
+        : [...selectedTypes, type];
+      onFilterChange({ selectedTypes: newSelectedTypes });
+    };
+
     const user = JSON.parse(localStorage.getItem("user"));
     useEffect(() => {
       if (
@@ -175,54 +190,9 @@ const RestaurantCards = memo(
       shuffledRestaurants,
     ]);
 
-    const handleCheckboxChange = (type) => {
-      setSelectedTypes((prevSelectedTypes) => {
-        if (prevSelectedTypes.includes(type)) {
-          return prevSelectedTypes.filter((t) => t !== type);
-        } else {
-          return [...prevSelectedTypes, type];
-        }
-      });
-    };
-
-    // extra filters for restaurant name , cuisine type , ratings order
-    const [ratings,setRatings]=useState([]);
-    const handleratingschange =(type)=>{
-      setRatings((ratingtypes)=>{
-        if (ratingtypes.includes(type))
-        {
-          return ratingtypes.filter((t) => t!==type);
-        }
-        else{
-          return [...ratingtypes, type];
-        }
-      });
-    };
-    const [cuisinefilter,setCusinefilter]=useState([]);
-    const handlecuisinetypechange = (type) => {
-      setCusinefilter((prev) => {
-        if (prev.includes(type)) {
-          return prev.filter((t) => t !== type);
-        } else {
-          return [...prev, type];  
-        }
-      });
-    };
-    
-   
-    const [reviewedFilter,setReviewdFilter]=useState([]);
-    const handlereviewtypechange = (type) => {
-      setReviewdFilter((prev) => {
-        if (prev.includes(type)) {
-          return prev.filter((t) => t !== type);
-        } else {
-          return [...prev, type]; 
-        }
-      });
-    };
 
     // console.log("~~ filtered restaurannts " , ratings , reviewedFilter , cuisinefilter);
-    const [showmore , setShowmore]=useState(false);
+
     const normalizeString = (str) => 
       str.toLowerCase().replace(/[^a-z0-9]/g, ''); 
     
@@ -332,9 +302,6 @@ const RestaurantCards = memo(
     // console.log("filters " , cuisinefilter ,reviewedFilter ,ratings)
     // console.log("filtered " , filteredRestaurants);
 
-    const [allCuisines, setAllCuisines] = useState([]);
-
-
     useEffect(() => {
       const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
       setCopiedRestaurants(copiedRestaurantsData);
@@ -342,11 +309,8 @@ const RestaurantCards = memo(
     
     
     const fillallcuisines = () => {
-      const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
-      setCopiedRestaurants(copiedRestaurantsData);
-        
       const extractedCuisines = new Set(cuisinestypes);
-  
+      
       filteredRestaurants.forEach((restaurant) => {
         if (restaurant.primaryCuisine?.name) {
           extractedCuisines.add(restaurant.primaryCuisine.name);
@@ -355,26 +319,38 @@ const RestaurantCards = memo(
           restaurant.categories.forEach((category) => extractedCuisines.add(category.title));
         }
       });
-  
-      setAllCuisines([...extractedCuisines]);
-      setShowmore(true);
+
+      onFilterChange({ 
+        allCuisines: [...extractedCuisines],
+        showmore: true 
+      });
     };
   
     
     const displayedCuisines = showmore ? allCuisines : cuisinestypes;
 
-    const clearfilters=()=>{
-      const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
-      setCopiedRestaurants(copiedRestaurantsData);
-      setCusinefilter([]);
-      setRatings([]);
-      setReviewdFilter([]);
-    }    
+    console.log("filtersss 2 " , filters);
+    
     return (
       <div>
         <div className="bg-plum px-4 sm:px-8 lg:px-24 pt-8 sm:pt-12 rounded-3xl">
         <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-6 sm:p-10 lg:p-14 bg-white">
-            <SearchLocationV2 />
+            <SearchLocationV2 
+            yelpData={yelpData}
+            resyData={resyData}
+            openTableData={openTableData}
+            formData={formData}
+            selectedStarFilter={selectedStarFilter}
+            selectedPriceFilter={selectedPriceFilter}
+            selectedCuisineFilter={selectedCuisineFilter}
+            filters={filters}
+            onFilterChange={onFilterChange}
+            onRatingsChange={onRatingsChange}
+            onCuisineChange={onCuisineChange}
+            onReviewChange={onReviewChange}
+            onShowMore={onShowMore}
+            onClearFilters={onClearFilters}
+            />
           </div>
 
           <div className="p-4 sm:p-8">
@@ -401,7 +377,7 @@ const RestaurantCards = memo(
                       className="hidden peer"
                     />
                     <span className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-white cursor-pointer rounded-full flex items-center justify-center shadow-spanshadow">
-                      {selectedTypes.includes("yelp") && <FaCheck size={23} color="#9235e2" />}
+                      {selectedTypes.includes("yelp") && <FaCheck size={18} color="#9235e2" />}
 
                     </span>
                   </label>
@@ -484,7 +460,7 @@ const RestaurantCards = memo(
             <div className="bg-purple-100 justify-end px-3 sm:px-4 py-1 rounded-3xl">
                   <p
                     className="font-agrandir text-xs sm:text-sm font-bold cursor-pointer text-plum"
-                    onClick={clearfilters}
+                    onClick={onClearFilters}
                   >
                     Clear
                   </p>
@@ -503,7 +479,7 @@ const RestaurantCards = memo(
                     id={`checkbox-${rating}`} // Unique ID
                     name={`checkbox-${rating}`}
                     checked={ratings.includes(rating)}
-                    onChange={() => handleratingschange(rating)}
+                    onChange={() => onRatingsChange(rating)}
                     className="hidden peer"
                   />
                   <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
@@ -535,8 +511,8 @@ const RestaurantCards = memo(
                 type="checkbox"
                 id="checkboxr1"
                 name="checkboxr1"
-                checked={Reviewedtype.includes("most")}
-                onChange={()=> handlereviewtypechange("most")}
+                checked={reviewedFilter.includes("most")}
+                onChange={()=> onReviewChange("most")}
                 className="hidden peer"
               />
               <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
@@ -554,8 +530,8 @@ const RestaurantCards = memo(
                 type="checkbox"
                 id="checkboxr1"
                 name="checkboxr1"
-                checked={Reviewedtype.includes("least")}
-                onChange={()=> handlereviewtypechange("least")}
+                checked={reviewedFilter.includes("least")}
+                onChange={()=> onReviewChange("least")}
                 className="hidden peer"
               />
               <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
@@ -580,7 +556,7 @@ const RestaurantCards = memo(
                   <input
                     type="checkbox"
                     checked={cuisinefilter.includes(cuisine)}
-                    onChange={() => handlecuisinetypechange(cuisine)}
+                    onChange={() => onCuisineChange(cuisine)}
                     className="hidden peer"
                   />
                   <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
@@ -595,7 +571,7 @@ const RestaurantCards = memo(
 
               <p
                 className="font-roboto font-medium text-sm text-white underline cursor-pointer"
-                onClick={ showmore ? ()=>{setShowmore(false)} : fillallcuisines}
+                onClick={showmore ? () => onShowMore() : fillallcuisines}
               >
                 {showmore ? "Show Less" : "Show More"}
               </p>

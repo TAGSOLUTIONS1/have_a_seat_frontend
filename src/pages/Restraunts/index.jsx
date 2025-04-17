@@ -21,7 +21,14 @@ const Search = () => {
   const [selectedStarFilter, setSelectedStarFilter] = useState(null);
   const [selectedPriceFilter, setSelectedPriceFilter] = useState(null);
   const [selectedCuisineFilter, setSelectedCuisineFilter] = useState(null);
-
+  const [filters, setFilters] = useState({
+    selectedTypes: ["yelp", "open_table", "resy"],
+    ratings: [],
+    cuisinefilter: [],
+    reviewedFilter: [],
+    showmore: false,
+    allCuisines: []
+  });
   const fetchData = async (apiEndpoint, customFormData) => {
     try {
       const response = await axios.get(`${Base_Url}${apiEndpoint}`, {
@@ -80,19 +87,61 @@ const Search = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleFilterChange = (newFilters) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+  };
+
+  // Add these handler functions to your Search component
+const handleRatingsChange = (rating) => {
+  setFilters(prev => ({
+    ...prev,
+    ratings: prev.ratings.includes(rating)
+      ? prev.ratings.filter(r => r !== rating)
+      : [...prev.ratings, rating]
+  }));
+};
+
+const handleCuisineChange = (cuisine) => {
+  setFilters(prev => ({
+    ...prev,
+    cuisinefilter: prev.cuisinefilter.includes(cuisine)
+      ? prev.cuisinefilter.filter(c => c !== cuisine)
+      : [...prev.cuisinefilter, cuisine]
+  }));
+};
+
+const handleReviewChange = (type) => {
+  setFilters(prev => ({
+    ...prev,
+    reviewedFilter: prev.reviewedFilter.includes(type)
+      ? prev.reviewedFilter.filter(t => t !== type)
+      : [...prev.reviewedFilter, type]
+  }));
+};
+
+const handleShowMore = () => {
+  setFilters(prev => ({
+    ...prev,
+    showmore: !prev.showmore
+  }));
+};
+
+const clearFilters = () => {
+  setFilters(prev => ({
+    ...prev,
+    ratings: [],
+    cuisinefilter: [],
+    reviewedFilter: []
+  }));
+};
+
+console.log("filtersss11 " , filters);
+
+
   return (
     <>
     <div className="w-full bg-bgGray">
       <div className="flex flex-col lg:flex-row max-w-[1550px] mx-auto justify-center p-4">
-        <div className="lg:hidden">
-          <button
-            className="lg:block bg-white text-black-600 px-2 py-1 rounded-full border-gray-300 shadow-md"
-            onClick={toggleSidebar}
-          >
-            <Sliders size={15} className="inline-block mr-2" />
-            Filters
-          </button>
-        </div>
 
         {isSidebarOpen && (
           // <div
@@ -147,6 +196,14 @@ const Search = () => {
                 selectedStarFilter={selectedStarFilter}
                 selectedPriceFilter={selectedPriceFilter}
                 selectedCuisineFilter={selectedCuisineFilter}
+                filters={filters}
+                onFilterChange={handleFilterChange}
+                onRatingsChange={handleRatingsChange}
+                onCuisineChange={handleCuisineChange}
+                onReviewChange={handleReviewChange}
+                onShowMore={handleShowMore}
+                onClearFilters={clearFilters}
+
               />
             </div>
           </>
