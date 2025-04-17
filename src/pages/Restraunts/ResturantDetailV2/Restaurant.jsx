@@ -19,7 +19,7 @@ export default function Restaurant({ restrauntDetail }) {
 
   return (
     <div className="py-4 sm:py-10 flex flex-col text-white">
-      <h1 className="font-bold text-6xl font-agrandir md:text-[2rem] lg:text-[3rem] mb-10 leading-[50px]">
+      <h1 className="font-bold text-6xl text-center md:text-left font-agrandir md:text-[2rem] lg:text-[3rem] mb-10 leading-[50px]">
         {restrauntDetail?.alias
           ? restrauntDetail?.name
           : restrauntDetail?.restaurant

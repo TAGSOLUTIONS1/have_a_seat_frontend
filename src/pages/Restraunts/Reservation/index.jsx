@@ -81,7 +81,7 @@ const Reservation = () => {
       ) : (
         <>
         <div className="flex flex-col justify-center items-center bg-bgGray">
-          <div className="w-2/4 mt-12 mb-24">
+          <div className="w-[93%] sm:w-3/4 md:w-2/4 mt-12 mb-24">
             <ReservationForm formData={formData} bookingInfo={bookingInfo} />
           </div>
           

@@ -135,140 +135,121 @@ const MainLinkingPage = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="md:ml-36 lg:ml-36">
-          <div className="grid grid-cols-7 md:gap-7   lg:gap-7">
-            <div className=" md:col-span-2 ml-4 -mr-8 md:-ml-20  mt-32  sm:ml-28 -sm:mr-24 lg:col-span-2 sm:col-span-5 col-span-6">
-              <div className=" bg-white shadow-lg rounded-lg card">
-                <div className="card-body">
-                  <div className="flex flex-col items-center text-center">
-                    <img
-                      src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                      alt="Admin"
-                      className="rounded-circle mt-8"
-                      width="150"
-                    />
-                    <div className="mt-3 mb-4">
-                      <h4 className="text-lg">
-                        {user?.first_name || "N/A"} {user?.last_name || "N/A"}
-                      </h4>
-                      <div>
-                        <div className="flex items-center space-x-4">
-                          <div className="w-full text-center">
-                            <LinkPageDialogue />
-                          </div>
-                          {/* <div className="w-full text-center ">
-                            <a href="/user-history">
-                            <Button className="bg-purple-600 mt-4 mx-auto" >
-                              <HistoryIcon className="mr-2 h-4 w-4" />
-                              History
-                            </Button>
-                            </a>
-                          </div> */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="md:col-span-4 lg:col-span-4 mx-2 sm:ml-24 sm:-mr-24 mb-52 sm:col-span-5 col-span-7 mt-32">
-              <div
-                className={`bg-white shadow-lg rounded-lg px-6 pt-12 pb-8 ${
-                  isEditMode ? "h-[295px] pt-4 overflow-hidden" : ""
-                }`}
-              >
-                <div className="mb-8">
-                  <div className="flex items-center">
-                    <div className="w-1/3">
-                      <h6 className="mb-0">First Name</h6>
-                    </div>
-                    <div className="w-2/3">
-                      {isEditMode ? (
-                        <input
-                          type="text"
-                          value={editedData?.first_name}
-                          className="border-2 p-2 -mb-4 rounded-lg"
-                          onChange={(e) =>
-                            handleInputChange("first_name", e.target.value)
-                          }
-                        />
-                      ) : (
-                        user?.first_name || "N/A"
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-8">
-                  <div className="flex items-center">
-                    <div className="w-1/3">
-                      <h6 className="mb-0">Last Name</h6>
-                    </div>
-                    <div className="w-2/3">
-                      {isEditMode ? (
-                        <input
-                          type="text"
-                          value={editedData?.last_name}
-                          className="border-2 p-2 -mb-4 rounded-lg"
-                          onChange={(e) =>
-                            handleInputChange("last_name", e.target.value)
-                          }
-                        />
-                      ) : (
-                        user?.last_name || "N/A"
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-8">
-                  <div className="flex items-center">
-                    <div className="w-1/3">
-                      <h6 className="mb-0">Email</h6>
-                    </div>
-                    <div className="w-2/3">
-                      {isEditMode ? (
-                        <input
-                          type="email"
-                          value={editedData?.email}
-                          className="border-2 p-2 rounded-lg w-2/3"
-                          onChange={(e) =>
-                            handleInputChange("email", e.target.value)
-                          }
-                        />
-                      ) : (
-                        user?.email || "N/A"
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-center items-center mx-auto mt-9">
-                  {isEditMode ? (
-                    <>
-                      <Button
-                        className="bg-purple-600 mr-2"
-                        onClick={handleSaveClick}
-                      >
-                        <Save className="mr-2 h-4 w-4" />
-                        Save
+        <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-8">
+          {/* Left Card (Profile) */}
+          <div className="md:col-span-2 flex justify-center">
+            <div className="bg-white shadow-lg rounded-lg w-full max-w-sm">
+              <div className="card-body p-6 flex flex-col items-center text-center">
+                <img
+                  src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                  alt="Admin"
+                  className="rounded-full mt-4"
+                  width="150"
+                />
+                <h4 className="text-lg font-semibold mt-4">
+                  {user?.first_name || "N/A"} {user?.last_name || "N/A"}
+                </h4>
+                <div className="mt-4 w-full">
+                  <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <LinkPageDialogue />
+                    {/* <a href="/user-history">
+                      <Button className="bg-purple-600 mt-2 sm:mt-0">
+                        <HistoryIcon className="mr-2 h-4 w-4" />
+                        History
                       </Button>
-                      <Button
-                        className="bg-red-500"
-                        onClick={handleCancelClick}
-                      >
-                        Cancel
-                      </Button>
-                    </>
-                  ) : (
-                    <Button className="bg-purple-600" onClick={handleEditClick}>
-                      <Edit className="mr-2 h-4 w-4" />
-                      Edit
-                    </Button>
-                  )}
+                    </a> */}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Right Card (Form) */}
+        {/* Right Card (Form) */}
+          <div className="md:col-span-5 bg-white shadow-lg rounded-lg p-6">
+            <h2 className="text-2xl font-semibold mb-6 text-left">Profile Information</h2>
+
+            {/* First Name */}
+            <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center">
+              <label className="sm:w-1/3 font-medium text-left">First Name</label>
+              <div className="sm:w-2/3 w-full">
+                {isEditMode ? (
+                  <input
+                    type="text"
+                    value={editedData?.first_name}
+                    className="border border-gray-300 p-2 rounded-lg w-full mt-2 sm:mt-0"
+                    onChange={(e) =>
+                      handleInputChange("first_name", e.target.value)
+                    }
+                  />
+                ) : (
+                  <p className="mt-2 sm:mt-0 text-left">{user?.first_name || "N/A"}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Last Name */}
+            <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center">
+              <label className="sm:w-1/3 font-medium text-left">Last Name</label>
+              <div className="sm:w-2/3 w-full">
+                {isEditMode ? (
+                  <input
+                    type="text"
+                    value={editedData?.last_name}
+                    className="border border-gray-300 p-2 rounded-lg w-full mt-2 sm:mt-0"
+                    onChange={(e) =>
+                      handleInputChange("last_name", e.target.value)
+                    }
+                  />
+                ) : (
+                  <p className="mt-2 sm:mt-0 text-left">{user?.last_name || "N/A"}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center">
+              <label className="sm:w-1/3 font-medium text-left">Email</label>
+              <div className="sm:w-2/3 w-full">
+                {isEditMode ? (
+                  <input
+                    type="email"
+                    value={editedData?.email}
+                    className="border border-gray-300 p-2 rounded-lg w-full mt-2 sm:mt-0"
+                    onChange={(e) =>
+                      handleInputChange("email", e.target.value)
+                    }
+                  />
+                ) : (
+                  <p className="mt-2 sm:mt-0 text-left">{user?.email || "N/A"}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-center md:justify-end mt-6 gap-4">
+              {isEditMode ? (
+                <>
+                  <Button className="bg-purple-600" onClick={handleSaveClick}>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save
+                  </Button>
+                  <Button className="bg-red-500" onClick={handleCancelClick}>
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <Button className="bg-purple-600" onClick={handleEditClick}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit
+                </Button>
+              )}
+            </div>
+          </div>
+
         </div>
+      </div>
       )}
     </>
   );
