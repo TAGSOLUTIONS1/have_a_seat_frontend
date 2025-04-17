@@ -155,31 +155,36 @@ export default function MakeReservation({ restrauntDetail }) {
 
   return (
     <>
+    <div className="overflow-hidden">
       <h1 className=" font-bold my-10 text-4xl font-agrandir text-shipGrey sm:text-3xl lg:text-4xl">
         Make a Reservation
       </h1>
-      <div className="  ">
-        <div className="flex gap-2 items-center border-[0.4px] border-[#B9B9B9] bg-white px-5 py-2 rounded-full ">
-          <div className="flex-grow border-r-2">
-            <span className="ml-4 font-roboto text-xl text-grayhead font-normal">Date</span>
+      <div className="w-full">
+    <div className="flex flex-col md:flex-row gap-4 items-center border-[0.4px] border-[#B9B9B9] bg-white px-4 py-4 md:px-5 md:py-2 rounded-2xl">
+      
+    <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
+        <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Date</span>
             <DatePicker setFormData={setFormData} />
           </div>
 
-          <div className="flex-grow border-r-2">
-            <span className="ml-4 font-roboto text-xl text-grayhead font-normal">Time</span>
+          <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
+        <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Time</span>
             <Time setFormData={setFormData} />
           </div>
 
-          <div className="flex-grow border-r-2">
-            <span className="ml-4 font-roboto text-xl text-grayhead font-normal">Guests</span>
+          <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
+        <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Guests</span>
             <PersonCard setFormData={setFormData} />
           </div>
-          <button
-            onClick={handleTimeSlots}
-            className=" bg-plum p-2 text-white rounded-full  focus:outline-none"
-          >
-            Find a Table
-          </button>
+
+          <div className="w-full md:w-auto">
+            <button
+              onClick={handleTimeSlots}
+              className="bg-plum px-4 py-2 text-white rounded-full w-full md:w-auto"
+            >
+              Find a Table
+            </button>
+        </div>
         </div>
         <div>
           {error && error !== null ? (
@@ -189,12 +194,13 @@ export default function MakeReservation({ restrauntDetail }) {
           {loading ? (
             <LucideLoader className="w-6 h-6 justify-center animate-spin align-middle mx-auto" />
           ) : (
-            <div className="py-10">
+            <div className="py-3 sm:py-10 text-center">
               {restrauntDetail?.alias ? (
                 isDataLoaded ? (
                   Array.isArray(timeSlots) && timeSlots.length > 0 ? (
                     <>
                       <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
+                      <div className="flex flex-wrap justify-center">
                       {timeSlots
                         .filter((data) => !isNaN(data.timestamp))
                         .map((data, index) => (
@@ -212,6 +218,7 @@ export default function MakeReservation({ restrauntDetail }) {
                             )}
                           </button>
                         ))}
+                        </div>
                     </>
                   ) : (
                     <p className="text-lg text-red-600">No slots available.</p>
@@ -224,6 +231,7 @@ export default function MakeReservation({ restrauntDetail }) {
                 openTableTimeSlots[0]?.availabilityDays[0]?.slots.length > 0 ? (
                   <>
                     <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
+                    <div className="flex flex-wrap justify-center">
                     {openTableTimeSlots[0]?.availabilityDays[0]?.slots
                       .filter((data) => !isNaN(data.timeOffsetMinutes))
                       .map((data, index) => (
@@ -238,6 +246,7 @@ export default function MakeReservation({ restrauntDetail }) {
                           )}
                         </button>
                       ))}
+                      </div>
                   </>
                 ) : (
                   <p className="text-lg text-red-600">No slots available.</p>
@@ -248,6 +257,7 @@ export default function MakeReservation({ restrauntDetail }) {
             </div>
           )}
         </div>
+      </div>
       </div>
     </>
   );
