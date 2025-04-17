@@ -21,7 +21,7 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
         {/* Slider */}
         <ImageSlider restrauntDetail={restrauntDetail} />
       </div>
-      <div className="px-10 pb-10 md:pb-[5rem] md:px-[5rem]">
+      <div className="px-10 md:px-[5rem]">
       <MakeReservation restrauntDetail={restrauntDetail} />
 
       {/* reviews */}

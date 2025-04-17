@@ -102,11 +102,11 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             >
               First Name
             </label>
-            <User  className="absolute top-[52px] left-[2.25rem] transform -translate-y-1/2 " />
+            <User  className="absolute top-[52px] left-[3%] transform -translate-y-1/2 " />
             <input
               type="text"
               placeholder="Required"
-              className="w-full pl-10 pr-4 py-2 ml-7 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               id="first_name"
               {...formik.getFieldProps("first_name")}
             />
@@ -124,11 +124,11 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             >
               Last Name
             </label>
-            <User  className="absolute top-[52px] left-[2.25rem] transform -translate-y-1/2 "/>
+            <User  className="absolute top-[52px]  left-[3%] transform -translate-y-1/2 "/>
             <input
               type="text"
               placeholder="Required"
-              className="w-full pl-10 pr-4 py-2 ml-7 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               id="last_name"
               {...formik.getFieldProps("last_name")}
             />
@@ -147,11 +147,11 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             >
               Contact Number
             </label>
-            <Phone  className="absolute top-[54px] left-[2.25rem] transform -translate-y-1/2 " />
+            <Phone  className="absolute top-[54px]  left-[3%] transform -translate-y-1/2 " />
             <input
               type="text"
               placeholder="Required"
-              className="w-full pl-10 pr-4 py-2 ml-7 px-2 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 px-2 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               required
               id="phone"
               {...formik.getFieldProps("phone")}
@@ -171,11 +171,11 @@ const ReservationForm = ({ formData, bookingInfo }) => {
             >
               Email Address
             </label>
-            <Mail className="absolute top-[54px] left-[2.25rem] transform -translate-y-1/2 " />
+            <Mail className="absolute top-[54px]  left-[3%] transform -translate-y-1/2 " />
             <input
               type="email"
               placeholder="Required"
-              className="w-full pl-10 pr-4 py-2 px-2 ml-7 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 px-2 border rounded-full text-gray-900 border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               required
               id="email"
               {...formik.getFieldProps("email")}
