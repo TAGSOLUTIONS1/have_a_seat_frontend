@@ -100,26 +100,26 @@ const SideNav = () => {
                       {authState.user?.email}
                     </li>
                   </ul>
-                  <ul className="flex flex-wrap justify-center items-center ml-2">
-                    <li className="p-1">
+                  <ul className="flex flex-col w-full gap-3 justify-center items-center ml-2">
+                    <li className="w-full">
                       <Button
-                        className={cn("rounded-full bg-purple-600 ")}
+                        className={cn("rounded-full bg-purple-600 w-3/4")}
                         asChild
                         onClick={handleLogout}
                       >
                         <Link to="/">Logout</Link>
                       </Button>
                     </li>
-                    <li className="p-4">
+                    <li className="w-full">
                       <Button
-                        className={cn("rounded-full bg-purple-600 ")}
+                        className={cn("rounded-full bg-purple-600 w-3/4")}
                         asChild
                       >
                         <Link to="/user-history">Reservations</Link>
                       </Button>
                     </li>
                     <li>
-                      <div className="relative w-[40px] h-[40px] mt-1 bg-purple-600 rounded-full p-2">
+                      <div className="relative flex justify-center items-center w-[50px] h-[50px] mt-1 bg-purple-600 rounded-full p-2">
                         <Link to="account-links">
                           <User className="cursor-pointer text-white w-6 h-6" />
                         </Link>

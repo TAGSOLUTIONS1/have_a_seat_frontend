@@ -14,8 +14,8 @@ export default function ReservationsHistory({reservations}) {
 <>
 
 <div className="my-4">
-    <div className="flex justify-between items-center">
-      <p className='font-bold text-4xl font-agrandir text-shipGrey my-4'>Upcoming Reservations</p>
+    <div className="flex flex-col md:flex-row justify-between items-center">
+      <p className='font-bold text-4xl text-center md:text-left font-agrandir text-shipGrey my-4'>Upcoming Reservations</p>
     <Link className='bg-plum p-3 px-4 rounded-full font-agrandir font-bold text-base text-white' to="/user-profile">
     Go to your Dining History
     </Link>
@@ -37,7 +37,7 @@ export default function ReservationsHistory({reservations}) {
 </div>
 
     <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col px-2  select-none">
-      <div className=" p-5 flex-1">
+      <div className="">
         <h1 className="text-3xl mb-1 font-semibold text-grey-darkest">
           {reservation?.restaurant_name}
         </h1>
@@ -117,10 +117,10 @@ export default function ReservationsHistory({reservations}) {
       </div>
     </div>
   </div>
-  )): <h4 className='text-lg text-plum font-agrandir italic p-5 '>No Up Coming Reservation</h4>}
+  )): <h4 className='text-lg text-center md:text-left text-plum font-agrandir italic p-5 '>No Up Coming Reservation</h4>}
 
 </div>
-<div className='my-12 py-10'>
+<div className='sm:my-8 md:my-12'>
 <h1 className='font-bold text-4xl font-agrandir text-shipGrey my-4'>Past Reservations</h1>
 {pastReservations.map((reservation) => (
   <div className="bg-white w-full mb-2 p-10 shadow-xl rounded-2xl flex flex-col md:flex-row lg:flex-row text-grey-darkest">
@@ -137,8 +137,8 @@ export default function ReservationsHistory({reservations}) {
     </div>
 
     {/* Reservation Details */}
-    <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col px-2 select-none">
-      <div className="p-5 flex-1">
+    <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col px-0 sm:px-4 xl:px-2 select-none">
+      <div className="">
         <p className="text-4xl mb-1 font-bold text-shipGrey font-agrandir">
           {reservation?.restaurant_name}
         </p>
@@ -181,7 +181,7 @@ export default function ReservationsHistory({reservations}) {
 
     {/* Reservation Actions */}
     <div className="w-full flex justify-center items-center md:w-[330px]">
-      <div className="flex flex-col justify-between h-full">
+      <div className="flex flex-col justify-between items-center h-full">
         {/* Reservation Platform Logo */}
         <img
           src={
