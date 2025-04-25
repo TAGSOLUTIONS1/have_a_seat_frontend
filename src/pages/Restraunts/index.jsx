@@ -135,8 +135,6 @@ const clearFilters = () => {
   }));
 };
 
-console.log("filtersss11 " , filters);
-
 
   return (
     <>
