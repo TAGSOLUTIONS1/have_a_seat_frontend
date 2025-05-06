@@ -328,6 +328,8 @@ const RestaurantCards = memo(
   
     
     const displayedCuisines = showmore ? allCuisines : cuisinestypes;
+
+    console.log("filtersss 2 " , filters);
     
     return (
       <div>
