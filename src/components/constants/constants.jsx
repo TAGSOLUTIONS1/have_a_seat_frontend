@@ -148,6 +148,6 @@ export const initialBookingState = {
   reservation_date: getCurrentDate(),
   date: getCurrentDate(),
   reservation_time: getCurrentTime(),
-  location: "New York, NY, United States of America",
+  location: "New York",
   term: "",
 };
