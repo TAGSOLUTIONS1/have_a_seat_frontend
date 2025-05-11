@@ -73,6 +73,7 @@ const Search = () => {
             term: undefined,
           };
         }
+        // console.log("data is for request  " , customFormData);
         const data = await fetchData(apiEndpoint, customFormData);
         setData(data);
       };

@@ -16,6 +16,8 @@ import { FaCheck } from "react-icons/fa6";
 import { ImFilter } from "react-icons/im";
 import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const getCurrentDate = () => {
   const today = new Date();
@@ -79,7 +81,8 @@ const SearchLocationV2 = memo(
   }, []);
 
   const getLocationData = (value) => {
-    setFormData((prevData) => ({ ...prevData, location: value }));
+    const firstWord = value.split(",")[0].trim();
+    setFormData((prevData) => ({ ...prevData, location: firstWord }));
   };
 
   const handleSearch = () => {
@@ -310,35 +313,43 @@ const SearchLocationV2 = memo(
 
         {/* Date */}
         <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
-          <BsCalendarDateFill size={20} color="#9235E2" className="mr-2" />
-          <input
-            type="date"
-            value={formData.date}
-            onChange={(e) => handleInputChange("date", e.target.value)}
-            className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
-          />
-          <style jsx>{`
-            input[type="date"]::-webkit-calendar-picker-indicator {
-              opacity: 0;
-            }
-          `}</style>
-        </div>
-
-        {/* Time */}
-        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
-          <IoTime size={20} color="#9235E2" className="mr-2" />
-          <input
-            type="time"
-            value={formData.reservation_time}
-            onChange={(e) => handleInputChange("reservation_time", e.target.value)}
-            className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
-          />
-          <style jsx>{`
-            input[type="time"]::-webkit-calendar-picker-indicator {
-              opacity: 0;
-            }
-          `}</style>
-        </div>
+              <BsCalendarDateFill size={24} color="#9235E2" className="mr-2" />
+              <DatePicker
+                selected={new Date(formData.date)}
+                onChange={(date) =>
+                  handleInputChange("date", date.toISOString().split("T")[0])
+                }
+                dateFormat="yyyy-MM-dd"
+                className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+                onKeyDown={(e) => e.preventDefault()}
+                // calendarStartDay={0}
+                placeholderText="Select a date"
+              />
+            </div>
+        
+        
+        
+            <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
+                <IoTime size={24} color="#9235E2" className="mr-2" />
+                <DatePicker
+                  selected={new Date(`${formData.date}T${formData.reservation_time}`)}
+                  onChange={(date) =>
+                    handleInputChange(
+                      "reservation_time",
+                      date.toTimeString().slice(0, 5)
+                    )
+                  }
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={1}
+                  timeCaption="Time"
+                  dateFormat="HH:mm"
+                  className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+                  onKeyDown={(e) => e.preventDefault()}
+                  placeholderText="Select time"
+                />
+              </div>
+        
 
         {/* Persons */}
         <div className="flex items-center border-b md:border-b-0 border-gray-200 pr-2 flex-1">

@@ -14,6 +14,8 @@ import { MdLocationOn } from "react-icons/md";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { BsCalendarDateFill } from "react-icons/bs";
 import { IoTime } from "react-icons/io5";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Hero() {
   const { location } = useLocation();
@@ -82,6 +84,7 @@ export default function Hero() {
       return updatedData;
     });
   };
+  const [startDate, setStartDate] = useState(new Date());
 
   return (
     <div className="py-8 px-10">
@@ -114,6 +117,7 @@ export default function Hero() {
                 Search, compare, and reserve at the best restaurants across multiple platforms in the US.
                 </p>
               </div>
+
               <div className="w-full max-w-[990px] mx-auto bg-lightGrey rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
                 
                 {/* <div className="bg-lightGrey rounded-sm md:rounded-[3rem] md:py-2 md:flex gap-1 justify-between md:gap-3 md:px-5"> */}
@@ -137,35 +141,44 @@ export default function Hero() {
                   <TermApiAuto getTermData={handleTermChange} />
                 </div>
 
-                    <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2">
-              <BsCalendarDateFill size={24} color="#9235E2" className="mr-2" />
-              <input
-                type="date"
-                value={formData.date}
-                onChange={(e) => handleInputChange("date", e.target.value)}
-                className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
-              />
-                      <style jsx>{`
-                        input[type="date"]::-webkit-calendar-picker-indicator {
-                          opacity: 0;
-                        }
-                      `}</style>
-                    </div>
+                <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2">
+                  <BsCalendarDateFill size={24} color="#9235E2" className="mr-2" />
+                  <DatePicker
+                    selected={new Date(formData.date)}
+                    onChange={(date) =>
+                      handleInputChange("date", date.toISOString().split("T")[0])
+                    }
+                    dateFormat="yyyy-MM-dd"
+                    className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+                    onKeyDown={(e) => e.preventDefault()}
+                    // calendarStartDay={0}
+                    placeholderText="Select a date"
+                  />
+                </div>
 
-                    <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2">
-              <IoTime size={24} color="#9235E2" className="mr-2" />
-              <input
-                type="time"
-                value={formData.reservation_time}
-                onChange={(e) => handleInputChange("reservation_time", e.target.value)}
-                className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
-              />
-                       <style jsx>{`
-                        input[type="time"]::-webkit-calendar-picker-indicator {
-                          opacity: 0;
-                        }
-                      `}</style>
-                    </div>
+
+
+                <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2">
+                    <IoTime size={24} color="#9235E2" className="mr-2" />
+                    <DatePicker
+                      selected={new Date(`${formData.date}T${formData.reservation_time}`)}
+                      onChange={(date) =>
+                        handleInputChange(
+                          "reservation_time",
+                          date.toTimeString().slice(0, 5)
+                        )
+                      }
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={1}
+                      timeCaption="Time"
+                      dateFormat="HH:mm"
+                      className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+                      onKeyDown={(e) => e.preventDefault()}
+                      placeholderText="Select time"
+                    />
+                  </div>
+
 
 
                    <div className="flex items-center justify-center sm:ml-auto">
