@@ -40,13 +40,13 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-bgGray sticky top-0 start-0 px-2 sm:px-4 md:px-4 lg:px-4 xl:px-4 2xl:px-4 z-20">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-          <div className="flex items-center rtl:space-x-reverse mt-3">
+      <nav className="sticky top-2 start-0 px-2 sm:px-4 md:px-4 lg:px-4 xl:px-4 2xl:px-4 z-20">
+        <div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto backdrop-blur-navigation px-5 rounded-full">
+          <div className="flex items-center rtl:space-x-reverse p-2">
             <Link className="flex" to="/">
               <img
                 src="/assets/haveaseatlogo.png"
-                className="h-16 w-20 sm:h-16 sm:w-20 md:h-20 md:w-24"
+                className="h-16 w-20 sm:h-16 sm:w-auto md:h-20 md:w-auto"
                 alt="Have A Seat Logo"
               />
             </Link>

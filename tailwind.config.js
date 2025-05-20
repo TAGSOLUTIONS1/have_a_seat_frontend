@@ -100,6 +100,9 @@ module.exports = {
         cardshadow:"6px 6px 54px 0px #0000000D",
         spanshadow:"0px 0px 0px 4px #FFFFFF40",
       },
+      backdropBlur: {
+        navigation: '30.4px',
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
