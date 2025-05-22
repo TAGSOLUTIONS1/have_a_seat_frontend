@@ -4,18 +4,13 @@
   padding: 0px 0px;
   font-size: 14px;
   font-weight: 400;
-  /* border-radius: 5px;
-  font-size: 18px;
-  padding: 12px 16px;
-  max-width: 300px; 
-  margin: 0.5rem 0;
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; */
+  color: #9235e2;
+  background: transparent;
+  width: 100%;
 }
 
 .geoapify-autocomplete-input::placeholder {
-  color: #999;
+  color: #999999;
 }
 
 
@@ -29,38 +24,66 @@
   margin-top: 0.5rem;
 }
 
-
-.geoapify-autocomplete-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  cursor: pointer;
+.geoapify-autocomplete-items .secondary-part{
+  font-size: 10px;
+  font-weight: 300;
+  color:black ;
+  text-align: left;
+  margin-left: 0px !important;
 }
-
-.geoapify-autocomplete-item:hover {
-  background-color: #f0f0f0;
-}
-
-.geoapify-autocomplete-item img {
-  margin-right: 16px; 
-}
-
-.geoapify-autocomplete-item-content {
+.geoapify-autocomplete-items .address{
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+}
+.geoapify-autocomplete-items .icon{
+  display: none;
+}
+.autocomplete-wrapper {
+  position: relative; /* Ensures dropdown aligns correctly */
+  width: 100%;
+  z-index: 1000;
 }
 
-.geoapify-autocomplete-item-name {
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.geoapify-autocomplete-item-details {
+/* Dropdown should appear outside the scrollable container */
+/* Style for individual suggestion items */
+.geoapify-autocomplete-items {
+  /* position: absolute; */
+  /* top: 100%; */
+  /* left: -20; */
+  width:fit-content;
+  min-width: 250px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index:1000;
+  padding: 10px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
   font-size: 14px;
-  color: #666;
+  cursor: pointer;
+  left:auto;
+  /* transition: background-color 0.3s ease; */
 }
 
-.geoapify-autocomplete-item-long-name .geoapify-autocomplete-item-content {
-  margin-top: 8px; 
+
+@media (min-width: 765px) and (max-width: 1080px) {
+  .geoapify-autocomplete-items {
+    left: 8%;
+  }
+}
+
+
+/* Style for the suggestions list */
+.geoapify-autocomplete-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 8px;
+  border-radius: 8px;
+  background-color: red;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect for suggestion items */
+.geoapify-autocomplete-item:hover {
+  background-color: #F5EEFC !important;
 }

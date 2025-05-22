@@ -118,7 +118,7 @@ export default function Hero() {
                 </p>
               </div>
 
-              <div className="w-full max-w-[990px] mx-auto bg-lightGrey rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
+              <div className="w-full max-w-[990px] mx-auto bg-white rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
                 
                 {/* <div className="bg-lightGrey rounded-sm md:rounded-[3rem] md:py-2 md:flex gap-1 justify-between md:gap-3 md:px-5"> */}
                   {/* <div className=" flex flex-col justify-between text-center gap-1 md:flex-row "> */}
@@ -126,7 +126,7 @@ export default function Hero() {
                   <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2">
               <MdLocationOn size={28} color="#9235E2" className="mr-2" />
               <div
-                  className={`text-base font-roboto font-normal z-50 w-full text-black ${
+                  className={`text-base font-agrandir font-bold w-full text-black ${
                     error ? "border-red-500" : "border-gray-200"
                   } focus:border-gray-200 focus:outline-none`}
                 >

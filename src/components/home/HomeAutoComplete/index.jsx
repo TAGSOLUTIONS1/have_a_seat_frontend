@@ -27,8 +27,8 @@ const GeoApiAuto = ({ getLocationData, location }) => {
         onUserInput={handleChange}
         placeholder="Location"
         className="geoapify-autocomplete-input  "
-        listClassName="geoapify-autocomplete-items  "
-        itemClassName="geoapify-autocomplete-item "
+        listClassName="geoapify-autocomplete-items"
+        itemClassName="geoapify-autocomplete-item"
         value={location}
       />
     </GeoapifyContext>
