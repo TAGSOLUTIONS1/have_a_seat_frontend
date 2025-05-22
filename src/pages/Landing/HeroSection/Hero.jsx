@@ -16,6 +16,7 @@ import { BsCalendarDateFill } from "react-icons/bs";
 import { IoTime } from "react-icons/io5";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import './datepicker.css';
 
 export default function Hero() {
   const { location } = useLocation();
@@ -142,7 +143,7 @@ export default function Hero() {
                   <TermApiAuto getTermData={handleTermChange} />
                 </div>
 
-                <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2">
+                <div className="flex items-center border-b md:border-b-0 md:border-r border-[#DDDDDD] rounded-3xl pr-2">
                   <BsCalendarDateFill size={24} color="#9235E2" className="mr-2" />
                   <DatePicker
                     selected={new Date(formData.date)}
