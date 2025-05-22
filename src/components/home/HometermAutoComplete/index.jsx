@@ -14,7 +14,7 @@ const groupByType = (suggestions) => {
 const fetchSuggestions = async (term, setSuggestions) => {
   try {
     const response = await axios.get(
-      `https://have-a-seatonline.com/api/v1/opentable/autocomplete?term=${encodeURIComponent(
+      `http://0.0.0.0:8000/api/v1/opentable/autocomplete?term=${encodeURIComponent(
         term
       )}`
     );
@@ -88,24 +88,16 @@ const TermApiAuto = ({ getTermData, term: initialTerm }) => {
 
               return (
                 <li key={type}>
-                  <div className="flex items-center p-2">
-                    <img
-                      src={`/assets/${type.toLowerCase()}-logo.png`}
-                      alt={`${type} Logo`}
-                      className="w-6 h-6 mr-2"
-                    />
-                    <strong>{type}:</strong>
-                  </div>
-                  <ul className="list-none p-2">
+                  <ul className="list-none">
                     {items.map((suggestion) => (
                       <li
                         key={suggestion.id}
-                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                        className="p-2 hover:bg-[#F5EEFC] cursor-pointer"
                         onClick={() => handleSuggestionClick(suggestion)}
                       >
-                        <div className="font-semibold">{suggestion.name}</div>
+                        <div className="font-bold font-agrandir text-sm text-black">{suggestion.name}</div>
                         {type === "Restaurant" && (
-                          <div className="text-xs text-gray-600">
+                          <div className="text-xs text-black font-normal font-roboto">
                             {suggestion.neighborhoodName},{" "}
                             {suggestion.macroName}
                           </div>

@@ -49,10 +49,10 @@ function Restaurants() {
           <div className=" max-w-[570px] relative flex flex-col gap-9">
             
           <div className="flex flex-col gap-8 sticky top-20">
-            <h1 className="text-[1.75rem] md:text-[4rem] font-raleWay font-extrabold">
+            <h1 className="text-[1.75rem] md:text-[4rem] font-agrandir font-bold">
               Discover Dining Delights Across Top Platforms
             </h1>
-              <p className="text-base md:text-xl">
+              <p className="text-base md:text-xl font-normal font-roboto">
                 Explore and book from an extensive selection of restaurants
                 sourced from top dining platforms, all through a single,
                 easy-to-use interface
@@ -60,7 +60,7 @@ function Restaurants() {
             
             <ul className="flex flex-col gap-5">
               {resturantsList.map((li) => (
-                <li className="text-lg flex gap-3 items-center" key={li}>
+                <li className="text-base md:text-xl font-normal font-roboto flex gap-3 items-center" key={li}>
                   <img
                     src={tick}
                     alt="tick"
@@ -73,7 +73,7 @@ function Restaurants() {
          
               <button
                 onClick={handleSearch}
-                className="bg-frenchPink text-plum items-center max-w-fit flex gap-2 text-base md:text-lg font-bold rounded-lg py-3 px-5 md:px-9 hover:bg-[#d5ccdb]"
+                className="bg-white text-plum items-center max-w-fit flex gap-2 text-base md:text-lg font-bold py-3 px-5 md:px-9 rounded-full hover:bg-[#d5ccdb]"
               >
                 <img
                   src={cal}

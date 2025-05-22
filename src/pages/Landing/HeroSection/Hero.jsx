@@ -38,6 +38,7 @@ export default function Hero() {
     setFormData((prevData) => {
       const updatedData = { ...prevData, location: value };
       localStorage.setItem("searchFormData", JSON.stringify(updatedData));
+      //  const firstWord = value.split(",")[0].trim();
       return updatedData;
     });
   };
