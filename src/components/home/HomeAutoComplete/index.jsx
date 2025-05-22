@@ -18,6 +18,7 @@ const GeoApiAuto = ({ getLocationData, location }) => {
     getLocationData(value);
   };
 
+   const firstWord = typeof location === "string" ? location.split(",")[0].trim() : "";
   return (
     <div className="autocomplete-scroller">
     <GeoapifyContext apiKey="a88698c29be445df993940c6904982f7">
@@ -29,7 +30,7 @@ const GeoApiAuto = ({ getLocationData, location }) => {
         className="geoapify-autocomplete-input  "
         listClassName="geoapify-autocomplete-items  "
         itemClassName="geoapify-autocomplete-item "
-        value={location}
+        value={firstWord}
       />
     </GeoapifyContext>
     </div>

@@ -6,7 +6,7 @@ function Stats() {
       <img
         src="/assets/sushi.png"
         alt="Sushi illustration"
-        className="hidden xl:block absolute left-10 top-[-7.5rem]"
+        className="hidden xl:block absolute left-10 top-[-10rem]"
       />
 
       <div className="flex flex-col md:flex-row items-end justify-between gap-6">

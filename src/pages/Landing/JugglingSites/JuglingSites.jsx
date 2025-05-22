@@ -76,7 +76,7 @@ const JuglingSites = () => {
         </div>
       </div>
 
-      <div className="w-full sm:w-2/3 h-full">
+      <div className="w-full sm:w-2/3 h-auto">
         <Swiper
           ref={swiperRef}
           direction="vertical"

@@ -16,6 +16,7 @@ import { BsCalendarDateFill } from "react-icons/bs";
 import { IoTime } from "react-icons/io5";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import './datepicker.css';
 
 export default function Hero() {
   const { location } = useLocation();
@@ -38,6 +39,7 @@ export default function Hero() {
     setFormData((prevData) => {
       const updatedData = { ...prevData, location: value };
       localStorage.setItem("searchFormData", JSON.stringify(updatedData));
+      //  const firstWord = value.split(",")[0].trim();
       return updatedData;
     });
   };
@@ -109,8 +111,8 @@ export default function Hero() {
 
           <div className="md:px-20">
             <div className="flex w-[90%] m-auto md:w-full flex-col gap-4 md:gap-8 py-4 md:py-20 text-white">
-              <div className="max-w-4xl mx-auto flex flex-col gap-4">
-                <h1 className="font-agrandir text-3xl sm:text-5xl lg:text-[4.5rem] leading-none font-bold text-white text-center max-w-[990px] mx-auto">
+              <div className="max-w-5xl mx-auto flex flex-col gap-4">
+                <h1 className="font-agrandir uppercase text-3xl sm:text-5xl lg:text-[4rem] leading-none font-bold text-white text-center max-w-[990px] mx-auto">
                 Why stress over endless sites when you can “Have a Seat” in seconds?
                 </h1>
                 <p className="text-center max-w-2xl mx-auto text-base md:text-2xl font-roboto">
@@ -118,7 +120,7 @@ export default function Hero() {
                 </p>
               </div>
 
-              <div className="w-full max-w-[990px] mx-auto bg-lightGrey rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
+              <div className="w-full max-w-[990px] mx-auto bg-white rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
                 
                 {/* <div className="bg-lightGrey rounded-sm md:rounded-[3rem] md:py-2 md:flex gap-1 justify-between md:gap-3 md:px-5"> */}
                   {/* <div className=" flex flex-col justify-between text-center gap-1 md:flex-row "> */}
@@ -126,7 +128,7 @@ export default function Hero() {
                   <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2">
               <MdLocationOn size={28} color="#9235E2" className="mr-2" />
               <div
-                  className={`text-base font-roboto font-normal z-50 w-full text-black ${
+                  className={`text-base font-agrandir font-bold w-full text-black ${
                     error ? "border-red-500" : "border-gray-200"
                   } focus:border-gray-200 focus:outline-none`}
                 >
@@ -141,7 +143,7 @@ export default function Hero() {
                   <TermApiAuto getTermData={handleTermChange} />
                 </div>
 
-                <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2">
+                <div className="flex items-center border-b md:border-b-0 md:border-r border-[#DDDDDD] rounded-3xl pr-2">
                   <BsCalendarDateFill size={24} color="#9235E2" className="mr-2" />
                   <DatePicker
                     selected={new Date(formData.date)}
@@ -198,7 +200,7 @@ export default function Hero() {
                         handleLocationUpdate={handleLocationUpdate}
                       />
                     ) : (
-                      <span>New York</span>
+                      <span className="bg-[#e8d3f5] relative rounded-full px-4 py-1 text-plum">New York</span>
                     )}
                   </div>
                 </div>
