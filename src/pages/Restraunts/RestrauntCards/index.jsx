@@ -5,7 +5,8 @@ import { FaCheck } from "react-icons/fa6";
 import { ImFilter } from "react-icons/im";
 import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
-
+import RestaurantCard
+ from "./RestaurantCard";
 const initialTypes = ["yelp", "open_table", "resy"];
 const ratingtypes = ["5" , "4" , "3" , "2" , "1"];
 const cuisinestypes=["Italian" , "Mediterranean" , "Mexican" , "Chinese" , "Thai"];
@@ -577,7 +578,43 @@ const RestaurantCards = memo(
 
         </div>
         <div className="flex-1">
-            {copiedRestaurants?.map((data, index) => (
+          {copiedRestaurants?.map((data, index) => {
+              if (data?.restraunt_type === "resy") {
+                return (
+                  <a
+                    key={index}
+                    href={`https://resy.com/cities/${data?.location?.url_slug}/venues/${data?.url_slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block mb-4 sm:mb-6"
+                  >
+                    <RestaurantCard data={data} />
+                  </a>
+                );
+              }
+
+              return (
+                <Link
+                  key={index}
+                  to={{
+                    pathname: "/restaurant-detail",
+                    search: `?${
+                      data?.restraunt_type === "yelp"
+                        ? "yelp_alias"
+                        : "map_url"
+                    }=${encodeURIComponent(
+                      data?.restraunt_type === "yelp"
+                        ? data?.alias
+                        : data?.urls?.profileLink?.link
+                    )}`,
+                  }}
+                  className="block mb-4 sm:mb-6"
+                >
+                  <RestaurantCard data={data} />
+                </Link>
+              );
+            })}
+            {/* {copiedRestaurants?.map((data, index) => (
               <Link
                 key={index}
                 to={{
@@ -603,7 +640,6 @@ const RestaurantCards = memo(
                 className="block mb-4 sm:mb-6"
               >
                 <div className="bg-white w-full p-4 sm:p-6 md:p-8 lg:p-10 shadow-cardshadow rounded-[20px] sm:rounded-[30px] flex flex-col md:flex-row">
-                  {/* Restaurant Image */}
                   <div className="w-full md:w-1/3 lg:w-2/5 h-48 sm:h-56 md:h-64 lg:h-72 mb-4 md:mb-0 md:mr-6">
                     <img
                       className="w-full h-full rounded-xl sm:rounded-2xl object-cover"
@@ -620,7 +656,6 @@ const RestaurantCards = memo(
                     />
                   </div>
 
-                  {/* Restaurant Info */}
                   <div className="flex-1 flex flex-col">
                     <div className="flex-1">
                       <p className="text-2xl sm:text-3xl md:text-4xl font-agrandir mb-1 sm:mb-2 font-bold text-shipGrey">
@@ -630,7 +665,7 @@ const RestaurantCards = memo(
                       </p>
 
                       <div className="text-grey-darkest py-4 sm:py-6 flex flex-col space-y-3 sm:space-y-4">
-                        {/* Ratings */}
+
                         <div>
                           <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
                             <img
@@ -655,7 +690,6 @@ const RestaurantCards = memo(
                           </p>
                         </div>
 
-                        {/* Address */}
                         <div>
                           <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
                             <img
@@ -684,7 +718,6 @@ const RestaurantCards = memo(
                           </p>
                         </div>
 
-                        {/* Contact */}
                         <div>
                           <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
                             <img
@@ -709,7 +742,6 @@ const RestaurantCards = memo(
                       </div>
                     </div>
 
-                    {/* Reserve Button and Logo - Mobile */}
                     <div className="md:hidden flex justify-between items-center mt-4">
                       <img
                         src={
@@ -730,7 +762,6 @@ const RestaurantCards = memo(
                     </div>
                   </div>
 
-                  {/* Reserve Button and Logo - Desktop */}
                   <div className="hidden md:flex flex-col justify-between items-center w-24 lg:w-32 ml-4 lg:ml-6">
                     <img
                       src={
@@ -751,7 +782,7 @@ const RestaurantCards = memo(
                   </div>
                 </div>
               </Link>
-            ))}
+            ))} */}
           </div>
        </div>
       </div>
