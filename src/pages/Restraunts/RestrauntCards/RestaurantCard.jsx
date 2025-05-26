@@ -151,7 +151,7 @@ const RestaurantCard = ({ data, children }) => {
           alt={`${data.restraunt_type} logo`}
           className="h-10 lg:h-14 mb-4"
         />
-        <button className="rounded-full px-4 py-2 lg:px-5 lg:py-3 bg-plum text-white text-sm lg:text-base">
+         <button className="rounded-full px-3 py-1.5 lg:px-5 lg:py-2 bg-plum text-white text-sm lg:text-base whitespace-nowrap">
           Reserve a Table
         </button>
       </div>
