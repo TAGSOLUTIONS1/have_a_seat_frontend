@@ -47,8 +47,8 @@ const LocationTracker = ({ onLocationUpdate }) => {
     <div className="text-center">
       <div>
         <p>
-          <IoIosSend className="inline" /> It looks like you are in
-          {initialState && (
+          <IoIosSend className="inline" /> It looks like you are in 
+          {initialState ? (
             <span className="bg-[#e8d3f5] relative rounded-full ml-3 pr-8 pl-4 py-1 text-plum">
               {initialState}
 
@@ -62,7 +62,11 @@ const LocationTracker = ({ onLocationUpdate }) => {
                 }}
               />
             </span>
-          )}
+              ): (
+              <span className="bg-[#e8d3f5] relative rounded-full ml-3 px-3 py-1 text-plum">
+                New York
+              </span>
+            )}
         </p>
       </div>
     </div>

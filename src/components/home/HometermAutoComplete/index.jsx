@@ -81,7 +81,7 @@ const TermApiAuto = ({ getTermData, term: initialTerm }) => {
         className="w-full rounded border-none focus:outline-none bg-transparent text-plum"
       />
       {suggestions.length > 0 && (
-        <div className="absolute bg-white border border-gray-200 mt-1 w-full rounded-lg shadow-lg z-10 left-0 max-h-80 overflow-y-auto">
+        <div className="absolute bg-white border border-gray-200 min-w-[250px] mt-1 w-full rounded-lg shadow-lg z-10 left-0 max-h-80 overflow-y-auto">
           <ul className="list-none p-2">
             {typeOrder.map((type) => {
               const items = groupedSuggestions[type];

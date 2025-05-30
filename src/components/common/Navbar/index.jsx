@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { cn } from "@/lib/utils";
@@ -7,8 +7,11 @@ import { LucideLoader } from "lucide-react";
 import SideNav from "../SideNav";
 import "./nav.css";
 import { navLinks } from "@/components/constants/constants";
+import { getCurrentTime, initialBookingState } from "@/components/constants/constants";
+import { getCurrentDate } from "@/lib/utils";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const { logout, authState } = useAuth();
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -37,6 +40,37 @@ const Navbar = () => {
       document.removeEventListener("click", handleDocumentClick);
     };
   }, []);
+
+  const [formData, setFormData] = useState({
+      attributes: "reservation",
+      reservation_covers: 2,
+      persons: 2,
+      reservation_date: getCurrentDate(),
+      date: getCurrentDate(),
+      reservation_time: getCurrentTime(),
+      location: "",
+      term: "",
+    });
+
+   const handleSearch = () => {
+      let route;
+      if (!formData.location) {
+        localStorage.setItem(
+          "searchFormData",
+          JSON.stringify(initialBookingState)
+        );
+        route = `/restraunts?data=${encodeURIComponent(
+          JSON.stringify(initialBookingState)
+        )}`;
+      } else {
+        localStorage.setItem("searchFormData", JSON.stringify(formData));
+        route = `/restraunts?data=${encodeURIComponent(
+          JSON.stringify(formData)
+        )}`;
+      }
+      console.log("rote is " , route)
+      navigate(route);
+    };
 
   return (
     <>
@@ -81,9 +115,10 @@ const Navbar = () => {
                       </li>
                       <hr className="border-gray-200" />
                       <li className="p-4">
-                        <Button className={cn("rounded-full" , "bg-plum text-base font-agrandir font-bold")} asChild>
-                          <Link to="/register">Book a Table</Link>
-                        </Button>
+                        <button className="rounded-full bg-plum text-base text-center text-white font-agrandir font-bold px-5 p-2"
+                        onClick={handleSearch}>
+                          Book a Table
+                        </button>
                       </li>
                     </ul>
                   </div>

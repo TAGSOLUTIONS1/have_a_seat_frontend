@@ -5,7 +5,8 @@ import { FaCheck } from "react-icons/fa6";
 import { ImFilter } from "react-icons/im";
 import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
-
+import RestaurantCard
+ from "./RestaurantCard";
 const initialTypes = ["yelp", "open_table", "resy"];
 const ratingtypes = ["5" , "4" , "3" , "2" , "1"];
 const cuisinestypes=["Italian" , "Mediterranean" , "Mexican" , "Chinese" , "Thai"];
@@ -331,7 +332,7 @@ const RestaurantCards = memo(
     
     return (
       <div>
-        <div className="bg-plum px-4 sm:px-8 lg:px-24 pt-8 sm:pt-12 rounded-3xl">
+        <div className="bg-plum px-4 sm:px-8 lg:px-24 py-8 sm:py-12 rounded-3xl">
         <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-6 sm:p-10 lg:p-14 bg-white">
             <SearchLocationV2 
             yelpData={yelpData}
@@ -351,100 +352,6 @@ const RestaurantCards = memo(
             />
           </div>
 
-          <div className="p-4 sm:p-8">
-            <div className="flex items-center gap-4 sm:gap-10">
-              <div className="flex-grow bg-[#39353C] h-[1px]"></div>
-              <div>
-                <h1 className="text-center font-bold font-agrandir text-shipGrey text-2xl sm:text-3xl lg:text-4xl">
-                  Select Platforms
-                </h1>
-              </div>
-              <div className="flex-grow bg-[#39353C] h-[1px]"></div>
-            </div>
-            <div className="flex flex-col gap-6 xl:flex-row items-center py-5 mb-2 mt-2 justify-center text-center">
-              <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-8 md:gap-8 lg:gap-16 xl:gap-8 my-5 md:my-0">
-                {/* Yelp */}
-                <div className="flex gap-2 sm:gap-3 items-center">
-                  <label className="relative">
-                    <input
-                      type="checkbox"
-                      id="checkbox3"
-                      name="checkbox3"
-                      checked={selectedTypes.includes("yelp")}
-                      onChange={() => handleCheckboxChange("yelp")}
-                      className="hidden peer"
-                    />
-                    <span className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-white cursor-pointer rounded-full flex items-center justify-center shadow-spanshadow">
-                      {selectedTypes.includes("yelp") && <FaCheck size={18} color="#9235e2" />}
-
-                    </span>
-                  </label>
-                  <img
-                    src="/assets/yelp_logo_new.png"
-                    alt="Yelp Logo"
-                     className="w-28 h-auto sm:w-32 sm:h-14 md:w-40"
-                  />
-                </div>
-
-                {/* Resy */}
-                <div className="flex gap-2 sm:gap-3 items-center">
-                  <label className="relative">
-                    <input
-                      type="checkbox"
-                      checked={selectedTypes.includes("resy")}
-                      onChange={() => handleCheckboxChange("resy")}
-                      className="hidden peer"
-                    />
-                    <span className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
-                      {selectedTypes.includes("resy") && (
-                        <FaCheck size={18} color="#9235e2" />
-                      )}
-                    </span>
-                  </label>
-                  <img
-                    src="/assets/resylogo.png"
-                    alt="Resy Logo"
-                    className="w-24 h-auto sm:w-32 sm:h-14 md:w-40 rounded-md object-cover"
-                  />
-                </div>
-
-                {/* OpenTable */}
-                <div className="flex gap-2 sm:gap-3 items-center">
-                  <label className="relative">
-                    <input
-                      type="checkbox"
-                      checked={selectedTypes.includes("open_table")}
-                      onChange={() => handleCheckboxChange("open_table")}
-                      className="hidden peer"
-                    />
-                    <span className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
-                      {selectedTypes.includes("open_table") && (
-                        <FaCheck size={18} color="#9235e2" />
-                      )}
-                    </span>
-                  </label>
-                  <img
-                    src="/assets/opentablelogo.png"
-                    alt="Open Table Logo"
-                    className="w-28 h-auto sm:w-32 sm:h-14 md:w-40 object-fit"
-                  />
-                </div>
-
-              </div>
-              <div className="my-4 md:my-0">
-                <p className="text-sm sm:text-base font-bold font-roboto text-shipGrey">
-                  <img
-                    src="/assets/send.png"
-                    alt=""
-                    className="inline mx-1 w-4 h-4"
-                  />
-                  <a href="" className="underline">
-                    Get notified when a new platform is added!
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Filtered Restaurants List */}
@@ -464,6 +371,64 @@ const RestaurantCards = memo(
                   </p>
                 </div>
           </div>
+
+          <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+
+            <div className="flex justify-between">
+               
+               <div className="flex gap-2 sm:gap-3 items-center">
+                  <label className="relative">
+                    <input
+                      type="checkbox"
+                      id="checkbox3"
+                      name="checkbox3"
+                      checked={selectedTypes.includes("yelp")}
+                      onChange={() => handleCheckboxChange("yelp")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full flex items-center justify-center shadow-spanshadowside">
+                      {selectedTypes.includes("yelp") && <FaCheck size={14} color="#9235e2" />}
+
+                    </span>
+                  </label>
+                    <p className="font-agrandir text-sm font-bold text-white uppercase">YELP</p>
+                </div>
+
+                <div className="flex gap-2 sm:gap-3 items-center">
+                  <label className="relative">
+                    <input
+                      type="checkbox"
+                      checked={selectedTypes.includes("resy")}
+                      onChange={() => handleCheckboxChange("resy")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                      {selectedTypes.includes("resy") && (
+                        <FaCheck size={14} color="#9235e2" />
+                      )}
+                    </span>
+                  </label>
+                   <p className="font-agrandir text-sm font-bold text-white uppercase">RESY</p>
+                </div>
+
+                 <div className="flex gap-2 sm:gap-3 items-center">
+                  <label className="relative">
+                    <input
+                      type="checkbox"
+                      checked={selectedTypes.includes("open_table")}
+                      onChange={() => handleCheckboxChange("open_table")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                      {selectedTypes.includes("open_table") && (
+                        <FaCheck size={14} color="#9235e2" />
+                      )}
+                    </span>
+                  </label>
+                  <p className="font-agrandir text-sm font-bold text-white uppercase">Open Table</p>
+                </div>
+
+            </div>
 
           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
 
@@ -577,7 +542,43 @@ const RestaurantCards = memo(
 
         </div>
         <div className="flex-1">
-            {copiedRestaurants?.map((data, index) => (
+          {copiedRestaurants?.map((data, index) => {
+              if (data?.restraunt_type === "resy") {
+                return (
+                  <a
+                    key={index}
+                    href={`https://resy.com/cities/${data?.location?.url_slug}/venues/${data?.url_slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block mb-4 sm:mb-6"
+                  >
+                    <RestaurantCard data={data} />
+                  </a>
+                );
+              }
+
+              return (
+                <Link
+                  key={index}
+                  to={{
+                    pathname: "/restaurant-detail",
+                    search: `?${
+                      data?.restraunt_type === "yelp"
+                        ? "yelp_alias"
+                        : "map_url"
+                    }=${encodeURIComponent(
+                      data?.restraunt_type === "yelp"
+                        ? data?.alias
+                        : data?.urls?.profileLink?.link
+                    )}`,
+                  }}
+                  className="block mb-4 sm:mb-6"
+                >
+                  <RestaurantCard data={data} />
+                </Link>
+              );
+            })}
+            {/* {copiedRestaurants?.map((data, index) => (
               <Link
                 key={index}
                 to={{
@@ -603,7 +604,6 @@ const RestaurantCards = memo(
                 className="block mb-4 sm:mb-6"
               >
                 <div className="bg-white w-full p-4 sm:p-6 md:p-8 lg:p-10 shadow-cardshadow rounded-[20px] sm:rounded-[30px] flex flex-col md:flex-row">
-                  {/* Restaurant Image */}
                   <div className="w-full md:w-1/3 lg:w-2/5 h-48 sm:h-56 md:h-64 lg:h-72 mb-4 md:mb-0 md:mr-6">
                     <img
                       className="w-full h-full rounded-xl sm:rounded-2xl object-cover"
@@ -620,7 +620,6 @@ const RestaurantCards = memo(
                     />
                   </div>
 
-                  {/* Restaurant Info */}
                   <div className="flex-1 flex flex-col">
                     <div className="flex-1">
                       <p className="text-2xl sm:text-3xl md:text-4xl font-agrandir mb-1 sm:mb-2 font-bold text-shipGrey">
@@ -630,7 +629,7 @@ const RestaurantCards = memo(
                       </p>
 
                       <div className="text-grey-darkest py-4 sm:py-6 flex flex-col space-y-3 sm:space-y-4">
-                        {/* Ratings */}
+
                         <div>
                           <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
                             <img
@@ -655,7 +654,6 @@ const RestaurantCards = memo(
                           </p>
                         </div>
 
-                        {/* Address */}
                         <div>
                           <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
                             <img
@@ -684,7 +682,6 @@ const RestaurantCards = memo(
                           </p>
                         </div>
 
-                        {/* Contact */}
                         <div>
                           <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
                             <img
@@ -709,7 +706,6 @@ const RestaurantCards = memo(
                       </div>
                     </div>
 
-                    {/* Reserve Button and Logo - Mobile */}
                     <div className="md:hidden flex justify-between items-center mt-4">
                       <img
                         src={
@@ -730,7 +726,6 @@ const RestaurantCards = memo(
                     </div>
                   </div>
 
-                  {/* Reserve Button and Logo - Desktop */}
                   <div className="hidden md:flex flex-col justify-between items-center w-24 lg:w-32 ml-4 lg:ml-6">
                     <img
                       src={
@@ -751,7 +746,7 @@ const RestaurantCards = memo(
                   </div>
                 </div>
               </Link>
-            ))}
+            ))} */}
           </div>
        </div>
       </div>
