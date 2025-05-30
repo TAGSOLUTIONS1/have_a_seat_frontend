@@ -332,7 +332,7 @@ const RestaurantCards = memo(
     
     return (
       <div>
-        <div className="bg-plum px-4 sm:px-8 lg:px-24 pt-8 sm:pt-12 rounded-3xl">
+        <div className="bg-plum px-4 sm:px-8 lg:px-24 py-8 sm:py-12 rounded-3xl">
         <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-6 sm:p-10 lg:p-14 bg-white">
             <SearchLocationV2 
             yelpData={yelpData}
@@ -352,7 +352,7 @@ const RestaurantCards = memo(
             />
           </div>
 
-          <div className="p-4 sm:p-8">
+          {/* <div className="p-4 sm:p-8">
             <div className="flex items-center gap-4 sm:gap-10">
               <div className="flex-grow bg-[#39353C] h-[1px]"></div>
               <div>
@@ -364,7 +364,7 @@ const RestaurantCards = memo(
             </div>
             <div className="flex flex-col gap-6 xl:flex-row items-center py-5 mb-2 mt-2 justify-center text-center">
               <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-8 md:gap-8 lg:gap-16 xl:gap-8 my-5 md:my-0">
-                {/* Yelp */}
+               
                 <div className="flex gap-2 sm:gap-3 items-center">
                   <label className="relative">
                     <input
@@ -387,7 +387,7 @@ const RestaurantCards = memo(
                   />
                 </div>
 
-                {/* Resy */}
+        
                 <div className="flex gap-2 sm:gap-3 items-center">
                   <label className="relative">
                     <input
@@ -409,7 +409,7 @@ const RestaurantCards = memo(
                   />
                 </div>
 
-                {/* OpenTable */}
+           
                 <div className="flex gap-2 sm:gap-3 items-center">
                   <label className="relative">
                     <input
@@ -445,7 +445,7 @@ const RestaurantCards = memo(
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Filtered Restaurants List */}
@@ -465,6 +465,64 @@ const RestaurantCards = memo(
                   </p>
                 </div>
           </div>
+
+          <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+
+            <div className="flex justify-between">
+               
+               <div className="flex gap-2 sm:gap-3 items-center">
+                  <label className="relative">
+                    <input
+                      type="checkbox"
+                      id="checkbox3"
+                      name="checkbox3"
+                      checked={selectedTypes.includes("yelp")}
+                      onChange={() => handleCheckboxChange("yelp")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full flex items-center justify-center shadow-spanshadowside">
+                      {selectedTypes.includes("yelp") && <FaCheck size={14} color="#9235e2" />}
+
+                    </span>
+                  </label>
+                    <p className="font-agrandir text-sm font-bold text-white uppercase">YELP</p>
+                </div>
+
+                <div className="flex gap-2 sm:gap-3 items-center">
+                  <label className="relative">
+                    <input
+                      type="checkbox"
+                      checked={selectedTypes.includes("resy")}
+                      onChange={() => handleCheckboxChange("resy")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                      {selectedTypes.includes("resy") && (
+                        <FaCheck size={14} color="#9235e2" />
+                      )}
+                    </span>
+                  </label>
+                   <p className="font-agrandir text-sm font-bold text-white uppercase">RESY</p>
+                </div>
+
+                 <div className="flex gap-2 sm:gap-3 items-center">
+                  <label className="relative">
+                    <input
+                      type="checkbox"
+                      checked={selectedTypes.includes("open_table")}
+                      onChange={() => handleCheckboxChange("open_table")}
+                      className="hidden peer"
+                    />
+                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                      {selectedTypes.includes("open_table") && (
+                        <FaCheck size={14} color="#9235e2" />
+                      )}
+                    </span>
+                  </label>
+                  <p className="font-agrandir text-sm font-bold text-white uppercase">Open Table</p>
+                </div>
+
+            </div>
 
           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
 
