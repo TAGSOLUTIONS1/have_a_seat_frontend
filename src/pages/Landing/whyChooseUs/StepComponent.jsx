@@ -3,22 +3,22 @@ import React from "react";
 const StepComponent = () => {
   const steps = [
     {
-      icon: <img src="/assets/sl.png" className=" h-5 md:h-7" alt="Search Icon" />,
+      icon: <img src="/assets/comp1.png" className=" h-5 md:h-7" alt="Search Icon" />,
       title: "Find It Fast",
       description: "Restaurants, cuisines or locations. Everything’s just a tap away.",
     },
     {
-      icon: <img src="/assets/compare.png" className=" h-5 md:h-7" alt="Compare Icon" />,
+      icon: <img src="/assets/comp2.png" className=" h-5 md:h-7" alt="Compare Icon" />,
       title: "Compare Without the Stress ",
       description: "Ratings, menus, slots. All sorted in seconds.",
     },
     {
-      icon: <img src="/assets/reserve.png" className=" h-5 md:h-7" alt="Reserve Icon" />,
+      icon: <img src="/assets/comp3.png" className=" h-5 md:h-7" alt="Reserve Icon" />,
       title: "Book & Reserve Instantly",
       description: "Just One click and Your seat’s ready.",
     },
     {
-      icon: <img src="/assets/enjoy.png" className=" h-5 md:h-7" alt="Enjoy Icon" />,
+      icon: <img src="/assets/comp4.png" className=" h-5 md:h-7" alt="Enjoy Icon" />,
       title: " Eat, Chill, Repeat",
       description: "No wait, no worries. Just good food and your vibes",
     },
