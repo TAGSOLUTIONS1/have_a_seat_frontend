@@ -24,22 +24,36 @@ export default function Hero() {
   const [error, setError] = useState(null);
   const { toast } = useToast();
 
-  const [formData, setFormData] = useState({
-    attributes: "reservation",
-    reservation_covers: 2,
-    persons: 2,
-    reservation_date: getCurrentDate(),
-    date: getCurrentDate(),
-    reservation_time: getCurrentTime(),
-    location: "",
-    term: "",
-  });
+    const loadInitialFormData = () => {
+    const savedData = localStorage.getItem("searchFormData");
+    if (savedData) {
+      try {
+        return JSON.parse(savedData);
+      } catch (e) {
+        console.error("Error parsing saved form data:", e);
+      }
+    }
+
+    // Fallback if nothing in localStorage
+    return {
+      attributes: "reservation",
+      reservation_covers: 2,
+      persons: 2,
+      reservation_date: getCurrentDate(),
+      date: getCurrentDate(),
+      reservation_time: getCurrentTime(),
+      location: "",
+      term: "",
+    };
+  };
+
+  const [formData, setFormData] = useState(loadInitialFormData);
+
 
   const getLocationData = (value) => {
     setFormData((prevData) => {
       const updatedData = { ...prevData, location: value };
       localStorage.setItem("searchFormData", JSON.stringify(updatedData));
-      //  const firstWord = value.split(",")[0].trim();
       return updatedData;
     });
   };
@@ -71,13 +85,14 @@ export default function Hero() {
     });
   };
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field1 ,field2, value) => {
     setFormData((prevData) => {
-      const updatedData = { ...prevData, [field]: value };
-      localStorage.setItem("searchFormData", JSON.stringify(updatedData));
+      const updatedData = { ...prevData, [field1]: value , [field2]: value };
       return updatedData;
     });
   };
+  // const localdata=localStorage.getItem("searchFormData");
+  // console.log("local on hero is  " , localdata)
 
   const handleLocationUpdate = (location) => {
     setFormData((prevData) => {
@@ -148,7 +163,7 @@ export default function Hero() {
                   <DatePicker
                     selected={new Date(formData.date)}
                     onChange={(date) =>
-                      handleInputChange("date", date.toISOString().split("T")[0])
+                      handleInputChange("date","reservation_date", date.toISOString().split("T")[0])
                     }
                     dateFormat="yyyy-MM-dd"
                     className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
@@ -167,12 +182,13 @@ export default function Hero() {
                       onChange={(date) =>
                         handleInputChange(
                           "reservation_time",
+                          "reservation_time",
                           date.toTimeString().slice(0, 5)
                         )
                       }
                       showTimeSelect
                       showTimeSelectOnly
-                      timeIntervals={1}
+                      timeIntervals={15}
                       timeCaption="Time"
                       dateFormat="HH:mm"
                       className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"

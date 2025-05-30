@@ -81,8 +81,8 @@ const TermApiAuto = ({ getTermData, term: initialTerm }) => {
         className="w-full rounded border-none focus:outline-none bg-transparent text-plum"
       />
       {suggestions.length > 0 && (
-        <div className="absolute bg-white border border-gray-200 min-w-[250px] mt-1 w-full rounded-lg shadow-lg z-10 left-0 max-h-80 overflow-y-auto">
-          <ul className="list-none p-2">
+        <div className="geoapify-autocomplete-items">
+          <ul className="list-none">
             {typeOrder.map((type) => {
               const items = groupedSuggestions[type];
               if (!items || items.length === 0) return null;
@@ -93,7 +93,7 @@ const TermApiAuto = ({ getTermData, term: initialTerm }) => {
                     {items.map((suggestion) => (
                       <li
                         key={suggestion.id}
-                        className="p-2 hover:bg-[#F5EEFC] cursor-pointer"
+                        className="hover:bg-[#F5EEFC] cursor-pointer"
                         onClick={() => handleSuggestionClick(suggestion)}
                       >
                         <div className="font-bold font-agrandir text-sm text-black">{suggestion.name}</div>
