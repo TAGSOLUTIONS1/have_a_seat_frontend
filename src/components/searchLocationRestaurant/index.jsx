@@ -298,7 +298,14 @@ const SearchLocationV2 = memo(
   
 
     const displayedCuisines = showmore ? allCuisines : cuisinestypes;
-    
+
+    const handleCheckboxChange = (type) => {
+      const newSelectedTypes = selectedTypes.includes(type)
+        ? selectedTypes.filter(t => t !== type)
+        : [...selectedTypes, type];
+      onFilterChange({ selectedTypes: newSelectedTypes });
+    };
+
 
   return (
     <div className="flex flex-col gap-4 w-full">
