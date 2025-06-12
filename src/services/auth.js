@@ -1,10 +1,10 @@
 // import axios from "axios";
 
-// const API_URL = "https://have-a-seatonline.com/api/v1"
+const API_URL = "https://have-a-seatonline.com/api/v1"
 
 import axios from "axios";
 
-const API_URL = "https://have-a-seatonline.com/api/v1";
+// const API_URL = "http://127.0.0.1:8000/api/v1";
 
 export const register = async (formData) => {
   const registerResponse = await axios.post(

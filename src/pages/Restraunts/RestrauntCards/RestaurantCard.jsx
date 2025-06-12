@@ -51,11 +51,11 @@ const RestaurantCard = ({ data, children }) => {
               </p>
               <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
                 {data.restraunt_type === "yelp"
-                  ? data?.rating
+                  ? (data?.rating?.toFixed(2) ?? "N/A")
                   : data.restraunt_type === "open_table"
-                  ? data?.statistics?.reviews?.ratings?.overall?.rating
+                  ? (data?.statistics?.reviews?.ratings?.overall?.rating?.toFixed(2) ?? "N/A")
                   : data.restraunt_type === "resy"
-                  ? data?.rating?.average
+                  ? (data?.rating?.average?.toFixed(2) ?? "N/A")
                   : null}
                 <span className="text-sm sm:text-base">/5</span>
               </p>
