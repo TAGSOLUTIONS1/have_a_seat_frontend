@@ -106,7 +106,16 @@ const SearchLocationV2 = memo(
 
   const handleTermChange = (value) => {
     setFormData((prevData) => {
-      const updatedData = { ...prevData, term: value };
+      // console.log("values " , value)
+      const words = value.trim().split(/\s+/);
+      if (!words.length) return null;
+      let word = words[0];
+      if (word.endsWith("'s")) {
+       word = word.slice(0, -2);
+      }
+      const result = word.toLowerCase();
+      // console.log("result is " , result);
+      const updatedData = { ...prevData, term: result };
       localStorage.setItem("searchFormData", JSON.stringify(updatedData));
       return updatedData;
     });
@@ -271,10 +280,13 @@ const SearchLocationV2 = memo(
       
       filteredRestaurants.forEach((restaurant) => {
         if (restaurant.primaryCuisine?.name) {
-          extractedCuisines.add(restaurant.primaryCuisine.name);
+          extractedCuisines.add(restaurant.primaryCuisine.name );
         }
         if (restaurant.categories) {
           restaurant.categories.forEach((category) => extractedCuisines.add(category.title));
+        }
+        if (restaurant.cuisine){
+          restaurant.cuisine.forEach((category) => extractedCuisines.add(category));
         }
       });
 
@@ -286,6 +298,14 @@ const SearchLocationV2 = memo(
   
 
     const displayedCuisines = showmore ? allCuisines : cuisinestypes;
+
+    const handleCheckboxChange = (type) => {
+      const newSelectedTypes = selectedTypes.includes(type)
+        ? selectedTypes.filter(t => t !== type)
+        : [...selectedTypes, type];
+      onFilterChange({ selectedTypes: newSelectedTypes });
+    };
+
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -413,8 +433,67 @@ const SearchLocationV2 = memo(
                           </p>
                         </div>
                   </div>
+
+                  <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+                
+                  <div className="flex justify-between">
+                               
+                               <div className="flex gap-2 sm:gap-3 items-center">
+                                  <label className="relative">
+                                    <input
+                                      type="checkbox"
+                                      id="checkbox3"
+                                      name="checkbox3"
+                                      checked={selectedTypes.includes("yelp")}
+                                      onChange={() => handleCheckboxChange("yelp")}
+                                      className="hidden peer"
+                                    />
+                                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full flex items-center justify-center shadow-spanshadowside">
+                                      {selectedTypes.includes("yelp") && <FaCheck size={14} color="#9235e2" />}
+                
+                                    </span>
+                                  </label>
+                                    <p className="font-agrandir text-sm font-bold text-white uppercase">YELP</p>
+                                </div>
+                
+                                <div className="flex gap-2 sm:gap-3 items-center">
+                                  <label className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedTypes.includes("resy")}
+                                      onChange={() => handleCheckboxChange("resy")}
+                                      className="hidden peer"
+                                    />
+                                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                                      {selectedTypes.includes("resy") && (
+                                        <FaCheck size={14} color="#9235e2" />
+                                      )}
+                                    </span>
+                                  </label>
+                                   <p className="font-agrandir text-sm font-bold text-white uppercase">RESY</p>
+                                </div>
+                
+                                 <div className="flex gap-2 sm:gap-3 items-center">
+                                  <label className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedTypes.includes("open_table")}
+                                      onChange={() => handleCheckboxChange("open_table")}
+                                      className="hidden peer"
+                                    />
+                                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                                      {selectedTypes.includes("open_table") && (
+                                        <FaCheck size={14} color="#9235e2" />
+                                      )}
+                                    </span>
+                                  </label>
+                                  <p className="font-agrandir text-sm font-bold text-white uppercase">Open Table</p>
+                                </div>
+                
+                            </div>
                 
                           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+
                 
                             <p className="font-agrandir text-xs font-bold text-white uppercase">Restaurant Rating</p>
                             <div className="my-7 flex flex-col gap-3">

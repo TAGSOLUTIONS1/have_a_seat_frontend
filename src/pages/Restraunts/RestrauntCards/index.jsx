@@ -287,12 +287,12 @@ const RestaurantCards = memo(
       if (ratings.length > 0) {
         updatedRestaurants = updatedRestaurants
           .filter(restaurant => {
-            const restaurantRating = restaurant?.statistics?.reviews?.ratings?.overall?.rating ?? restaurant?.rating ?? 0;
+            const restaurantRating = restaurant?.statistics?.reviews?.ratings?.overall?.rating ?? restaurant?.rating?.average ?? restaurant?.rating ?? 0;
             return ratings.some(selectedRating => restaurantRating <= parseInt(selectedRating));
           })
           .sort((a, b) => {
-            const ratingA = a?.statistics?.reviews?.ratings?.overall?.rating ?? a?.rating ?? 0;
-            const ratingB = b?.statistics?.reviews?.ratings?.overall?.rating ?? b?.rating ?? 0;
+            const ratingA = parseFloat(a?.statistics?.reviews?.ratings?.overall?.rating ?? a?.rating?.average ?? a?.rating ?? 0);
+            const ratingB = parseFloat(b?.statistics?.reviews?.ratings?.overall?.rating ?? b?.rating?.average ?? b?.rating ?? 0);
             return ratingB - ratingA;
           });
       }
@@ -318,6 +318,9 @@ const RestaurantCards = memo(
         }
         if (restaurant.categories) {
           restaurant.categories.forEach((category) => extractedCuisines.add(category.title));
+        }
+        if (restaurant.cuisine){
+          restaurant.cuisine.forEach((category) => extractedCuisines.add(category));
         }
       });
 
