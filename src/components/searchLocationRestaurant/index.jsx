@@ -129,10 +129,9 @@ const SearchLocationV2 = memo(
     });
   };
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field1 ,field2, value) => {
     setFormData((prevData) => {
-      const updatedData = { ...prevData, [field]: value };
-      localStorage.setItem("searchFormData", JSON.stringify(updatedData));
+      const updatedData = { ...prevData, [field1]: value , [field2]: value };
       return updatedData;
     });
   };
@@ -337,7 +336,7 @@ const SearchLocationV2 = memo(
               <DatePicker
                 selected={new Date(formData.date)}
                 onChange={(date) =>
-                  handleInputChange("date", date.toISOString().split("T")[0])
+                  handleInputChange("date","reservation_date", date.toISOString().split("T")[0])
                 }
                 dateFormat="yyyy-MM-dd"
                 className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
@@ -354,14 +353,15 @@ const SearchLocationV2 = memo(
                 <DatePicker
                   selected={new Date(`${formData.date}T${formData.reservation_time}`)}
                   onChange={(date) =>
-                    handleInputChange(
-                      "reservation_time",
-                      date.toTimeString().slice(0, 5)
-                    )
-                  }
+                        handleInputChange(
+                          "reservation_time",
+                          "reservation_time",
+                          date.toTimeString().slice(0, 5)
+                        )
+                      }
                   showTimeSelect
                   showTimeSelectOnly
-                  timeIntervals={1}
+                  timeIntervals={15}
                   timeCaption="Time"
                   dateFormat="HH:mm"
                   className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
