@@ -44,13 +44,14 @@ export default function ImageSlider({ restrauntDetail }) {
   }, [restrauntDetail]);
 
   let imageUrls = [];
-  if (pictures?.alias) {
-    imageUrls = pictures?.photos || [];
-  } else if (pictures?.restaurant) {
-    const galleryPhotos = pictures?.restaurant?.photos?.gallery?.photos;
+  // if (pictures?.alias) {
+  //   imageUrls = pictures?.photos || [];
+  // } else 
+    if (pictures?.images || pictures?.photos) {
+    const galleryPhotos = pictures?.images || pictures?.photos;
     if (galleryPhotos && galleryPhotos.length > 0) {
       imageUrls = galleryPhotos.map((photo) => {
-        const firstThumbnailUrl = photo.thumbnails[2]?.url;
+        const firstThumbnailUrl = photo;
         return firstThumbnailUrl;
       });
     }

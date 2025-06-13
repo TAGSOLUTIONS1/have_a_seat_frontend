@@ -16,7 +16,7 @@ export default function Restaurant({ restrauntDetail }) {
   // // Getting the corresponding object based on the random key
   // const randomTemplate =
   //   randomTemplateKey && restrauntDetail?.templates[randomTemplateKey];
-
+  
   return (
     <div className="py-4 sm:py-10 flex flex-col text-white">
       <h1 className="font-bold text-6xl text-center md:text-left font-agrandir md:text-[2rem] lg:text-[3rem] mb-10 leading-[50px]">
@@ -39,13 +39,10 @@ export default function Restaurant({ restrauntDetail }) {
               <span className="font-roboto font-semibold text-xl text-white">Ratings:</span>
               </p>
               <p className="text-sm sm:text-base font-roboto font-normal min-h-[40px]">
-              
+                
+
                 {restrauntDetail?.rating
-                  ? restrauntDetail.rating
-                  : restrauntDetail?.restaurant?.statistics?.reviews?.ratings
-                      ?.overall?.rating
-                  ? restrauntDetail?.restaurant?.statistics?.reviews?.ratings
-                      ?.overall.rating
+                  ? restrauntDetail?.rating?.value || restrauntDetail?.rating || restrauntDetail?.restaurant?.statistics?.reviews?.ratings?.overall?.rating
                   : "No rating available"}
                 <span className="text-sm sm:text-base">/5</span>
               </p>
@@ -63,24 +60,10 @@ export default function Restaurant({ restrauntDetail }) {
                 <span className="font-roboto font-semibold text-xl text-white">Cuisine:</span>
               </p>
               <p className="text-sm sm:text-base font-roboto font-normal min-h-[40px]">
-                {restrauntDetail?.alias ? (
-                  <>
-                    {/* {restrauntDetail?.categories[0]?.title} */}
+               {restrauntDetail.categories
+              ? restrauntDetail.categories.map((c) => c.title).join(", ")
+              : restrauntDetail.cuisine?.join(", ") || restrauntDetail.restaurant?.primaryCuisine?.name || "N/A"}
 
-                    {restrauntDetail?.categories
-                      .map((category) => category.title)
-                      .join(", ")}
-                  </>
-                ) : restrauntDetail?.restaurant ? (
-                  restrauntDetail?.restaurant?.primaryCuisine?.name
-                ) : (
-                  <>
-                    {restrauntDetail?.cuisine[0]}
-                    {restrauntDetail?.cuisine
-                      .map((cuisineItem) => cuisineItem)
-                      .join(", ")}
-                  </>
-                )}
               </p>
             </div>
           </div>
@@ -99,21 +82,21 @@ export default function Restaurant({ restrauntDetail }) {
               </p>
               <p className="text-sm sm:text-base font-roboto font-normal min-h-[40px]">
                 {restrauntDetail?.alias ? (
-                  <>
-                    {restrauntDetail?.location?.address1},
-                    {restrauntDetail?.location?.city}
-                  </>
-                ) : restrauntDetail?.restaurant ? (
-                  <>
-                    {restrauntDetail?.restaurant?.address?.line1} ,
-                    {restrauntDetail?.restaurant?.address?.city}
-                  </>
-                ) : (
-                  <>
-                    {restrauntDetail?.neighborhood} ,
-                    {restrauntDetail?.location.name} ,{restrauntDetail?.country}
-                  </>
-                )}
+                      <>
+                        {restrauntDetail?.location?.address1 && restrauntDetail?.location?.city ? (
+                          <>
+                            {restrauntDetail.location.address1}, {restrauntDetail.location.city}
+                          </>
+                        ) : restrauntDetail?.address?.street && restrauntDetail?.address?.city ? (
+                          <>
+                            {restrauntDetail.address.street}, {restrauntDetail.address.city}
+                          </>
+                        ) : (
+                          <>Address not available</>
+                        )}
+                      </>
+                    ) :(<></>)}
+
               </p>
             </div>
           </div>
