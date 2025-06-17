@@ -23,7 +23,10 @@ module.exports = {
       roboto: ['Roboto', 'sans-serif'],
       agrandir: ['Agrandir', 'sans-serif'],
       jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
-      poppins:['"Poppins"', 'sans-serif']
+      poppins:['"Poppins"', 'sans-serif'],
+      agrandir: ['Agrandir', 'sans-serif'],
+      agrandirHeavy: ['Agrandir GrandHeavy', 'sans-serif'],
+      agrandirWide: ['Agrandir WideBlack', 'sans-serif']
     },
     extend: {
       colors: {
