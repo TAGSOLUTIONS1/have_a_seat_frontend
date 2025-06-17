@@ -137,8 +137,10 @@ export default function Hero() {
                 </p>
               </div>
 
-                    <div className="flex md:hidden w-3/4 mx-auto items-center rounded-full bg-white">
-                        <div className="flex pl-4">
+              <div className="w-full md:hidden bg-white rounded-full">
+                    {/* <div className="flex md:hidden w-3/4 mx-auto items-center rounded-full bg-white"> */}
+                        {/* <div className="flex items-center pl-4"> */}
+                        <div className="flex items-center pl-4 justify-end">
 
                       <div
                           className={`text-base font-agrandir font-bold w-full text-black ${
@@ -150,14 +152,15 @@ export default function Hero() {
                             location={formData.location}
                           />
                         </div>
-                         <div className="flex items-center">
+                         <div className="absolute flex">
                           <button className="bg-plum p-1.5 mr-1 my-auto rounded-full text-white hover:bg-plum transition"
                           onClick={handleSearch}>
                             <Search size={15} />
                           </button>
                         </div>
                     </div>
-                    </div>
+                    {/* </div> */}
+              </div>
 
               <div className="w-full max-w-[990px] hidden mx-auto bg-white rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 md:flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
                 
