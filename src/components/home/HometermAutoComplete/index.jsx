@@ -60,12 +60,18 @@ const TermApiAuto = ({ getTermData, term: initialTerm }) => {
   const handleSuggestionClick = (suggestion) => {
     setTerm(suggestion.name);
     setSuggestions([]);
-    getTermData(suggestion.name);
+    getTermData(suggestion);
   };
 
   const handleBlur = () => {
-    getTermData(term);
-  };
+  const matchedSuggestion = suggestions.find((s) => s.name === term);
+
+  if (matchedSuggestion) {
+    getTermData(matchedSuggestion);
+  } else {
+    getTermData({ name: term, type: "Custom" });
+  }
+};
 
   const groupedSuggestions = groupByType(suggestions);
   const typeOrder = ["Cuisine", "Restaurant"];

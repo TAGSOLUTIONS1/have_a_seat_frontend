@@ -59,6 +59,8 @@ const SearchLocationV2 = memo(
     location: "",
     term: "",
     rating: "hightolow",
+    longitude:"",
+    latitude:"",
   });
 
   const [error, setError] = useState(null);
@@ -106,8 +108,8 @@ const SearchLocationV2 = memo(
 
   const handleTermChange = (value) => {
     setFormData((prevData) => {
-      // console.log("values " , value)
-      const words = value.trim().split(/\s+/);
+      console.log("values " , value)
+      const words = value.name.trim().split(/\s+/);
       if (!words.length) return null;
       let word = words[0];
       if (word.endsWith("'s")) {
@@ -115,8 +117,16 @@ const SearchLocationV2 = memo(
       }
       const result = word.toLowerCase();
       // console.log("result is " , result);
-      const updatedData = { ...prevData, term: result };
+      let updatedData;
+      if (value.latitude || value.longitude)
+      {
+      updatedData = { ...prevData, term: result , latitude:value.latitude , longitude:value.longitude};
+      }
+      else{
+        updatedData = { ...prevData, term: result};
+      }
       localStorage.setItem("searchFormData", JSON.stringify(updatedData));
+      handleSearch();
       return updatedData;
     });
   };

@@ -20,6 +20,7 @@ import Landing from "./pages/Landing/Landing";
 import MainLayout from "./components/Layout/Layout";
 import RestaurantDetailsV2 from "./pages/Restraunts/ResturantDetailV2/RestaurantDetailsV2";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import '../public/assets/fonts/fonts.css';
 
 function App() {
   const location = useLocation();

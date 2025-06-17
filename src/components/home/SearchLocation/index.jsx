@@ -26,6 +26,8 @@ const SearchLocation = () => {
     reservation_time: "19:00",
     location: "",
     term: "",
+    longitude:"",
+    latitude:"",
   });
 
   const [error, setError] = useState(null);

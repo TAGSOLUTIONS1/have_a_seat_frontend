@@ -93,21 +93,21 @@ const Slider = () => {
     <section className="mx-auto overflow-hidden relative px-4 sm:px-6 lg:px-8" id="superfast">
       <div className="max-w-[1600px] mx-auto items-center relative">
         
-        <div className='flex flex-col gap-4 mx-auto text-center p-5 sm:p-0 w-full sm:w-2/3 lg:w-1/2'>
-          <p className='text-shipGrey font-bold text-3xl sm:text-4xl md:text-5xl font-agrandir'>
+        <div className='flex flex-col gap-4 mx-auto text-center p-6 sm:p-0 w-full sm:w-2/3 lg:w-1/2'>
+          <p className='text-shipGrey font-bold text-xl sm:text-4xl md:text-5xl font-agrandir'>
             Search smartly & reserve your table across top platforms
           </p>
-          <p className='text-plum font-black text-4xl sm:text-6xl md:text-7xl font-agrandir italic'>
+          <p className='text-plum text-4xl sm:text-6xl md:text-7xl font-agrandirWide font-black italic'>
             Super fast
           </p>
-          <p className='text-shipGrey font-normal text-lg sm:text-xl md:text-2xl font-roboto'>
+          <p className='text-shipGrey font-normal text-sm sm:text-xl md:text-2xl font-roboto'>
             One search = All your favorite restaurants
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row justify-center items-center lg:-space-x-20 relative mt-10 sm:mt-20">
+        <div className="flex flex-col lg:flex-row justify-center items-center lg:-space-x-20 relative mt-0 sm:mt-20">
           {/* Mobile view - centered slider with highlighted active image */}
-          <div className="lg:hidden w-full relative h-40 mb-8">
+          <div className="lg:hidden w-full relative h-40 mb-0 sm:mb-8">
             <div className="flex items-center justify-center h-full">
               {content.map((slide, index) => {
                 const position = index - currentSlide;

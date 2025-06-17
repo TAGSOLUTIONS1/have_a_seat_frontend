@@ -1,4 +1,12 @@
 import React, { useState } from "react";
+import { Navigation, Pagination, Scrollbar, A11y , Autoplay } from 'swiper/modules';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
 const testimonials = [
   {
@@ -56,19 +64,19 @@ const Testimonial = () => {
     <div className="testimonial-section text-center p-8">
       {/* Testimonial Display */}
       <div className="testimonial-text">
-        <p className="text-grayblu font-agrandir font-normal tracking-[-1.3%] text-xl mb-2 max-w-[90%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[55%] mx-auto min-h-[220px]">{testimonials[activeIndex].text}</p>
-        <p className="font-extrabold text-blu text-lg font-jakarta">{testimonials[activeIndex].name}</p>
-        <p className="text-grayblu text-sm font-agrandir font-medium">{testimonials[activeIndex].location}</p>
+        <p className="text-grayblu font-agrandir font-normal tracking-[-1.3%] text-sm sm:text-xl mb-2 max-w-[90%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[55%] mx-auto min-h-[220px]">{testimonials[activeIndex].text}</p>
+        <p className="font-extrabold text-blu text-base sm:text-lg font-jakarta">{testimonials[activeIndex].name}</p>
+        <p className="text-grayblu text-xs sm:text-sm font-agrandir font-medium">{testimonials[activeIndex].location}</p>
       </div>
 
       {/* Avatar Navigation */}
-      <div className="avatar-navigation flex justify-center space-x-4 mt-7">
+      {/* <div className="avatar-navigation flex justify-center space-x-4 mt-7">
         {testimonials.map((testimonial, index) => (
           <img
             key={index}
             src={testimonial.img}
             alt={testimonial.name}
-            className={`w-9 h-9 rounded-full cursor-pointer object-cover ${
+            className={`h-7 w-7 sm:w-9 sm:h-9 rounded-full cursor-pointer object-cover ${
               index === activeIndex
                 ? " transform scale-110"
                 : "opacity-50"
@@ -76,7 +84,70 @@ const Testimonial = () => {
             onClick={() => handleAvatarClick(index)}
           />
         ))}
+      </div> */}
+
+      <div className="mt-5 w-2/3 flex mx-auto">
+         <Swiper
+            modules={[Navigation, Pagination, Scrollbar, A11y , Autoplay]}
+            spaceBetween={10}
+            slidesPerView={4}
+            // navigation
+            autoplay={{
+            delay: 1000,
+            disableOnInteraction: false,
+          }}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+            // pagination={{ clickable: true }}
+            // scrollbar={{ draggable: true }}
+          >
+            {testimonials.map((testimonial, index) => (
+              <SwiperSlide key={index}>
+              <img
+                src={testimonial.img}
+                alt={testimonial.name}
+                className={`h-9 w-9 sm:h-11 sm:w-11 rounded-full cursor-pointer object-cover mx-auto transition-transform duration-300 ${
+                  index === activeIndex ? "scale-125 border-2 border-purple-600" : "opacity-50"
+                }`}
+                onClick={() => handleAvatarClick(index)}
+              />
+            </SwiperSlide>
+
+          ))}
+          </Swiper>
       </div>
+
+       {/* <div className="mt-8 max-w-3xl mx-auto">
+        <Swiper
+          spaceBetween={20}
+          slidesPerView={3}
+          centeredSlides={true}
+          loop={true}
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          modules={[Autoplay]}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          className="w-full"
+          breakpoints={{
+            640: { slidesPerView: 3 },
+            768: { slidesPerView: 4 },
+          }}
+        >
+          {testimonials.map((testimonial, index) => (
+            <SwiperSlide key={index}>
+              <img
+                src={testimonial.img}
+                alt={testimonial.name}
+                onClick={() => setActiveIndex(index)}
+                className={`h-12 w-12 sm:h-14 sm:w-14 rounded-full object-cover cursor-pointer mx-auto transition duration-300 ${
+                  index === activeIndex ? "scale-110 border-2 border-purple-600" : "opacity-50"
+                }`}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div> */}
     </div>
   );
 };

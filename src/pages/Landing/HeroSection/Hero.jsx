@@ -121,11 +121,13 @@ export default function Hero() {
           alt="Overlay"
         />
 
-        <div className="relative z-10 h-full">
+        {/* <div className="relative z-10 h-full"> */}
+        <div className="relative z-10 h-full flex flex-col items-center justify-center">
           <div className="hidden md:block px-20 py-7"></div>
 
           <div className="md:px-20">
-            <div className="flex w-[90%] m-auto md:w-full flex-col gap-4 md:gap-8 py-4 md:py-20 text-white">
+            {/* <div className="flex w-[90%] m-auto md:w-full flex-col gap-4 md:gap-8 py-4 md:py-20 text-white"> */}
+            <div className="flex w-[90%] m-auto md:w-full flex-col gap-4 md:gap-8 text-white justify-center items-center h-full text-center">
               <div className="max-w-5xl mx-auto flex flex-col gap-4">
                 <h1 className="font-agrandir uppercase text-3xl sm:text-5xl lg:text-[4rem] leading-none font-bold text-white text-center max-w-[990px] mx-auto">
                 Why stress over endless sites when you can “Have a Seat” in seconds?
@@ -135,7 +137,32 @@ export default function Hero() {
                 </p>
               </div>
 
-              <div className="w-full max-w-[990px] mx-auto bg-white rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
+              <div className="w-full md:hidden bg-white rounded-full">
+                    {/* <div className="flex md:hidden w-3/4 mx-auto items-center rounded-full bg-white"> */}
+                        {/* <div className="flex items-center pl-4"> */}
+                        <div className="flex items-center pl-4 justify-end">
+
+                      <div
+                          className={`text-base font-agrandir font-bold w-full text-black ${
+                            error ? "border-red-500" : "border-gray-200"
+                          } focus:border-gray-200 focus:outline-none`}
+                        >
+                          <GeoApiAuto
+                            getLocationData={getLocationData}
+                            location={formData.location}
+                          />
+                        </div>
+                         <div className="absolute flex">
+                          <button className="bg-plum p-1.5 mr-1 my-auto rounded-full text-white hover:bg-plum transition"
+                          onClick={handleSearch}>
+                            <Search size={15} />
+                          </button>
+                        </div>
+                    </div>
+                    {/* </div> */}
+              </div>
+
+              <div className="w-full max-w-[990px] hidden mx-auto bg-white rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 md:flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
                 
                 {/* <div className="bg-lightGrey rounded-sm md:rounded-[3rem] md:py-2 md:flex gap-1 justify-between md:gap-3 md:px-5"> */}
                   {/* <div className=" flex flex-col justify-between text-center gap-1 md:flex-row "> */}
