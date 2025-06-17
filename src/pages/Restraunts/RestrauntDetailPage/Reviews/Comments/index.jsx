@@ -4,9 +4,6 @@ import { ArrowLeft, ArrowRight, Star } from "lucide-react";
 
 const Comments = ({ reviewsData, yelpReviews }) => {
 
-  console.log("reviews data " , reviewsData)
-  console.log("yelp reviews " , yelpReviews)
-
   const [reviews, setReviews] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const reviewsPerPage = 3;
@@ -16,8 +13,6 @@ const Comments = ({ reviewsData, yelpReviews }) => {
       setReviews(reviewsData?.reviews);
     }
   }, [reviewsData]);
-
-  console.log("now reviews are " , reviews)
 
   const handleNext = () => {
     const lastIndex = reviews.length - 1;
