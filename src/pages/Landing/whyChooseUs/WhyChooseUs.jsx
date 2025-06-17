@@ -8,7 +8,7 @@ const WhyChooseUs = () => {
           <StepComponent />
         </div>
     
-       <div className="">
+       <div className="hidden md:flex">
         <img src="/assets/why.png" alt="" className="h-[400px] md:h-[530px] xl:h-[570px] mx-auto" />
        </div>
       </div>

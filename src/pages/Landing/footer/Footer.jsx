@@ -73,15 +73,15 @@ function Footer() {
 
       <div className="flex flex-col w-full gap-6 md:gap-0 md:flex-row justify-between items-center">
         <div className="w-[90%] text-center sm:text-left sm:w-1/2">
-          <h2 className="text-3xl font-agrandir text-ftext font-bold text-center md:text-left ">Join Our Newsletter</h2>
-          <p className="text-xl text-grayblu font-roboto">
+          <h2 className="text-xl sm:text-3xl font-agrandir text-ftext font-bold text-center md:text-left ">Join Our Newsletter</h2>
+          <p className="text-sm sm:text-xl text-grayblu font-roboto">
             Only updates and special offers. No spams.
           </p>
         </div>
 
         <form className=" flex flex-col md:w-1/2 gap-6 md:gap-0 md:flex-row justify-end items-center text-end">
           <div className="relative w-full md:w-3/5">
-            <Mail size={20} className="absolute top-1/2 left-3 transform -translate-y-1/2 text-grayblu" />
+            <Mail size={16} className="absolute top-1/2 left-3 transform -translate-y-1/2 text-grayblu" />
             <input
               type="email"
               placeholder="Enter your email address..."
@@ -101,7 +101,7 @@ function Footer() {
       {/* copyrigths */}
       <div className=" py-4">
         <div className=" border-t-2 border-black m-auto md:w-full">
-          <div className="text-center md:text-left flex flex-col gap-4 md:gap-0 md:flex-row text-base justify-between items-center py-5">
+          <div className="text-center md:text-left flex flex-col gap-4 md:gap-0 md:flex-row text-sm sm:text-base justify-between items-center py-5">
             <div>
               <p className=" ">Copyright © HaveaSeat. All rights reserved. </p>
             </div>

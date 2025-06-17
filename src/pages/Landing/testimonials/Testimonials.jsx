@@ -39,10 +39,10 @@ export default function Testimonials() {
     <div className="md:p-[120px] relative" id="testimonials">
      
       <div className="w-full m-auto items-center flex flex-col gap-6 px-2 sm:px-0 py-10">
-        <p className="text-[38px] w-[85%] md:w-full m-auto md:text-7xl font-bold font-agrandir text-center">
+        <p className="w-[85%] md:w-full m-auto text-2xl sm:text-4xl md:text-6xl font-bold font-agrandir text-center">
           <span className="text-shipGrey">Stories From <span className="text-plum">Our Guests</span> </span> 
         </p>
-        <p className="w-full md:w-[65%] text-xl font-normal font-roboto text-shipGrey text-center">
+        <p className="w-3/4 md:w-[65%] text-sm sm:text-xl font-normal font-roboto text-shipGrey text-center">
         So why do they choose us and what sets us apart? Let them tell you
         </p>
         <div className="w-[80%] md:w-full m-auto ">

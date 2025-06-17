@@ -2,7 +2,7 @@ import { stats } from "../../../components/constants/constants";
 
 function Stats() {
   return (
-    <div className="p-16 md:p-28 bg-[#F5EDFC] relative">
+    <div className="p-2 px-14 sm:px-0 sm:p-16 md:p-28 bg-[#F5EDFC] relative">
       <img
         src="/assets/sushi.png"
         alt="Sushi illustration"
@@ -18,9 +18,9 @@ function Stats() {
             <div
               key={stat.heading}
               className={`flex-1 p-4 w-full md:w-auto flex flex-col items-center text-center
-              ${index !== stats.length - 1 ? "md:border-r-[3px] md:border-plum" : ""}`}
+              ${index !== stats.length - 1 ? "border-b-[2px] border-plum md:border-r-[3px] md:border-plum" : ""}`}
             >
-              <p className="text-3xl md:text-4xl text-shipGrey font-extrabold font-agrandir">
+              <p className="text-3xl md:text-4xl text-shipGrey font-extrabold font-agrandirHeavy">
                 {stat.stat}
               </p>
               <p className="text-sm md:text-base text-shipGrey font-roboto">
