@@ -132,16 +132,60 @@ export default function Hero() {
             {/* <div className="flex w-[90%] m-auto md:w-full flex-col gap-4 md:gap-8 py-4 md:py-20 text-white"> */}
             <div className="flex w-[90%] m-auto md:w-full flex-col gap-4 md:gap-8 text-white justify-center items-center h-full text-center">
               <div className="max-w-5xl mx-auto flex flex-col gap-4">
-                <h1 className="font-agrandir uppercase text-3xl sm:text-5xl lg:text-[4rem] leading-none font-bold text-white text-center max-w-[990px] mx-auto">
+                <h1 className="font-agrandir uppercase text-2xl sm:text-5xl lg:text-[4rem] leading-none font-bold text-white text-center max-w-[990px] mx-auto">
                 Why stress over endless sites when you can “Have a Seat” in seconds?
                 </h1>
-                <p className="text-center max-w-2xl mx-auto text-base md:text-2xl font-roboto">
+                <p className="text-center hidden md:block max-w-2xl mx-auto text-base md:text-2xl font-roboto">
                 Search, compare, and reserve at the best restaurants across multiple platforms in the US.
                 </p>
               </div>
 
-              <div className="w-full md:hidden bg-white rounded-full">
-                        <div className="flex items-center pl-4 justify-end">
+              <div className="flex w-[90%] flex-col md:hidden mt-7 gap-4">
+                        
+                    <div className="flex items-center bg-white rounded-2xl p-2">
+                  <IoTime size={24} color="#9235E2" className="mr-2" />
+                    <DatePicker
+                      selected={new Date(`${formData.date}T${formData.reservation_time}`)}
+                      onChange={(date) =>
+                        handleInputChange(
+                          "reservation_time",
+                          "reservation_time",
+                          date.toTimeString().slice(0, 5)
+                        )
+                      }
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={15}
+                      timeCaption="Time"
+                      dateFormat="HH:mm"
+                      className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+                      onKeyDown={(e) => e.preventDefault()}
+                      placeholderText="Select time"
+                    />
+                    </div>
+                    <div className="flex items-center bg-white rounded-2xl p-2">
+
+                        <BsCalendarDateFill size={18} color="#9235E2" className="mr-2" />
+                  <DatePicker
+                    selected={new Date(formData.date)}
+                    onChange={(date) =>
+                      handleInputChange("date","reservation_date", date.toISOString().split("T")[0])
+                    }
+                    dateFormat="yyyy-MM-dd"
+                    className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+                    onKeyDown={(e) => e.preventDefault()}
+                    // calendarStartDay={0}
+                    placeholderText="Select a date"
+                  />
+
+                    </div>
+
+                     <div className="flex items-center p-2 bg-white rounded-full">
+                     <MdOutlineRestaurantMenu size={18} color="#9235E2" className="mr-2" />
+                  <TermApiAuto getTermData={handleTermChange} />
+                    </div>
+
+                     <div className="flex flex-col items-center pl-4 bg-white rounded-full pt-1">
 
                       <div
                           className={`text-base font-agrandir font-bold w-full text-black ${
@@ -152,12 +196,6 @@ export default function Hero() {
                             getLocationData={getLocationData}
                             location={formData.location}
                           />
-                        </div>
-                         <div className="absolute flex">
-                          <button className="bg-plum p-1.5 mr-1 my-auto rounded-full text-white hover:bg-plum transition"
-                          onClick={handleSearch}>
-                            <Search size={15} />
-                          </button>
                         </div>
                     </div>
                     {/* </div> */}
