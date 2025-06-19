@@ -185,8 +185,8 @@ export default function Hero() {
                   <TermApiAuto getTermData={handleTermChange} />
                     </div>
 
-                     <div className="flex flex-col items-center pl-4 bg-white rounded-full pt-1">
-
+                     <div className="flex items-center bg-white rounded-full pt-1">
+                        <MdLocationOn size={28} color="#9235E2" className="mr-2 ml-1 mb-1" />
                       <div
                           className={`text-base font-agrandir font-bold w-full text-black ${
                             error ? "border-red-500" : "border-gray-200"
@@ -198,7 +198,14 @@ export default function Hero() {
                           />
                         </div>
                     </div>
-                    {/* </div> */}
+                    <div className="">
+                      <button
+                    className="bg-plum hover:bg-purple-800 transition p-3 md:p-4 rounded-full text-white"
+                    onClick={handleSearch}
+                  >
+                    <Search className="w-4 h-4 md:w-5 md:h-5" />
+                  </button>
+                      </div>
               </div>
 
               <div className="w-full max-w-[990px] hidden mx-auto bg-white rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 md:flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
