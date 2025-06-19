@@ -36,13 +36,13 @@ const SideNav = () => {
           size="icon"
           data-collapse-toggle="navbar-default"
           type="button"
-          className="inline-flex items-center mx-2  p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100  "
+          className="inline-flex items-center mx-2 p-1 w-10 h-10 justify-center text-sm text-plum border-0 rounded-lg md:hidden hover:bg-gray-100  "
           aria-controls="navbar-default"
           aria-expanded="false"
         >
           <span className="sr-only">Open main menu</span>
           <svg
-            className="w-5 h-5"
+            className="w-6 h-6"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

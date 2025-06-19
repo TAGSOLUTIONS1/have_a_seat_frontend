@@ -7,7 +7,9 @@ import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
 
 // components/RestaurantCard.jsx
+
 const RestaurantCard = ({ data, children }) => {
+
   return (
     <div className="bg-white w-full p-4 sm:p-6 md:p-8 lg:p-10 shadow-cardshadow rounded-[20px] sm:rounded-[30px] flex flex-col md:flex-row">
       {/* Restaurant Image */}
@@ -21,7 +23,8 @@ const RestaurantCard = ({ data, children }) => {
                 Array.isArray(data?.images) &&
                 data?.images.length > 0
               ? data?.images[0]
-              : data?.photos?.profile?.medium?.url
+              : data?.photos?.gallery?.photos[0]?.thumbnails[0]?.url
+              // : data?.photos?.profile?.medium?.url
           }
           alt={data?.name}
         />

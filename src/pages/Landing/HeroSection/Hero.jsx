@@ -104,17 +104,20 @@ export default function Hero() {
   const [startDate, setStartDate] = useState(new Date());
 
   return (
-    <div className="py-8 px-10">
+    <div className="py-5 px-5 md:py-8 md:px-10">
       <div
         className="relative rounded-[30px] overflow-hidden w-full h-[550px] md:h-[700px]"
         id="home"
       >
+        {/* <div class="bg-fancy-radial h-screen w-full flex items-center justify-center"> */}
         <img
           className="absolute top-0 left-0 w-full h-full object-cover"
           src="/assets/background-img.png"
           alt="Background"
         />
         <div className="absolute top-0 left-0 w-full h-full bg-black/50"></div>
+        <div className="absolute top-[40%] w-full h-full bg-fancy-radial"></div>
+        {/* <div className="absolute top-[40%] right-[55%] w-full h-full bg-fancy-radial"></div> */}
         <img
           className="absolute top-0 left-0 w-full h-full object-cover"
           src="/assets/flare.png"
@@ -138,8 +141,6 @@ export default function Hero() {
               </div>
 
               <div className="w-full md:hidden bg-white rounded-full">
-                    {/* <div className="flex md:hidden w-3/4 mx-auto items-center rounded-full bg-white"> */}
-                        {/* <div className="flex items-center pl-4"> */}
                         <div className="flex items-center pl-4 justify-end">
 
                       <div
