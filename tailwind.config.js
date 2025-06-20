@@ -107,6 +107,10 @@ module.exports = {
       backdropBlur: {
         navigation: '30.4px',
       },
+      backgroundImage: {
+        'fancy-radial': "radial-gradient(50% 50% at 50% 50%, rgba(255,255,255,0.34) 0%, rgba(248,167,255,0.34) 8.33%, rgba(136,9,168,0.34) 36.98%, rgba(30,30,30,0.34) 100%)",
+        'fancy-radial-strong': "radial-gradient(50% 50% at 50% 50%, rgba(255,255,255,0.76) 0%, rgba(248,167,255,0.76) 8.33%, rgba(136,9,168,0.76) 36.98%, rgba(30,30,30,0.76) 100%)",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

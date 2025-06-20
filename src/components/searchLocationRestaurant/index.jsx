@@ -336,13 +336,13 @@ const SearchLocationV2 = memo(
 
         {/* Restaurant/Cuisine */}
         <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 text-black pr-2 flex-1">
-          <MdOutlineRestaurantMenu size={24} color="#9235E2" className="mr-2" />
+          <MdOutlineRestaurantMenu size={22} color="#9235E2" className="mr-2" />
           <TermApiAuto getTermData={handleTermChange} />
         </div>
 
         {/* Date */}
         <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
-              <BsCalendarDateFill size={24} color="#9235E2" className="mr-2" />
+              <BsCalendarDateFill size={18} color="#9235E2" className="mr-2" />
               <DatePicker
                 selected={new Date(formData.date)}
                 onChange={(date) =>
@@ -359,7 +359,7 @@ const SearchLocationV2 = memo(
         
         
             <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
-                <IoTime size={24} color="#9235E2" className="mr-2" />
+                <IoTime size={20} color="#9235E2" className="mr-2" />
                 <DatePicker
                   selected={new Date(`${formData.date}T${formData.reservation_time}`)}
                   onChange={(date) =>

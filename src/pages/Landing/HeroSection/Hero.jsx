@@ -104,17 +104,20 @@ export default function Hero() {
   const [startDate, setStartDate] = useState(new Date());
 
   return (
-    <div className="py-8 px-10">
+    <div className="py-5 px-5 md:py-8 md:px-10">
       <div
         className="relative rounded-[30px] overflow-hidden w-full h-[550px] md:h-[700px]"
         id="home"
       >
+        {/* <div class="bg-fancy-radial h-screen w-full flex items-center justify-center"> */}
         <img
           className="absolute top-0 left-0 w-full h-full object-cover"
           src="/assets/background-img.png"
           alt="Background"
         />
         <div className="absolute top-0 left-0 w-full h-full bg-black/50"></div>
+        <div className="absolute top-[40%] w-full h-full bg-fancy-radial"></div>
+        {/* <div className="absolute top-[40%] right-[55%] w-full h-full bg-fancy-radial"></div> */}
         <img
           className="absolute top-0 left-0 w-full h-full object-cover"
           src="/assets/flare.png"
@@ -129,19 +132,61 @@ export default function Hero() {
             {/* <div className="flex w-[90%] m-auto md:w-full flex-col gap-4 md:gap-8 py-4 md:py-20 text-white"> */}
             <div className="flex w-[90%] m-auto md:w-full flex-col gap-4 md:gap-8 text-white justify-center items-center h-full text-center">
               <div className="max-w-5xl mx-auto flex flex-col gap-4">
-                <h1 className="font-agrandir uppercase text-3xl sm:text-5xl lg:text-[4rem] leading-none font-bold text-white text-center max-w-[990px] mx-auto">
+                <h1 className="font-agrandir uppercase text-2xl sm:text-5xl lg:text-[4rem] leading-none font-bold text-white text-center max-w-[990px] mx-auto">
                 Why stress over endless sites when you can “Have a Seat” in seconds?
                 </h1>
-                <p className="text-center max-w-2xl mx-auto text-base md:text-2xl font-roboto">
+                <p className="text-center hidden md:block max-w-2xl mx-auto text-base md:text-2xl font-roboto">
                 Search, compare, and reserve at the best restaurants across multiple platforms in the US.
                 </p>
               </div>
 
-              <div className="w-full md:hidden bg-white rounded-full">
-                    {/* <div className="flex md:hidden w-3/4 mx-auto items-center rounded-full bg-white"> */}
-                        {/* <div className="flex items-center pl-4"> */}
-                        <div className="flex items-center pl-4 justify-end">
+              <div className="flex w-[90%] flex-col md:hidden mt-7 gap-4">
+                        
+                    <div className="flex items-center bg-white rounded-2xl p-2">
+                  <IoTime size={24} color="#9235E2" className="mr-2" />
+                    <DatePicker
+                      selected={new Date(`${formData.date}T${formData.reservation_time}`)}
+                      onChange={(date) =>
+                        handleInputChange(
+                          "reservation_time",
+                          "reservation_time",
+                          date.toTimeString().slice(0, 5)
+                        )
+                      }
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={15}
+                      timeCaption="Time"
+                      dateFormat="HH:mm"
+                      className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+                      onKeyDown={(e) => e.preventDefault()}
+                      placeholderText="Select time"
+                    />
+                    </div>
+                    <div className="flex items-center bg-white rounded-2xl p-2">
 
+                        <BsCalendarDateFill size={18} color="#9235E2" className="mr-2" />
+                  <DatePicker
+                    selected={new Date(formData.date)}
+                    onChange={(date) =>
+                      handleInputChange("date","reservation_date", date.toISOString().split("T")[0])
+                    }
+                    dateFormat="yyyy-MM-dd"
+                    className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+                    onKeyDown={(e) => e.preventDefault()}
+                    // calendarStartDay={0}
+                    placeholderText="Select a date"
+                  />
+
+                    </div>
+
+                     <div className="flex items-center p-2 bg-white rounded-full">
+                     <MdOutlineRestaurantMenu size={18} color="#9235E2" className="mr-2" />
+                  <TermApiAuto getTermData={handleTermChange} />
+                    </div>
+
+                     <div className="flex items-center bg-white rounded-full pt-1">
+                        <MdLocationOn size={28} color="#9235E2" className="mr-2 ml-1 mb-1" />
                       <div
                           className={`text-base font-agrandir font-bold w-full text-black ${
                             error ? "border-red-500" : "border-gray-200"
@@ -152,14 +197,15 @@ export default function Hero() {
                             location={formData.location}
                           />
                         </div>
-                         <div className="absolute flex">
-                          <button className="bg-plum p-1.5 mr-1 my-auto rounded-full text-white hover:bg-plum transition"
-                          onClick={handleSearch}>
-                            <Search size={15} />
-                          </button>
-                        </div>
                     </div>
-                    {/* </div> */}
+                    <div className="">
+                      <button
+                    className="bg-plum hover:bg-purple-800 transition p-3 md:p-4 rounded-full text-white"
+                    onClick={handleSearch}
+                  >
+                    <Search className="w-4 h-4 md:w-5 md:h-5" />
+                  </button>
+                      </div>
               </div>
 
               <div className="w-full max-w-[990px] hidden mx-auto bg-white rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 md:flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
