@@ -58,7 +58,7 @@ const JuglingSites = () => {
   }, []);
 
   return (
-    <div className="w-full px-5 sm:px-14 md:px-20 h-screen flex">
+    <div className="hidden w-full px-5 sm:px-14 md:px-20 h-screen md:flex">
 
       {/* Fixed Left Image */}
       <div className="w-1/3 h-full hidden sm:flex items-center justify-center bg-white">
