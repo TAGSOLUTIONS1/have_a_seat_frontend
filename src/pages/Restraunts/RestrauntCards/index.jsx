@@ -76,13 +76,14 @@ const RestaurantCards = memo(
           );
         }
 
-        const shuffledRestaurants = mergedRestaurants.sort((a, b) => {
-          const keyA = (a.name + a.id).toLowerCase();
-          const keyB = (b.name + b.id).toLowerCase();
-          return keyA.localeCompare(keyB);
-        });
 
-        setShuffledRestaurants(shuffledRestaurants);
+        // const shuffledRestaurants = mergedRestaurants.sort((a, b) => {
+        //   const keyA = (a.name + a.id).toLowerCase();
+        //   const keyB = (b.name + b.id).toLowerCase();
+        //   return keyA.localeCompare(keyB);
+        // });
+        
+        setShuffledRestaurants(mergedRestaurants);
       } else {
         setShuffledRestaurants([]);
       }
@@ -160,7 +161,6 @@ const RestaurantCards = memo(
         });
       }
 
-
       //////// extra filters 
       // if (formData.cuisine_type != ""){
       //   const inputText = normalizeString(formData?.cuisine_type || "");
@@ -221,7 +221,7 @@ const RestaurantCards = memo(
     
     useEffect(() => {
       let updatedRestaurants = [...shuffledRestaurants]; // Start with merged & shuffled data
-      
+        
       // Apply Price Filter
       if (selectedPriceFilter != null) {
         updatedRestaurants = updatedRestaurants.filter((restaurant) => {
@@ -307,7 +307,7 @@ const RestaurantCards = memo(
       const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
       setCopiedRestaurants(copiedRestaurantsData);
     }, [filteredRestaurants]);
-    
+
     
     const fillallcuisines = () => {
       const extractedCuisines = new Set(cuisinestypes);

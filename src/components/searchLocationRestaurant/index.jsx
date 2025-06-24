@@ -56,6 +56,7 @@ const SearchLocationV2 = memo(
     reservation_time: getCurrentTime(),
     restaurant_name: "",
     cuisine_type: "",
+    region_id: "",
     location: "",
     term: "",
     rating: "hightolow",
@@ -106,6 +107,19 @@ const SearchLocationV2 = memo(
     navigate(route);
   };
 
+
+        useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+          if (formData.location || formData.term) {
+            handleSearch();
+          }
+        }, 500); // wait 500ms after typing stops
+
+        return () => clearTimeout(delayDebounce);
+      }, [formData]);
+
+
+
   const handleTermChange = (value) => {
     setFormData((prevData) => {
       console.log("values " , value)
@@ -120,13 +134,12 @@ const SearchLocationV2 = memo(
       let updatedData;
       if (value.latitude || value.longitude)
       {
-      updatedData = { ...prevData, term: result , latitude:value.latitude , longitude:value.longitude};
+      updatedData = { ...prevData, term: result , latitude:value.latitude , longitude:value.longitude , region_id:value.id};
       }
       else{
         updatedData = { ...prevData, term: result};
       }
       localStorage.setItem("searchFormData", JSON.stringify(updatedData));
-      handleSearch();
       return updatedData;
     });
   };
