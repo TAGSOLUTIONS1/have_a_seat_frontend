@@ -57,6 +57,7 @@ const SearchLocationV2 = memo(
     restaurant_name: "",
     cuisine_type: "",
     region_id: "",
+    cuisine_id:"",
     location: "",
     term: "",
     rating: "hightolow",
@@ -107,16 +108,17 @@ const SearchLocationV2 = memo(
     navigate(route);
   };
 
+  console.log("form data " , formData)
 
-        useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-          if (formData.location || formData.term) {
-            handleSearch();
-          }
-        }, 500); // wait 500ms after typing stops
+    useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (formData.location || formData.term) {
+        handleSearch();
+      }
+    }, 500); // wait 500ms after typing stops
 
-        return () => clearTimeout(delayDebounce);
-      }, [formData]);
+    return () => clearTimeout(delayDebounce);
+  }, [formData]);
 
 
 
@@ -130,11 +132,15 @@ const SearchLocationV2 = memo(
        word = word.slice(0, -2);
       }
       const result = word.toLowerCase();
-      // console.log("result is " , result);
+      console.log("result is " , value);
       let updatedData;
       if (value.latitude || value.longitude)
       {
       updatedData = { ...prevData, term: result , latitude:value.latitude , longitude:value.longitude , region_id:value.id};
+      }
+      else if (value.id || value.latitude==null)
+      {
+        updatedData = { ...prevData, term: result , cuisine_id:value.id};
       }
       else{
         updatedData = { ...prevData, term: result};
