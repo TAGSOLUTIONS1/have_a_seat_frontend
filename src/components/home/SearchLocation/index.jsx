@@ -28,6 +28,7 @@ const SearchLocation = () => {
     term: "",
     longitude:"",
     latitude:"",
+    regiion_id:"",
   });
 
   const [error, setError] = useState(null);

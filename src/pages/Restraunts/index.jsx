@@ -59,30 +59,67 @@ const Search = () => {
     setLoading(false);
   }, [data]);
 
-  useEffect(() => {
-    if (!loading) {
-      const fetchDataFromApi = async (apiEndpoint, setData) => {
-        let customFormData = formData;
-        if (
-          apiEndpoint === "/api/v1/opentable/get_restaurants" &&
-          formData.term
-        ) {
-          customFormData = {
-            ...formData,
-            categories: formData.term,
-            term: undefined,
-          };
-        }
-        // console.log("data is for request  " , customFormData);
-        const data = await fetchData(apiEndpoint, customFormData);
-        setData(data);
-      };
+  // useEffect(() => {
+  //   if (!loading) {
+  //     const fetchDataFromApi = async (apiEndpoint, setData) => {
+  //       let customFormData = formData;
+  //       if (
+  //         apiEndpoint === "/api/v1/opentable/get_restaurants" &&
+  //         formData.term
+  //       ) {
+  //         customFormData = {
+  //           ...formData,
+  //           categories: formData.term,
+  //           term: undefined,
+  //         };
+  //       }
+  //       // console.log("data is for request  " , customFormData);
+  //       const data = await fetchData(apiEndpoint, customFormData);
+  //       setData(data);
+  //     };
 
-      fetchDataFromApi("/api/v1/yelp/get_restaurants", setYelpData);
-      fetchDataFromApi("/api/v1/resy/get_restaurants", setResyData);
-      fetchDataFromApi("/api/v1/opentable/get_restaurants", setOpenTableData);
-    }
-  }, [formData, loading]);
+  //     fetchDataFromApi("/api/v1/yelp/get_restaurants", setYelpData);
+  //     fetchDataFromApi("/api/v1/resy/get_restaurants", setResyData);
+  //     fetchDataFromApi("/api/v1/opentable/get_restaurants", setOpenTableData);
+  //   }
+  // }, [formData, loading]);
+
+  // useEffect=(()=>{
+  //     setFormData(localStorage.getItem("searchFormData"));
+  //     console.log("change in local state ")
+  // },[localStorage])
+
+
+  useEffect(() => {
+  if (!loading) {
+    const fetchDataInOrder = async () => {
+      const results = [];
+      const customFormData =
+        formData.term && formData.term.length > 0
+          ? { ...formData, categories: formData.term, term: undefined }
+          : formData;
+
+      // Yelp
+      const yelpData = await fetchData("/api/v1/yelp/get_restaurants", formData);
+      results.push({ source: "yelp", data: yelpData });
+
+      // Resy
+      const resyData = await fetchData("/api/v1/resy/get_restaurants", formData);
+      results.push({ source: "resy", data: resyData });
+
+      // OpenTable
+      const openTableData = await fetchData("/api/v1/opentable/get_restaurants", customFormData);
+      results.push({ source: "opentable", data: openTableData });
+
+      // Set data in the same order
+      setYelpData(results.find(r => r.source === "yelp")?.data || []);
+      setResyData(results.find(r => r.source === "resy")?.data || []);
+      setOpenTableData(results.find(r => r.source === "opentable")?.data || []);
+    };
+
+    fetchDataInOrder();
+  }
+}, [formData, loading]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -135,7 +172,7 @@ const clearFilters = () => {
     reviewedFilter: []
   }));
 };
-
+    
 
   return (
     <>
