@@ -108,9 +108,10 @@ const SearchLocationV2 = memo(
     navigate(route);
   };
 
-  console.log("form data " , formData)
+  // console.log("form data " , formData)
 
     useEffect(() => {
+    // console.log("handle search called")
     const delayDebounce = setTimeout(() => {
       if (formData.location || formData.term) {
         handleSearch();
@@ -124,7 +125,7 @@ const SearchLocationV2 = memo(
 
   const handleTermChange = (value) => {
     setFormData((prevData) => {
-      console.log("values " , value)
+      // console.log("values " , value)
       const words = value.name.trim().split(/\s+/);
       if (!words.length) return null;
       let word = words[0];
@@ -132,7 +133,7 @@ const SearchLocationV2 = memo(
        word = word.slice(0, -2);
       }
       const result = word.toLowerCase();
-      console.log("result is " , value);
+      // console.log("result is " , value);
       let updatedData;
       if (value.latitude || value.longitude)
       {
@@ -140,7 +141,14 @@ const SearchLocationV2 = memo(
       }
       else if (value.id || value.latitude==null)
       {
-        updatedData = { ...prevData, term: result , cuisine_id:value.id};
+        // updatedData = { ...prevData, term: result , cuisine_id:value.id,region_id:"",latitude:"",longitude:"" };
+        updatedData = {
+            ...prevData, term:result, cuisine_id: value.id,
+          };
+          // Remove location-specific fields
+          delete updatedData.latitude;
+          delete updatedData.longitude;
+          delete updatedData.region_id;
       }
       else{
         updatedData = { ...prevData, term: result};
