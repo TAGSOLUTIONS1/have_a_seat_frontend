@@ -3,6 +3,7 @@ import { AiOutlineMail } from "react-icons/ai";
 import axios from "axios";
 import BookRestaurant from "../BookResturant/BookRestaurant";
 import { useToast } from "@/components/ui/use-toast";
+import { Base_Url } from "@/baseUrl";
 
 export default function ContactForm() {
   const [form, setForm] = useState({
@@ -25,7 +26,7 @@ export default function ContactForm() {
     setSuccess(false);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/v1/connect/contact-us", form);
+      const response = await axios.post(`${Base_Url}/api/v1/connect/contact-us`, form);
       console.log("Submitted:", response.data);
       setSuccess(true);
       setForm({
