@@ -37,7 +37,7 @@ export default function ContactForm() {
               <input
                 type="email"
                 placeholder="Your email"
-                className="w-full p-2 sm:p-4 px-7 pl-12 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
+                className="w-full p-4 pl-12 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
               />
             </div>
 
