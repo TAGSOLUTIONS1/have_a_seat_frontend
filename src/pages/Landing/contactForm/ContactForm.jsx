@@ -1,7 +1,52 @@
+import React, { useState } from "react";
 import { AiOutlineMail } from "react-icons/ai";
+import axios from "axios";
 import BookRestaurant from "../BookResturant/BookRestaurant";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function ContactForm() {
+  const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    message: "",
+  });
+  const { toast } = useToast();
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setSuccess(false);
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/v1/connect/contact-us", form);
+      console.log("Submitted:", response.data);
+      setSuccess(true);
+      setForm({
+        first_name: "",
+        last_name: "",
+        email: "",
+        message: "",
+      });
+      toast({
+      title: "Your message has been sent successfully!",
+      status: "success",
+      duration: 8000,
+      isClosable: true,
+    });
+    } catch (error) {
+      console.error("Submission error:", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  
   return (
    <div className="bg-[#F5EDFC]">
     <BookRestaurant />
@@ -15,16 +60,23 @@ export default function ContactForm() {
         <p className="text-center font-roboto font-normal text-shipGrey text-sm sm:text-xl md:text-2xl">You can reach us at anytime.</p>
         </div>
 
-        <form className="space-y-2 sm:space-y-4">
+        <form className="space-y-2 sm:space-y-4" onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row gap-2 sm:gap-4">
             <input
+              name="first_name"
               type="text"
               placeholder="First name"
+              value={form.first_name}
+              onChange={handleChange}
               className="flex-1 p-2 sm:p-4 px-7 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
+              required
             />
             <input
+              name="last_name"
               type="text"
               placeholder="Last name"
+              value={form.last_name}
+              onChange={handleChange}
               className="flex-1 p-2 sm:p-4 px-7 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
           </div>
@@ -35,24 +87,36 @@ export default function ContactForm() {
                 className="absolute left-4 top-1/2 transform -translate-y-1/2"
               />
               <input
+                name="email"
                 type="email"
                 placeholder="Your email"
+                value={form.email}
+                onChange={handleChange}
                 className="w-full p-4 pl-12 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400"
               />
             </div>
 
           <textarea
+            name="message"
             placeholder="How can we help?"
             className="w-full p-2 sm:p-4 px-7 rounded-[32px] focus:outline-none focus:ring-2 focus:ring-purple-400"
-            rows="4"
+            rows={4}
+            value={form.message}
+            onChange={handleChange}
           ></textarea>
           <button
             type="submit"
+            disabled={submitting}
             className="w-full bg-plum text-white py-2 sm:py-3 rounded-full hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400
             text-lg sm:text-xl font-roboto font-medium"
           >
-            Submit
+            {submitting ? "Sending..." : "Submit"}
           </button>
+          {success && (
+              <p className="text-green-600 text-center pt-2">
+                Your message has been sent successfully!
+              </p>
+            )}
         </form>
       </div>
     </div>

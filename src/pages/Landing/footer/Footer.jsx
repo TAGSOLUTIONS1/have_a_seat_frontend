@@ -8,11 +8,14 @@ import {
 } from "@/components/constants/constants";
 import { Link as ScrollLink } from "react-scroll";
 import { Mail, Phone } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import axios from "axios";
 
 function Footer() {
   const [formData, setFormData] = useState(initialBookingState);
   const navigate = useNavigate();
 
+  // const [submit,setSubmit]=useState("");
   const handleSearch = () => {
     localStorage.setItem("searchFormData", JSON.stringify(formData)); // Store form data before navigating
     const route = `/restraunts?data=${encodeURIComponent(
@@ -21,6 +24,46 @@ function Footer() {
 
     navigate(route);
   };
+
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const { toast } = useToast();
+
+const handleNewsletterSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!newsletterEmail) {
+    toast({
+      title: "Email required",
+      description: "Please enter your email to subscribe.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  try {
+    await axios.post("http://127.0.0.1:8000/api/v1/connect/subscribe", {
+      email: newsletterEmail,
+    });
+
+    toast({
+      title: "Subscribed!",
+      description: "You've been added to our newsletter.",
+    });
+
+    setNewsletterEmail("");
+  } catch (error) {
+    console.error(error);
+    const message =
+      error?.response?.data?.detail || "Subscription failed. Try again.";
+    toast({
+      title: "Subscription failed",
+      description: message,
+      variant: "destructive",
+    });
+  }
+};
+
+
   return (
     <div id="contact" className="bg-[#F5EDFC] py-5 md:py-0 px-5 md:px-[75px]">
       {/* web*/}
@@ -79,14 +122,22 @@ function Footer() {
           </p>
         </div>
 
-        <form className=" flex flex-col md:w-1/2 gap-6 md:gap-0 md:flex-row justify-end items-center text-end">
+        <form
+          onSubmit={handleNewsletterSubmit}
+          className="flex flex-col md:w-1/2 gap-6 md:gap-0 md:flex-row justify-end items-center text-end"
+        >
           <div className="relative w-full md:w-3/5">
-            <Mail size={16} className="absolute top-1/2 left-3 transform -translate-y-1/2 text-grayblu" />
+            <Mail
+              size={16}
+              className="absolute top-1/2 left-3 transform -translate-y-1/2 text-grayblu"
+            />
             <input
               type="email"
               placeholder="Enter your email address..."
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
               className="w-full text-grayblu pl-10 pr-4 py-2 rounded-full 
-              border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
           <button
@@ -96,6 +147,7 @@ function Footer() {
             Subscribe →
           </button>
         </form>
+
       </div>
 
       {/* copyrigths */}
