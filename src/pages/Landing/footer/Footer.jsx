@@ -10,6 +10,7 @@ import { Link as ScrollLink } from "react-scroll";
 import { Mail, Phone } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
+import { Base_Url } from "@/baseUrl";
 
 function Footer() {
   const [formData, setFormData] = useState(initialBookingState);
@@ -41,7 +42,7 @@ const handleNewsletterSubmit = async (e) => {
   }
 
   try {
-    await axios.post("http://127.0.0.1:8000/api/v1/connect/subscribe", {
+    await axios.post(`${Base_Url}/api/v1/connect/subscribe`, {
       email: newsletterEmail,
     });
 
