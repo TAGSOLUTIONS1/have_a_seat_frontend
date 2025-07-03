@@ -61,10 +61,21 @@ const RestrauntDetail = () => {
       if (endpoint) {
         try {
           const response = await axios.get(endpoint);
+          
           if (key === "open_table") {
-            setRestrauntDetail(response?.data?.data);
+            const data = response?.data?.data;
+            setRestrauntDetail({
+              ...data,
+              restaurant_type: "open_table",
+            });
+            // setRestrauntDetail(response?.data?.data);
           } else if (key === "yelp") {
-            setRestrauntDetail(response.data.data);
+            const data = response?.data?.data;
+             setRestrauntDetail({
+              ...data,
+              restaurant_type: "yelp",
+            });
+            // setRestrauntDetail(response.data.data);
           } else {
             return;
           }

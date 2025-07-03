@@ -40,7 +40,7 @@ export default function MakeReservation({ restrauntDetail }) {
     if (!reservation_covers) return setError("Persons are Required");
 
     setError("");
-    reservationCard?.alias ? fetchYelpTimeSlots() : fetchOpenTableTimeSlots();
+    reservationCard?.restaurant_type ==="yelp" ? fetchYelpTimeSlots() : fetchOpenTableTimeSlots();
   };
 
   const handleYelpReservation = (clickedData) => {
@@ -119,7 +119,7 @@ export default function MakeReservation({ restrauntDetail }) {
       date: formData?.reservation_date,
       time: formData?.reservation_time,
       persons: formData?.reservation_covers,
-      restaurant_id: reservationCard?.restaurant?.restaurantId,
+      restaurant_id: reservationCard?.id,
     };
     try {
       console.log("opentbaletime params", openTableTimeParams);
