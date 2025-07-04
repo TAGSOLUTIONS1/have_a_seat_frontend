@@ -182,7 +182,7 @@ const ReservationStatus = () => {
         const finalTime = `${formattedHours}:${formattedMinutes}`;
 
         setLoading(true);
-
+        console.log("final data available is " , finalData , myData)
         const apiParams = {
           first_name: myData?.reservationFormData?.first_name,
           last_name: myData?.reservationFormData?.last_name,

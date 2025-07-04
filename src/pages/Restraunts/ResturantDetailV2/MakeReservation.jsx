@@ -54,15 +54,15 @@ export default function MakeReservation({ restrauntDetail }) {
   };
 
   const handleOpenTableReservation = (clickedData) => {
-    // console.log(reservationCard?.restaurant?.restaurantId);
-    const restraunt_id = reservationCard?.restaurant?.restaurantId;
-    const restaurantName = reservationCard?.restaurant?.name;
-    const restaurantAddress = reservationCard?.restaurant?.address;
-    const restaurantCuisines = reservationCard?.restaurant?.cuisines;
+    console.log("clicked data " , clickedData , reservationCard);
+    const restaurant_id = reservationCard?.id;
+    const restaurantName = reservationCard?.name;
+    const restaurantAddress = reservationCard?.address;
+    const restaurantCuisines = reservationCard?.cuisines;
     const updatedNextData = [
       formData,
       clickedData,
-      restraunt_id,
+      restaurant_id,
       restaurantName,
       restaurantAddress,
       restaurantCuisines,
@@ -148,10 +148,13 @@ export default function MakeReservation({ restrauntDetail }) {
     const baseTimeDate = new Date();
     baseTimeDate.setHours(hours, minutes, 0, 0);
     const time = new Date(baseTimeDate.getTime() + offset * 60000);
-    const formattedHours = String(time.getHours()).padStart(2, "0");
+    const formattedHours = time.getHours() % 12 || 12; // Convert to 12-hour format
     const formattedMinutes = String(time.getMinutes()).padStart(2, "0");
-    return `${formattedHours}:${formattedMinutes}`;
+    const amPm = time.getHours() >= 12 ? "PM" : "AM";
+    return `${formattedHours}:${formattedMinutes} ${amPm}`;
   }
+
+  console.log("time slots  " , timeSlots , openTableTimeSlots)
 
   return (
     <>
@@ -195,65 +198,60 @@ export default function MakeReservation({ restrauntDetail }) {
             <LucideLoader className="w-6 h-6 justify-center animate-spin align-middle mx-auto" />
           ) : (
             <div className="py-3 sm:py-10 text-center">
-              {restrauntDetail?.alias ? (
-                isDataLoaded ? (
-                  Array.isArray(timeSlots) && timeSlots.length > 0 ? (
-                    <>
-                      <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
-                      <div className="flex flex-wrap justify-center">
-                      {timeSlots
-                        .filter((data) => !isNaN(data.timestamp))
-                        .map((data, index) => (
-                          <button
-                            key={index}
-                            className="bg-plum text-white font-semibold font-roboto text-base p-2 px-3 m-1 rounded-lg"
-                            onClick={() => handleYelpReservation(data)}
-                          >
-                            {new Date(data.timestamp * 1000).toLocaleTimeString(
-                              [],
-                              {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              }
-                            )}
-                          </button>
-                        ))}
+              {isDataLoaded ? (
+                  restrauntDetail?.restaurant_type === "yelp" ? (
+                    Array.isArray(timeSlots) && timeSlots.length > 0 ? (
+                      <>
+                        <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
+                        <div className="flex flex-wrap justify-center">
+                          {timeSlots
+                            .filter((data) => !isNaN(data.timestamp))
+                            .map((data, index) => (
+                              <button
+                                key={index}
+                                className="bg-plum text-white font-semibold font-roboto text-base p-2 px-3 m-1 rounded-lg"
+                                onClick={() => handleYelpReservation(data)}
+                              >
+                                {/* {new Date(data.timestamp * 1000).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })} */}
+                                {data.formatted_time}
+                              </button>
+                            ))}
                         </div>
-                    </>
-                  ) : (
-                    <p className="text-lg text-red-600">No slots available.</p>
-                  )
-                ) : (
-                  <p></p>
-                )
-              ) : isDataLoaded ? (
-                Array.isArray(openTableTimeSlots) &&
-                openTableTimeSlots[0]?.availabilityDays[0]?.slots.length > 0 ? (
-                  <>
-                    <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
-                    <div className="flex flex-wrap justify-center">
-                    {openTableTimeSlots[0]?.availabilityDays[0]?.slots
-                      .filter((data) => !isNaN(data.timeOffsetMinutes))
-                      .map((data, index) => (
-                        <button
-                          key={index}
-                          className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                          onClick={() => handleOpenTableReservation(data)}
-                        >
-                          {convertOffsetToTime(
-                            data.timeOffsetMinutes,
-                            formData?.reservation_time
-                          )}
-                        </button>
-                      ))}
-                      </div>
-                  </>
-                ) : (
-                  <p className="text-lg text-red-600">No slots available.</p>
-                )
-              ) : (
-                <p></p>
-              )}
+                      </>
+                    ) : (
+                      <p className="text-lg text-red-600">No slots available.</p>
+                    )
+                  ) : restrauntDetail?.restaurant_type === "open_table" ? (
+                    Array.isArray(openTableTimeSlots) &&
+                    openTableTimeSlots[0]?.availabilityDays[0]?.slots.length > 0 ? (
+                      <>
+                        <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
+                        <div className="flex flex-wrap justify-center">
+                          {openTableTimeSlots[0]?.availabilityDays[0]?.slots
+                            .filter((data) => !isNaN(data.timeOffsetMinutes))
+                            .map((data, index) => (
+                              <button
+                                key={index}
+                                className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                                onClick={() => handleOpenTableReservation(data)}
+                              >
+                                {convertOffsetToTime(
+                                  data.timeOffsetMinutes,
+                                  formData?.reservation_time
+                                )}
+                              </button>
+                            ))}
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-lg text-red-600">No opentable slots available.</p>
+                    )
+                  ) :  <p className="text-lg text-red-600">Couldnot get slots.</p>
+                ) : null}
+
             </div>
           )}
         </div>
