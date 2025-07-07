@@ -19,8 +19,8 @@ const ReservationStatus = () => {
 
   useEffect(() => {
     const finalData = JSON.parse(data);
-    console.log(finalData, "final data");
-    if (finalData?.bookingInfo) {
+        
+        if (finalData?.bookingInfo) {
       yelpReservation();
     } else {
       openTableReservation();
@@ -32,6 +32,7 @@ const ReservationStatus = () => {
       let finalData = null;
       if (data) {
         finalData = JSON.parse(decodeURIComponent(data));
+        // console.log("opne tbale final daata " , finalData)
         setFormData(finalData);
 
         const newDate = finalData?.formData[0]?.reservation_date;
@@ -95,7 +96,7 @@ const ReservationStatus = () => {
       }
     } catch (error) {
       console.error("Error :", error);
-      setStatus(false);
+      // setStatus(false);
       setLoading(false);
     }
   };
@@ -105,7 +106,6 @@ const ReservationStatus = () => {
       let finalData = null;
       if (data) {
         finalData = JSON.parse(decodeURIComponent(data));
-        console.log(finalData);
         setFormData(finalData);
 
         const address = finalData?.bookingInfo?.formattedAddress;
@@ -167,7 +167,7 @@ const ReservationStatus = () => {
       if (data) {
         const myData = JSON.parse(decodeURIComponent(data));
         const finalData = myData.formData;
-        setFormData(myData.reservationFormData);
+        setFormData(myData);
 
         const reservationTime = finalData[0]?.reservation_time;
         const timeDifference = finalData[1]?.timeOffsetMinutes;
@@ -182,15 +182,15 @@ const ReservationStatus = () => {
         const finalTime = `${formattedHours}:${formattedMinutes}`;
 
         setLoading(true);
-        console.log("final data available is " , finalData , myData)
         const apiParams = {
           first_name: myData?.reservationFormData?.first_name,
           last_name: myData?.reservationFormData?.last_name,
           mobile_number: myData?.reservationFormData?.phone,
-          mobile_country_id: "PK",
+          mobile_country_id: "US",
           email: myData?.reservationFormData?.email,
           persons: finalData[0]?.reservation_covers,
           restaurant_id: finalData[2],
+          restaurant_name:finalData[3] || "the restaurant",
           seating_option: "default",
           dining_area_id: 1,
           slot_hash: finalData[1]?.slotHash,

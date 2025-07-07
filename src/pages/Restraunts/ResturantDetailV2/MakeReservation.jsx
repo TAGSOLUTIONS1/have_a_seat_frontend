@@ -54,7 +54,6 @@ export default function MakeReservation({ restrauntDetail }) {
   };
 
   const handleOpenTableReservation = (clickedData) => {
-    console.log("clicked data " , clickedData , reservationCard);
     const restaurant_id = reservationCard?.id;
     const restaurantName = reservationCard?.name;
     const restaurantAddress = reservationCard?.address;
