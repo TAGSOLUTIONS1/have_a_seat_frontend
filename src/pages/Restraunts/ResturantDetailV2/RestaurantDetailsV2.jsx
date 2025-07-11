@@ -29,11 +29,11 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
 
       {/* reviews */}
       <Reviews restrauntDetail={restrauntDetail} />
-      {restrauntDetail.menus ? 
+      {restrauntDetail.menus || restrauntDetail?.restaurant_type==="resy" ? 
         (<>
                <MenuDetails restrauntDetail={restrauntDetail}></MenuDetails>
         </>)
-      :(
+        :(
         <>
         <div className="">
         <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-4">

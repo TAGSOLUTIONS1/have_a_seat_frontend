@@ -153,8 +153,6 @@ export default function MakeReservation({ restrauntDetail }) {
     return `${formattedHours}:${formattedMinutes} ${amPm}`;
   }
 
-  console.log("time slots  " , timeSlots , openTableTimeSlots)
-
   return (
     <>
     <div className="overflow-hidden">

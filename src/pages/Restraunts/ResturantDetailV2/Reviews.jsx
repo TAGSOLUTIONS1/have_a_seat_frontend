@@ -92,6 +92,10 @@ export default function Reviews({ restrauntDetail }) {
     }
   }, [restrauntDetail?.restaurant_flag]);
 
+  // const firstAbout = Object.values(data)[0]?.content?.["en-us"]?.about?.body;
+    const templates = restrauntDetail?.results?.venues[0]?.templates;
+    const firstTemplate = Object.values(templates || {})[0];
+
   return (
     <div className=" py-8 lg:flex gap-10">
       {/* About Section */}
@@ -104,17 +108,35 @@ export default function Reviews({ restrauntDetail }) {
             ? restrauntDetail?.restaurant?.name
             : restrauntDetail?.name}
         </h2>
-        <p className="text-shipGrey font-roboto text-xl font-normal">
-          {restrauntDetail?.alias
-            ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
-            : restrauntDetail?.restaurant
-            ? convertHtmlToText(restrauntDetail?.restaurant?.description)
-            : "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."}
-          {/* randomTemplate?.content["en-us"]?.about?.body */}
+        <p className="text-shipGrey font-roboto text-sm sm:text-base md:text-lg lg:text-xl font-normal">
+          {
+            restrauntDetail?.alias
+              ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
+              : restrauntDetail?.restaurant?.description
+              ? convertHtmlToText(restrauntDetail.restaurant.description)
+              : firstTemplate?.content?.['en-us']?.about?.body && (
+              " " + convertHtmlToText(
+                firstTemplate?.content?.['en-us']?.about?.body 
+              )
+            ) 
+            // :" "
+          }
         </p>
+        <p className="text-shipGrey font-roboto text-sm sm:text-base md:text-lg lg:text-xl font-bold mt-5">
+          {
+            firstTemplate?.content?.['en-us']?.need_to_know?.body && (
+              " " + convertHtmlToText(
+                firstTemplate?.content?.['en-us']?.need_to_know?.body 
+              )
+            ) 
+            // :" "
+          }
+        </p>
+
       </div>
       {/* Reviews Section */}
-      <div className="lg:w-1/2 mt-8 lg:mt-0 border-[0.4px] border-[#B9B9B9] shadow-lg bg-white p-5 rounded-[30px]">
+      {restrauntDetail?.restaurant_type!=="resy" ?
+      (<div className="lg:w-1/2 mt-8 lg:mt-0 border-[0.4px] border-[#B9B9B9] shadow-lg bg-white p-5 rounded-[30px]">
         <h2 className="text-4xl text-shipGrey font-agrandir font-bold mb-4">Reviews</h2>
         <div className="space-y-4">
           {restrauntDetail?.restaurant ? (
@@ -125,7 +147,7 @@ export default function Reviews({ restrauntDetail }) {
 
           <Comments reviewsData={reviewsData} yelpReviews={yelpReviews} />
         </div>
-      </div>
+      </div>):null}
     </div>
   );
 }

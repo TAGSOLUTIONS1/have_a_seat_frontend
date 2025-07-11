@@ -16,7 +16,6 @@ export default function Restaurant({ restrauntDetail }) {
   // // Getting the corresponding object based on the random key
   // const randomTemplate =
   //   randomTemplateKey && restrauntDetail?.templates[randomTemplateKey];
-  
   return (
     <div className="py-4 sm:py-10 flex flex-col text-white">
       <h1 className="font-bold text-6xl text-center md:text-left font-agrandir md:text-[2rem] lg:text-[3rem] mb-10 leading-[50px]">
@@ -24,7 +23,9 @@ export default function Restaurant({ restrauntDetail }) {
           ? restrauntDetail?.name
           : restrauntDetail?.restaurant
           ? restrauntDetail?.restaurant?.name
-          : restrauntDetail?.name}
+          : restrauntDetail?.name
+          ? restrauntDetail?.results?.venues
+          :restrauntDetail?.results?.venues[0]?.venue?.name}
       </h1>
       <div className="flex sm:my-10  justify-between items-center">
         <div className="flex flex-col gap-4">
@@ -41,9 +42,12 @@ export default function Restaurant({ restrauntDetail }) {
               <p className="text-sm sm:text-base font-roboto font-normal min-h-[40px]">
                 
 
-                {restrauntDetail?.rating
+                {restrauntDetail
                   ? restrauntDetail?.rating?.value || restrauntDetail?.rating || restrauntDetail?.restaurant?.statistics?.reviews?.ratings?.overall?.rating
-                  : "No rating available"}
+                  ? restrauntDetail?.results?.venues[0]?.venue
+                  : `${Number(restrauntDetail?.results?.venues[0]?.venue?.rating).toFixed(2)}`
+                  : "No rating available"
+                }
                 <span className="text-sm sm:text-base">/5</span>
               </p>
             </div>
@@ -62,7 +66,9 @@ export default function Restaurant({ restrauntDetail }) {
               <p className="text-sm sm:text-base font-roboto font-normal min-h-[40px]">
                {restrauntDetail.categories
               ? restrauntDetail.categories.map((c) => c.title).join(", ")
-              : restrauntDetail.cuisine?.join(", ") || restrauntDetail.restaurant?.primaryCuisine?.name || "N/A"}
+              : restrauntDetail.cuisine?.join(", ") || restrauntDetail.restaurant?.primaryCuisine?.name
+              ? restrauntDetail?.results?.venues[0]?.venue
+              : restrauntDetail?.results?.venues[0]?.venue?.type || "N/A"}
 
               </p>
             </div>
@@ -91,11 +97,21 @@ export default function Restaurant({ restrauntDetail }) {
                           <>
                             {restrauntDetail.address.street}, {restrauntDetail.address.city}
                           </>
-                        ) : (
+                        ) 
+                        :(
                           <>Address not available</>
                         )}
                       </>
-                    ) :(<></>)}
+                    ) :(<>
+                    {restrauntDetail?.results?.venues[0]?.venue?.location ? (
+                      <>
+                      {restrauntDetail?.results?.venues[0]?.venue?.location.neighborhood}, {restrauntDetail?.results?.venues[0]?.venue?.location?.name}
+                          </>
+                        ) :(
+                          <>Address not available</>
+                        )
+                    }
+                    </>)}
 
               </p>
             </div>
@@ -122,7 +138,7 @@ export default function Restaurant({ restrauntDetail }) {
                     }
                   </>
                 ) : (
-                  <></>
+                  <>N/A</>
                 )}
               </p>
             </div>

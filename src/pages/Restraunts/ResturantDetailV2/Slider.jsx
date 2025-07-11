@@ -49,12 +49,18 @@ export default function ImageSlider({ restrauntDetail }) {
   // } else 
     if (pictures?.images || pictures?.photos) {
     const galleryPhotos = pictures?.images || pictures?.photos;
+
     if (galleryPhotos && galleryPhotos.length > 0) {
       imageUrls = galleryPhotos.map((photo) => {
         const firstThumbnailUrl = photo;
         return firstThumbnailUrl;
       });
     }
+  } 
+  else if (restrauntDetail?.results?.venues[0]?.venue?.responsive_images?.originals) {
+    const galleryPhotos = restrauntDetail?.results?.venues[0]?.venue?.responsive_images?.originals;      
+    imageUrls = Object.values(galleryPhotos).map(photo => photo.url);
+
   } else {
     imageUrls = pictures?.images || [];
   }
