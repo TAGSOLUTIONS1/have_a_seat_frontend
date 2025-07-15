@@ -15,7 +15,9 @@ const RestrauntDetail = () => {
   const [loading, setLoading] = useState(true);
   const [endpoint, setEndPoint] = useState();
   const [key, setKey] = useState();
-
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+  
   const location = useLocation();
 
   useEffect(() => {
@@ -34,8 +36,8 @@ const RestrauntDetail = () => {
     const params = new URLSearchParams(location.search);
     const map_url = params.get("map_url");
     const yelp_alias = params.get("yelp_alias");
-
-    if (yelp_alias === null) {
+    const resy_alias = params.get("resy_alias");
+    if (map_url) {
       setPrevId(map_url);
       const openTableParamUrl = map_url?.replace(
         "https://www.opentable.com/",
@@ -45,13 +47,21 @@ const RestrauntDetail = () => {
       setEndPoint(
         `${Base_Url}/api/v1/opentable/get_restaurant_details?map_url=${openTableParamUrl}`
       );
-    } else if (map_url === null) {
+    } else if (yelp_alias) {
       setPrevId(yelp_alias);
       setKey("yelp");
       setEndPoint(
         `${Base_Url}/api/v1/yelp/get_restaurant_details/${yelp_alias}`
       );
-    } else {
+    }
+    else if(resy_alias){
+    setPrevId(resy_alias);
+      setKey("resy");
+      setEndPoint(
+        `${Base_Url}/api/v1/resy/get_restaurant_details/?venue_id=${resy_alias}&persons=2&date=${formattedDate}`
+      );
+    } 
+    else {
       null;
     }
   }, [location.search, prevId]);
@@ -76,7 +86,23 @@ const RestrauntDetail = () => {
               restaurant_type: "yelp",
             });
             // setRestrauntDetail(response.data.data);
-          } else {
+          } 
+          else if (key === "resy") {
+            const data = response?.data?.data;
+            const additionalApiUrl = `${Base_Url}/api/v1/resy/get_restaurant_details_v2?url_slug=omakase-ichi&location=new-york-ny`;
+            const additionalResponse = await axios.get(additionalApiUrl);
+            const additionalData = additionalResponse?.data?.data || {};
+            // console.log("additional dtaa is " , additionalData)
+             setRestrauntDetail({
+              ...data,
+              results: {
+                ...data.results,
+                resy2: additionalData,              
+              },
+              restaurant_type: "resy",
+            });
+          }
+          else {
             return;
           }
           setLoading(false);

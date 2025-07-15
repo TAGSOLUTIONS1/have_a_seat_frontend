@@ -330,7 +330,6 @@ const RestaurantCards = memo(
       });
     };
   
-    
     const displayedCuisines = showmore ? allCuisines : cuisinestypes;
     
     return (
@@ -546,19 +545,19 @@ const RestaurantCards = memo(
         </div>
         <div className="flex-1">
           {copiedRestaurants?.map((data, index) => {
-              if (data?.restraunt_type === "resy") {
-                return (
-                  <a
-                    key={index}
-                    href={`https://resy.com/cities/${data?.location?.url_slug}/venues/${data?.url_slug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block mb-4 sm:mb-6"
-                  >
-                    <RestaurantCard data={data} />
-                  </a>
-                );
-              }
+              // if (data?.restraunt_type === "resy") {
+              //   return (
+              //     <a
+              //       key={index}
+              //       href={`https://resy.com/cities/${data?.location?.url_slug}/venues/${data?.url_slug}`}
+              //       target="_blank"
+              //       rel="noopener noreferrer"
+              //       className="block mb-4 sm:mb-6"
+              //     >
+              //       <RestaurantCard data={data} />
+              //     </a>
+              //   );
+              // }
 
               return (
                 <Link
@@ -568,11 +567,15 @@ const RestaurantCards = memo(
                     search: `?${
                       data?.restraunt_type === "yelp"
                         ? "yelp_alias"
-                        : "map_url"
+                        :data?.restraunt_type === "open_table"
+                        ? "map_url"
+                        : "resy_alias"
                     }=${encodeURIComponent(
                       data?.restraunt_type === "yelp"
                         ? data?.alias
-                        : data?.urls?.profileLink?.link
+                        : data?.restraunt_type === "open_table"
+                        ? data?.urls?.profileLink?.link
+                        : data?.id?.resy
                     )}`,
                   }}
                   className="block mb-4 sm:mb-6"
