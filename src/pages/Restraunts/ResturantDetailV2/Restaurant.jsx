@@ -137,7 +137,14 @@ export default function Restaurant({ restrauntDetail }) {
                         ?.formattedPhoneNumber
                     }
                   </>
-                ) : (
+                ) : restrauntDetail?.results?.resy2 ? (
+                  <>
+                    {
+                      restrauntDetail?.results?.resy2?.contact?.phone_number
+                    }
+                  </>
+                )
+                : (
                   <>N/A</>
                 )}
               </p>

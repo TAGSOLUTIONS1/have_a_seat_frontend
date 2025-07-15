@@ -89,8 +89,16 @@ const RestrauntDetail = () => {
           } 
           else if (key === "resy") {
             const data = response?.data?.data;
+            const additionalApiUrl = `${Base_Url}/api/v1/resy/get_restaurant_details_v2?url_slug=omakase-ichi&location=new-york-ny`;
+            const additionalResponse = await axios.get(additionalApiUrl);
+            const additionalData = additionalResponse?.data?.data || {};
+            // console.log("additional dtaa is " , additionalData)
              setRestrauntDetail({
               ...data,
+              results: {
+                ...data.results,
+                resy2: additionalData,              
+              },
               restaurant_type: "resy",
             });
           }
