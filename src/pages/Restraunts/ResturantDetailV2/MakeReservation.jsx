@@ -20,7 +20,6 @@ export default function MakeReservation({ restrauntDetail }) {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [timeSlots, setTimeSlots] = useState();
   const [openTableTimeSlots, setOpenTableTimeSlots] = useState();
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +30,7 @@ export default function MakeReservation({ restrauntDetail }) {
   useEffect(() => {
     // console.log(nextData);
   }, [nextData]);
-
+  
   const handleTimeSlots = () => {
     const { reservation_covers, reservation_date, reservation_time } = formData;
 
@@ -40,7 +39,9 @@ export default function MakeReservation({ restrauntDetail }) {
     if (!reservation_covers) return setError("Persons are Required");
 
     setError("");
-    reservationCard?.restaurant_type ==="yelp" ? fetchYelpTimeSlots() : fetchOpenTableTimeSlots();
+    reservationCard?.restaurant_type ==="yelp" ? fetchYelpTimeSlots() :
+    reservationCard?.restaurant_type ==="open_table" ? fetchOpenTableTimeSlots() :
+    fetchResyTimeSlots();
   };
 
   const handleYelpReservation = (clickedData) => {
@@ -111,9 +112,39 @@ export default function MakeReservation({ restrauntDetail }) {
     }
   };
 
+    const fetchResyTimeSlots = async () => {
+    setLoading(true);
+    const resyTimeParams = {
+      venue_id: reservationCard?.results?.venues[0]?.venue?.id?.resy,
+      date: formData?.reservation_date,
+      persons: formData?.reservation_covers,
+    };
+    try {
+      const response = await axios.get(
+        `${Base_Url}/api/v1/resy/get_restaurant_details?`,
+        {
+          params: resyTimeParams,
+        }
+      );
+
+      if (response.status === 200) {
+        setTimeSlots(
+          response?.data?.data?.results?.venues[0]?.slots
+        );
+        setLoading(false);
+        setIsDataLoaded(true);
+      } else {
+        setLoading(fasle);
+        throw new Error("Network response was not ok.");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const fetchOpenTableTimeSlots = async () => {
     setLoading(true);
-    // console.log(reservationCard?.restaurant?.restaurantId)
     const openTableTimeParams = {
       date: formData?.reservation_date,
       time: formData?.reservation_time,
@@ -121,7 +152,6 @@ export default function MakeReservation({ restrauntDetail }) {
       restaurant_id: reservationCard?.id,
     };
     try {
-      console.log("opentbaletime params", openTableTimeParams);
       const response = await axios.get(
         `${Base_Url}/api/v1/opentable/get_restaurant_timings?`,
         {
@@ -152,6 +182,14 @@ export default function MakeReservation({ restrauntDetail }) {
     const amPm = time.getHours() >= 12 ? "PM" : "AM";
     return `${formattedHours}:${formattedMinutes} ${amPm}`;
   }
+
+  const formatTimeOnly = (datetimeString) => {
+  return new Date(datetimeString.replace(' ', 'T')).toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
+
 
   return (
     <>
@@ -245,6 +283,31 @@ export default function MakeReservation({ restrauntDetail }) {
                       </>
                     ) : (
                       <p className="text-lg text-red-600">No opentable slots available.</p>
+                    )
+                  ) : restrauntDetail?.restaurant_type === "resy" ? (
+                    timeSlots.length > 0 ? (
+                      <>
+                        <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
+                        <div className="flex flex-wrap justify-center">
+                          {timeSlots
+                            // .filter((data) => !isNaN(data.timeOffsetMinutes))
+                            .map((data, index) => (
+                              <button
+                                key={index}
+                                className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                                // onClick={() => handleOpenTableReservation(data)}
+                              >
+                                {/* {convertOffsetToTime(
+                                  data.date.start,
+                                  formData?.reservation_time
+                                )} */}
+                                {formatTimeOnly(data.date.start)}
+                              </button>
+                            ))}
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-lg text-red-600">No resy slots available.</p>
                     )
                   ) :  <p className="text-lg text-red-600">Couldnot get slots.</p>
                 ) : null}
