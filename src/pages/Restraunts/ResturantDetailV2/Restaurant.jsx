@@ -42,10 +42,12 @@ export default function Restaurant({ restrauntDetail }) {
               <p className="text-sm sm:text-base font-roboto font-normal min-h-[40px]">
                 
 
-                {restrauntDetail
-                  ? restrauntDetail?.rating?.value || restrauntDetail?.rating || restrauntDetail?.restaurant?.statistics?.reviews?.ratings?.overall?.rating
-                  ? restrauntDetail?.results?.venues[0]?.venue
-                  : `${Number(restrauntDetail?.results?.venues[0]?.venue?.rating).toFixed(2)}`
+                {restrauntDetail?.rating ?
+                  restrauntDetail?.rating?.value || restrauntDetail?.rating
+                  : restrauntDetail?.restaurant ?
+                    restrauntDetail?.restaurant?.statistics?.reviews?.ratings?.overall?.rating
+                  : restrauntDetail?.results?.venues[0]?.venue ?
+                   `${Number(restrauntDetail?.results?.venues[0]?.venue?.rating).toFixed(2)}`
                   : "No rating available"
                 }
                 <span className="text-sm sm:text-base">/5</span>
@@ -66,9 +68,11 @@ export default function Restaurant({ restrauntDetail }) {
               <p className="text-sm sm:text-base font-roboto font-normal min-h-[40px]">
                {restrauntDetail.categories
               ? restrauntDetail.categories.map((c) => c.title).join(", ")
-              : restrauntDetail.cuisine?.join(", ") || restrauntDetail.restaurant?.primaryCuisine?.name
-              ? restrauntDetail?.results?.venues[0]?.venue
-              : restrauntDetail?.results?.venues[0]?.venue?.type || "N/A"}
+              : restrauntDetail?.cuisine ?
+               restrauntDetail.cuisine?.join(", ") || restrauntDetail.restaurant?.primaryCuisine?.name
+              : restrauntDetail?.results?.venues[0]?.venue
+              ? restrauntDetail?.results?.venues[0]?.venue?.type 
+              : "N/A"}
 
               </p>
             </div>
