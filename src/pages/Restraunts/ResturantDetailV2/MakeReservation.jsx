@@ -191,6 +191,23 @@ export default function MakeReservation({ restrauntDetail }) {
 };
 
 
+    const [showModal, setShowModal] = useState(false);
+
+      const handleClick = () => {
+        setShowModal(true);
+
+        // Open Resy link after a short delay (e.g., 2 seconds)
+        setTimeout(() => {
+          window.open(
+            `https://resy.com/cities/${data?.location?.url_slug}/venues/${data?.url_slug}`,
+            "_blank",
+            "noopener,noreferrer"
+          );
+          setShowModal(false); // Optionally close modal
+        }, 2000);
+      };
+
+
   return (
     <>
     <div className="overflow-hidden">
@@ -287,14 +304,16 @@ export default function MakeReservation({ restrauntDetail }) {
                   ) : restrauntDetail?.restaurant_type === "resy" ? (
                     timeSlots.length > 0 ? (
                       <>
-                        <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
+                        <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots resy</p>
                         <div className="flex flex-wrap justify-center">
                           {timeSlots
                             // .filter((data) => !isNaN(data.timeOffsetMinutes))
                             .map((data, index) => (
+                              <>
                               <button
                                 key={index}
                                 className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                                onClick={handleClick}
                                 // onClick={() => handleOpenTableReservation(data)}
                               >
                                 {/* {convertOffsetToTime(
@@ -303,6 +322,18 @@ export default function MakeReservation({ restrauntDetail }) {
                                 )} */}
                                 {formatTimeOnly(data.date.start)}
                               </button>
+
+                            {showModal && (
+                                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                                      <div className="bg-white p-6 rounded shadow-lg text-center max-w-sm">
+                                        <p className="text-lg font-semibold mb-4">
+                                          Redirecting to Resy...
+                                        </p>
+                                        <p className="text-sm text-gray-600">Your reservation is in progress.</p>
+                                      </div>
+                                    </div>
+                                  )}
+                              </>
                             ))}
                         </div>
                       </>

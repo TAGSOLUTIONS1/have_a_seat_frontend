@@ -63,7 +63,7 @@ const RestrauntDetail = () => {
     } 
     else {
       null;
-    }setPrevId
+    }
   }, [location.search, prevId]);
 
   useEffect(() => {
