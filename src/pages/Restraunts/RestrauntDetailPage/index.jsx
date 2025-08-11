@@ -59,12 +59,11 @@ const RestrauntDetail = () => {
       setKey("resy");
       setEndPoint(
         `${Base_Url}/api/v1/resy/get_restaurant_details?venue_id=${resy_alias}&persons=2&date=${formattedDate}`
-        // `${Base_Url}/api/v1/resy/get_restaurant_details_v2?url_slug=omakase-ichi&location=new-york-ny`
       );
     } 
     else {
       null;
-    }setPrevId
+    }
   }, [location.search, prevId]);
 
   useEffect(() => {

@@ -29,33 +29,7 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
 
       {/* reviews */}
       <Reviews restrauntDetail={restrauntDetail} />
-      {restrauntDetail.menus || restrauntDetail?.restaurant_type==="resy" ? 
-        (<>
-               <MenuDetails restrauntDetail={restrauntDetail}></MenuDetails>
-        </>)
-        :(
-        <>
-        <div className="">
-        <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-4">
-          <strong>Menu</strong>
-        </h2>
-        <p className="text-gray-500">
-              At present, we do not have menu information for this restaurant.
-              Please see the{" "}
-              <a
-                href={restrauntDetail?.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-plum underline hover:text-purple-800"
-              >
-                website
-              </a>{" "}
-              or wait to visit the restaurant to learn more.
-            </p>
-
-          </div>
-        </>)
-      }
+        <MenuDetails restrauntDetail={restrauntDetail}></MenuDetails>
       </div>
       <div>
         {/* <Menu restrauntDetail={restrauntDetail} ></Menu> */}

@@ -24,7 +24,7 @@ export default function MakeReservation({ restrauntDetail }) {
 
   useEffect(() => {
     setReservationCard(restrauntDetail);
-    // console.log(restrauntDetail)
+    // console.log("restrauntDetail", restrauntDetail)
   }, [restrauntDetail]);
 
   useEffect(() => {
@@ -191,6 +191,22 @@ export default function MakeReservation({ restrauntDetail }) {
 };
 
 
+    const [showModal, setShowModal] = useState(false);
+    const [selectedResySlot, setSelectedResySlot] = useState(null);
+
+    // Open modal and store selected slot data
+    const handleResyClick = () => {
+      setSelectedResySlot(restrauntDetail?.results?.resy2);
+      setShowModal(true);
+    };
+
+    // Close modal handler
+    const closeModal = () => {
+      setShowModal(false);
+      setSelectedResySlot(null);
+    };
+
+
   return (
     <>
     <div className="overflow-hidden">
@@ -295,7 +311,7 @@ export default function MakeReservation({ restrauntDetail }) {
                               <button
                                 key={index}
                                 className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                                // onClick={() => handleOpenTableReservation(data)}
+                                onClick={() => handleResyClick(data)}
                               >
                                 {/* {convertOffsetToTime(
                                   data.date.start,
@@ -317,6 +333,47 @@ export default function MakeReservation({ restrauntDetail }) {
         </div>
       </div>
       </div>
+
+      {showModal && selectedResySlot && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-white p-6 rounded shadow-lg text-center max-w-sm relative"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl"
+              onClick={closeModal}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <p className="text-lg font-semibold mb-4">
+              Redirect to Resy
+            </p>
+            <p className="text-sm text-gray-600 mb-4">
+              Have a seat development is underway. Thank you for choosing us. Meanwhile, you can book a table on Resy for this slot.
+            </p>
+            <a
+              href={`${selectedResySlot?.links?.web}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
+              onClick={closeModal}
+            >
+              Go to Resy
+            </a>
+            <button
+              className="mt-4 block w-full text-gray-600 hover:text-gray-900 underline"
+              onClick={closeModal}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
