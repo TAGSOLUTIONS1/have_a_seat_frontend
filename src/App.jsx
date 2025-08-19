@@ -21,6 +21,7 @@ import MainLayout from "./components/Layout/Layout";
 import RestaurantDetailsV2 from "./pages/Restraunts/ResturantDetailV2/RestaurantDetailsV2";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import '../public/assets/fonts/fonts.css';
+import ChatBotWidget from "./components/ChatBotWidget";
 
 function App() {
   const location = useLocation();
@@ -54,6 +55,8 @@ function App() {
         </Route>
       </Routes>
       {/* {showFooter && <Footer />} */}
+
+      <ChatBotWidget />
     </>
   );
 }
