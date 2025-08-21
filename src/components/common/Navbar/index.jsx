@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { cn } from "@/lib/utils";
 import { LucideLoader } from "lucide-react";
 import SideNav from "../SideNav";
+import NotificationBell from "../NotificationBell";
 import "./nav.css";
 import { navLinks } from "@/components/constants/constants";
 import { getCurrentTime, initialBookingState } from "@/components/constants/constants";
@@ -134,6 +135,12 @@ const Navbar = () => {
                         </Button>
                       </li>
                     </ul>
+                    
+                    {/* Notification Bell */}
+                    <div className="flex items-center">
+                      <NotificationBell />
+                    </div>
+                    
                     <div
                       className="relative flex items-center gap-2 tooltip-trigger"
                       onClick={toggleTooltip} // Toggle on click
@@ -163,6 +170,14 @@ const Navbar = () => {
                                 className="block w-full text-gray-700 hover:text-purple-600"
                               >
                                 History
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                to="/notifications"
+                                className="block w-full text-gray-700 hover:text-purple-600"
+                              >
+                                Notifications
                               </Link>
                             </li>
                             <li>
