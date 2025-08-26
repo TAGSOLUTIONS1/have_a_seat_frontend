@@ -78,8 +78,7 @@ const ReservationStatus = () => {
 
         setLoading(true);
         const response = await axios.post(
-          `${Base_Url}/api/v1/reservation/create_reservation/`, 
-          null, 
+          `${Base_Url}/api/v1/reservation/create_reservation/`,
           {
             params: requiredApiParams,
             headers: {
