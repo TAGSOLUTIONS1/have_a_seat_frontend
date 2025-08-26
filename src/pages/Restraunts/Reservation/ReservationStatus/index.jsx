@@ -6,9 +6,11 @@ import ReservationFailed from "./ReservationFailed";
 import ReservationSuccessFul from "./ReservationSuccess";
 import Loader from "@/components/Loader";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
+import { useNotificationToast } from '@/hooks/useNotificationToast';
 
 const ReservationStatus = () => {
   const { authState } = useAuth();
+  const { showNotification } = useNotificationToast();
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(null);
@@ -36,10 +38,9 @@ const ReservationStatus = () => {
         setFormData(finalData);
 
         const newDate = finalData?.formData[0]?.reservation_date;
-
         const newTime = finalData?.formData[0]?.reservation_time;
         const newTimeOffset = finalData?.formData[1]?.timeOffsetMinutes;
-        const id = finalData?.formData[2].toString();
+        const id = finalData?.formData[2]?.toString();
 
         const [hours, minutes] = newTime.split(":").map(Number);
 
@@ -56,7 +57,7 @@ const ReservationStatus = () => {
           .padStart(2, "0")}`;
 
         const FinalApiTime = `${newDate}T${newTime}`;
-        const cousine = finalData?.formData[5]
+        const cousine = finalData?.formData[5];
         const people = finalData?.formData[0]?.reservation_covers;
 
         const requiredApiParams = {
@@ -65,11 +66,11 @@ const ReservationStatus = () => {
           reservation_status: "CONFIRMED",
           reservation_date: FinalApiTime,
           restaurant_id: id,
-          restaurant_name: finalData?.formData[3],
-          location: finalData?.formData[4]?.city,
+          restaurant_name: finalData?.formData[3] || 'Restaurant',
+          location: finalData?.formData[4]?.city || 'Unknown',
           price: 150,
-          num_diners: people,
-          cuisine_type: cousine[0]?.name,
+          num_diners: people || 1,
+          cuisine_type: cousine?.[0]?.name || 'Unknown',
           indoor_outdoor: "Indoor",
         };
 
@@ -88,6 +89,12 @@ const ReservationStatus = () => {
           }
         );
 
+        // ✅ Trigger notification for successful reservation
+        if (response.status === 200 || response.status === 201) {
+          // Notification already sent in openTableReservation, no need to send again
+          console.log('Reservation saved to backend successfully');
+        }
+
         setStatus(true);
         setLoading(false);
         console.log(response, "response in API");
@@ -96,6 +103,18 @@ const ReservationStatus = () => {
       }
     } catch (error) {
       console.error("Error :", error);
+      
+      // ✅ Trigger notification for failed reservation
+      showNotification(
+        'reservation_cancellation',
+        'Reservation Failed ❌',
+        'There was an issue processing your OpenTable reservation. Please try again.',
+        {
+          error: error.message,
+          reservation_type: 'OPENTABLE'
+        }
+      );
+      
       // setStatus(false);
       setLoading(false);
     }
@@ -149,6 +168,13 @@ const ReservationStatus = () => {
             },
           }
         );
+        
+        // ✅ Trigger notification for successful backend save
+        if (response.status === 200 || response.status === 201) {
+          // Notification already sent in yelpReservation, no need to send again
+          console.log('Reservation saved to backend successfully');
+        }
+        
         setStatus(true);
         setLoading(false);
         console.log(response, "response in API");
@@ -188,9 +214,9 @@ const ReservationStatus = () => {
           mobile_number: myData?.reservationFormData?.phone,
           mobile_country_id: "US",
           email: myData?.reservationFormData?.email,
-          persons: finalData[0]?.reservation_covers,
-          restaurant_id: finalData[2],
-          restaurant_name:finalData[3] || "the restaurant",
+          persons: finalData[0]?.reservation_covers || 1,
+          restaurant_id: finalData[2] || 'unknown',
+          restaurant_name: finalData[3] || "the restaurant",
           seating_option: "default",
           dining_area_id: 1,
           slot_hash: finalData[1]?.slotHash,
@@ -202,7 +228,6 @@ const ReservationStatus = () => {
 
         const response = await axios.post(
           `${Base_Url}/api/v1/opentable/do_reservation`,
-          null,
           {
             params: apiParams,
           }
@@ -214,6 +239,26 @@ const ReservationStatus = () => {
           console.log("Reservation created successfully");
         if (response.data.data && response.data.data.reservationId) {
           console.log("Reservation created successfully");
+          
+          // ✅ Trigger notification for successful OpenTable reservation
+          showNotification(
+            'reservation_confirmation',
+            'Reservation Confirmed! 🎉',
+            `Your table at ${finalData[3] || 'Restaurant'} is confirmed for ${finalData[0]?.reservation_date} at ${finalData[0]?.reservation_time}`,
+            {
+              restaurant_name: finalData[3] || 'Restaurant',
+              reservation_date: finalData[0]?.reservation_date,
+              reservation_time: finalData[0]?.reservation_time,
+              num_diners: finalData[0]?.reservation_covers || 1,
+              reservation_id: response.data.data.reservationId,
+              reservation_type: 'OPENTABLE',
+              confirmation_number: response.data.data.confirmationNumber,
+              party_size: response.data.data.partySize,
+              reservation_datetime: response.data.data.reservationDateTime,
+              restaurant_id: response.data.data.restaurantId
+            }
+          );
+          
           PostOpentableReservation(response.data.data.reservationId, "OPENTABLE");
           }
         } 
@@ -223,6 +268,18 @@ const ReservationStatus = () => {
       }
     } catch (error) {
       console.error("Error :", error);
+      
+      // ✅ Trigger notification for failed reservation
+      showNotification(
+        'reservation_cancellation',
+        'Reservation Failed ❌',
+        'There was an issue processing your OpenTable reservation. Please try again.',
+        {
+          error: error.message,
+          reservation_type: 'OPENTABLE'
+        }
+      );
+      
       setStatus(false);
       setLoading(false);
     }
@@ -267,6 +324,22 @@ const ReservationStatus = () => {
           console.log("Reservation created successfully");
         if (response.data.data && response.data.data.rez_id) {
           console.log("Reservation created successfully");
+          
+          // ✅ Trigger notification for successful Yelp reservation
+          showNotification(
+            'reservation_confirmation',
+            'Reservation Confirmed! 🎉',
+            `Your table at ${finalData?.formData[0]?.name || 'Restaurant'} is confirmed for ${date} at ${time}`,
+            {
+              restaurant_name: finalData?.formData[0]?.name || 'Restaurant',
+              reservation_date: date,
+              reservation_time: time,
+              num_diners: finalData?.bookingInfo?.covers,
+              reservation_id: response.data.data.rez_id,
+              reservation_type: 'YELP'
+            }
+          );
+          
           PostYelpReservation(response.data.data.rez_id, "YELP");
         }
       } else {
@@ -276,6 +349,18 @@ const ReservationStatus = () => {
       }
    } catch (error) {
       console.error("Error :", error);
+      
+      // ✅ Trigger notification for failed Yelp reservation
+      showNotification(
+        'reservation_cancellation',
+        'Reservation Failed ❌',
+        'There was an issue processing your Yelp reservation. Please try again.',
+        {
+          error: error.message,
+          reservation_type: 'YELP'
+        }
+      );
+      
       setStatus(false);
       setLoading(false);
     }

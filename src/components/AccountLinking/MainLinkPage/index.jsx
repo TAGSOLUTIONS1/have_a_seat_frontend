@@ -36,7 +36,7 @@ const MainLinkingPage = () => {
         },
       };
       const response = await axios.get(
-        "https://have-a-seatonline.com/api/v1/users/me",
+        "http://127.0.0.1:8000/api/v1/users/me",
         config
       );
       if (response.status === 200) {
@@ -77,7 +77,7 @@ const MainLinkingPage = () => {
       };
 
       const response = await axios.patch(
-        "https://have-a-seatonline.com/api/v1/users/me",
+        "http://127.0.0.1:8000/api/v1/users/me",
         editedData,
         config
       );

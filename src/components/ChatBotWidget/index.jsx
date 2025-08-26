@@ -20,7 +20,7 @@ export default function ChatBotWidget() {
 
     try {
       const params = chatId ? { query: input, chat_id: chatId } : { query: input };
-      const res = await axios.get("https://have-a-seatonline.com/api/v1/yelp/chat", { params });
+      const res = await axios.get("http://127.0.0.1:8000/api/v1/yelp/chat", { params });
 
       const data = res.data;
       const botMsg = {

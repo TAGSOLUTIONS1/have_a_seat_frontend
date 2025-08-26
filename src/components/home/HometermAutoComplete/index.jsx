@@ -15,7 +15,7 @@ const fetchSuggestions = async (term, setSuggestions) => {
   try {
 
     const response = await axios.get(
-      `https://have-a-seatonline.com/api/v1/opentable/autocomplete?term=${encodeURIComponent(
+      `http://127.0.0.1:8000/api/v1/opentable/autocomplete?term=${encodeURIComponent(
         term
       )}`
     );

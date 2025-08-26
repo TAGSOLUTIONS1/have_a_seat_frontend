@@ -22,7 +22,7 @@ const UserStatistics = () => {
   const getUserStatistics = async () => {
     try {
       const response = await axios.get(
-        `https://have-a-seatonline.com/api/v1/reservation/statistics/`,
+        `http://127.0.0.1:8000/api/v1/reservation/statistics/`,
         {
           headers: {
             Authorization: `Bearer ${authState?.accessToken}`,

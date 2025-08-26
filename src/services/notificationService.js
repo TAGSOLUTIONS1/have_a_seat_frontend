@@ -6,22 +6,16 @@ class NotificationService {
     this.baseURL = Base_Url;
   }
 
-  // Get auth token from localStorage
-  getAuthToken() {
-    return localStorage.getItem('accessToken');
-  }
-
-  // Get auth headers
-  getAuthHeaders() {
-    const token = this.getAuthToken();
+  // Get auth headers with passed auth state
+  getAuthHeaders(authState) {
     return {
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${authState?.accessToken}`,
       'Content-Type': 'application/json'
     };
   }
 
   // GET User Notifications
-  async getNotifications(page = 1, size = 20, unreadOnly = false) {
+  async getNotifications(authState, page = 1, size = 20, unreadOnly = false) {
     try {
       const params = new URLSearchParams({
         page: page.toString(),
@@ -34,7 +28,7 @@ class NotificationService {
 
       const response = await axios.get(
         `${this.baseURL}/api/v1/notifications?${params}`,
-        { headers: this.getAuthHeaders() }
+        { headers: this.getAuthHeaders(authState) }
       );
       return response.data;
     } catch (error) {
@@ -44,11 +38,11 @@ class NotificationService {
   }
 
   // GET Single Notification
-  async getNotification(notificationId) {
+  async getNotification(authState, notificationId) {
     try {
       const response = await axios.get(
         `${this.baseURL}/api/v1/notifications/${notificationId}`,
-        { headers: this.getAuthHeaders() }
+        { headers: this.getAuthHeaders(authState) }
       );
       return response.data;
     } catch (error) {
@@ -58,12 +52,12 @@ class NotificationService {
   }
 
   // MARK Notification as Read
-  async markAsRead(notificationId) {
+  async markAsRead(authState, notificationId) {
     try {
       const response = await axios.patch(
         `${this.baseURL}/api/v1/notifications/${notificationId}/read`,
         {},
-        { headers: this.getAuthHeaders() }
+        { headers: this.getAuthHeaders(authState) }
       );
       return response.data;
     } catch (error) {
@@ -73,12 +67,12 @@ class NotificationService {
   }
 
   // MARK ALL Notifications as Read
-  async markAllAsRead() {
+  async markAllAsRead(authState) {
     try {
       const response = await axios.patch(
         `${this.baseURL}/api/v1/notifications/read-all`,
         {},
-        { headers: this.getAuthHeaders() }
+        { headers: this.getAuthHeaders(authState) }
       );
       return response.data;
     } catch (error) {
@@ -88,11 +82,11 @@ class NotificationService {
   }
 
   // GET Notification Statistics
-  async getNotificationStats() {
+  async getNotificationStats(authState) {
     try {
       const response = await axios.get(
         `${this.baseURL}/api/v1/notifications/stats`,
-        { headers: this.getAuthHeaders() }
+        { headers: this.getAuthHeaders(authState) }
       );
       return response.data;
     } catch (error) {
@@ -102,11 +96,11 @@ class NotificationService {
   }
 
   // GET User Notification Preferences
-  async getPreferences() {
+  async getPreferences(authState) {
     try {
       const response = await axios.get(
         `${this.baseURL}/api/v1/preferences`,
-        { headers: this.getAuthHeaders() }
+        { headers: this.getAuthHeaders(authState) }
       );
       return response.data;
     } catch (error) {
@@ -116,16 +110,31 @@ class NotificationService {
   }
 
   // UPDATE User Notification Preferences
-  async updatePreference(notificationType, preferences) {
+  async updatePreference(authState, notificationType, preferences) {
     try {
       const response = await axios.put(
         `${this.baseURL}/api/v1/preferences/${notificationType}`,
         preferences,
-        { headers: this.getAuthHeaders() }
+        { headers: this.getAuthHeaders(authState) }
       );
       return response.data;
     } catch (error) {
       console.error('Error updating preferences:', error);
+      throw error;
+    }
+  }
+
+  // CREATE New Notification
+  async createNotification(authState, notificationData) {
+    try {
+      const response = await axios.post(
+        `${this.baseURL}/api/v1/notifications/create/`,
+        notificationData,
+        { headers: this.getAuthHeaders(authState) }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error creating notification:', error);
       throw error;
     }
   }
