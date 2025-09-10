@@ -7,7 +7,13 @@ import { LucideLoader } from "lucide-react";
 import DatePicker from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Date";
 import Time from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Time";
 import PersonCard from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Person";
+import GuestSignInModal from "@/components/common/GuestSignInModal";
+import ReservationConflictModal from "@/components/common/ReservationConflictModal";
+import { useAuth } from "@/contexts/authContext/AuthProvider";
+import { useToast } from "@/components/ui/use-toast";
 export default function MakeReservation({ restrauntDetail }) {
+  const { authState } = useAuth();
+  const { toast } = useToast();
   const [reservationCard, setReservationCard] = useState();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -18,8 +24,18 @@ export default function MakeReservation({ restrauntDetail }) {
   const [error, setError] = useState("");
   const [nextData, setNextData] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [showGuestModal, setShowGuestModal] = useState(false);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [selectedReservationType, setSelectedReservationType] = useState(null);
   const [timeSlots, setTimeSlots] = useState();
   const [openTableTimeSlots, setOpenTableTimeSlots] = useState();
+  
+  // Conflict checking state
+  const [showConflictModal, setShowConflictModal] = useState(false);
+  const [conflictingReservations, setConflictingReservations] = useState([]);
+  const [pendingReservationData, setPendingReservationData] = useState(null);
+  const [isCheckingConflicts, setIsCheckingConflicts] = useState(false);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,6 +46,160 @@ export default function MakeReservation({ restrauntDetail }) {
   useEffect(() => {
     // console.log(nextData);
   }, [nextData]);
+
+  // Check for pending reservations after authentication
+  // useEffect(() => {
+  //   if (authState?.isAuthenticated) {
+  //     const pendingReservation = localStorage.getItem('pendingReservation');
+  //     if (pendingReservation) {
+  //       try {
+  //         const reservationData = JSON.parse(pendingReservation);
+  //         // Check if the reservation is not too old (24 hours)
+  //         const isRecent = Date.now() - reservationData.timestamp < 24 * 60 * 60 * 1000;
+          
+  //         if (isRecent && reservationData.returnPath === window.location.pathname) {
+  //           // Restore the reservation data
+  //           setFormData(reservationData.formData);
+  //           setSelectedTimeSlot(reservationData.selectedTimeSlot);
+  //           setSelectedReservationType(reservationData.reservationData?.restaurant_type);
+            
+  //           // Clear the pending reservation
+  //           localStorage.removeItem('pendingReservation');
+            
+  //           // Show a toast notification
+  //           toast({
+  //             title: "Welcome back!",
+  //             description: "Your reservation details have been restored. You can now proceed with your booking.",
+  //             status: "success",
+  //             duration: 5000,
+  //           });
+
+  //           // If we have a selected time slot, automatically proceed with the reservation
+  //           if (reservationData.selectedTimeSlot) {
+  //             // Small delay to ensure state is updated
+  //             setTimeout(() => {
+  //               if (reservationData.reservationData?.restaurant_type === 'yelp') {
+  //                 handleYelpReservation(reservationData.selectedTimeSlot);
+  //               } else if (reservationData.reservationData?.restaurant_type === 'open_table') {
+  //                 handleOpenTableReservation(reservationData.selectedTimeSlot);
+  //               }
+  //             }, 1000);
+  //           }
+  //         } else {
+  //           // Clear old or invalid pending reservation
+  //           localStorage.removeItem('pendingReservation');
+  //         }
+  //       } catch (error) {
+  //         console.error('Error parsing pending reservation:', error);
+  //         localStorage.removeItem('pendingReservation');
+  //       }
+  //     }
+  //   }
+  // }, [authState?.isAuthenticated]);
+
+  // Cleanup pending reservations on unmount
+  useEffect(() => {
+    return () => {
+      // Only clear if user is not authenticated (they left without signing in)
+      if (!authState?.isAuthenticated) {
+        const pendingReservation = localStorage.getItem('pendingReservation');
+        if (pendingReservation) {
+          const reservationData = JSON.parse(pendingReservation);
+          // Only clear if it's from this page
+          if (reservationData.returnPath === window.location.pathname) {
+            localStorage.removeItem('pendingReservation');
+          }
+        }
+      }
+    };
+  }, []);
+
+  // Function to check for reservation conflicts
+  const checkReservationConflicts = async (reservationDate) => {
+    if (!authState?.isAuthenticated) {
+      console.log('User not authenticated, skipping conflict check');
+      return { has_conflict: false, conflicting_reservations: [] };
+    }
+
+    try {
+      setIsCheckingConflicts(true);
+      
+      const token = localStorage.getItem('accessToken');
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      };
+      
+      const response = await fetch(`${Base_Url}/api/v1/reservation/check_conflict?reservation_date=${encodeURIComponent(reservationDate)}`, {
+        method: 'POST',
+        headers,
+      });
+
+      if (response.ok) {
+        const result = await response.json(); 
+        return result;
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to get reservations conflicts:', response.status, errorText);
+        return { has_conflict: false, conflicting_reservations: [] };
+      }
+    } catch (error) {
+      console.error('Error checking reservation conflicts:', error);
+      return { has_conflict: false, conflicting_reservations: [] };
+    } finally {
+      setIsCheckingConflicts(false);
+    }
+  };
+
+  // Function to handle conflict modal actions
+  const handleConflictContinue = () => {
+    setShowConflictModal(false);
+    // Proceed with navigation to reservation
+    proceedWithReservation();
+  };
+
+  const handleConflictCancel = () => {
+    setShowConflictModal(false);
+    // Clear any pending data
+    setPendingReservationData(null);
+  };
+
+  // Function to proceed with reservation navigation
+  const proceedWithReservation = () => {
+    if (pendingReservationData) {
+      const { reservationType, timeSlotData } = pendingReservationData;
+      if (reservationType === 'yelp') {
+        const updatedNextData = [reservationCard, timeSlotData];
+        setNextData(updatedNextData);
+        const route = `/reservation?data=${encodeURIComponent(
+          JSON.stringify(updatedNextData)
+        )}`;
+        navigate(route);
+        setFormData("");
+      } else if (reservationType === 'open_table') {
+        const restaurant_id = reservationCard?.id;
+        const restaurantName = reservationCard?.name;
+        const restaurantAddress = reservationCard?.address;
+        const restaurantCuisines = reservationCard?.cuisines;
+        const updatedNextData = [
+          formData,
+          timeSlotData,
+          restaurant_id,
+          restaurantName,
+          restaurantAddress,
+          restaurantCuisines,
+        ];
+        setNextData(updatedNextData);
+        const route = `/reservation?data=${encodeURIComponent(
+          JSON.stringify(updatedNextData)
+        )}`;
+        navigate(route);
+        setFormData("");
+      }
+      // Clear pending data after navigation
+      setPendingReservationData(null);
+    }
+  };
   
   const handleTimeSlots = () => {
     const { reservation_covers, reservation_date, reservation_time } = formData;
@@ -44,36 +214,106 @@ export default function MakeReservation({ restrauntDetail }) {
     fetchResyTimeSlots();
   };
 
-  const handleYelpReservation = (clickedData) => {
-    const updatedNextData = [reservationCard, clickedData];
-    setNextData(updatedNextData);
-    const route = `/reservation?data=${encodeURIComponent(
-      JSON.stringify(updatedNextData)
-    )}`;
-    navigate(route);
-    setFormData("");
+  const handleYelpReservation = async (clickedData) => {
+    // Prevent rapid clicking
+    if (isCheckingConflicts) return;
+
+    if(authState?.isAuthenticated){
+      const selectedSlotTime = clickedData.formatted_time || formData.reservation_time;
+      const result = clickedData.isodate ? clickedData.isodate.slice(0,19) : `${formData.reservation_date}T${formData.reservation_time}`;
+      
+      const conflictResult = await checkReservationConflicts(result);
+      
+      if (conflictResult && conflictResult.has_conflict) {
+        // Store conflicting reservations and show modal
+        setConflictingReservations(conflictResult.conflicting_reservations || []);
+        setPendingReservationData({
+          restaurant_name: reservationCard?.name,
+          reservation_date: formData.reservation_date,
+          reservation_time: selectedSlotTime,
+          num_diners: formData.reservation_covers,
+          reservationType: 'yelp',
+          timeSlotData: clickedData
+        });
+        setShowConflictModal(true);
+      } else {
+        // No conflicts, proceed directly
+        const updatedNextData = [reservationCard, clickedData];
+        setNextData(updatedNextData);
+        const route = `/reservation?data=${encodeURIComponent(
+          JSON.stringify(updatedNextData)
+        )}`;
+        navigate(route);
+        setFormData("");
+      }
+    }
+    else
+    {
+      setSelectedTimeSlot(clickedData);
+      setSelectedReservationType('yelp');
+      setShowGuestModal(true);
+    }
   };
 
-  const handleOpenTableReservation = (clickedData) => {
-    const restaurant_id = reservationCard?.id;
-    const restaurantName = reservationCard?.name;
-    const restaurantAddress = reservationCard?.address;
-    const restaurantCuisines = reservationCard?.cuisines;
-    const updatedNextData = [
-      formData,
-      clickedData,
-      restaurant_id,
-      restaurantName,
-      restaurantAddress,
-      restaurantCuisines,
-    ];
+  const handleOpenTableReservation = async (clickedData) => {
+    // Prevent rapid clicking
+    if (isCheckingConflicts) return;
 
-    setNextData(updatedNextData);
-    const route = `/reservation?data=${encodeURIComponent(
-      JSON.stringify(updatedNextData)
-    )}`;
-    navigate(route);
-    setFormData("");
+    if(authState?.isAuthenticated){
+      // Convert offset to time format for OpenTable
+      const reservationTime = formData.reservation_time;
+      const timeDifference = clickedData?.timeOffsetMinutes;
+      const [hours, minutes] = reservationTime?.split(":");
+      const formattedTimeMinutes = parseInt(hours, 10) * 60 + parseInt(minutes, 10);
+      const calculatedTime = formattedTimeMinutes + timeDifference;
+      const calculatedHours = Math.floor(calculatedTime / 60);
+      const calculatedMinutes = calculatedTime % 60;
+      const finalTime = `${("0" + calculatedHours).slice(-2)}:${("0" + calculatedMinutes).slice(-2)}:00`;
+
+      const conflictResult = await checkReservationConflicts(
+        `${formData.reservation_date}T${finalTime}`
+      );
+      
+      if (conflictResult && conflictResult.has_conflict) {
+        // Store conflicting reservations and show modal
+        setConflictingReservations(conflictResult.conflicting_reservations || []);
+        setPendingReservationData({
+          restaurant_name: reservationCard?.name,
+          reservation_date: formData.reservation_date,
+          reservation_time: finalTime,
+          num_diners: formData.reservation_covers,
+          reservationType: 'open_table',
+          timeSlotData: clickedData
+        });
+        setShowConflictModal(true);
+      } else {
+        // No conflicts, proceed directly
+        const restaurant_id = reservationCard?.id;
+        const restaurantName = reservationCard?.name;
+        const restaurantAddress = reservationCard?.address;
+        const restaurantCuisines = reservationCard?.cuisines;
+        const updatedNextData = [
+          formData,
+          clickedData,
+          restaurant_id,
+          restaurantName,
+          restaurantAddress,
+          restaurantCuisines,
+        ];
+
+        setNextData(updatedNextData);
+        const route = `/reservation?data=${encodeURIComponent(
+          JSON.stringify(updatedNextData)
+        )}`;
+        navigate(route);
+        setFormData("");
+      }
+    }
+    else{
+      setSelectedTimeSlot(clickedData);
+      setSelectedReservationType('open_table');
+      setShowGuestModal(true);
+    }
   };
 
   const fetchYelpTimeSlots = async () => {
@@ -194,16 +434,52 @@ export default function MakeReservation({ restrauntDetail }) {
     const [showModal, setShowModal] = useState(false);
     const [selectedResySlot, setSelectedResySlot] = useState(null);
 
-    // Open modal and store selected slot data
-    const handleResyClick = () => {
-      setSelectedResySlot(restrauntDetail?.results?.resy2);
-      setShowModal(true);
+    const handleResyClick = (clickedData) => {
+      setSelectedTimeSlot(clickedData);
+      setSelectedReservationType('resy');
+      setShowGuestModal(true);
     };
 
     // Close modal handler
     const closeModal = () => {
       setShowModal(false);
       setSelectedResySlot(null);
+    };
+
+    // Handle guest continuation
+    const handleContinueAsGuest = (timeSlot, reservationData) => {
+      if (selectedReservationType === 'yelp') {
+        const updatedNextData = [reservationCard, timeSlot];
+        setNextData(updatedNextData);
+        const route = `/reservation?data=${encodeURIComponent(
+          JSON.stringify(updatedNextData)
+        )}`;
+        navigate(route);
+        setFormData("");
+      } else if (selectedReservationType === 'open_table') {
+        const restaurant_id = reservationCard?.id;
+        const restaurantName = reservationCard?.name;
+        const restaurantAddress = reservationCard?.address;
+        const restaurantCuisines = reservationCard?.cuisines;
+        const updatedNextData = [
+          formData,
+          timeSlot,
+          restaurant_id,
+          restaurantName,
+          restaurantAddress,
+          restaurantCuisines,
+        ];
+        setNextData(updatedNextData);
+        const route = `/reservation?data=${encodeURIComponent(
+          JSON.stringify(updatedNextData)
+        )}`;
+        navigate(route);
+        setFormData("");
+      } else if (selectedReservationType === 'resy') {
+        // For Resy, show the existing Resy modal
+        setSelectedResySlot(restrauntDetail?.results?.resy2);
+        setShowModal(true);
+      }
     };
 
 
@@ -260,14 +536,15 @@ export default function MakeReservation({ restrauntDetail }) {
                             .map((data, index) => (
                               <button
                                 key={index}
-                                className="bg-plum text-white font-semibold font-roboto text-base p-2 px-3 m-1 rounded-lg"
-                                onClick={() => handleYelpReservation(data)}
+                                className={`bg-plum text-white font-semibold font-roboto text-base p-2 px-3 m-1 rounded-lg ${isCheckingConflicts ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                onClick={() => !isCheckingConflicts && handleYelpReservation(data)}
+                                disabled={isCheckingConflicts}
                               >
                                 {/* {new Date(data.timestamp * 1000).toLocaleTimeString([], {
                                   hour: "2-digit",
                                   minute: "2-digit",
                                 })} */}
-                                {data.formatted_time}
+                                {isCheckingConflicts ? "Checking..." : data.formatted_time}
                               </button>
                             ))}
                         </div>
@@ -286,10 +563,11 @@ export default function MakeReservation({ restrauntDetail }) {
                             .map((data, index) => (
                               <button
                                 key={index}
-                                className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                                onClick={() => handleOpenTableReservation(data)}
+                                className={`bg-purple-600 text-white p-3 m-1 rounded-lg ${isCheckingConflicts ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                onClick={() => !isCheckingConflicts && handleOpenTableReservation(data)}
+                                disabled={isCheckingConflicts}
                               >
-                                {convertOffsetToTime(
+                                {isCheckingConflicts ? "Checking..." : convertOffsetToTime(
                                   data.timeOffsetMinutes,
                                   formData?.reservation_time
                                 )}
@@ -374,6 +652,23 @@ export default function MakeReservation({ restrauntDetail }) {
           </div>
         </div>
       )}
+
+      <GuestSignInModal
+        isOpen={showGuestModal}
+        onClose={() => setShowGuestModal(false)}
+        onContinueAsGuest={handleContinueAsGuest}
+        selectedTimeSlot={selectedTimeSlot}
+        reservationData={reservationCard}
+        formData={formData}
+      />
+
+      <ReservationConflictModal
+        isOpen={showConflictModal}
+        onClose={handleConflictCancel}
+        onContinue={handleConflictContinue}
+        conflictingReservations={conflictingReservations}
+        newReservationDetails={pendingReservationData}
+      />
     </>
   );
 }

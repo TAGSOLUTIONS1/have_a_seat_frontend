@@ -40,9 +40,8 @@ export const useAuthProvider = () => {
     }
     toast({
       title: errorMessage,
-      status: "error",
+      variant: "destructive",
       duration: 9000,
-      isClosable: true,
     });
   };
 
@@ -96,9 +95,8 @@ export const useAuthProvider = () => {
       toast({
         title: "Login Successful.",
         description: "You are logged in successfully",
-        status: "success",
+        variant: "default",
         duration: 9000,
-        isClosable: true,
       });
 
     } catch (error) {
@@ -106,9 +104,8 @@ export const useAuthProvider = () => {
       toast({
         title: "Login Failed.",
         description: "Please try again and re-check your credentials",
-        status: "error",
+        variant: "destructive",
         duration: 9000,
-        isClosable: true,
       });
       setAuthState({
         isAuthenticated: false,

@@ -31,35 +31,52 @@ const ReservationForm = ({ formData, bookingInfo }) => {
     email: "",
   });
 
+  // useEffect(() => {
+  //   // Retrieve data from local storage
+  //   const userData = localStorage.getItem("userData");
+  //   console.log("userData local storage", userData);
+  //   if (userData) {
+  //     const parsedData = JSON.parse(userData);
+  //     const newValues = {
+  //       first_name: parsedData.first_name || "",
+  //       last_name: parsedData.last_name || "",
+  //       phone: "", // Optionally set a default value or leave empty
+  //       email: parsedData.email || "",
+  //     };
+  //     setInitialValues(newValues);
+  //     formik.setValues(newValues); // Update formik values when initial values change
+  //   }
+  // }, []);
+
   useEffect(() => {
-    // Retrieve data from local storage
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-      const parsedData = JSON.parse(userData);
+    // Auto-fill form with authenticated user data
+    if (authState.isAuthenticated && authState.user) {
+      const user = authState.user;
       const newValues = {
-        first_name: parsedData.first_name || "",
-        last_name: parsedData.last_name || "",
-        phone: "", // Optionally set a default value or leave empty
-        email: parsedData.email || "",
+        first_name: user.first_name || user.firstName || "",
+        last_name: user.last_name || user.lastName || "",
+        phone: user.phone || user.phone_number || "",
+        email: user.email || "",
       };
       setInitialValues(newValues);
-      formik.setValues(newValues); // Update formik values when initial values change
+      formik.setValues(newValues);
     }
-  }, []);
+  }, [authState.isAuthenticated, authState.user]);
+
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      if (!authState.user?.id) {
-        toast({
-          title: "You need to login first",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        return;
-      }
+      // if (!authState.user?.id) {
+      //   toast({
+      //     title: "You need to login first",
+      //     status: "error",
+      //     duration: 9000,
+      //     isClosable: true,
+      //   });
+      //   return;
+      // }
 
       const updatedNextData = {
         reservationFormData: values,

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { User,Lock, Mail } from "lucide-react";
+import { User,Lock, Mail , Clock } from "lucide-react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -26,11 +26,19 @@ const SignupForm = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
   const [showpassword ,SetShowPasword]=useState(false);
+  const [hasPendingReservation, setHasPendingReservation] = useState(false);
   const form = useForm({
     resolver: yupResolver(SignupSchema),
   });
 
   const { toast } = useToast();
+
+  useEffect(() => {
+    const pendingReservation = localStorage.getItem('pendingReservation');
+    if (pendingReservation) {
+    setHasPendingReservation(true);
+    }
+    }, []);
 
   const handleShowPassword =() =>{
     if (showpassword===true)
@@ -44,57 +52,72 @@ const SignupForm = () => {
   }
   const onSubmit = async (data) => {
     try {
-      setLoading(true);
-      await register(data);
-      // Store user data in local storage
-      localStorage.setItem('userData', JSON.stringify({
-        first_name: data.first_name,
-        last_name: data.last_name,
-        email: data.email,
-        // You might want to store phone if you collect it in the signup form
-      }));
-      setLoading(false);
-      navigate("/");
-      toast({
-        title: "Account created.",
-        description: "We've created your account.",
-        status: "success",
-        duration: 10000 * 60,
-        isClosable: true,
-        action: (
-          <ToastAction altText="login">
-            <a href="/login">
-              <Button className="bg-purple-600">login</Button>
-            </a>
-          </ToastAction>
-        ),
-      });
+    setLoading(true);
+    await register(data);
+    // Store user data in local storage
+    // localStorage.setItem('userData', JSON.stringify({
+    //   first_name: data.first_name,
+    //   last_name: data.last_name,
+    //   email: data.email,
+    //   // You might want to store phone if you collect it in the signup form
+    // }));
+    setLoading(false);
+    
+    // Check if there's a pending reservation
+    const pendingReservation = localStorage.getItem('pendingReservation');
+    if (pendingReservation) {
+    // Redirect to login page to complete the reservation flow
+    navigate("/login");
+    toast({
+    title: "Account created successfully!",
+    description: "Please sign in to complete your reservation.",
+    status: "success",
+    duration: 5000,
+    });
+     } else {
+     // No pending reservation, go to home
+     navigate("/");
+     toast({
+     title: "Account created.",
+     description: "We've created your account.",
+     status: "success",
+     duration: 10000 * 60,
+     isClosable: true,
+     action: (
+       <ToastAction altText="login">
+         <a href="/login">
+           <Button className="bg-purple-600">login</Button>
+         </a>
+       </ToastAction>
+     ),
+     });
+     }
     } catch (err) {
-      console.error(err, "ERROR ON THE RESPONSE OF SIGNUP API");
-      setLoading(false);
-      // Handle error cases
-      switch (err?.response?.status) {
-        case 400:
-          toast({
-            title: "Account already exists.",
-            description: "Please try again.",
-            status: "error",
-            duration: 9000,
-            isClosable: true,
-          });
-          break;
-        case 500:
-          toast({
-            title: "Server error.",
-            description: "Please try again.",
-            status: "error",
-            duration: 9000,
-            isClosable: true,
-          });
-          break;
-      }
+    console.error(err, "ERROR ON THE RESPONSE OF SIGNUP API");
+    setLoading(false);
+    // Handle error cases
+    switch (err?.response?.status) {
+    case 400:
+    toast({
+      title: "Account already exists.",
+      description: "Please try again.",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    });
+    break;
+    case 500:
+    toast({
+      title: "Server error.",
+      description: "Please try again.",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    });
+    break;
     }
-  };
+    }
+    };
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto lg:p-40">
       <div className="md:w-5/6 lg:w-11/12 xl:w-5/6 order-2 md:order-1 mx-auto flex flex-col gap-3">
@@ -103,6 +126,19 @@ const SignupForm = () => {
           <p className="text-4xl font-agrandir md:text-5xl font-bold text-txtcolor">Let’s Create Your Account.</p>
           <p className="text-base font-roboto font-normal text-txtcolor">Sign up for free and get started quickly.</p>
           </div>
+          {hasPendingReservation && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <div className="flex items-center gap-2 text-blue-800">
+                <Clock className="h-5 w-5" />
+                <div>
+                  <p className="font-semibold text-sm">Complete Your Reservation</p>
+                    <p className="text-xs text-blue-700">
+                      After creating your account, you'll be redirected to sign in to complete your reservation.
+                    </p>
+                </div>
+              </div>
+            </div>
+          )}
         <Form {...form}>
           <form
             className="flex flex-col space-y-4 md:space-y-5"

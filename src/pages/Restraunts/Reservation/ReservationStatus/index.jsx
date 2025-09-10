@@ -258,7 +258,9 @@ const ReservationStatus = () => {
             }
           );
           
-          PostOpentableReservation(response.data.data.reservationId, "OPENTABLE");
+          if(authState?.isAuthenticated){
+            PostOpentableReservation(response.data.data.reservationId, "OPENTABLE");
+          }
           }
         } 
       } else {
@@ -338,8 +340,9 @@ const ReservationStatus = () => {
               reservation_type: 'YELP'
             }
           );
-          
-          PostYelpReservation(response.data.data.rez_id, "YELP");
+          if(authState?.isAuthenticated){
+            PostYelpReservation(response.data.data.rez_id, "YELP");
+          }
         }
       } else {
         console.error("Data parameter is null or undefined");
