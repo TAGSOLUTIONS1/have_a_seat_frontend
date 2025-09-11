@@ -5,8 +5,6 @@ import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { useState } from "react";
 import { useNotificationToast } from '@/hooks/useNotificationToast';
 
-const { authState } = useAuth();
-
 export const register = async (formData) => {
   console.log("formData for register is ", formData);
   const registerResponse = await axios.post(
@@ -196,6 +194,8 @@ export const PostOpentableReservationwithEmail = async (reservationId, restauran
   };
 
 export const PostOpentableReservation = async (reservationId, restaurantType) => {
+  const { authState } = useAuth();
+
     try {
       let finalData = null;
       if (data) {
@@ -289,6 +289,8 @@ export const PostOpentableReservation = async (reservationId, restaurantType) =>
   };
 
 export const PostYelpReservation = async (reservationId, restaurantType) => {
+  const { authState } = useAuth();
+
     try {
       let finalData = null;
       if (data) {
