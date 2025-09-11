@@ -95,6 +95,9 @@ const LoginForm = () => {
             variant: "default",
             duration: 5000,
           });
+          
+          // Clear pending reservation from localStorage after successful redirect
+          localStorage.removeItem('pendingReservation');
         } catch (error) {
           console.error('Error parsing pending reservation:', error);
           localStorage.removeItem('pendingReservation');

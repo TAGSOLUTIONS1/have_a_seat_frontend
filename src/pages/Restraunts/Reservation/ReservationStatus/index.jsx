@@ -7,6 +7,7 @@ import ReservationSuccessFul from "./ReservationSuccess";
 import Loader from "@/components/Loader";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { useNotificationToast } from '@/hooks/useNotificationToast';
+import { createUser } from "@/services/auth";
 
 const ReservationStatus = () => {
   const { authState } = useAuth();
@@ -28,7 +29,11 @@ const ReservationStatus = () => {
       openTableReservation();
     }
   }, []);
+  
 
+  const [accessTokenforReservation, setAccessTokenforReservation] = useState(null);
+
+  console.log("accessTokenforReservation" , accessTokenforReservation , localStorage.getItem('accessToken'))
   const PostOpentableReservation = async (reservationId, restaurantType) => {
     try {
       let finalData = null;
@@ -77,12 +82,14 @@ const ReservationStatus = () => {
         console.log(requiredApiParams , "requiredApiParams")
 
         setLoading(true);
+        // Use accessToken from localStorage if authState doesn't have it
+        const token = authState?.accessToken || localStorage.getItem('accessToken');
         const response = await axios.post(
           `${Base_Url}/api/v1/reservation/create_reservation/`,
           {
             params: requiredApiParams,
             headers: {
-              Authorization: `Bearer ${authState?.accessToken}`,
+              Authorization: `Bearer ${token}`,
               accept: "application/json",
             },
           }
@@ -92,6 +99,11 @@ const ReservationStatus = () => {
         if (response.status === 200 || response.status === 201) {
           // Notification already sent in openTableReservation, no need to send again
           console.log('Reservation saved to backend successfully');
+          
+          // Clear access token after successful reservation
+          localStorage.removeItem('accessToken');
+          setAccessTokenforReservation(null);
+          console.log('Access token cleared from localStorage');
         }
 
         setStatus(true);
@@ -156,13 +168,15 @@ const ReservationStatus = () => {
         };
 
         setLoading(true);
+        // Use accessToken from localStorage if authState doesn't have it
+        const token = authState?.accessToken || localStorage.getItem('accessToken') || accessTokenforReservation;
         const response = await axios.post(
           `${Base_Url}/api/v1/reservation/create_reservation/`, 
           null, 
           {
             params: requiredApiParams,
             headers: {
-              Authorization: `Bearer ${authState?.accessToken}`,
+              Authorization: `Bearer ${token}`,
               accept: "application/json",
             },
           }
@@ -172,6 +186,11 @@ const ReservationStatus = () => {
         if (response.status === 200 || response.status === 201) {
           // Notification already sent in yelpReservation, no need to send again
           console.log('Reservation saved to backend successfully');
+          
+          // Clear access token after successful reservation
+          localStorage.removeItem('accessToken');
+          setAccessTokenforReservation(null);
+          console.log('Access token cleared from localStorage');
         }
         
         setStatus(true);
@@ -260,6 +279,46 @@ const ReservationStatus = () => {
           
           if(authState?.isAuthenticated){
             PostOpentableReservation(response.data.data.reservationId, "OPENTABLE");
+          } else {
+            // Create user account for the reservation
+            try {
+              const userData = {
+                email: finalData[0]?.reservationFormData?.email || 'guest@example.com',
+                first_name: finalData[0]?.reservationFormData?.first_name || 'Guest',
+                last_name: finalData[0]?.reservationFormData?.last_name || 'User',
+                password: 'temp123' // Default password for auto-created users
+              };
+              
+              const usercreated = await createUser(userData);
+              console.log("user created", usercreated);
+              
+              // Create login form data
+              const loginFormData = new FormData();
+              loginFormData.append('username', usercreated.email);
+              loginFormData.append('password', usercreated.password);
+              loginFormData.append('grant_type', '');
+              loginFormData.append('client_id', '');
+              loginFormData.append('client_secret', '');
+
+              const requestOptions = {
+                method: "POST",
+                body: loginFormData,
+                redirect: "follow",
+              };
+              const loginResponse = await fetch(`${Base_Url}/api/v1/auth/jwt/login`, requestOptions);
+              
+              if (loginResponse.ok) {
+                const loginResult = await loginResponse.json();
+                localStorage.setItem('accessToken', loginResult.access_token);
+                setAccessTokenforReservation(loginResult.access_token);
+                console.log("accessToken stored:", loginResult.access_token);
+              }
+              // Create reservation for the new user with JWT token
+              await PostOpentableReservation(response.data.data.reservationId, "OPENTABLE");
+              
+            } catch (error) {
+              console.error('Error creating user for OpenTable reservation:', error);
+            }
           }
           }
         } 
@@ -325,7 +384,6 @@ const ReservationStatus = () => {
           console.log("Reservation created successfully");
         if (response.data.data && response.data.data.rez_id) {
           console.log("Reservation created successfully");
-          
           // ✅ Trigger notification for successful Yelp reservation
           showNotification(
             'reservation_confirmation',
@@ -342,6 +400,46 @@ const ReservationStatus = () => {
           );
           if(authState?.isAuthenticated){
             PostYelpReservation(response.data.data.rez_id, "YELP");
+          } else {
+            // Create user account for the reservation
+            try {
+              const userData = {
+                email: finalData?.reservationFormData?.email || 'guest@example.com',
+                first_name: finalData?.reservationFormData?.first_name || 'Guest',
+                last_name: finalData?.reservationFormData?.last_name || 'User',
+                password: 'a' // Default password for auto-created users
+              };
+              
+              const usercreated = await createUser(userData);
+              console.log("user created", usercreated);
+              
+              // Create login form data
+              const loginFormData = new FormData();
+              loginFormData.append('username', usercreated.email);
+              loginFormData.append('password', usercreated.password);
+              loginFormData.append('grant_type', '');
+              loginFormData.append('client_id', '');
+              loginFormData.append('client_secret', '');
+
+              const requestOptions = {
+                method: "POST",
+                body: loginFormData,
+                redirect: "follow",
+              };
+              const loginResponse = await fetch(`${Base_Url}/api/v1/auth/jwt/login`, requestOptions);
+              
+              if (loginResponse.ok) {
+                const loginResult = await loginResponse.json();
+                localStorage.setItem('accessToken', loginResult.access_token);
+                setAccessTokenforReservation(loginResult.access_token);
+                console.log("accessToken stored:", loginResult.access_token);
+              }
+              // Create reservation for the new user with JWT token
+              await PostYelpReservation(response.data.data.rez_id, "YELP" );
+              
+            } catch (error) {
+              console.error('Error creating user for Yelp reservation:', error);
+            }
           }
         }
       } else {
