@@ -246,6 +246,7 @@ const ReservationStatus = () => {
 
         const response = await axios.post(
           `${Base_Url}/api/v1/opentable/do_reservation`,
+          null,
           {
             params: apiParams,
           }
@@ -283,9 +284,9 @@ const ReservationStatus = () => {
             // Create user account for the reservation
             try {
               const userData = {
-                email: finalData[0]?.reservationFormData?.email || 'guest@example.com',
-                first_name: finalData[0]?.reservationFormData?.first_name || 'Guest',
-                last_name: finalData[0]?.reservationFormData?.last_name || 'User',
+                first_name: myData?.reservationFormData?.first_name,
+                last_name: myData?.reservationFormData?.last_name,
+                email: myData?.reservationFormData?.email,
                 password: 'temp123' // Default password for auto-created users
               };
               
@@ -407,7 +408,7 @@ const ReservationStatus = () => {
                 email: finalData?.reservationFormData?.email || 'guest@example.com',
                 first_name: finalData?.reservationFormData?.first_name || 'Guest',
                 last_name: finalData?.reservationFormData?.last_name || 'User',
-                password: 'a' // Default password for auto-created users
+                password: 'a' 
               };
               
               const usercreated = await createUser(userData);
