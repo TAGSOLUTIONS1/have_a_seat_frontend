@@ -24,6 +24,7 @@ import NotificationsPage from "./pages/Notifications";
 import '../public/assets/fonts/fonts.css';
 import ChatBotWidget from "./components/ChatBotWidget";
 import NotificationToast from "./components/common/NotificationToast";
+import ResetPasswordOne from "./pages/ResetPasswordOne";
 
 function App() {
   const location = useLocation();
@@ -41,6 +42,7 @@ function App() {
           <Route path="/register" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
+          <Route path="/reset-password" element={<ResetPasswordOne />} />
           <Route path="/forget" element={<ForgetPassword />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/verifyuser" element={<VerifyUser />} />

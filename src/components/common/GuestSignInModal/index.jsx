@@ -78,10 +78,10 @@ const GuestSignInModal = ({
         <div className="space-y-4 py-4">
           {/* Guest limitations */}
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <h4 className="font-semibold text-red-800 mb-2">Guest reservations are not linked to your account</h4>
-            <ul className="text-sm text-red-700 space-y-1">
-              <li>• You won't be able to cancel or edit your booking through us later</li>
-              <li>• Your cuisine preferences, stats, and history will not be saved in HAS</li>
+            <h4 className="font-semibold text-yellow-800 mb-2">Guest reservations are linked to your account</h4>
+            <ul className="text-sm text-yellow-700 space-y-1">
+              <li>• Sign up or log in to unlock exclusive features — completely free!</li>
+              {/* <li>• Your cuisine preferences, stats, and history will be saved in HAS</li> */}
             </ul>
           </div>
 

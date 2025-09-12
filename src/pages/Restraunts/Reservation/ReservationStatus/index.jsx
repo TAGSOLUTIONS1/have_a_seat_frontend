@@ -121,12 +121,35 @@ const ReservationStatus = () => {
               console.log("user created", usercreated);
               
               if (usercreated && usercreated.email) {
-                  
-                  await PostOpentableReservationwithEmail(response.data.data.reservationId, "OPENTABLE" , usercreated.email);
+                // Pass myData to the reservation function
+                const reservationResult = await PostOpentableReservationwithEmail(
+                  response.data.data.reservationId, 
+                  "OPENTABLE", 
+                  usercreated.email,
+                  myData
+                );
+                
+                if (reservationResult?.success) {
+                  console.log("OpenTable reservation successfully saved to backend");
+                } else {
+                  console.error("Failed to save OpenTable reservation to backend");
+                }
+              } else {
+                console.error("User creation failed - no email returned");
               }
                             
             } catch (error) {
               console.error('Error creating user for OpenTable reservation:', error);
+              // Show error notification
+              showNotification(
+                'reservation_cancellation',
+                'User Creation Failed ❌',
+                'There was an issue creating your account. Your reservation was made but may not be saved to your account.',
+                {
+                  error: error.message,
+                  reservation_type: 'OPENTABLE'
+                }
+              );
             }
           }
           }
@@ -220,14 +243,38 @@ const ReservationStatus = () => {
               };
               
               const usercreated = await createUser(userData);
-              console.log("user created", usercreated);
+              console.log("user created", usercreated , usercreated.email);
               
               if (usercreated && usercreated.email) {
-                await PostYelpReservationwithEmail(response.data.data.rez_id, "YELP" ,usercreated.email);
+                // Pass finalData to the reservation function
+                const reservationResult = await PostYelpReservationwithEmail(
+                  response.data.data.rez_id, 
+                  "YELP", 
+                  usercreated.email,
+                  finalData
+                );
+                
+                if (reservationResult?.success) {
+                  console.log("Reservation successfully saved to backend");
+                } else {
+                  console.error("Failed to save reservation to backend");
+                }
+              } else {
+                console.error("User creation failed - no email returned");
               }
               
             } catch (error) {
               console.error('Error creating user for Yelp reservation:', error);
+              // Show error notification
+              showNotification(
+                'reservation_cancellation',
+                'User Creation Failed ❌',
+                'There was an issue creating your account. Your reservation was made but may not be saved to your account.',
+                {
+                  error: error.message,
+                  reservation_type: 'YELP'
+                }
+              );
             }
           }
         }
