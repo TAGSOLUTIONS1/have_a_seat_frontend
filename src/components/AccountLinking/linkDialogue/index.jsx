@@ -102,7 +102,7 @@ const LinkDialogue = () => {
 
     // Update the restaurant type in the backend
     const accessToken = localStorage.getItem("accessToken");
-    fetch("http://127.0.0.1:8000/api/v1/users/me", {
+    fetch("https://have-a-seatonline.com/api/v1/users/me", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

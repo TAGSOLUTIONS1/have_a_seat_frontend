@@ -110,7 +110,7 @@ The system automatically uses your `Base_Url` from `src/baseUrl.jsx`:
 
 ```javascript
 // Current configuration
-export const Base_Url = "http://127.0.0.1:8000";
+export const Base_Url = "https://have-a-seatonline.com";
 ```
 
 ### **Available Endpoints**
@@ -169,7 +169,7 @@ All components are fully responsive:
 ### **Environment Variables**
 ```bash
 # Backend API URL
-REACT_APP_API_URL=http://127.0.0.1:8000
+REACT_APP_API_URL=https://have-a-seatonline.com
 
 # WebSocket URL (for development)
 REACT_APP_WS_URL=ws://localhost:8000
@@ -241,7 +241,7 @@ npm run build
 ### **Environment Setup**
 ```bash
 # Production
-REACT_APP_API_URL=http://127.0.0.1:8000
+REACT_APP_API_URL=https://have-a-seatonline.com
 REACT_APP_WS_URL=wss://have-a-seatonline.com
 
 # Development
