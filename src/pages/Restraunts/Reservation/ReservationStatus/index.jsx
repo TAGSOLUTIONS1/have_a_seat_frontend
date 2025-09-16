@@ -106,7 +106,12 @@ const ReservationStatus = () => {
           );
           
           if(authState?.isAuthenticated){
-           await PostOpentableReservation(response.data.data.reservationId, "OPENTABLE");
+           const reservationResult = await PostOpentableReservation(response.data.data.reservationId, "OPENTABLE", myData);
+           if (reservationResult?.success) {
+             console.log("OpenTable reservation successfully saved to backend");
+           } else {
+             console.error("Failed to save OpenTable reservation to backend");
+           }
           } else {
             // Create user account for the reservation
             try {
@@ -231,7 +236,12 @@ const ReservationStatus = () => {
             }
           );
           if(authState?.isAuthenticated){
-           await PostYelpReservation(response.data.data.rez_id, "YELP");
+           const reservationResult = await PostYelpReservation(response.data.data.rez_id, "YELP", finalData);
+           if (reservationResult?.success) {
+             console.log("Yelp reservation successfully saved to backend");
+           } else {
+             console.error("Failed to save Yelp reservation to backend");
+           }
           } else {
             // Create user account for the reservation
             try {
