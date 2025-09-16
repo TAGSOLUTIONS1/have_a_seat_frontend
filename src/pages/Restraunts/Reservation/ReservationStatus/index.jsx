@@ -78,12 +78,14 @@ const ReservationStatus = () => {
             params: apiParams,
           }
         );
-        console.log("Response:" , response)
-        setStatus(true);
-        setLoading(false);
+        console.log("OpenTable API Response:" , response)
+        console.log("Response success:", response.data.success)
+        console.log("Response data:", response.data.data)
+        
         if (response.data.success === true) {
-          console.log("Reservation created successfully");
+          console.log("OpenTable reservation API call successful");
         if (response.data.data && response.data.data.reservationId) {
+          console.log("Reservation ID found:", response.data.data.reservationId)
           console.log("Reservation created successfully");
           // console.log("Authentication state:", authState?.isAuthenticated);
           // console.log("Access token exists:", !!localStorage.getItem('accessToken'));
@@ -98,7 +100,7 @@ const ReservationStatus = () => {
               reservation_date: finalData[0]?.reservation_date,
               reservation_time: finalData[0]?.reservation_time,
               num_diners: finalData[0]?.reservation_covers || 1,
-              reservation_id: response.data.data.reservationId,
+              reservation_id: String(response.data.data.reservationId),
               reservation_type: 'OPENTABLE',
               confirmation_number: response.data.data.confirmationNuymber,
               party_size: response.data.data.partySize,
@@ -108,8 +110,10 @@ const ReservationStatus = () => {
           );
           // console.log('Auth state:', authState);
           if(authState?.isAuthenticated){
+           console.log("User is authenticated, creating backend reservation...");
            try {
              const reservationResult = await PostOpentableReservation(response.data.data.reservationId, "OPENTABLE", myData);
+             console.log("Backend reservation result:", reservationResult);
              if (reservationResult?.success) {
                console.log("OpenTable reservation successfully saved to backend");
              } else {
@@ -128,6 +132,7 @@ const ReservationStatus = () => {
              );
            }
           } else {
+            console.log("User is not authenticated, creating user account for reservation...");
             // Create user account for the reservation
             try {
               const userData = {
@@ -138,9 +143,10 @@ const ReservationStatus = () => {
               };
               
               const usercreated = await createUser(userData);
-              console.log("user created", usercreated);
+              console.log("User created:", usercreated);
               
               if (usercreated && usercreated.email) {
+                console.log("Creating backend reservation with email:", usercreated.email);
                 // Pass myData to the reservation function
                 const reservationResult = await PostOpentableReservationwithEmail(
                   response.data.data.reservationId, 
@@ -148,6 +154,7 @@ const ReservationStatus = () => {
                   usercreated.email,
                   myData
                 );
+                console.log("Backend reservation result (with email):", reservationResult);
                 
                 if (reservationResult?.success) {
                   console.log("OpenTable reservation successfully saved to backend");
@@ -172,8 +179,14 @@ const ReservationStatus = () => {
               );
             }
           }
+          setStatus(true);
+          setLoading(false);
           }
-        } 
+        } else {
+          console.error("OpenTable reservation failed - success is false");
+          setStatus(false);
+          setLoading(false);
+        }
       } else {
         console.error("Data parameter is null or undefined");
         setLoading(false);

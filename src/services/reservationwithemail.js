@@ -1,5 +1,4 @@
 const API_URL = "https://have-a-seatonline.com/api/v1"
-import {useAuth} from "@/contexts/authContext/AuthProvider";
 import axios from "axios";
 
 export const register = async (formData) => {
@@ -168,8 +167,6 @@ export const PostOpentableReservationwithEmail = async (reservationId, restauran
 
 export const PostOpentableReservation = async (reservationId, restaurantType, finalData) => {
     try {
-      const { authState } = useAuth();
-
       if (!finalData) {
         throw new Error("Final data is required for reservation creation");
       }
@@ -213,12 +210,13 @@ export const PostOpentableReservation = async (reservationId, restaurantType, fi
 
       console.log('Creating OpenTable reservation for authenticated user:', requiredApiParams);
       // Get accessToken from localStorage
-      const token = authState?.accessToken || localStorage.getItem('accessToken');
+      const token = localStorage.getItem('accessToken');
       console.log('Token:', token);
       if (!token) {
         throw new Error("No access token found. User must be authenticated.");
       }
 
+      console.log('Making API call to create reservation...');
       const response = await axios.post(
         `${API_URL}/reservation/create_reservation/`,
         null,
@@ -230,6 +228,10 @@ export const PostOpentableReservation = async (reservationId, restaurantType, fi
           },
         }
       );
+
+      console.log('Backend API response:', response);
+      console.log('Response status:', response.status);
+      console.log('Response data:', response.data);
 
       // ✅ Trigger notification for successful reservation
       if (response.status === 200 || response.status === 201) {
