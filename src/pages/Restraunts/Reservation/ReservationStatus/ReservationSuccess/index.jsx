@@ -1,4 +1,17 @@
+import { useEffect } from 'react';
+// import { useNotificationToast } from '@/hooks/useNotificationToast';
+
 const ReservationSuccess = ({ formData }) => {
+  // const { showNotification } = useNotificationToast();
+  
+  // ✅ Notification already sent in main reservation flow, no need to send again
+  // This prevents duplicate notifications
+  useEffect(() => {
+    if (formData) {
+      console.log('Reservation success - notification already sent in main flow');
+    }
+  }, [formData]);
+
   // console.log(formData)
   return (
     <div className="flex items-center justify-center my-20 md:my-0 p-10 md:p-20">

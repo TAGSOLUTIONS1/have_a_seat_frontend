@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { LoginSchema, cn } from "@/lib/utils";
@@ -9,7 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LucideLoader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Clock } from "lucide-react";
 import { PiEyeLight, PiEyeSlash } from "react-icons/pi";
 import { PiSignIn } from "react-icons/pi";
 
@@ -18,6 +18,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [hasPendingReservation, setHasPendingReservation] = useState(false);
 
   const {
     register,
@@ -26,6 +27,15 @@ const LoginForm = () => {
   } = useForm({
     resolver: yupResolver(LoginSchema),
   });
+
+  // Check for pending reservations on component mount
+  useEffect(() => {
+    const pendingReservation = localStorage.getItem('pendingReservation');
+    if (pendingReservation) {
+      console.log("pendingReservation local", pendingReservation);
+      setHasPendingReservation(true);
+    }
+  }, []);
 
   const onSubmit = async (form) => {
     try {
@@ -42,24 +52,76 @@ const LoginForm = () => {
         formdata.append(key, value);
       }
       await login(formdata);
-      navigate("/");
+      
+      // Check if there's a pending reservation
+      const pendingReservationStr = localStorage.getItem('pendingReservation');
+      if (pendingReservationStr) {
+        try {
+          const pendingReservation = JSON.parse(pendingReservationStr);
+          console.log("pendingReservation parsed", pendingReservation);
+          const reservationType = pendingReservation.reservationData.restaurant_type;
+          const timeSlotData = pendingReservation.selectedTimeSlot; // Fixed: was timeSlotData
+          const formData = pendingReservation.formData;
+          const reservationCard = pendingReservation.reservationData;
+          
+          if (reservationType === 'yelp') {
+            const updatedNextData = [reservationCard, timeSlotData];
+            const route = `/reservation?data=${encodeURIComponent(
+              JSON.stringify(updatedNextData)
+            )}`;
+            navigate(route);
+          } else if (reservationType === 'open_table') {
+            const restaurant_id = reservationCard?.id;
+            const restaurantName = reservationCard?.name;
+            const restaurantAddress = reservationCard?.address;
+            const restaurantCuisines = reservationCard?.cuisines;
+            const updatedNextData = [
+              formData,
+              timeSlotData,
+              restaurant_id,
+              restaurantName,
+              restaurantAddress,
+              restaurantCuisines,
+            ];
+            const route = `/reservation?data=${encodeURIComponent(
+              JSON.stringify(updatedNextData)
+            )}`;
+            navigate(route);
+          }
+          
+          toast({
+            title: "Welcome back!",
+            description: "Your reservation details have been restored. You can now proceed with your booking.",
+            variant: "default",
+            duration: 5000,
+          });
+          
+          // Clear pending reservation from localStorage after successful redirect
+          localStorage.removeItem('pendingReservation');
+        } catch (error) {
+          console.error('Error parsing pending reservation:', error);
+          localStorage.removeItem('pendingReservation');
+          navigate("/");
+        }
+      } else {
+        // No pending reservation, go to home
+        navigate("/");
+      }
     } catch (err) {
-      handleError(err.response.status, toast);
+      console.error('Login error:', err);
+      if (err.response && err.response.status) {
+        handleError(err.response.status);
+      } else {
+        handleError(500); // Default to server error
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const [showpassword ,SetShowPasword]=useState(false);
-  const handleShowPassword =() =>{
-    if (showpassword===true)
-    {
-      SetShowPasword(false);
-    }
-    else{
-      SetShowPasword(true);
-    }
-    
+  const [showPassword, setShowPassword] = useState(false);
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
   }
   return (
     <div className="w-full md:w-11/12 lg:w-full xl:w-11/12 mx-auto lg:p-40">
@@ -68,8 +130,23 @@ const LoginForm = () => {
 
        <div className="flex flex-col gap-4 text-center">
         <p className="text-4xl font-agrandir md:text-5xl font-bold text-txtcolor">Welcome Back</p>
-        <p className="text-base font-roboto font-normal text-txtcolor">Let’s sign in to your account and get started</p>
+        <p className="text-base font-roboto font-normal text-txtcolor">Let's sign in to your account and get started</p>
        </div>
+       
+       {/* Pending reservation indicator */}
+       {hasPendingReservation && (
+         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+           <div className="flex items-center gap-2 text-blue-800">
+             <Clock className="h-5 w-5" />
+             <div>
+               <p className="font-semibold text-sm">Complete Your Reservation</p>
+               <p className="text-xs text-blue-700">
+                 After signing in, you'll be redirected back to complete your reservation.
+               </p>
+             </div>
+           </div>
+         </div>
+       )}
         <form
           className="space-y-4 md:space-y-6"
           onSubmit={handleSubmit(onSubmit)}
@@ -98,7 +175,7 @@ const LoginForm = () => {
             <div className="flex-grow flex relative flex-col gap-2">
             <p className="text-txtcolor text-sm font-medium font-roboto">Password</p>
               <Lock size={22} className="absolute top-9 left-3 " />
-                {showpassword===true ? (
+                {showPassword ? (
                     <PiEyeLight size={22} className="text-plum absolute top-9 cursor-pointer right-6" onClick={handleShowPassword}/>
                   ) : 
                   (
@@ -108,7 +185,7 @@ const LoginForm = () => {
                   }
 
               <input
-                type={showpassword ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 id="password"
                 className={`border ${
                   errors.password ? "border-red-500" : "border-gray-300 rounded-full"

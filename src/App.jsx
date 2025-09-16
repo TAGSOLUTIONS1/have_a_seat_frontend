@@ -20,7 +20,11 @@ import Landing from "./pages/Landing/Landing";
 import MainLayout from "./components/Layout/Layout";
 import RestaurantDetailsV2 from "./pages/Restraunts/ResturantDetailV2/RestaurantDetailsV2";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import NotificationsPage from "./pages/Notifications";
 import '../public/assets/fonts/fonts.css';
+import ChatBotWidget from "./components/ChatBotWidget";
+import NotificationToast from "./components/common/NotificationToast";
+import ResetPasswordOne from "./pages/ResetPasswordOne";
 
 function App() {
   const location = useLocation();
@@ -38,6 +42,7 @@ function App() {
           <Route path="/register" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
+          <Route path="/reset-password" element={<ResetPasswordOne />} />
           <Route path="/forget" element={<ForgetPassword />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/verifyuser" element={<VerifyUser />} />
@@ -47,6 +52,7 @@ function App() {
           <Route path="/reservation-status" element={<ReservationStatus />} />
           <Route path="/user-history" element={<UserHistory />} />
           <Route path="/user-profile" element={<UserStatistics />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           {/* <Route path="/account-links" element={<Protected Component={<AccountLinks />} />} /> */}
           <Route path="/account-links" element={<Protected />}>
             <Route path="/account-links" element={<AccountLinks />} />
@@ -54,6 +60,9 @@ function App() {
         </Route>
       </Routes>
       {/* {showFooter && <Footer />} */}
+
+      <ChatBotWidget />
+      <NotificationToast />
     </>
   );
 }

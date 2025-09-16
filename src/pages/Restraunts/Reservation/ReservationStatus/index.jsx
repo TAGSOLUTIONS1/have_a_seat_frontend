@@ -6,9 +6,13 @@ import ReservationFailed from "./ReservationFailed";
 import ReservationSuccessFul from "./ReservationSuccess";
 import Loader from "@/components/Loader";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
+import { useNotificationToast } from '@/hooks/useNotificationToast';
+import { createUser } from "@/services/auth";
+import { PostOpentableReservationwithEmail , PostYelpReservationwithEmail , PostYelpReservation, PostOpentableReservation } from "@/services/reservationwithemail";
 
 const ReservationStatus = () => {
   const { authState } = useAuth();
+  const { showNotification } = useNotificationToast();
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(null);
@@ -26,141 +30,8 @@ const ReservationStatus = () => {
       openTableReservation();
     }
   }, []);
+  
 
-  const PostOpentableReservation = async (reservationId, restaurantType) => {
-    try {
-      let finalData = null;
-      if (data) {
-        finalData = JSON.parse(decodeURIComponent(data));
-        // console.log("opne tbale final daata " , finalData)
-        setFormData(finalData);
-
-        const newDate = finalData?.formData[0]?.reservation_date;
-
-        const newTime = finalData?.formData[0]?.reservation_time;
-        const newTimeOffset = finalData?.formData[1]?.timeOffsetMinutes;
-        const id = finalData?.formData[2].toString();
-
-        const [hours, minutes] = newTime.split(":").map(Number);
-
-        const Finaldate = new Date();
-        Finaldate.setHours(hours);
-        Finaldate.setMinutes(minutes);
-
-        Finaldate.setMinutes(Finaldate.getMinutes() + newTimeOffset);
-
-        const newFormattedTime = `${Finaldate.getHours()
-          .toString()
-          .padStart(2, "0")}:${Finaldate.getMinutes()
-          .toString()
-          .padStart(2, "0")}`;
-
-        const FinalApiTime = `${newDate}T${newTime}`;
-        const cousine = finalData?.formData[5]
-        const people = finalData?.formData[0]?.reservation_covers;
-
-        const requiredApiParams = {
-          reservation_id: reservationId,
-          reservation_type: restaurantType,
-          reservation_status: "CONFIRMED",
-          reservation_date: FinalApiTime,
-          restaurant_id: id,
-          restaurant_name: finalData?.formData[3],
-          location: finalData?.formData[4]?.city,
-          price: 150,
-          num_diners: people,
-          cuisine_type: cousine[0]?.name,
-          indoor_outdoor: "Indoor",
-        };
-
-        console.log(requiredApiParams , "requiredApiParams")
-
-        setLoading(true);
-        const response = await axios.post(
-          `${Base_Url}/api/v1/reservation/create_reservation/`, 
-          null, 
-          {
-            params: requiredApiParams,
-            headers: {
-              Authorization: `Bearer ${authState?.accessToken}`,
-              accept: "application/json",
-            },
-          }
-        );
-
-        setStatus(true);
-        setLoading(false);
-        console.log(response, "response in API");
-      } else {
-        console.error("Data parameter is null or undefined");
-      }
-    } catch (error) {
-      console.error("Error :", error);
-      // setStatus(false);
-      setLoading(false);
-    }
-  };
-
-  const PostYelpReservation = async (reservationId, restaurantType) => {
-    try {
-      let finalData = null;
-      if (data) {
-        finalData = JSON.parse(decodeURIComponent(data));
-        setFormData(finalData);
-
-        const address = finalData?.bookingInfo?.formattedAddress;
-        const cityParts = address?.split("<br>");
-        const cityStateZip = cityParts[1];
-        const cityPartsPro = cityStateZip.split(", ");
-        const city = cityPartsPro[0];
-
-        const separator = finalData?.bookingInfo?.formSubmitPath;
-        const parts = separator?.split("/");
-        const date = parts[4];
-        const time = parts[5];
-        const people = parts[6];
-
-        const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`;
-        const DateAndTime = `${date}T${formattedTime}`;
-
-        const requiredApiParams = {
-          reservation_id: reservationId,
-          reservation_type: restaurantType,
-          reservation_status: "CONFIRMED",
-          reservation_date: DateAndTime,
-          restaurant_id: finalData?.formData[0]?.alias,
-          restaurant_name: finalData?.bookingInfo?.businessName,
-          location: city,
-          price: 150,
-          num_diners: people,
-          cuisine_type: finalData?.bookingInfo?.restaurant?.categories[0],
-          indoor_outdoor: "Indoor",
-        };
-
-        setLoading(true);
-        const response = await axios.post(
-          `${Base_Url}/api/v1/reservation/create_reservation/`, 
-          null, 
-          {
-            params: requiredApiParams,
-            headers: {
-              Authorization: `Bearer ${authState?.accessToken}`,
-              accept: "application/json",
-            },
-          }
-        );
-        setStatus(true);
-        setLoading(false);
-        console.log(response, "response in API");
-      } else {
-        console.error("Data parameter is null or undefined");
-      }
-    } catch (error) {
-      console.error("Error :", error);
-      setStatus(false);
-      setLoading(false);
-    }
-  };
 
   const openTableReservation = async () => {
     try {
@@ -188,9 +59,9 @@ const ReservationStatus = () => {
           mobile_number: myData?.reservationFormData?.phone,
           mobile_country_id: "US",
           email: myData?.reservationFormData?.email,
-          persons: finalData[0]?.reservation_covers,
-          restaurant_id: finalData[2],
-          restaurant_name:finalData[3] || "the restaurant",
+          persons: finalData[0]?.reservation_covers || 1,
+          restaurant_id: finalData[2] || 'unknown',
+          restaurant_name: finalData[3] || "the restaurant",
           seating_option: "default",
           dining_area_id: 1,
           slot_hash: finalData[1]?.slotHash,
@@ -207,22 +78,133 @@ const ReservationStatus = () => {
             params: apiParams,
           }
         );
-        console.log("Response:" , response)
-        setStatus(true);
-        setLoading(false);
+        console.log("OpenTable API Response:" , response)
+        console.log("Response success:", response.data.success)
+        console.log("Response data:", response.data.data)
+        
         if (response.data.success === true) {
-          console.log("Reservation created successfully");
+          console.log("OpenTable reservation API call successful");
         if (response.data.data && response.data.data.reservationId) {
+          console.log("Reservation ID found:", response.data.data.reservationId)
           console.log("Reservation created successfully");
-          PostOpentableReservation(response.data.data.reservationId, "OPENTABLE");
+          // console.log("Authentication state:", authState?.isAuthenticated);
+          // console.log("Access token exists:", !!localStorage.getItem('accessToken'));
+          
+          // ✅ Trigger notification for successful OpenTable reservation
+          showNotification(
+            'reservation_confirmation',
+            'Reservation Confirmed! 🎉',
+            `Your table at ${finalData[3] || 'Restaurant'} is confirmed for ${finalData[0]?.reservation_date} at ${finalData[0]?.reservation_time}`,
+            {
+              restaurant_name: finalData[3] || 'Restaurant',
+              reservation_date: finalData[0]?.reservation_date,
+              reservation_time: finalData[0]?.reservation_time,
+              num_diners: finalData[0]?.reservation_covers || 1,
+              reservation_id: String(response.data.data.reservationId),
+              reservation_type: 'OPENTABLE',
+              confirmation_number: response.data.data.confirmationNuymber,
+              party_size: response.data.data.partySize,
+              reservation_datetime: response.data.data.reservationDateTime,
+              restaurant_id: response.data.data.restaurantId
+            }
+          );
+          // console.log('Auth state:', authState);
+          if(authState?.isAuthenticated){
+           console.log("User is authenticated, creating backend reservation...");
+           try {
+             const reservationResult = await PostOpentableReservation(response.data.data.reservationId, "OPENTABLE", myData);
+             console.log("Backend reservation result:", reservationResult);
+             if (reservationResult?.success) {
+               console.log("OpenTable reservation successfully saved to backend");
+             } else {
+               console.error("Failed to save OpenTable reservation to backend");
+             }
+           } catch (error) {
+             console.error("Error saving OpenTable reservation to backend:", error);
+             showNotification(
+               'reservation_cancellation',
+               'Backend Save Failed ⚠️',
+               'Your reservation was created successfully, but there was an issue saving it to your account. Please contact support.',
+               {
+                 error: error.message,
+                 reservation_type: 'OPENTABLE'
+               }
+             );
+           }
+          } else {
+            console.log("User is not authenticated, creating user account for reservation...");
+            // Create user account for the reservation
+            try {
+              const userData = {
+                first_name: myData?.reservationFormData?.first_name,
+                last_name: myData?.reservationFormData?.last_name,
+                email: myData?.reservationFormData?.email,
+                password: 'temp123' // Default password for auto-created users
+              };
+              
+              const usercreated = await createUser(userData);
+              console.log("User created:", usercreated);
+              
+              if (usercreated && usercreated.email) {
+                console.log("Creating backend reservation with email:", usercreated.email);
+                // Pass myData to the reservation function
+                const reservationResult = await PostOpentableReservationwithEmail(
+                  response.data.data.reservationId, 
+                  "OPENTABLE", 
+                  usercreated.email,
+                  myData
+                );
+                console.log("Backend reservation result (with email):", reservationResult);
+                
+                if (reservationResult?.success) {
+                  console.log("OpenTable reservation successfully saved to backend");
+                } else {
+                  console.error("Failed to save OpenTable reservation to backend");
+                }
+              } else {
+                console.error("User creation failed - no email returned");
+              }
+                            
+            } catch (error) {
+              console.error('Error creating user for OpenTable reservation:', error);
+              // Show error notification
+              showNotification(
+                'reservation_cancellation',
+                'User Creation Failed ❌',
+                'There was an issue creating your account. Your reservation was made but may not be saved to your account.',
+                {
+                  error: error.message,
+                  reservation_type: 'OPENTABLE'
+                }
+              );
+            }
           }
-        } 
+          setStatus(true);
+          setLoading(false);
+          }
+        } else {
+          console.error("OpenTable reservation failed - success is false");
+          setStatus(false);
+          setLoading(false);
+        }
       } else {
         console.error("Data parameter is null or undefined");
         setLoading(false);
       }
     } catch (error) {
       console.error("Error :", error);
+      
+      // ✅ Trigger notification for failed reservation
+      showNotification(
+        'reservation_cancellation',
+        'Reservation Failed ❌',
+        'There was an issue processing your OpenTable reservation. Please try again.',
+        {
+          error: error.message,
+          reservation_type: 'OPENTABLE'
+        }
+      );
+      
       setStatus(false);
       setLoading(false);
     }
@@ -267,7 +249,87 @@ const ReservationStatus = () => {
           console.log("Reservation created successfully");
         if (response.data.data && response.data.data.rez_id) {
           console.log("Reservation created successfully");
-          PostYelpReservation(response.data.data.rez_id, "YELP");
+          // console.log("Authentication state:", authState?.isAuthenticated);
+          // console.log("Access token exists:", !!localStorage.getItem('accessToken'));
+          // ✅ Trigger notification for successful Yelp reservation
+          showNotification(
+            'reservation_confirmation',
+            'Reservation Confirmed! 🎉',
+            `Your table at ${finalData?.formData[0]?.name || 'Restaurant'} is confirmed for ${date} at ${time}`,
+            {
+              restaurant_name: finalData?.formData[0]?.name || 'Restaurant',
+              reservation_date: date,
+              reservation_time: time,
+              num_diners: finalData?.bookingInfo?.covers,
+              reservation_id: response.data.data.rez_id,
+              reservation_type: 'YELP'
+            }
+          );
+          if(authState?.isAuthenticated){
+           try {
+             const reservationResult = await PostYelpReservation(response.data.data.rez_id, "YELP", finalData);
+             if (reservationResult?.success) {
+               console.log("Yelp reservation successfully saved to backend");
+             } else {
+               console.error("Failed to save Yelp reservation to backend");
+             }
+           } catch (error) {
+             console.error("Error saving Yelp reservation to backend:", error);
+             showNotification(
+               'reservation_cancellation',
+               'Backend Save Failed ⚠️',
+               'Your reservation was created successfully, but there was an issue saving it to your account. Please contact support.',
+               {
+                 error: error.message,
+                 reservation_type: 'YELP'
+               }
+             );
+           }
+          } else {
+            // Create user account for the reservation
+            try {
+              const userData = {
+                email: finalData?.reservationFormData?.email || 'guest@example.com',
+                first_name: finalData?.reservationFormData?.first_name || 'Guest',
+                last_name: finalData?.reservationFormData?.last_name || 'User',
+                password: 'a' 
+              };
+              
+              const usercreated = await createUser(userData);
+              console.log("user created", usercreated , usercreated.email);
+              
+              if (usercreated && usercreated.email) {
+                // Pass finalData to the reservation function
+                const reservationResult = await PostYelpReservationwithEmail(
+                  response.data.data.rez_id, 
+                  "YELP", 
+                  usercreated.email,
+                  finalData
+                );
+                
+                if (reservationResult?.success) {
+                  console.log("Reservation successfully saved to backend");
+                } else {
+                  console.error("Failed to save reservation to backend");
+                }
+              } else {
+                console.error("User creation failed - no email returned");
+              }
+              
+            } catch (error) {
+              console.error('Error creating user for Yelp reservation:', error);
+              // Show error notification
+              showNotification(
+                'reservation_cancellation',
+                'User Creation Failed ❌',
+                'There was an issue creating your account. Your reservation was made but may not be saved to your account.',
+                {
+                  error: error.message,
+                  reservation_type: 'YELP'
+                }
+              );
+            }
+          }
         }
       } else {
         console.error("Data parameter is null or undefined");
@@ -276,6 +338,18 @@ const ReservationStatus = () => {
       }
    } catch (error) {
       console.error("Error :", error);
+      
+      // ✅ Trigger notification for failed Yelp reservation
+      showNotification(
+        'reservation_cancellation',
+        'Reservation Failed ❌',
+        'There was an issue processing your Yelp reservation. Please try again.',
+        {
+          error: error.message,
+          reservation_type: 'YELP'
+        }
+      );
+      
       setStatus(false);
       setLoading(false);
     }

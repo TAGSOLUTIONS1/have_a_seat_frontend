@@ -1,0 +1,260 @@
+.notification-preferences {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.preferences-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 16px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-icon {
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.preferences-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.preferences-subtitle {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.preferences-content {
+  min-height: 400px;
+}
+
+.preferences-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.preference-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+}
+
+.preference-item:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.preference-header {
+  margin-bottom: 20px;
+}
+
+.preference-type-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.preference-description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.preference-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.preference-option {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.preference-option:hover {
+  border-color: #3b82f6;
+  background-color: #f8fafc;
+}
+
+.preference-option input[type="checkbox"] {
+  margin-right: 12px;
+  width: 18px;
+  height: 18px;
+  accent-color: #3b82f6;
+}
+
+.option-icon {
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+  margin-right: 8px;
+}
+
+.preference-option span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.preferences-actions {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.save-preferences-button {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 200px;
+}
+
+.save-preferences-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.save-preferences-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.no-preferences {
+  text-align: center;
+  padding: 60px 20px;
+  color: #9ca3af;
+}
+
+.no-preferences-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  opacity: 0.5;
+}
+
+.no-preferences p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.notification-preferences-loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f4f6;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .notification-preferences {
+    padding: 16px;
+    margin: 16px;
+  }
+  
+  .preferences-header {
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  .header-icon {
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
+  
+  .preferences-title {
+    font-size: 24px;
+  }
+  
+  .preference-item {
+    padding: 20px;
+  }
+  
+  .preference-options {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .save-preferences-button {
+    min-width: 100%;
+    padding: 16px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-preferences {
+    padding: 12px;
+    margin: 8px;
+  }
+  
+  .preference-item {
+    padding: 16px;
+  }
+  
+  .preferences-title {
+    font-size: 20px;
+  }
+  
+  .preference-type-title {
+    font-size: 16px;
+  }
+} 
