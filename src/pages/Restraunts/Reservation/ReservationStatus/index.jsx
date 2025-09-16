@@ -85,6 +85,8 @@ const ReservationStatus = () => {
           console.log("Reservation created successfully");
         if (response.data.data && response.data.data.reservationId) {
           console.log("Reservation created successfully");
+          // console.log("Authentication state:", authState?.isAuthenticated);
+          // console.log("Access token exists:", !!localStorage.getItem('accessToken'));
           
           // ✅ Trigger notification for successful OpenTable reservation
           showNotification(
@@ -98,19 +100,32 @@ const ReservationStatus = () => {
               num_diners: finalData[0]?.reservation_covers || 1,
               reservation_id: response.data.data.reservationId,
               reservation_type: 'OPENTABLE',
-              confirmation_number: response.data.data.confirmationNumber,
+              confirmation_number: response.data.data.confirmationNuymber,
               party_size: response.data.data.partySize,
               reservation_datetime: response.data.data.reservationDateTime,
               restaurant_id: response.data.data.restaurantId
             }
           );
-          
+          // console.log('Auth state:', authState);
           if(authState?.isAuthenticated){
-           const reservationResult = await PostOpentableReservation(response.data.data.reservationId, "OPENTABLE", myData);
-           if (reservationResult?.success) {
-             console.log("OpenTable reservation successfully saved to backend");
-           } else {
-             console.error("Failed to save OpenTable reservation to backend");
+           try {
+             const reservationResult = await PostOpentableReservation(response.data.data.reservationId, "OPENTABLE", myData);
+             if (reservationResult?.success) {
+               console.log("OpenTable reservation successfully saved to backend");
+             } else {
+               console.error("Failed to save OpenTable reservation to backend");
+             }
+           } catch (error) {
+             console.error("Error saving OpenTable reservation to backend:", error);
+             showNotification(
+               'reservation_cancellation',
+               'Backend Save Failed ⚠️',
+               'Your reservation was created successfully, but there was an issue saving it to your account. Please contact support.',
+               {
+                 error: error.message,
+                 reservation_type: 'OPENTABLE'
+               }
+             );
            }
           } else {
             // Create user account for the reservation
@@ -221,6 +236,8 @@ const ReservationStatus = () => {
           console.log("Reservation created successfully");
         if (response.data.data && response.data.data.rez_id) {
           console.log("Reservation created successfully");
+          // console.log("Authentication state:", authState?.isAuthenticated);
+          // console.log("Access token exists:", !!localStorage.getItem('accessToken'));
           // ✅ Trigger notification for successful Yelp reservation
           showNotification(
             'reservation_confirmation',
@@ -236,11 +253,24 @@ const ReservationStatus = () => {
             }
           );
           if(authState?.isAuthenticated){
-           const reservationResult = await PostYelpReservation(response.data.data.rez_id, "YELP", finalData);
-           if (reservationResult?.success) {
-             console.log("Yelp reservation successfully saved to backend");
-           } else {
-             console.error("Failed to save Yelp reservation to backend");
+           try {
+             const reservationResult = await PostYelpReservation(response.data.data.rez_id, "YELP", finalData);
+             if (reservationResult?.success) {
+               console.log("Yelp reservation successfully saved to backend");
+             } else {
+               console.error("Failed to save Yelp reservation to backend");
+             }
+           } catch (error) {
+             console.error("Error saving Yelp reservation to backend:", error);
+             showNotification(
+               'reservation_cancellation',
+               'Backend Save Failed ⚠️',
+               'Your reservation was created successfully, but there was an issue saving it to your account. Please contact support.',
+               {
+                 error: error.message,
+                 reservation_type: 'YELP'
+               }
+             );
            }
           } else {
             // Create user account for the reservation

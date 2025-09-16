@@ -1,9 +1,6 @@
 const API_URL = "https://have-a-seatonline.com/api/v1"
-
+import {useAuth} from "@/contexts/authContext/AuthProvider";
 import axios from "axios";
-import { useAuth } from "@/contexts/authContext/AuthProvider";
-import { useState } from "react";
-import { useNotificationToast } from '@/hooks/useNotificationToast';
 
 export const register = async (formData) => {
   console.log("formData for register is ", formData);
@@ -170,9 +167,9 @@ export const PostOpentableReservationwithEmail = async (reservationId, restauran
   };
 
 export const PostOpentableReservation = async (reservationId, restaurantType, finalData) => {
-  const { authState } = useAuth();
-
     try {
+      const { authState } = useAuth();
+
       if (!finalData) {
         throw new Error("Final data is required for reservation creation");
       }
@@ -215,9 +212,13 @@ export const PostOpentableReservation = async (reservationId, restaurantType, fi
       };
 
       console.log('Creating OpenTable reservation for authenticated user:', requiredApiParams);
-
-      // Use accessToken from localStorage if authState doesn't have it
+      // Get accessToken from localStorage
       const token = authState?.accessToken || localStorage.getItem('accessToken');
+      console.log('Token:', token);
+      if (!token) {
+        throw new Error("No access token found. User must be authenticated.");
+      }
+
       const response = await axios.post(
         `${API_URL}/reservation/create_reservation/`,
         null,
@@ -245,8 +246,6 @@ export const PostOpentableReservation = async (reservationId, restaurantType, fi
   };
 
 export const PostYelpReservation = async (reservationId, restaurantType, finalData) => {
-  const { authState } = useAuth();
-
     try {
       if (!finalData) {
         throw new Error("Final data is required for reservation creation");
@@ -283,8 +282,12 @@ export const PostYelpReservation = async (reservationId, restaurantType, finalDa
 
       console.log('Creating Yelp reservation for authenticated user:', requiredApiParams);
       
-      // Use accessToken from localStorage if authState doesn't have it
-      const token = authState?.accessToken || localStorage.getItem('accessToken') ;
+      // Get accessToken from localStorage
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        throw new Error("No access token found. User must be authenticated.");
+      }
+
       const response = await axios.post(
         `${API_URL}/reservation/create_reservation/`, 
         null, 
