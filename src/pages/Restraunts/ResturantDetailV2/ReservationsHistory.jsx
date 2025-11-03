@@ -116,7 +116,7 @@ export default function ReservationsHistory({reservations}) {
           <div className="flex-grow"></div>
           {new Date (reservation?.reservation_date) < new Date() &&  <div className="bg-grey-lighter  flex items-center justify-between transition hover:bg-grey-light cursor-pointer mt-2">
             <button className="rounded-full p-3 bg-plum text-white ">
-        <span>Reserve again</span>
+              <span>Reserve again</span>
             </button>
             <i className="fas fa-chevron-right"></i>
           </div>}
