@@ -11,8 +11,23 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
-const DatePicker = ({ setFormData }) => {
-  const [date, setDate] = useState(new Date()); // Default to current date
+const DatePicker = ({ setFormData, initialDate }) => {
+  // Initialize date from prop if provided, otherwise use current date
+  const getInitialDate = () => {
+    if (initialDate) {
+      try {
+        const parsedDate = new Date(initialDate);
+        if (!isNaN(parsedDate.getTime())) {
+          return parsedDate;
+        }
+      } catch (e) {
+        console.error("Error parsing initial date:", e);
+      }
+    }
+    return new Date();
+  };
+  
+  const [date, setDate] = useState(getInitialDate());
 
   useEffect(() => {
     const formattedDate = format(date, "yyyy-MM-dd");
@@ -21,6 +36,20 @@ const DatePicker = ({ setFormData }) => {
       reservation_date: formattedDate,
     }));
   }, [date, setFormData]);
+
+  // Update date when initialDate prop changes
+  useEffect(() => {
+    if (initialDate) {
+      try {
+        const parsedDate = new Date(initialDate);
+        if (!isNaN(parsedDate.getTime())) {
+          setDate(parsedDate);
+        }
+      } catch (e) {
+        console.error("Error parsing initial date:", e);
+      }
+    }
+  }, [initialDate]);
 
   return (
     <div>

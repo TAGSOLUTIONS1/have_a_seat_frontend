@@ -16,11 +16,30 @@ export default function MakeReservation({ restrauntDetail }) {
   const { toast } = useToast();
   const [reservationCard, setReservationCard] = useState();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    reservation_covers: null,
-    reservation_date: null,
-    reservation_time: null,
-  });
+  
+  // Initialize formData from localStorage if available (filter search data)
+  const getInitialFormData = () => {
+    const savedFormData = localStorage.getItem("searchFormData");
+    if (savedFormData) {
+      try {
+        const parsed = JSON.parse(savedFormData);
+        return {
+          reservation_covers: parsed.reservation_covers || parsed.persons || 2,
+          reservation_date: parsed.reservation_date || parsed.date || null,
+          reservation_time: parsed.reservation_time || null,
+        };
+      } catch (e) {
+        console.error("Error parsing saved form data:", e);
+      }
+    }
+    return {
+      reservation_covers: null,
+      reservation_date: null,
+      reservation_time: null,
+    };
+  };
+  
+  const [formData, setFormData] = useState(getInitialFormData());
   const [error, setError] = useState("");
   const [nextData, setNextData] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -494,17 +513,17 @@ export default function MakeReservation({ restrauntDetail }) {
       
     <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
         <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Date</span>
-            <DatePicker setFormData={setFormData} />
+            <DatePicker setFormData={setFormData} initialDate={formData.reservation_date} />
           </div>
 
           <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
         <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Time</span>
-            <Time setFormData={setFormData} />
+            <Time setFormData={setFormData} initialTime={formData.reservation_time} />
           </div>
 
           <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
         <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Guests</span>
-            <PersonCard setFormData={setFormData} />
+            <PersonCard setFormData={setFormData} initialGuests={formData.reservation_covers} />
           </div>
 
           <div className="w-full md:w-auto">
