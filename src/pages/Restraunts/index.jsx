@@ -6,11 +6,35 @@ import { useLocation } from "react-router-dom";
 import Filters from "./Filters";
 import RestrautCards from "./RestrauntCards";
 import Loader from "@/components/Loader";
+import { useAuth } from "@/contexts/authContext/AuthProvider";
+
+// Load filters from localStorage
+const loadFiltersFromStorage = () => {
+  try {
+    const savedFilters = localStorage.getItem("restaurantFilters");
+    if (savedFilters) {
+      return JSON.parse(savedFilters);
+    }
+  } catch (e) {
+    console.error("Error loading filters from storage:", e);
+  }
+  return null;
+};
+
+// Save filters to localStorage
+const saveFiltersToStorage = (filters) => {
+  try {
+    localStorage.setItem("restaurantFilters", JSON.stringify(filters));
+  } catch (e) {
+    console.error("Error saving filters to storage:", e);
+  }
+};
 
 const Search = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const data = params.get("data");
+  const { authState } = useAuth();
 
   const [formData, setFormData] = useState({});
   const [yelpData, setYelpData] = useState();
@@ -21,14 +45,36 @@ const Search = () => {
   const [selectedStarFilter, setSelectedStarFilter] = useState(null);
   const [selectedPriceFilter, setSelectedPriceFilter] = useState(null);
   const [selectedCuisineFilter, setSelectedCuisineFilter] = useState(null);
-  const [filters, setFilters] = useState({
-    selectedTypes: ["yelp", "open_table", "resy"],
-    ratings: [],
-    cuisinefilter: [],
-    reviewedFilter: [],
-    showmore: false,
-    allCuisines: []
-  });
+  const [userStatistics, setUserStatistics] = useState(null);
+  const [filtersFromPreferences, setFiltersFromPreferences] = useState(false);
+  
+  // Initialize filters with saved preferences or defaults
+  const initializeFilters = () => {
+    const savedFilters = loadFiltersFromStorage();
+    
+    if (savedFilters) {
+      // Ensure all required properties exist
+      return {
+        selectedTypes: savedFilters.selectedTypes || ["yelp", "open_table", "resy"],
+        ratings: savedFilters.ratings || [],
+        cuisinefilter: savedFilters.cuisinefilter || [],
+        reviewedFilter: savedFilters.reviewedFilter || [],
+        showmore: savedFilters.showmore || false,
+        allCuisines: savedFilters.allCuisines || []
+      };
+    }
+    
+    return {
+      selectedTypes: ["yelp", "open_table", "resy"],
+      ratings: [],
+      cuisinefilter: [],
+      reviewedFilter: [],
+      showmore: false,
+      allCuisines: []
+    };
+  };
+
+  const [filters, setFilters] = useState(initializeFilters);
   const fetchData = async (apiEndpoint, customFormData) => {
     try {
       const response = await axios.get(`${Base_Url}${apiEndpoint}`, {
@@ -43,6 +89,71 @@ const Search = () => {
       return [];
     }
   };
+
+  // Fetch user statistics to get favorite cuisines
+  useEffect(() => {
+    const fetchUserStatistics = async () => {
+      if (authState?.isAuthenticated && authState?.accessToken) {
+        try {
+          const response = await axios.get(
+            `${Base_Url}/api/v1/reservation/statistics/`,
+            {
+              headers: {
+                Authorization: `Bearer ${authState.accessToken}`,
+                accept: "application/json",
+              },
+            }
+          );
+          setUserStatistics(response.data);
+          
+          // Check if user has favorite cuisines and no saved filters
+          const savedFilters = loadFiltersFromStorage();
+          if (response.data?.most_common_cuisine_types?.length > 0 && !savedFilters) {
+            // Auto-apply favorite cuisines as default filters
+            const favoriteCuisines = response.data.most_common_cuisine_types.slice(0, 3); // Top 3 favorites
+            const defaultFilters = {
+              selectedTypes: ["yelp", "open_table", "resy"],
+              ratings: [],
+              cuisinefilter: favoriteCuisines,
+              reviewedFilter: [],
+              showmore: false,
+              allCuisines: []
+            };
+            setFilters(defaultFilters);
+            setFiltersFromPreferences(true);
+            
+            // Save the auto-applied filters
+            saveFiltersToStorage(defaultFilters);
+          } else if (savedFilters && response.data?.most_common_cuisine_types?.length > 0) {
+            // Check if saved filters match user preferences (for showing "Favorite" badge)
+            const savedCuisines = savedFilters.cuisinefilter || [];
+            const favoriteCuisines = response.data.most_common_cuisine_types || [];
+            const matchesPreferences = savedCuisines.some(cuisine => 
+              favoriteCuisines.includes(cuisine)
+            );
+            if (matchesPreferences && savedCuisines.length > 0) {
+              setFiltersFromPreferences(true);
+            }
+            // Ensure saved filters are applied even if they were loaded before user stats
+            setFilters(prev => ({
+              ...prev,
+              cuisinefilter: savedCuisines
+            }));
+          } else if (savedFilters) {
+            // If we have saved filters but no user stats, just apply them
+            setFilters(prev => ({
+              ...prev,
+              cuisinefilter: savedFilters.cuisinefilter || prev.cuisinefilter
+            }));
+          }
+        } catch (error) {
+          console.error("Error fetching user statistics:", error);
+        }
+      }
+    };
+
+    fetchUserStatistics();
+  }, [authState]);
 
   useEffect(() => {
     let finalData;
@@ -126,35 +237,60 @@ const Search = () => {
   };
 
   const handleFilterChange = (newFilters) => {
-    setFilters(prev => ({ ...prev, ...newFilters }));
+    setFilters(prev => {
+      const updated = { ...prev, ...newFilters };
+      // Save to localStorage whenever filters change
+      saveFiltersToStorage(updated);
+      // If user manually changes filters, mark that they're not from preferences anymore
+      if (newFilters.cuisinefilter && filtersFromPreferences) {
+        setFiltersFromPreferences(false);
+      }
+      return updated;
+    });
   };
 
   // Add these handler functions to your Search component
 const handleRatingsChange = (rating) => {
-  setFilters(prev => ({
-    ...prev,
-    ratings: prev.ratings.includes(rating)
-      ? prev.ratings.filter(r => r !== rating)
-      : [...prev.ratings, rating]
-  }));
+  setFilters(prev => {
+    const updated = {
+      ...prev,
+      ratings: prev.ratings.includes(rating)
+        ? prev.ratings.filter(r => r !== rating)
+        : [...prev.ratings, rating]
+    };
+    saveFiltersToStorage(updated);
+    return updated;
+  });
 };
 
 const handleCuisineChange = (cuisine) => {
-  setFilters(prev => ({
-    ...prev,
-    cuisinefilter: prev.cuisinefilter.includes(cuisine)
-      ? prev.cuisinefilter.filter(c => c !== cuisine)
-      : [...prev.cuisinefilter, cuisine]
-  }));
+  setFilters(prev => {
+    const updated = {
+      ...prev,
+      cuisinefilter: prev.cuisinefilter.includes(cuisine)
+        ? prev.cuisinefilter.filter(c => c !== cuisine)
+        : [...prev.cuisinefilter, cuisine]
+    };
+    saveFiltersToStorage(updated);
+    // User manually changed cuisine filters, so not from preferences anymore
+    if (filtersFromPreferences) {
+      setFiltersFromPreferences(false);
+    }
+    return updated;
+  });
 };
 
 const handleReviewChange = (type) => {
-  setFilters(prev => ({
-    ...prev,
-    reviewedFilter: prev.reviewedFilter.includes(type)
-      ? prev.reviewedFilter.filter(t => t !== type)
-      : [...prev.reviewedFilter, type]
-  }));
+  setFilters(prev => {
+    const updated = {
+      ...prev,
+      reviewedFilter: prev.reviewedFilter.includes(type)
+        ? prev.reviewedFilter.filter(t => t !== type)
+        : [...prev.reviewedFilter, type]
+    };
+    saveFiltersToStorage(updated);
+    return updated;
+  });
 };
 
 const handleShowMore = () => {
@@ -164,13 +300,21 @@ const handleShowMore = () => {
   }));
 };
 
-const clearFilters = () => {
-  setFilters(prev => ({
-    ...prev,
-    ratings: [],
-    cuisinefilter: [],
-    reviewedFilter: []
-  }));
+const clearFilters = (keepFavorites = false) => {
+  setFilters(prev => {
+    const favoriteCuisines = userStatistics?.most_common_cuisine_types?.slice(0, 3) || [];
+    const updated = {
+      ...prev,
+      ratings: [],
+      reviewedFilter: [],
+      cuisinefilter: keepFavorites && filtersFromPreferences ? favoriteCuisines : []
+    };
+    saveFiltersToStorage(updated);
+    if (!keepFavorites) {
+      setFiltersFromPreferences(false);
+    }
+    return updated;
+  });
 };
     
 
@@ -239,7 +383,8 @@ const clearFilters = () => {
                 onReviewChange={handleReviewChange}
                 onShowMore={handleShowMore}
                 onClearFilters={clearFilters}
-
+                filtersFromPreferences={filtersFromPreferences}
+                userStatistics={userStatistics}
               />
             </div>
           </>

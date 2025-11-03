@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchLocationV2 from "@/components/searchLocationRestaurant";
 import { FaCheck } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
 import { ImFilter } from "react-icons/im";
 import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
@@ -26,7 +27,9 @@ const RestaurantCards = memo(
     onCuisineChange,
     onReviewChange,
     onShowMore,
-    onClearFilters
+    onClearFilters,
+    userStatistics,
+    filtersFromPreferences
   }) => {
     const { selectedTypes, ratings, cuisinefilter, reviewedFilter, showmore, allCuisines } = filters;
     const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
@@ -312,6 +315,10 @@ const RestaurantCards = memo(
     const fillallcuisines = () => {
       const extractedCuisines = new Set(cuisinestypes);
       
+      // Add favorite cuisines from user stats if available
+      const favoriteCuisines = userStatistics?.most_common_cuisine_types || [];
+      favoriteCuisines.forEach(cuisine => extractedCuisines.add(cuisine));
+      
       filteredRestaurants.forEach((restaurant) => {
         if (restaurant.primaryCuisine?.name) {
           extractedCuisines.add(restaurant.primaryCuisine.name);
@@ -330,12 +337,40 @@ const RestaurantCards = memo(
       });
     };
   
-    const displayedCuisines = showmore ? allCuisines : cuisinestypes;
+    // Get favorite cuisines from user stats
+    const favoriteCuisines = userStatistics?.most_common_cuisine_types || [];
+    
+    // Prepare displayed cuisines with favorites at top
+    const prepareDisplayedCuisines = () => {
+      const baseCuisines = showmore ? allCuisines : cuisinestypes;
+      const cuisineSet = new Set(baseCuisines);
+      
+      // Add favorite cuisines if not present
+      favoriteCuisines.forEach(cuisine => cuisineSet.add(cuisine));
+      
+      const allCuisinesList = Array.from(cuisineSet);
+      
+      // Sort: favorites first, then others
+      return allCuisinesList.sort((a, b) => {
+        const aIsFavorite = favoriteCuisines.includes(a);
+        const bIsFavorite = favoriteCuisines.includes(b);
+        if (aIsFavorite && !bIsFavorite) return -1;
+        if (!aIsFavorite && bIsFavorite) return 1;
+        return a.localeCompare(b);
+      });
+    };
+    
+    const displayedCuisines = prepareDisplayedCuisines();
+    
+    // Check if a cuisine is favorite
+    const isFavoriteCuisine = (cuisine) => {
+      return favoriteCuisines.includes(cuisine);
+    };
     
     return (
       <div>
         <div className="bg-plum px-4 sm:px-8 lg:px-24 py-8 sm:py-12 rounded-3xl">
-        <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-6 sm:p-10 lg:p-14 bg-white">
+        <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-6 sm:p-10 lg:p-14 bg-white max-w-[1550px] mx-auto">
             <SearchLocationV2 
             yelpData={yelpData}
             resyData={resyData}
@@ -351,10 +386,51 @@ const RestaurantCards = memo(
             onReviewChange={onReviewChange}
             onShowMore={onShowMore}
             onClearFilters={onClearFilters}
+            userStatistics={userStatistics}
+            filtersFromPreferences={filtersFromPreferences}
             />
           </div>
 
         </div>
+
+        {/* Cuisine Selector Section - Show Favorites Only */}
+        {favoriteCuisines.length > 0 && (
+          <div className="mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8 max-w-[1550px] mx-auto">
+            <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200">
+              <h3 className="font-agrandir text-lg sm:text-xl font-bold text-shipGrey mb-4">Select Cuisines</h3>
+              <div className="flex flex-wrap gap-2 sm:gap-3">
+                {favoriteCuisines.map((cuisine) => (
+                  <label
+                    key={cuisine}
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full cursor-pointer border-2 transition-colors"
+                    style={{
+                      borderColor: cuisinefilter.includes(cuisine) ? "#9235e2" : "#e5e7eb",
+                      backgroundColor: cuisinefilter.includes(cuisine) ? "#f3e8ff" : "#f9fafb"
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={cuisinefilter.includes(cuisine)}
+                      onChange={() => onCuisineChange(cuisine)}
+                      className="hidden peer"
+                    />
+                    <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-sm bg-white border-2 flex items-center justify-center"
+                      style={{
+                        borderColor: cuisinefilter.includes(cuisine) ? "#9235e2" : "#d1d5db"
+                      }}
+                    >
+                      {cuisinefilter.includes(cuisine) && <FaCheck size={10} color="#9235e2" />}
+                    </span>
+                    <span className="font-roboto font-medium text-xs sm:text-sm text-shipGrey">
+                      {cuisine}
+                    </span>
+                    <FaHeart size={12} color="#FFD700" className="ml-1" />
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Filtered Restaurants List */}
         <div className="mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-7">
@@ -530,7 +606,12 @@ const RestaurantCards = memo(
                     {cuisinefilter.includes(cuisine) && <FaCheck size={13} color="#9235e2" />}
                   </span>
                 </label>
-                <p className="font-roboto font-medium text-sm text-white">{cuisine}</p>
+                <div className="flex items-center gap-2">
+                  <p className="font-roboto font-medium text-sm text-white">{cuisine}</p>
+                  {isFavoriteCuisine(cuisine) && (
+                    <FaHeart size={14} color="#FFD700" className="ml-1" />
+                  )}
+                </div>
               </div>
             ))}
 
