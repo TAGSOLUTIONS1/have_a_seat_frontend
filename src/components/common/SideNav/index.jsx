@@ -20,6 +20,21 @@ import {
 const SideNav = () => {
   const { logout, authState } = useAuth();
 
+  // Handle avatar URL from backend - construct full URL if needed
+  const getAvatarUrl = () => {
+    if (!authState?.user?.avatar_url) {
+      return "https://bootdey.com/img/Content/avatar/avatar7.png";
+    }
+    
+    // If avatar_url is already a full URL, use it
+    if (authState.user.avatar_url.startsWith('http')) {
+      return authState.user.avatar_url;
+    }
+    
+    // If it's a relative path, construct full URL
+    return `https://have-a-seatonline.com/${authState.user.avatar_url}`;
+  };
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -66,10 +81,14 @@ const SideNav = () => {
         <div className=" justify-center text-center align-middle items-center w-full">
           <div className="flex justify-center text-center align-middle items-center">
             <img
-              src="https://bootdey.com/img/Content/avatar/avatar7.png"
+              src={authState?.user ? getAvatarUrl() : "https://bootdey.com/img/Content/avatar/avatar7.png"}
               alt="Admin"
-              className="rounded-circle"
+              className="rounded-circle object-cover"
               width="150"
+              height="150"
+              onError={(e) => {
+                e.target.src = "https://bootdey.com/img/Content/avatar/avatar7.png";
+              }}
             />
           </div>
           <div className="relative">
