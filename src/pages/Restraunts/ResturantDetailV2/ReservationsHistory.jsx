@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaHeart } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
+import CancelReservation from './CancelReservation';
 
 export default function ReservationsHistory({reservations}) {
     const now = new Date();
@@ -11,6 +12,10 @@ export default function ReservationsHistory({reservations}) {
     (reservation) => new Date(reservation.reservation_date) >= now
   );
 
+  const handleCancel = (cancelledReservation) => {
+    alert(`Reservation at ${cancelledReservation?.restaurant_name} cancelled!`);
+  };
+  
   return (
 <>
 
@@ -115,6 +120,14 @@ export default function ReservationsHistory({reservations}) {
             </button>
             <i className="fas fa-chevron-right"></i>
           </div>}
+
+          {new Date(reservation?.reservation_date) >= new Date() && (
+              <CancelReservation
+                reservation={reservation}
+                onCancel={handleCancel}
+              />
+            )}
+
         </div>
       </div>
     </div>

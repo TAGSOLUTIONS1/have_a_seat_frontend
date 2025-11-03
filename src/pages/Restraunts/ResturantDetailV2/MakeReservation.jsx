@@ -544,7 +544,8 @@ export default function MakeReservation({ restrauntDetail }) {
                                   hour: "2-digit",
                                   minute: "2-digit",
                                 })} */}
-                                {isCheckingConflicts ? "Checking..." : data.formatted_time}
+                                {/* {isCheckingConflicts ? "Checking..." : data.formatted_time} */}
+                                {data.formatted_time}
                               </button>
                             ))}
                         </div>
@@ -567,10 +568,14 @@ export default function MakeReservation({ restrauntDetail }) {
                                 onClick={() => !isCheckingConflicts && handleOpenTableReservation(data)}
                                 disabled={isCheckingConflicts}
                               >
-                                {isCheckingConflicts ? "Checking..." : convertOffsetToTime(
+                                {convertOffsetToTime(
                                   data.timeOffsetMinutes,
                                   formData?.reservation_time
                                 )}
+                                {/* {isCheckingConflicts ? "Checking..." : convertOffsetToTime(
+                                  data.timeOffsetMinutes,
+                                  formData?.reservation_time
+                                )} */}
                               </button>
                             ))}
                         </div>
