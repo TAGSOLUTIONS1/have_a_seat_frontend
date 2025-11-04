@@ -23,6 +23,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotificationsPage from "./pages/Notifications";
 import Favourites from "./pages/Favourites";
 import Demographics from "./pages/Demographics";
+import LeaveReview from "./pages/LeaveReview";
 import '../public/assets/fonts/fonts.css';
 import ChatBotWidget from "./components/ChatBotWidget";
 import NotificationToast from "./components/common/NotificationToast";
@@ -56,6 +57,7 @@ function App() {
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/demographics" element={<Demographics />} />
+          <Route path="/leave-review" element={<LeaveReview />} />
           {/* <Route path="/account-links" element={<Protected Component={<AccountLinks />} />} /> */}
           <Route path="/account-links" element={<Protected />}>
             <Route path="/account-links" element={<AccountLinks />} />
