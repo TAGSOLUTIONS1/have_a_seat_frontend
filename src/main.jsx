@@ -8,6 +8,7 @@ import { AuthProvider } from "./contexts/authContext/AuthProvider.jsx";
 import { NotificationProvider } from "./contexts/notificationContext/NotificationProvider.jsx";
 
 import "./index.css";
+import "leaflet/dist/leaflet.css";
 import { Toaster } from "./components/ui/toaster.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

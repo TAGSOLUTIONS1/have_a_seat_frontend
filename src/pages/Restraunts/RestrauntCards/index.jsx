@@ -1,13 +1,14 @@
 import React, { memo, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SearchLocationV2 from "@/components/searchLocationRestaurant";
 import { FaCheck } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa6";
 import { ImFilter } from "react-icons/im";
 import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
-import RestaurantCard
- from "./RestaurantCard";
+import { MapPin, List } from "lucide-react";
+import RestaurantCard from "./RestaurantCard";
+import Map from "@/components/shared/Map";
 const initialTypes = ["yelp", "open_table", "resy"];
 const ratingtypes = ["5" , "4" , "3" , "2" , "1"];
 const cuisinestypes=["Italian" , "Mediterranean" , "Mexican" , "Chinese" , "Thai"];
@@ -35,6 +36,8 @@ const RestaurantCards = memo(
     const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
     const [filteredRestaurants, setFilteredRestaurants] = useState([]);
     const [searchTerm, setSearchTerm] = useState(formData?.term || "");
+    const [viewMode, setViewMode] = useState("list"); // "list" or "map"
+    const navigate = useNavigate();
 
     const handleCheckboxChange = (type) => {
       const newSelectedTypes = selectedTypes.includes(type)
@@ -366,6 +369,100 @@ const RestaurantCards = memo(
     const isFavoriteCuisine = (cuisine) => {
       return favoriteCuisines.includes(cuisine);
     };
+
+    // Extract coordinates from restaurant data
+    const getRestaurantCoordinates = (restaurant) => {
+      if (restaurant.restraunt_type === "yelp" && restaurant.coordinates) {
+        return {
+          lat: restaurant.coordinates.latitude,
+          lng: restaurant.coordinates.longitude,
+        };
+      } else if (restaurant.restraunt_type === "open_table") {
+        // OpenTable might have coordinates in different locations
+        if (restaurant.coordinates) {
+          return {
+            lat: restaurant.coordinates.latitude || restaurant.coordinates.lat,
+            lng: restaurant.coordinates.longitude || restaurant.coordinates.lng,
+          };
+        }
+      } else if (restaurant.restraunt_type === "resy") {
+        // Resy might have coordinates
+        if (restaurant.coordinates) {
+          return {
+            lat: restaurant.coordinates.latitude || restaurant.coordinates.lat,
+            lng: restaurant.coordinates.longitude || restaurant.coordinates.lng,
+          };
+        }
+      }
+      return null;
+    };
+
+    // Prepare map markers from filtered restaurants
+    const mapMarkers = copiedRestaurants
+      .map((restaurant) => {
+        const coords = getRestaurantCoordinates(restaurant);
+        if (!coords) return null;
+
+        const address =
+          restaurant.restraunt_type === "yelp"
+            ? restaurant.location?.display_address?.join(" ")
+            : restaurant.restraunt_type === "open_table"
+            ? `${restaurant.address?.line1 || ""} ${restaurant.address?.city || ""}`.trim()
+            : restaurant.restraunt_type === "resy"
+            ? `${restaurant.locality || ""} ${restaurant.location?.name || ""}`.trim()
+            : "";
+
+        // Extract cuisine information
+        let cuisine = "";
+        if (restaurant.restraunt_type === "yelp") {
+          cuisine = restaurant.categories?.map(cat => cat.title).join(", ") || "N/A";
+        } else if (restaurant.restraunt_type === "open_table") {
+          cuisine = restaurant.primaryCuisine?.name || "N/A";
+        } else if (restaurant.restraunt_type === "resy") {
+          cuisine = restaurant.cuisine?.join(", ") || "N/A";
+        }
+
+        return {
+          lat: coords.lat,
+          lng: coords.lng,
+          title: restaurant.name,
+          description: address,
+          cuisine: cuisine,
+          restaurant: restaurant, // Store full restaurant data
+          restaurantType: restaurant.restraunt_type, // Pass restaurant type for colored markers
+        };
+      })
+      .filter(Boolean);
+
+    // Calculate map center from markers or use default
+    const mapCenter = mapMarkers.length > 0
+      ? [
+          mapMarkers.reduce((sum, m) => sum + m.lat, 0) / mapMarkers.length,
+          mapMarkers.reduce((sum, m) => sum + m.lng, 0) / mapMarkers.length,
+        ]
+      : [40.7128, -74.0060]; // Default to New York
+
+    // Handle popup navigation (when clicking on popup content)
+    const handlePopupNavigate = (marker) => {
+      const restaurant = marker.restaurant;
+      if (!restaurant) return;
+      
+      const pathname = "/restaurant-detail";
+      const search = `?${
+        restaurant?.restraunt_type === "yelp"
+          ? "yelp_alias"
+          : restaurant?.restraunt_type === "open_table"
+          ? "map_url"
+          : "resy_alias"
+      }=${encodeURIComponent(
+        restaurant?.restraunt_type === "yelp"
+          ? restaurant?.alias
+          : restaurant?.restraunt_type === "open_table"
+          ? restaurant?.urls?.profileLink?.link
+          : restaurant?.id?.resy
+      )}`;
+      navigate({ pathname, search });
+    };
     
     return (
       <div>
@@ -624,8 +721,39 @@ const RestaurantCards = memo(
             </div>
 
         </div>
+        
+        {/* List/Map Toggle and View Section */}
         <div className="flex-1">
-          {copiedRestaurants?.map((data, index) => {
+          {/* Toggle Buttons */}
+          <div className="mb-6 flex justify-end gap-4 px-4 sm:px-6 lg:px-8">
+            <button
+              onClick={() => setViewMode("list")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-agrandir font-semibold transition-all ${
+                viewMode === "list"
+                  ? "bg-plum text-white shadow-md"
+                  : "bg-white text-plum border-2 border-plum hover:bg-plum/10"
+              }`}
+            >
+              <List className="w-5 h-5" />
+              List
+            </button>
+            <button
+              onClick={() => setViewMode("map")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-agrandir font-semibold transition-all ${
+                viewMode === "map"
+                  ? "bg-plum text-white shadow-md"
+                  : "bg-white text-plum border-2 border-plum hover:bg-plum/10"
+              }`}
+            >
+              <MapPin className="w-5 h-5" />
+              Map
+            </button>
+          </div>
+
+          {/* List View */}
+          {viewMode === "list" && (
+            <div>
+              {copiedRestaurants?.map((data, index) => {
               // if (data?.restraunt_type === "resy") {
               //   return (
               //     <a
@@ -665,8 +793,38 @@ const RestaurantCards = memo(
                 </Link>
               );
             })}
+            </div>
+          )}
 
-          </div>
+          {/* Map View */}
+          {viewMode === "map" && (
+            <div className="px-4 sm:px-6 lg:px-8">
+              <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+                {mapMarkers.length > 0 ? (
+                  <Map
+                    center={mapCenter}
+                    zoom={mapMarkers.length === 1 ? 15 : 12}
+                    markers={mapMarkers}
+                    height="600px"
+                    onNavigate={handlePopupNavigate}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-96 bg-gray-100 rounded-3xl">
+                    <div className="text-center">
+                      <MapPin className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                      <p className="font-agrandir text-lg text-gray-600">
+                        No restaurants with location data available
+                      </p>
+                      <p className="font-roboto text-sm text-gray-500 mt-2">
+                        Switch to list view to see all restaurants
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
        </div>
       </div>
     );
