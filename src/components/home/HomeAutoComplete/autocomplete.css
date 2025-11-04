@@ -1,12 +1,13 @@
 
 .geoapify-autocomplete-input {
-  border: none;
+  border: none !important;
   padding: 0px 0px;
   font-size: 14px;
   font-weight: 400;
   color: #9235e2;
   background: transparent;
   width: 100%;
+  outline: none !important;
 }
 
 .geoapify-autocomplete-input::placeholder {
@@ -86,4 +87,78 @@
 /* Hover effect for suggestion items */
 .geoapify-autocomplete-item:hover {
   background-color: #F5EEFC !important;
+}
+
+/* OpenMap AutoComplete Styles */
+.open-map-autocomplete-input {
+  border: none;
+  padding: 0px 0px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #9235e2;
+  background: transparent;
+  width: 100%;
+  outline: none;
+}
+
+.open-map-autocomplete-input::placeholder {
+  color: #999999;
+}
+
+.open-map-autocomplete-items {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: fit-content;
+  min-width: 250px;
+  max-width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgb(0, 0, 0);
+  margin-top: 0.5rem;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.open-map-autocomplete-items .secondary-part {
+  font-size: 10px;
+  font-weight: 300;
+  color: black;
+  text-align: left;
+  margin-left: 0px !important;
+}
+
+.open-map-autocomplete-items .address {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+}
+
+.open-map-autocomplete-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 4px;
+  margin-bottom: 2px;
+}
+
+.open-map-autocomplete-item:hover {
+  background-color: #F5EEFC !important;
+}
+
+.open-map-autocomplete-item:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 765px) and (max-width: 1080px) {
+  .open-map-autocomplete-items {
+    left: 8%;
+  }
 }

@@ -128,7 +128,7 @@ const Map = ({
         {userLocation && userLocation.lat && userLocation.lng && (() => {
           const lat = typeof userLocation.lat === 'string' ? parseFloat(userLocation.lat) : userLocation.lat;
           const lng = typeof userLocation.lng === 'string' ? parseFloat(userLocation.lng) : userLocation.lng;
-          
+          console.log("lat", lat, "lng", lng);
           if (isNaN(lat) || isNaN(lng)) return null;
           
           return (

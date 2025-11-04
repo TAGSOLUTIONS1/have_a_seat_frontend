@@ -218,12 +218,29 @@ const Favourites = () => {
     }
   }, [favorites, userLocationCoords]);
 
-  // Get user location from localStorage or geocode
+  // Get user location from localStorage or formData
   useEffect(() => {
     const fetchUserCoordinates = async () => {
       try {
-        const location = localStorage.getItem("location");
+        // First check if coordinates are in saved formData
+        const savedFormData = localStorage.getItem("searchFormData");
+        if (savedFormData) {
+          try {
+            const formData = JSON.parse(savedFormData);
+            if (formData?.latitude && formData?.longitude) {
+              setUserLocationCoords({
+                lat: parseFloat(formData.latitude),
+                lng: parseFloat(formData.longitude)
+              });
+              return;
+            }
+          } catch (e) {
+            console.error("Error parsing formData:", e);
+          }
+        }
         
+        // Fallback: geocode location string if coordinates not available
+        const location = localStorage.getItem("location");
         if (location) {
           try {
             const coords = await getCoordinates(location);

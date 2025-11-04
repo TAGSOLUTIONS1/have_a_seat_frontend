@@ -35,7 +35,17 @@ const SearchLocation = () => {
 
   const getLocationData = (value) => {
     setFormData((prevData) => {
-      const updatedData = { ...prevData, location: value };
+      // Handle both string and object with coordinates
+      const locationString = typeof value === 'string' ? value : value?.location || value;
+      const latitude = typeof value === 'object' && value?.latitude ? value.latitude : null;
+      const longitude = typeof value === 'object' && value?.longitude ? value.longitude : null;
+      
+      const updatedData = { 
+        ...prevData, 
+        location: locationString,
+        latitude: latitude || prevData.latitude || "",
+        longitude: longitude || prevData.longitude || ""
+      };
       localStorage.setItem("searchFormData", JSON.stringify(updatedData)); // Store updated location in local storage
       return updatedData;
     });

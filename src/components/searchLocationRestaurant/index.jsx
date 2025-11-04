@@ -88,8 +88,18 @@ const SearchLocationV2 = memo(
   }, []);
 
   const getLocationData = (value) => {
-    const firstWord = value.split(",")[0].trim();
-    setFormData((prevData) => ({ ...prevData, location: firstWord }));
+    // Handle both string and object with coordinates
+    const locationString = typeof value === 'string' ? value : value?.location || value;
+    const firstWord = locationString.split(",")[0].trim();
+    const latitude = typeof value === 'object' && value?.latitude ? value.latitude : null;
+    const longitude = typeof value === 'object' && value?.longitude ? value.longitude : null;
+    
+    setFormData((prevData) => ({ 
+      ...prevData, 
+      location: firstWord,
+      latitude: latitude || prevData.latitude || "",
+      longitude: longitude || prevData.longitude || ""
+    }));
   };
 
   const handleSearch = () => {
@@ -381,8 +391,8 @@ const SearchLocationV2 = memo(
     <div className="flex flex-col gap-4 w-full">
       <div className="w-full max-w-[1550px] mx-auto bg-white rounded-2xl md:rounded-[3rem] shadow-lg border border-gray-100 p-4 md:py-5 md:px-8 flex flex-col md:flex-row gap-4 md:gap-6 items-stretch md:items-center">
         {/* Location */}
-        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 md:pr-4 flex-1 min-w-0">
-          <MdLocationOn size={24} color="#9235E2" className="mr-3 flex-shrink-0" />
+        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 flex-1 min-w-0">
+          <MdLocationOn size={24} color="#9235E2" className=" flex-shrink-0" />
           <div
             className={`text-sm md:text-base font-roboto font-normal z-10 w-full text-shipGrey ${
               error ? "border-red-500" : ""

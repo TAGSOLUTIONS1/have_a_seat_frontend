@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 function Restaurants() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialBookingState);
-
+console.log("formData", formData);
   const handleSearch = () => {
     localStorage.setItem("searchFormData", JSON.stringify(formData)); // Store form data before navigating
     const route = `/restraunts?data=${encodeURIComponent(
