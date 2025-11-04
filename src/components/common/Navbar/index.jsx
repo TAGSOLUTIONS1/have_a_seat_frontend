@@ -430,6 +430,26 @@ const Navbar = () => {
                             </li>
                             <li>
                               <Link
+                                to="/demographics"
+                                onClick={() => setShowTooltip(false)}
+                                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 group"
+                              >
+                                <Gift className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
+                                <span className="font-medium">Demographics</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                to="/favourites"
+                                onClick={() => setShowTooltip(false)}
+                                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 group"
+                              >
+                                <Heart className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
+                                <span className="font-medium">Favourites</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
                                 to="/user-history"
                                 onClick={() => setShowTooltip(false)}
                                 className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 group"
@@ -448,26 +468,7 @@ const Navbar = () => {
                                 <span className="font-medium">Notifications</span>
                               </Link>
                             </li>
-                            <li>
-                              <Link
-                                to="/favourites"
-                                onClick={() => setShowTooltip(false)}
-                                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 group"
-                              >
-                                <Heart className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
-                                <span className="font-medium">Favourites</span>
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                to="/demographics"
-                                onClick={() => setShowTooltip(false)}
-                                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 group"
-                              >
-                                <Gift className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
-                                <span className="font-medium">Demographics</span>
-                              </Link>
-                            </li>
+                            
                           </ul>
                           
                           {/* Divider */}
