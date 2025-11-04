@@ -8,7 +8,7 @@ import axios from "axios";
 import { FaHeart } from "react-icons/fa6";
 import { IoIosCloseCircle } from "react-icons/io";
 import { Search } from "lucide-react";
-import RestaurantCard from "@/pages/Restraunts/RestrauntCards/RestaurantCard";
+import FavoritesCard from "@/components/common/FavoritesCard";
 import getCoordinates from "@/lib/utils";
 
 const Favourites = () => {
@@ -28,6 +28,7 @@ const Favourites = () => {
   console.log("authState", authState);
   // Calculate distance between two coordinates using Haversine formula
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    console.log("lat1", lat1);
     if (!lat1 || !lon1 || !lat2 || !lon2) return null;
     
     const R = 6371; // Radius of the Earth in kilometers
@@ -93,7 +94,13 @@ const Favourites = () => {
               const data = detailsResp?.data?.data || {};
               return {
                 ...fav,
-                details: { ...data, restaurant_type: "yelp" },
+                details: { 
+                  ...data, 
+                  restaurant_type: "yelp",
+                  restraunt_type: "yelp",  // Add restraunt_type to details for RestaurantCard
+                  alias,  // Add alias to details
+                  restaurant_alias: fav?.restaurant_alias  // Add restaurant_alias to details
+                },
                 alias,
                 restraunt_type: "yelp",
               };
@@ -112,7 +119,22 @@ const Favourites = () => {
               const data = detailsResp?.data?.data || {};
               return {
                 ...fav,
-                details: { ...data, restaurant_type: "open_table" },
+                details: { 
+                  ...data, 
+                  restaurant_type: "open_table",
+                  restraunt_type: "open_table",  // Add restraunt_type to details for RestaurantCard
+                  restaurant_alias: fav?.restaurant_alias,  // Add restaurant_alias to details
+                  // Ensure urls structure for navigation
+                  urls: {
+                    ...data?.urls,
+                    profileLink: {
+                      ...data?.urls?.profileLink,
+                      link: fullLink.startsWith("http") 
+                        ? fullLink 
+                        : `https://www.opentable.com/${fullLink}`
+                    }
+                  }
+                },
                 restraunt_type: "open_table",
               };
             }
@@ -143,9 +165,49 @@ const Favourites = () => {
     if (favorites && favorites.length > 0) {
       setIsEnriching(true);
       enrichFavorites(favorites).then((enriched) => {
-        setEnrichedFavorites(enriched);
-        setFavoriteRestaurants(enriched);
-        setFilteredRestaurants(enriched);
+        // Calculate distances after enrichment when coordinates are available
+        const enrichedWithDistance = enriched.map((item) => {
+          console.log("item", item);
+          let restaurantDistance = null;
+          const restType = item?.restaurant_type || item?.restraunt_type;
+          console.log("userLocationCoords", userLocationCoords , restType);
+          if (userLocationCoords) {
+            if (restType === "open_table" && item?.details?.geo) {
+              restaurantDistance = calculateDistance(
+                userLocationCoords.lat,
+                userLocationCoords.lng,
+                item.details.geo.latitude,
+                item.details.geo.longitude
+              );
+            } else if (restType === "yelp" && item?.details?.coordinates) {
+              restaurantDistance = calculateDistance(
+                userLocationCoords.lat,
+                userLocationCoords.lng,
+                item.details.coordinates.latitude,
+                item.details.coordinates.longitude
+              );
+            } else if (restType === "resy" && 
+                       item?.details?.location && 
+                       item?.details?.location.latitude && 
+                       item?.details?.location.longitude) {
+              restaurantDistance = calculateDistance(
+                userLocationCoords.lat,
+                userLocationCoords.lng,
+                item.details.location.latitude,
+                item.details.location.longitude
+              );
+            }
+          }
+          
+          return {
+            ...item,
+            calculatedDistance: restaurantDistance
+          };
+        });
+        
+        setEnrichedFavorites(enrichedWithDistance);
+        setFavoriteRestaurants(enrichedWithDistance);
+        setFilteredRestaurants(enrichedWithDistance);
         setIsEnriching(false);
       });
     } else {
@@ -154,7 +216,7 @@ const Favourites = () => {
       setFilteredRestaurants([]);
       setIsEnriching(false);
     }
-  }, [favorites]);
+  }, [favorites, userLocationCoords]);
 
   // Get user location from localStorage or geocode
   useEffect(() => {
@@ -258,6 +320,8 @@ const Favourites = () => {
     );
   }
 
+  console.log("filteredRestaurants", filteredRestaurants);
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -339,102 +403,42 @@ const Favourites = () => {
             )}
           </div>
         ) : (
-          <div className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {filteredRestaurants
               .filter((item) => item?.details && item?.details?.name) // Only show items with valid details
               .map((item, index) => {
                 try {
-                  // Calculate distance for this restaurant
-                  let restaurantDistance = null;
-                  const restType = item?.restaurant_type || item?.restraunt_type;
-                  
-                  if (restType === "open_table" && 
-                      item?.details?.coordinates && 
-                      userLocationCoords) {
-                    restaurantDistance = calculateDistance(
-                      userLocationCoords.lat,
-                      userLocationCoords.lng,
-                      item.details.coordinates.latitude,
-                      item.details.coordinates.longitude
-                    );
-                  } else if (restType === "yelp" && item?.details?.coordinates && userLocationCoords) {
-                    restaurantDistance = calculateDistance(
-                      userLocationCoords.lat,
-                      userLocationCoords.lng,
-                      item.details.coordinates.latitude,
-                      item.details.coordinates.longitude
-                    );
-                  } else if (restType === "resy" && 
-                             item?.details?.location && 
-                             item?.details?.location.latitude && 
-                             item?.details?.location.longitude &&
-                             userLocationCoords) {
-                    restaurantDistance = calculateDistance(
-                      userLocationCoords.lat,
-                      userLocationCoords.lng,
-                      item.details.location.latitude,
-                      item.details.location.longitude
-                    );
-                  }
-
-                  // Prepare restaurant data for RestaurantCard
-                  const restaurantData = {
-                    ...item.details,
-                    restraunt_type: restType,
-                    alias: item?.alias || item?.restaurant_alias,
-                    restaurant_alias: item?.restaurant_alias,
-                    // For OpenTable, ensure urls structure is present
-                    ...(restType === "open_table" && item?.restaurant_alias && {
-                      urls: {
-                        ...item.details?.urls,
-                        profileLink: {
-                          ...item.details?.urls?.profileLink,
-                          link: item.restaurant_alias.startsWith("http") 
-                            ? item.restaurant_alias 
-                            : `https://www.opentable.com/${item.restaurant_alias}`
-                        }
-                      }
-                    }),
-                    // For Resy, ensure id structure is present
-                    ...(restType === "resy" && (item?.restaurant_alias || item?.id) && {
-                      id: {
-                        ...item.details?.id,
-                        resy: item?.restaurant_alias || item?.id?.resy || item?.id
-                      }
-                    })
-                  };
-
-                  // Get navigation URL
-                  const getNavigationUrl = () => {
+                  const handlePress = (restaurantItem) => {
+                    const restType = restaurantItem?.restaurant_type || restaurantItem?.restraunt_type;
+                    let url = "#";
+                    
                     if (restType === "yelp") {
-                      const alias = item?.restaurant_alias || item?.alias;
-                      if (!alias) return "#";
-                      return `/restaurant-detail?yelp_alias=${encodeURIComponent(alias)}`;
+                      const alias = restaurantItem?.details?.alias || restaurantItem?.alias || restaurantItem?.restaurant_alias;
+                      if (alias) {
+                        url = `/restaurant-detail?yelp_alias=${encodeURIComponent(alias)}`;
+                      }
                     } else if (restType === "open_table") {
-                      const alias = item?.restaurant_alias;
-                      if (!alias) return "#";
-                      const mapUrl = alias.startsWith("http") 
-                        ? alias 
-                        : `https://www.opentable.com/${alias}`;
-                      return `/restaurant-detail?map_url=${encodeURIComponent(mapUrl)}`;
+                      const link = restaurantItem?.details?.urls?.profileLink?.link || restaurantItem?.restaurant_alias;
+                      if (link) {
+                        url = `/restaurant-detail?map_url=${encodeURIComponent(link)}`;
+                      }
                     } else if (restType === "resy") {
-                      const resyId = item?.restaurant_alias || item?.id?.resy || item?.id;
-                      if (!resyId) return "#";
-                      return `/restaurant-detail?resy_alias=${encodeURIComponent(resyId)}`;
+                      const resyId = restaurantItem?.details?.id?.resy || restaurantItem?.restaurant_alias || restaurantItem?.id?.resy;
+                      if (resyId) {
+                        url = `/restaurant-detail?resy_alias=${encodeURIComponent(resyId)}`;
+                      }
                     }
-                    return "#";
+                    
+                    navigate(url);
                   };
 
                   return (
-                    <Link key={`${item?.restaurant_alias || item?.alias || index}`} to={getNavigationUrl()} className="block">
-                      <RestaurantCard 
-                        data={restaurantData} 
-                        distance={restaurantDistance}
-                        formData={{}}
-                        favoritesList={favorites}
-                        onFavoriteChange={fetchFavorites}
-                      />
-                    </Link>
+                    <FavoritesCard
+                      key={`${item?.restaurant_alias || item?.alias || index}`}
+                      item={item}
+                      distance={item?.calculatedDistance || null}
+                      onPress={handlePress}
+                    />
                   );
                 } catch (error) {
                   console.error("Error rendering restaurant card:", error, item);
