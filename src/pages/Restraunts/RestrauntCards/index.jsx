@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SearchLocationV2 from "@/components/searchLocationRestaurant";
 import { FaCheck } from "react-icons/fa6";
@@ -9,6 +9,34 @@ import { IoIosStar } from "react-icons/io";
 import { MapPin, List } from "lucide-react";
 import RestaurantCard from "./RestaurantCard";
 import Map from "@/components/shared/Map";
+import getCoordinates from "@/lib/utils";
+
+// Calculate distance between two coordinates using Haversine formula
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+  
+  const R = 6371; // Radius of the Earth in kilometers
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+  
+  // Convert to miles and format
+  const miles = distance * 0.621371;
+  if (miles < 0.1) {
+    return `${Math.round(miles * 5280)} ft`;
+  } else if (miles < 1) {
+    return `${miles.toFixed(1)} mi`;
+  } else {
+    return `${miles.toFixed(1)} mi`;
+  }
+};
 const initialTypes = ["yelp", "open_table", "resy"];
 const ratingtypes = ["5" , "4" , "3" , "2" , "1"];
 const cuisinestypes=["Italian" , "Mediterranean" , "Mexican" , "Chinese" , "Thai"];
@@ -37,6 +65,7 @@ const RestaurantCards = memo(
     const [filteredRestaurants, setFilteredRestaurants] = useState([]);
     const [searchTerm, setSearchTerm] = useState(formData?.term || "");
     const [viewMode, setViewMode] = useState("list"); // "list" or "map"
+    const [userLocationCoords, setUserLocationCoords] = useState(null);
     const navigate = useNavigate();
 
     const handleCheckboxChange = (type) => {
@@ -386,8 +415,13 @@ const RestaurantCards = memo(
           };
         }
       } else if (restaurant.restraunt_type === "resy") {
-        // Resy might have coordinates
-        if (restaurant.coordinates) {
+        // Resy has coordinates in location object
+        if (restaurant.location && restaurant.location.latitude && restaurant.location.longitude) {
+          return {
+            lat: restaurant.location.latitude,
+            lng: restaurant.location.longitude,
+          };
+        } else if (restaurant.coordinates) {
           return {
             lat: restaurant.coordinates.latitude || restaurant.coordinates.lat,
             lng: restaurant.coordinates.longitude || restaurant.coordinates.lng,
@@ -397,43 +431,94 @@ const RestaurantCards = memo(
       return null;
     };
 
-    // Prepare map markers from filtered restaurants
-    const mapMarkers = copiedRestaurants
-      .map((restaurant) => {
-        const coords = getRestaurantCoordinates(restaurant);
-        if (!coords) return null;
+    // Prepare map markers from filtered restaurants with distance calculation
+    const mapMarkers = useMemo(() => {
+      return copiedRestaurants
+        .map((restaurant) => {
+          const coords = getRestaurantCoordinates(restaurant);
+          if (!coords) return null;
 
-        const address =
-          restaurant.restraunt_type === "yelp"
-            ? restaurant.location?.display_address?.join(" ")
-            : restaurant.restraunt_type === "open_table"
-            ? `${restaurant.address?.line1 || ""} ${restaurant.address?.city || ""}`.trim()
-            : restaurant.restraunt_type === "resy"
-            ? `${restaurant.locality || ""} ${restaurant.location?.name || ""}`.trim()
-            : "";
+          const address =
+            restaurant.restraunt_type === "yelp"
+              ? restaurant.location?.display_address?.join(" ")
+              : restaurant.restraunt_type === "open_table"
+              ? `${restaurant.address?.line1 || ""} ${restaurant.address?.city || ""}`.trim()
+              : restaurant.restraunt_type === "resy"
+              ? `${restaurant.locality || ""} ${restaurant.location?.name || ""}`.trim()
+              : "";
 
-        // Extract cuisine information
-        let cuisine = "";
-        if (restaurant.restraunt_type === "yelp") {
-          cuisine = restaurant.categories?.map(cat => cat.title).join(", ") || "N/A";
-        } else if (restaurant.restraunt_type === "open_table") {
-          cuisine = restaurant.primaryCuisine?.name || "N/A";
-        } else if (restaurant.restraunt_type === "resy") {
-          cuisine = restaurant.cuisine?.join(", ") || "N/A";
-        }
+          // Extract cuisine information
+          let cuisine = "";
+          if (restaurant.restraunt_type === "yelp") {
+            cuisine = restaurant.categories?.map(cat => cat.title).join(", ") || "N/A";
+          } else if (restaurant.restraunt_type === "open_table") {
+            cuisine = restaurant.primaryCuisine?.name || "N/A";
+          } else if (restaurant.restraunt_type === "resy") {
+            cuisine = restaurant.cuisine?.join(", ") || "N/A";
+          }
 
-        return {
-          lat: coords.lat,
-          lng: coords.lng,
-          title: restaurant.name,
-          description: address,
-          cuisine: cuisine,
-          restaurant: restaurant, // Store full restaurant data
-          restaurantType: restaurant.restraunt_type, // Pass restaurant type for colored markers
-        };
-      })
-      .filter(Boolean);
+          // Calculate distance
+          let distance = null;
+          
+          // Handle OpenTable restaurants
+          if (restaurant.restraunt_type === "open_table" && 
+              restaurant.coordinates && 
+              userLocationCoords) {
+            distance = calculateDistance(
+              userLocationCoords.lat,
+              userLocationCoords.lng,
+              restaurant.coordinates.latitude,
+              restaurant.coordinates.longitude
+            );
+          } 
+          // Handle Yelp restaurants
+          else if (restaurant.restraunt_type === "yelp" && restaurant.distance) {
+            // Yelp provides distance in meters, convert to miles
+            const miles = restaurant.distance * 0.000621371;
+            if (miles < 0.1) {
+              distance = `${Math.round(miles * 5280)} ft`;
+            } else {
+              distance = `${miles.toFixed(1)} mi`;
+            }
+          } else if (restaurant.restraunt_type === "yelp" && 
+                     restaurant.coordinates &&
+                     userLocationCoords) {
+            distance = calculateDistance(
+              userLocationCoords.lat,
+              userLocationCoords.lng,
+              restaurant.coordinates.latitude,
+              restaurant.coordinates.longitude
+            );
+          }
+          // Handle Resy restaurants
+          else if (restaurant.restraunt_type === "resy" && 
+                   restaurant.location && 
+                   restaurant.location.latitude && 
+                   restaurant.location.longitude &&
+                   userLocationCoords) {
+            distance = calculateDistance(
+              userLocationCoords.lat,
+              userLocationCoords.lng,
+              restaurant.location.latitude,
+              restaurant.location.longitude
+            );
+          }
 
+          return {
+            lat: coords.lat,
+            lng: coords.lng,
+            title: restaurant.name,
+            description: address,
+            cuisine: cuisine,
+            distance: distance,
+            restaurant: restaurant, // Store full restaurant data
+            restaurantType: restaurant.restraunt_type, // Pass restaurant type for colored markers
+          };
+        })
+        .filter(Boolean);
+    }, [copiedRestaurants, userLocationCoords]);
+
+    // console.log("copiedRestaurants", copiedRestaurants);
     // Calculate map center from markers or use default
     const mapCenter = mapMarkers.length > 0
       ? [
@@ -463,7 +548,42 @@ const RestaurantCards = memo(
       )}`;
       navigate({ pathname, search });
     };
-    
+    // Geocode location string to get coordinates if lat/lng not available
+    useEffect(() => {
+      const fetchUserCoordinates = async () => {
+        // If we already have lat/lng, use them
+        if (formData?.latitude && formData?.longitude) {
+          setUserLocationCoords({
+            lat: parseFloat(formData.latitude),
+            lng: parseFloat(formData.longitude)
+          });
+          return;
+        }
+        
+        // If we have a location string but no coordinates, geocode it
+        if (formData?.location && !formData?.latitude && !formData?.longitude) {
+          try {
+            const coords = await getCoordinates(formData.location);
+            if (coords && coords.lat && coords.lng) {
+              setUserLocationCoords({
+                lat: coords.lat,
+                lng: coords.lng
+              });
+            }
+          } catch (error) {
+            console.error("Error geocoding location:", error);
+            setUserLocationCoords(null);
+          }
+        } else {
+          setUserLocationCoords(null);
+        }
+      };
+
+      fetchUserCoordinates();
+    }, [formData?.location, formData?.latitude, formData?.longitude]);
+
+    // console.log("formData", formData);
+    // console.log("userLocationCoords", userLocationCoords);
     return (
       <div>
         <div className="bg-plum px-4 sm:px-8 lg:px-24 py-8 sm:py-12 rounded-3xl">
@@ -754,19 +874,52 @@ const RestaurantCards = memo(
           {viewMode === "list" && (
             <div>
               {copiedRestaurants?.map((data, index) => {
-              // if (data?.restraunt_type === "resy") {
-              //   return (
-              //     <a
-              //       key={index}
-              //       href={`https://resy.com/cities/${data?.location?.url_slug}/venues/${data?.url_slug}`}
-              //       target="_blank"
-              //       rel="noopener noreferrer"
-              //       className="block mb-4 sm:mb-6"
-              //     >
-              //       <RestaurantCard data={data} />
-              //     </a>
-              //   );
-              // }
+                // Calculate distance for this restaurant
+                let restaurantDistance = null;
+                
+                // Handle OpenTable restaurants
+                if (data.restraunt_type === "open_table" && 
+                    data.coordinates && 
+                    userLocationCoords) {
+                  restaurantDistance = calculateDistance(
+                    userLocationCoords.lat,
+                    userLocationCoords.lng,
+                    data.coordinates.latitude,
+                    data.coordinates.longitude
+                  );
+                } 
+                // Handle Yelp restaurants
+                else if (data.restraunt_type === "yelp" && data.distance) {
+                  // Yelp provides distance in meters, convert to miles
+                  const miles = data.distance * 0.000621371;
+                  if (miles < 0.1) {
+                    restaurantDistance = `${Math.round(miles * 5280)} ft`;
+                  } else {
+                    restaurantDistance = `${miles.toFixed(1)} mi`;
+                  }
+                } else if (data.restraunt_type === "yelp" && 
+                           data.coordinates &&
+                           userLocationCoords) {
+                  restaurantDistance = calculateDistance(
+                    userLocationCoords.lat,
+                    userLocationCoords.lng,
+                    data.coordinates.latitude,
+                    data.coordinates.longitude
+                  );
+                }
+                // Handle Resy restaurants
+                else if (data.restraunt_type === "resy" && 
+                         data.location && 
+                         data.location.latitude && 
+                         data.location.longitude &&
+                         userLocationCoords) {
+                  restaurantDistance = calculateDistance(
+                    userLocationCoords.lat,
+                    userLocationCoords.lng,
+                    data.location.latitude,
+                    data.location.longitude
+                  );
+                }
 
               return (
                 <Link
@@ -789,7 +942,7 @@ const RestaurantCards = memo(
                   }}
                   className="block mb-4 sm:mb-6"
                 >
-                  <RestaurantCard data={data} />
+                  <RestaurantCard data={data} distance={restaurantDistance} formData={formData} />
                 </Link>
               );
             })}
@@ -807,6 +960,7 @@ const RestaurantCards = memo(
                     markers={mapMarkers}
                     height="600px"
                     onNavigate={handlePopupNavigate}
+                    userLocation={userLocationCoords}
                   />
                 ) : (
                   <div className="flex items-center justify-center h-96 bg-gray-100 rounded-3xl">

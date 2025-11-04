@@ -5,15 +5,31 @@ import { FaCheck } from "react-icons/fa6";
 import { ImFilter } from "react-icons/im";
 import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
+import FavoriteButton from "@/components/common/FavoriteButton";
 
 // components/RestaurantCard.jsx
 
-const RestaurantCard = ({ data, children }) => {
+const RestaurantCard = ({ data, distance, formData, children, favoritesList, onFavoriteChange }) => {
+  // Get restaurant alias and type for favorite button
+  const getRestaurantAlias = () => {
+    if (data?.restraunt_type === "yelp") {
+      return data?.alias;
+    } else if (data?.restraunt_type === "open_table") {
+      return data?.urls?.profileLink?.link || data?.restaurant_alias;
+    } else if (data?.restraunt_type === "resy") {
+      return data?.id?.resy || data?.restaurant_alias;
+    }
+    return data?.restaurant_alias || data?.alias;
+  };
+
+  const getRestaurantType = () => {
+    return data?.restraunt_type || data?.restaurant_type || "yelp";
+  };
 
   return (
     <div className="bg-white w-full p-4 sm:p-6 md:p-8 lg:p-10 shadow-cardshadow rounded-[20px] sm:rounded-[30px] flex flex-col md:flex-row">
       {/* Restaurant Image */}
-      <div className="w-full md:w-1/3 lg:w-2/5 h-48 sm:h-56 md:h-64 lg:h-72 mb-4 md:mb-0 md:mr-6">
+      <div className="w-full md:w-1/3 lg:w-2/5 h-48 sm:h-56 md:h-64 lg:h-72 mb-4 md:mb-0 md:mr-6 relative">
         <img
           className="w-full h-full rounded-xl sm:rounded-2xl object-cover"
           src={
@@ -27,6 +43,13 @@ const RestaurantCard = ({ data, children }) => {
               // : data?.photos?.profile?.medium?.url
           }
           alt={data?.name}
+        />
+        <FavoriteButton
+          restaurantAlias={getRestaurantAlias()}
+          restaurantType={getRestaurantType()}
+          size={20}
+          favoritesList={favoritesList}
+          onFavoriteChange={onFavoriteChange}
         />
       </div>
 
@@ -154,6 +177,11 @@ const RestaurantCard = ({ data, children }) => {
           alt={`${data.restraunt_type} logo`}
           className="h-10 lg:h-14 mb-4"
         />
+          <div>
+          <span className="bg-[#e8d3f5] relative rounded-full text-plum px-2 py-1 text-sm">
+              {distance || "See on map"}
+            </span>
+          </div>
          <button className="rounded-full px-3 py-1.5 lg:px-5 lg:py-2 bg-plum text-white text-sm lg:text-base whitespace-nowrap">
           Reserve a Table
         </button>

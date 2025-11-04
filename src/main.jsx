@@ -6,6 +6,7 @@ import App from "./App.jsx";
 
 import { AuthProvider } from "./contexts/authContext/AuthProvider.jsx";
 import { NotificationProvider } from "./contexts/notificationContext/NotificationProvider.jsx";
+import { FavoritesProvider } from "./contexts/favoritesContext/FavoritesProvider.jsx";
 
 import "./index.css";
 import "leaflet/dist/leaflet.css";
@@ -16,8 +17,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <AuthProvider>
         <NotificationProvider>
-          <App />
-          <Toaster />
+          <FavoritesProvider>
+            <App />
+            <Toaster />
+          </FavoritesProvider>
         </NotificationProvider>
       </AuthProvider>
     </BrowserRouter>

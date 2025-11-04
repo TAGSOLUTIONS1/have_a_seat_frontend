@@ -57,6 +57,11 @@ const PopupContent = ({ marker, onNavigate }) => {
           {/* <span className="map-popup-label">Location:</span> */}
           <span className="map-popup-value">{marker.description || "N/A"}</span>
         </div>
+        <div className="map-popup-row">
+          <span className="map-popup-value map-popup-distance">
+            {marker.distance || "See on map"}
+          </span>
+        </div>
       </div>
       <button className="map-popup-button">
         View Details
@@ -100,6 +105,7 @@ const Map = ({
   onMapClick,
   className = "",
   onNavigate,
+  userLocation = null, // { lat, lng } for user's current location
 }) => {
   return (
     <div style={{ height, width }} className={className}>
@@ -117,6 +123,45 @@ const Map = ({
         
         <MapView center={center} zoom={zoom} />
         <SinglePopupManager markers={markers} onNavigate={onNavigate} />
+        
+        {/* User Location Marker */}
+        {userLocation && userLocation.lat && userLocation.lng && (() => {
+          const lat = typeof userLocation.lat === 'string' ? parseFloat(userLocation.lat) : userLocation.lat;
+          const lng = typeof userLocation.lng === 'string' ? parseFloat(userLocation.lng) : userLocation.lng;
+          
+          if (isNaN(lat) || isNaN(lng)) return null;
+          
+          return (
+            <Marker
+              position={[lat, lng]}
+              icon={L.divIcon({
+                className: 'user-location-marker',
+                html: `<div style="
+                  background-color: #9235e2;
+                  width: 28px;
+                  height: 28px;
+                  border-radius: 50%;
+                  border: 5px solid white;
+                  box-shadow: 0 3px 10px rgba(146, 53, 226, 0.6);
+                "></div>`,
+                iconSize: [28, 28],
+                iconAnchor: [14, 14],
+              })}
+              zIndexOffset={1000}
+            >
+              <Popup className="map-popup">
+                <div className="map-popup-content">
+                  <div className="text-center">
+                    <strong className="map-popup-title">Your Location</strong>
+                    <p className="map-popup-value" style={{ marginTop: '8px', marginBottom: '0' }}>
+                      You are here
+                    </p>
+                  </div>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })()}
         
         {markers.map((marker, index) => (
           <Marker

@@ -3,7 +3,7 @@ import { Link ,useNavigate} from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { cn } from "@/lib/utils";
-import { LucideLoader, User, History, Bell, LogOut, Camera } from "lucide-react";
+import { LucideLoader, User, History, Bell, LogOut, Camera, Heart } from "lucide-react";
 import SideNav from "../SideNav";
 import NotificationBell from "../NotificationBell";
 import "./nav.css";
@@ -447,6 +447,16 @@ const Navbar = () => {
                               >
                                 <Bell className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
                                 <span className="font-medium">Notifications</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link
+                                to="/favourites"
+                                onClick={() => setShowTooltip(false)}
+                                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 group"
+                              >
+                                <Heart className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
+                                <span className="font-medium">Favourites</span>
                               </Link>
                             </li>
                           </ul>

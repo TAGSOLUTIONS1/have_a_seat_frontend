@@ -44,6 +44,12 @@
   word-wrap: break-word;
 }
 
+.map-popup-distance {
+  font-weight: 600;
+  color: #9235e2;
+  font-size: 0.85rem;
+}
+
 .map-popup-button {
   width: 100%;
   padding: 8px 12px;
