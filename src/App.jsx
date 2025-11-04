@@ -22,11 +22,11 @@ import RestaurantDetailsV2 from "./pages/Restraunts/ResturantDetailV2/Restaurant
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotificationsPage from "./pages/Notifications";
 import Favourites from "./pages/Favourites";
+import Demographics from "./pages/Demographics";
 import '../public/assets/fonts/fonts.css';
 import ChatBotWidget from "./components/ChatBotWidget";
 import NotificationToast from "./components/common/NotificationToast";
 import ResetPasswordOne from "./pages/ResetPasswordOne";
-
 function App() {
   const location = useLocation();
   const showFooter =
@@ -55,6 +55,7 @@ function App() {
           <Route path="/user-profile" element={<UserStatistics />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/favourites" element={<Favourites />} />
+          <Route path="/demographics" element={<Demographics />} />
           {/* <Route path="/account-links" element={<Protected Component={<AccountLinks />} />} /> */}
           <Route path="/account-links" element={<Protected />}>
             <Route path="/account-links" element={<AccountLinks />} />

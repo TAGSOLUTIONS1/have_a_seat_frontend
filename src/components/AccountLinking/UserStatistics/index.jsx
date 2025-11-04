@@ -163,7 +163,7 @@ const UserStatistics = () => {
         <div className="mb-12">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl text-shipGrey font-agrandir mb-2">
             <span className="font-bold text-plum">{authState?.user?.first_name}'s</span>
-            <span className="font-normal"> Dining History</span>
+            <span className="font-normal"> Dining Insights</span>
           </h1>
           <p className="text-lg sm:text-xl text-shipGrey/70 font-agrandir">
             Here's How You've Been Dining!

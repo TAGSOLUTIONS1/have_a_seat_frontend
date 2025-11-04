@@ -23,7 +23,7 @@ export default function ReservationsHistory({reservations}) {
     <div className="flex flex-col md:flex-row justify-between items-center">
       <p className='font-bold text-4xl text-center md:text-left font-agrandir text-shipGrey my-4'>Upcoming Reservations</p>
     <Link className='bg-plum p-3 px-4 rounded-full font-agrandir font-bold text-base text-white' to="/user-profile">
-    Go to your Dining History
+    Go to your Dining Insights
     </Link>
     </div>
   {upcomingReservations.length >0? upcomingReservations.map((reservation) =>(
