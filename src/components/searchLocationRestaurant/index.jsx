@@ -525,7 +525,7 @@ const SearchLocationV2 = memo(
 
                   <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
                 
-                  <div className="flex justify-between">
+                  <div className="flex flex-wrap gap-x-4 gap-y-3">
                                
                                <div className="flex gap-2 sm:gap-3 items-center">
                                   <label className="relative">
@@ -577,6 +577,40 @@ const SearchLocationV2 = memo(
                                     </span>
                                   </label>
                                   <p className="font-agrandir text-sm font-bold text-white uppercase">Open Table</p>
+                                </div>
+
+                                <div className="flex gap-2 sm:gap-3 items-center">
+                                  <label className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedTypes.includes("tock")}
+                                      onChange={() => handleCheckboxChange("tock")}
+                                      className="hidden peer"
+                                    />
+                                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                                      {selectedTypes.includes("tock") && (
+                                        <FaCheck size={14} color="#9235e2" />
+                                      )}
+                                    </span>
+                                  </label>
+                                  <p className="font-agrandir text-sm font-bold text-white uppercase">TOCK</p>
+                                </div>
+
+                                <div className="flex gap-2 sm:gap-3 items-center">
+                                  <label className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedTypes.includes("tableagent")}
+                                      onChange={() => handleCheckboxChange("tableagent")}
+                                      className="hidden peer"
+                                    />
+                                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                                      {selectedTypes.includes("tableagent") && (
+                                        <FaCheck size={14} color="#9235e2" />
+                                      )}
+                                    </span>
+                                  </label>
+                                  <p className="font-agrandir text-sm font-bold text-white uppercase">TABLE AGENT</p>
                                 </div>
                 
                             </div>

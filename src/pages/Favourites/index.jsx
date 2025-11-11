@@ -139,6 +139,214 @@ const Favourites = () => {
               };
             }
 
+            if (type === "resy") {
+              // Resy: restaurant_alias is the venue_id as a string (e.g., "85380")
+              const venueId = fav?.restaurant_alias;
+              if (!venueId) return fav;
+              
+              const today = new Date();
+              const formattedDate = today.toISOString().split('T')[0];
+              const detailsResp = await axios.get(
+                `${Base_Url}/api/v1/resy/get_restaurant_details?venue_id=${venueId}&persons=2&date=${formattedDate}`
+              );
+              const responseData = detailsResp?.data?.data || {};
+              
+              // Convert venue_id string back to number for id.resy structure
+              const resyIdNum = parseInt(venueId, 10);
+              
+              // Resy response structure: data.results.venues[0].venue contains the restaurant data
+              const venueData = responseData?.results?.venues?.[0]?.venue || {};
+              
+              // Extract images from responsive_images
+              const images = venueData?.responsive_images?.originals 
+                ? Object.values(venueData.responsive_images.originals).map(img => img.url)
+                : [];
+              
+              // Get first image URL for image_url
+              const imageUrl = images.length > 0 ? images[0] : null;
+              
+              // Convert cuisine type (string) to array format
+              const cuisine = venueData?.type ? [venueData.type] : [];
+              
+              return {
+                ...fav,
+                details: {
+                  // Spread the full response data to preserve structure
+                  ...responseData,
+                  // Spread venue data at top level for easier access
+                  ...venueData,
+                  // Ensure name is at top level (required for filtering)
+                  name: venueData?.name || "",
+                  // Extract images array
+                  images: images,
+                  image_url: imageUrl,
+                  // Cuisine as array
+                  cuisine: cuisine,
+                  // Rating structure
+                  rating: {
+                    average: venueData?.rating || 0,
+                    total: venueData?.total_ratings || 0
+                  },
+                  // Location structure for address display
+                  locality: venueData?.location?.neighborhood || "",
+                  // ID structure: id.resy (number) - saved as string in restaurant_alias
+                  id: {
+                    resy: resyIdNum
+                  },
+                  restaurant_type: "resy",
+                  restraunt_type: "resy",
+                  restaurant_alias: venueId,  // Keep as string for consistency
+                },
+                restraunt_type: "resy",
+              };
+            }
+
+            if (type === "tock") {
+              const domain = fav?.restaurant_alias || fav?.tock_domain;
+              if (!domain) return fav;
+              const detailsResp = await axios.get(
+                `${Base_Url}/api/v1/tock/get_restaurant_details/${encodeURIComponent(domain)}`
+              );
+              const data = detailsResp?.data?.data || {};
+              const address = data?.address || {};
+              // Transform Tock schema.org format to match expected structure
+              const transformedData = {
+                name: data?.name || "",
+                description: data?.description || "",
+                url: data?.url || "",
+                phone: data?.telephone || "", // Map telephone to phone for component
+                telephone: data?.telephone || "",
+                email: data?.email || "",
+                logo: data?.logo || "",
+                priceRange: data?.priceRange || "",
+                servesCuisine: data?.servesCuisine || "",
+                // Transform cuisine to array format expected by component
+                cuisine: data?.servesCuisine ? [data.servesCuisine] : [],
+                categories: data?.servesCuisine ? [{ title: data.servesCuisine }] : [],
+                // Transform address to expected format
+                address: {
+                  street: address?.streetAddress || "",
+                  city: address?.addressLocality || "",
+                  state: address?.addressRegion || "",
+                  zipCode: address?.postalCode || "",
+                  country: address?.addressCountry || "",
+                  streetAddress: address?.streetAddress || "",
+                  addressLocality: address?.addressLocality || "",
+                  addressRegion: address?.addressRegion || "",
+                  postalCode: address?.postalCode || "",
+                  addressCountry: address?.addressCountry || ""
+                },
+                location: {
+                  address1: address?.streetAddress || "",
+                  city: address?.addressLocality || "",
+                  state: address?.addressRegion || "",
+                  zipCode: address?.postalCode || "",
+                  country: address?.addressCountry || "",
+                  display_address: address?.streetAddress 
+                    ? [`${address.streetAddress}`, `${address.addressLocality || ""}, ${address.addressRegion || ""} ${address.postalCode || ""}`.trim()]
+                    : []
+                },
+                sameAs: data?.sameAs || [],
+                image_url: data?.logo || "",
+                restaurant_type: "tock",
+                restraunt_type: "tock",
+                tock_domain: domain,
+                tock_data: data
+              };
+              return {
+                ...fav,
+                details: transformedData,
+                restraunt_type: "tock",
+                tock_domain: domain
+              };
+            }
+            if (type === "tableagent") {
+              // Get slug from id.tableagent (saved as string in restaurant_alias) or fallback to other fields
+              const slug = String(fav?.id?.tableagent || fav?.restaurant_alias || fav?.tableagent_slug || fav?.slug || "");
+              const city = fav?.tableagent_city || fav?.city || "New York City";
+              if (!slug) return fav;
+              
+              const detailsResp = await axios.get(
+                `${Base_Url}/api/v1/tableagent/get_restaurant_details/${encodeURIComponent(city)}/${encodeURIComponent(slug)}`
+              );
+              // Handle response structure: response.data.data or response.data
+              const responseData = detailsResp?.data?.data || detailsResp?.data || {};
+              const addressParts = responseData?.address_parts || {};
+              const tableagentSlug = String(responseData?.slug || slug);
+              
+              // Extract images from gallery_photos or images array
+              const images = responseData?.gallery_photos?.length > 0
+                ? responseData.gallery_photos.map(photo => photo.original_url || photo.thumbnail_url)
+                : responseData?.images || [];
+              
+              // Get first image URL
+              const imageUrl = responseData?.image_url || images[0] || null;
+              
+              // Transform Table Agent response to match expected structure
+              const transformedData = {
+                name: responseData?.name || "",
+                description: responseData?.description || "",
+                url: responseData?.url || "",
+                website: responseData?.website || "",
+                phone: responseData?.phone || "",
+                rating: responseData?.rating || 0,
+                price_range: responseData?.price_range || "",
+                priceRange: responseData?.price_range || "",
+                // Transform cuisines to array format expected by component
+                cuisines: responseData?.cuisines || [],
+                cuisine: responseData?.cuisines || [],
+                categories: responseData?.cuisines?.map(cuisine => ({ title: cuisine })) || [],
+                // Images
+                images: images,
+                image_url: imageUrl,
+                gallery_photos: responseData?.gallery_photos || [],
+                // Transform address to expected format
+                address: typeof responseData?.address === "string"
+                  ? responseData.address
+                  : {
+                      street: addressParts?.street || "",
+                      city: addressParts?.city || "",
+                      state: addressParts?.state || "",
+                      zipCode: addressParts?.postal_code || "",
+                      postalCode: addressParts?.postal_code || "",
+                    },
+                address_parts: addressParts,
+                location: {
+                  address1: addressParts?.street || "",
+                  city: addressParts?.city || "",
+                  state: addressParts?.state || "",
+                  zipCode: addressParts?.postal_code || "",
+                  display_address: typeof responseData?.address === "string"
+                    ? [responseData.address]
+                    : addressParts?.street
+                      ? [`${addressParts.street}, ${addressParts.city}, ${addressParts.state} ${addressParts.postal_code}`.trim()]
+                      : []
+                },
+                // Business hours and reviews
+                business_hours: responseData?.business_hours || {},
+                reviews: responseData?.reviews || {},
+                // ID structure similar to Resy - save slug as string
+                id: {
+                  tableagent: tableagentSlug
+                },
+                slug: tableagentSlug,
+                city: responseData?.city || city,
+                city_slug: responseData?.city_slug || city.toLowerCase().replace(/\s+/g, "-"),
+                restaurant_type: "tableagent",
+                restraunt_type: "tableagent",
+                tableagent_slug: tableagentSlug,
+                tableagent_city: city,
+                tableagent_data: responseData
+              };
+              return {
+                ...fav,
+                details: transformedData,
+                restraunt_type: "tableagent",
+                tableagent_slug: tableagentSlug,
+                tableagent_city: city
+              };
+            }
+
             // Unknown type: return as-is
             return fav;
           } catch (e) {
@@ -443,6 +651,17 @@ const Favourites = () => {
                       const resyId = restaurantItem?.details?.id?.resy || restaurantItem?.restaurant_alias || restaurantItem?.id?.resy;
                       if (resyId) {
                         url = `/restaurant-detail?resy_alias=${encodeURIComponent(resyId)}`;
+                      }
+                    } else if (restType === "tock") {
+                      const domain = restaurantItem?.tock_domain || restaurantItem?.details?.tock_domain || restaurantItem?.restaurant_alias;
+                      if (domain) {
+                        url = `/restaurant-detail?tock_domain=${encodeURIComponent(domain)}`;
+                      }
+                    } else if (restType === "tableagent") {
+                      const slug = restaurantItem?.details?.id?.tableagent || restaurantItem?.id?.tableagent || restaurantItem?.tableagent_slug || restaurantItem?.details?.slug || restaurantItem?.restaurant_alias;
+                      const city = restaurantItem?.tableagent_city || restaurantItem?.details?.city || restaurantItem?.city || "New York City";
+                      if (slug) {
+                        url = `/restaurant-detail?tableagent_slug=${encodeURIComponent(slug)}&tableagent_city=${encodeURIComponent(city)}`;
                       }
                     }
                     

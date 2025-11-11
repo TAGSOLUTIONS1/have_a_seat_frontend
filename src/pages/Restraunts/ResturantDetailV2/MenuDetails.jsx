@@ -6,7 +6,7 @@ export default function MenuDetails({ restrauntDetail }) {
   const [menus, setMenus] = useState(restrauntDetail?.menus || []);
   const [activeTab, setActiveTab] = useState(0);
 
-  console.log("details", menus);
+  // console.log("details", menus);
 
   useEffect(() => {
     const fetchYelpMenu = async () => {
@@ -28,10 +28,31 @@ export default function MenuDetails({ restrauntDetail }) {
     fetchYelpMenu();
   }, [restrauntDetail?.alias, restrauntDetail?.restaurant_type]);
 
-  if ( restrauntDetail?.restaurant_type==="resy") {
+  if (restrauntDetail?.restaurant_type === "resy" || restrauntDetail?.restaurant_type === "tock" || restrauntDetail?.restaurant_type === "tableagent") {
     return (
-      <div className="py-10 text-center text-gray-300">
-        No menu available.
+      <div className="py-10 text-center text-gray-500">
+        <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-4">
+          <strong>Menu</strong>
+        </h2>
+        <p className="text-gray-500 font-roboto">
+          {restrauntDetail?.restaurant_type === "tableagent" && restrauntDetail?.website ? (
+            <>
+              At present, we do not have menu information for this restaurant.
+              Please see the{" "}
+              <a
+                href={restrauntDetail?.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-plum underline hover:text-purple-800"
+              >
+                website
+              </a>{" "}
+              or wait to visit the restaurant to learn more.
+            </>
+          ) : (
+            "No menu available."
+          )}
+        </p>
       </div>
     );
   }

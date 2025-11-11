@@ -27,10 +27,14 @@ export const addToFavorites = async (restaurantAlias, restaurantType, accessToke
         Authorization: `Bearer ${accessToken}`,
       },
     };
+    // Ensure restaurant_alias is always a string (API requires string type)
+    // Resy: id.resy is a number, must be converted to string
+    // TableAgent: id.tableagent is already a string
+    const aliasString = restaurantAlias ? String(restaurantAlias) : restaurantAlias;
     const response = await axios.post(
       `${API_URL}/favorites/add/`,
       {
-        restaurant_alias: restaurantAlias,
+        restaurant_alias: aliasString,
         restaurant_type: restaurantType,
       },
       config
@@ -51,9 +55,10 @@ export const removeFromFavorites = async (restaurantAlias, restaurantType, acces
         "Content-Type": "application/json",
       },
     };
-    
+    // Ensure restaurant_alias is always a string (API requires string type)
+    const aliasString = restaurantAlias ? String(restaurantAlias) : restaurantAlias;
     const requestBody = {
-      restaurant_alias: restaurantAlias,
+      restaurant_alias: aliasString,
       restaurant_type: restaurantType,
     };
         

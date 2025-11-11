@@ -37,7 +37,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return `${miles.toFixed(1)} mi`;
   }
 };
-const initialTypes = ["yelp", "open_table", "resy"];
+const initialTypes = ["yelp", "open_table", "resy", "tock", "tableagent"];
 const ratingtypes = ["5" , "4" , "3" , "2" , "1"];
 const cuisinestypes=["Italian" , "Mediterranean" , "Mexican" , "Chinese" , "Thai"];
 const Reviewedtype=["most" , "least"];
@@ -46,6 +46,8 @@ const RestaurantCards = memo(
     yelpData,
     openTableData,
     resyData,
+    tockData,
+    tableAgentData,
     formData,
     selectedStarFilter,
     selectedPriceFilter,
@@ -80,7 +82,9 @@ const RestaurantCards = memo(
       if (
         (yelpData && selectedTypes.includes("yelp")) ||
         (openTableData && selectedTypes.includes("open_table")) ||
-        (resyData && selectedTypes.includes("resy"))
+        (resyData && selectedTypes.includes("resy")) ||
+        (tockData && selectedTypes.includes("tock")) ||
+        (tableAgentData && selectedTypes.includes("tableagent"))
       ) {
         const mergedRestaurants = [];
 
@@ -111,6 +115,24 @@ const RestaurantCards = memo(
           );
         }
 
+        if (tockData && selectedTypes.includes("tock")) {
+          mergedRestaurants.push(
+            ...tockData.map((restaurant) => ({
+              ...restaurant,
+              restraunt_type: "tock",
+            }))
+          );
+        }
+
+        if (tableAgentData && selectedTypes.includes("tableagent")) {
+          mergedRestaurants.push(
+            ...tableAgentData.map((restaurant) => ({
+              ...restaurant,
+              restraunt_type: "tableagent",
+            }))
+          );
+        }
+
 
         // const shuffledRestaurants = mergedRestaurants.sort((a, b) => {
         //   const keyA = (a.name + a.id).toLowerCase();
@@ -122,7 +144,7 @@ const RestaurantCards = memo(
       } else {
         setShuffledRestaurants([]);
       }
-    }, [yelpData, openTableData, resyData, selectedTypes]);
+    }, [yelpData, openTableData, resyData, tockData, tableAgentData, selectedTypes]);
 
     useEffect(() => {
       let filteredRestaurants = shuffledRestaurants;
@@ -131,7 +153,7 @@ const RestaurantCards = memo(
         filteredRestaurants = filteredRestaurants.filter((restaurant) => {
           let price = null;
 
-          if (restaurant.restraunt_type === "yelp") {
+          if (restaurant.restraunt_type === "yelp" || restaurant.restraunt_type === "tock" || restaurant.restraunt_type === "tableagent") {
             switch (restaurant.price) {
               case "$":
                 price = 1;
@@ -170,6 +192,11 @@ const RestaurantCards = memo(
             );
           } else if (restaurant.restraunt_type === "resy") {
             rating = Math.floor(parseFloat(restaurant.rating?.average));
+          } else if (restaurant.restraunt_type === "tock") {
+            // Tock doesn't provide rating in search response, so skip rating filter for Tock
+            rating = null;
+          } else if (restaurant.restraunt_type === "tableagent") {
+            rating = Math.floor(parseFloat(restaurant.rating || restaurant.tableagent_rating || 0));
           }
           return rating != null && rating === selectedStarFilter;
         });
@@ -188,6 +215,13 @@ const RestaurantCards = memo(
             cuisine = restaurant?.cuisine
               ?.map((cuisineItem) => cuisineItem.toLowerCase())
               .join(", ");
+          } else if (restaurant.restraunt_type === "tock") {
+            cuisine = restaurant?.categories
+              ?.map((category) => category.title.toLowerCase())
+              .join(", ");
+          } else if (restaurant.restraunt_type === "tableagent") {
+            // Table Agent doesn't provide categories in search response
+            cuisine = "";
           }
           return (
             cuisine != null &&
@@ -261,7 +295,7 @@ const RestaurantCards = memo(
       if (selectedPriceFilter != null) {
         updatedRestaurants = updatedRestaurants.filter((restaurant) => {
           let price = null;
-          if (restaurant.restraunt_type === "yelp") {
+          if (restaurant.restraunt_type === "yelp" || restaurant.restraunt_type === "tock" || restaurant.restraunt_type === "tableagent") {
             price = restaurant.price ? restaurant.price.length : null;
           } else {
             price = restaurant.priceBand?.priceBandId || restaurant.price_range_id;
@@ -280,6 +314,11 @@ const RestaurantCards = memo(
             rating = Math.floor(parseFloat(restaurant.statistics?.reviews?.ratings?.overall?.rating));
           } else if (restaurant.restraunt_type === "resy") {
             rating = Math.floor(parseFloat(restaurant.rating?.average));
+          } else if (restaurant.restraunt_type === "tock") {
+            // Tock doesn't provide rating in search response, so skip rating filter for Tock
+            rating = null;
+          } else if (restaurant.restraunt_type === "tableagent") {
+            rating = Math.floor(parseFloat(restaurant.rating || restaurant.tableagent_rating || 0));
           }
           return rating != null && rating === selectedStarFilter;
         });
@@ -291,12 +330,15 @@ const RestaurantCards = memo(
           const normalizedCuisines = cuisinefilter.map((cuisine) => cuisine.toLowerCase());
           let restaurantCuisine = "";
     
-          if (restaurant.restraunt_type === "yelp") {
+          if (restaurant.restraunt_type === "yelp" || restaurant.restraunt_type === "tock") {
             restaurantCuisine = restaurant.categories?.map(cat => cat.title.toLowerCase()) || [];
           } else if (restaurant.restraunt_type === "open_table") {
             restaurantCuisine = [restaurant.primaryCuisine?.name?.toLowerCase()];
           } else if (restaurant.restraunt_type === "resy") {
             restaurantCuisine = restaurant.cuisine?.map(c => c.toLowerCase()) || [];
+          } else if (restaurant.restraunt_type === "tableagent") {
+            // Table Agent doesn't provide categories in search response
+            restaurantCuisine = [];
           }
     
           return restaurantCuisine.some(cuisine => normalizedCuisines.includes(cuisine));
@@ -427,13 +469,20 @@ const RestaurantCards = memo(
             lng: restaurant.coordinates.longitude || restaurant.coordinates.lng,
           };
         }
+      } else if (restaurant.restraunt_type === "tock" && restaurant.coordinates) {
+        return {
+          lat: restaurant.coordinates.latitude,
+          lng: restaurant.coordinates.longitude,
+        };
       }
+      // Table Agent restaurants are excluded from map
       return null;
     };
 
     // Prepare map markers from filtered restaurants with distance calculation
     const mapMarkers = useMemo(() => {
       return copiedRestaurants
+        .filter((restaurant) => restaurant.restraunt_type !== "tableagent") // Exclude Table Agent from map
         .map((restaurant) => {
           const coords = getRestaurantCoordinates(restaurant);
           if (!coords) return null;
@@ -445,11 +494,13 @@ const RestaurantCards = memo(
               ? `${restaurant.address?.line1 || ""} ${restaurant.address?.city || ""}`.trim()
               : restaurant.restraunt_type === "resy"
               ? `${restaurant.locality || ""} ${restaurant.location?.name || ""}`.trim()
+              : restaurant.restraunt_type === "tock"
+              ? restaurant.location?.display_address?.join(" ") || `${restaurant.location?.address1 || ""} ${restaurant.location?.city || ""}`.trim()
               : "";
 
           // Extract cuisine information
           let cuisine = "";
-          if (restaurant.restraunt_type === "yelp") {
+          if (restaurant.restraunt_type === "yelp" || restaurant.restraunt_type === "tock") {
             cuisine = restaurant.categories?.map(cat => cat.title).join(", ") || "N/A";
           } else if (restaurant.restraunt_type === "open_table") {
             cuisine = restaurant.primaryCuisine?.name || "N/A";
@@ -519,13 +570,24 @@ const RestaurantCards = memo(
     }, [copiedRestaurants, userLocationCoords]);
 
     // console.log("copiedRestaurants", copiedRestaurants);
-    // Calculate map center from markers or use default
-    const mapCenter = mapMarkers.length > 0
-      ? [
+    // Calculate map center - prioritize user's searched location, then restaurant markers average, then default
+    const mapCenter = useMemo(() => {
+      // First priority: Use user's searched location if available
+      if (userLocationCoords && userLocationCoords.lat && userLocationCoords.lng) {
+        return [userLocationCoords.lat, userLocationCoords.lng];
+      }
+      
+      // Second priority: Use average of restaurant markers if available
+      if (mapMarkers.length > 0) {
+        return [
           mapMarkers.reduce((sum, m) => sum + m.lat, 0) / mapMarkers.length,
           mapMarkers.reduce((sum, m) => sum + m.lng, 0) / mapMarkers.length,
-        ]
-      : [40.7128, -74.0060]; // Default to New York
+        ];
+      }
+      
+      // Default: New York coordinates
+      return [40.7128, -74.0060];
+    }, [mapMarkers, userLocationCoords]);
 
     // Handle popup navigation (when clicking on popup content)
     const handlePopupNavigate = (marker) => {
@@ -533,19 +595,38 @@ const RestaurantCards = memo(
       if (!restaurant) return;
       
       const pathname = "/restaurant-detail";
-      const search = `?${
-        restaurant?.restraunt_type === "yelp"
-          ? "yelp_alias"
-          : restaurant?.restraunt_type === "open_table"
-          ? "map_url"
-          : "resy_alias"
-      }=${encodeURIComponent(
-        restaurant?.restraunt_type === "yelp"
-          ? restaurant?.alias
-          : restaurant?.restraunt_type === "open_table"
-          ? restaurant?.urls?.profileLink?.link
-          : restaurant?.id?.resy
-      )}`;
+      let search = "";
+      if (restaurant?.restraunt_type === "tableagent") {
+        const slug = restaurant?.tableagent_slug || restaurant?.slug || restaurant?.id;
+        let city = restaurant?.tableagent_city || restaurant?.city || formData?.location || formData?.city || "New York City";
+        // Format city name - handle "New York" case
+        if (city.toLowerCase().includes("new york") && !city.toLowerCase().includes("new york city")) {
+          city = "New York City";
+        }
+        search = `?tableagent_slug=${encodeURIComponent(slug)}&tableagent_city=${encodeURIComponent(city)}`;
+      } else {
+        search = `?${
+          restaurant?.restraunt_type === "yelp"
+            ? "yelp_alias"
+            : restaurant?.restraunt_type === "open_table"
+            ? "map_url"
+            : restaurant?.restraunt_type === "resy"
+            ? "resy_alias"
+            : restaurant?.restraunt_type === "tock"
+            ? "tock_domain"
+            : "resy_alias"
+        }=${encodeURIComponent(
+          restaurant?.restraunt_type === "yelp"
+            ? restaurant?.alias
+            : restaurant?.restraunt_type === "open_table"
+            ? restaurant?.urls?.profileLink?.link
+            : restaurant?.restraunt_type === "resy"
+            ? restaurant?.id?.resy
+            : restaurant?.restraunt_type === "tock"
+            ? restaurant?.tock_domain || restaurant?.tock_business_id?.toString() || restaurant?.id
+            : restaurant?.id?.resy
+        )}`;
+      }
       navigate({ pathname, search });
     };
     // Geocode location string to get coordinates if lat/lng not available
@@ -669,7 +750,7 @@ const RestaurantCards = memo(
 
           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
 
-            <div className="flex justify-between">
+            <div className="flex flex-wrap gap-x-4 gap-y-3">
                
                <div className="flex gap-2 sm:gap-3 items-center">
                   <label className="relative">
@@ -721,6 +802,40 @@ const RestaurantCards = memo(
                     </span>
                   </label>
                   <p className="font-agrandir text-sm font-bold text-white uppercase">Open Table</p>
+                </div>
+
+                <div className="flex gap-2 sm:gap-3 items-center">
+                                  <label className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedTypes.includes("tock")}
+                                      onChange={() => handleCheckboxChange("tock")}
+                                      className="hidden peer"
+                                    />
+                                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                                      {selectedTypes.includes("tock") && (
+                                        <FaCheck size={14} color="#9235e2" />
+                                      )}
+                                    </span>
+                                  </label>
+                                  <p className="font-agrandir text-sm font-bold text-white uppercase">TOCK</p>
+                </div>
+
+                <div className="flex gap-2 sm:gap-3 items-center">
+                                  <label className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedTypes.includes("tableagent")}
+                                      onChange={() => handleCheckboxChange("tableagent")}
+                                      className="hidden peer"
+                                    />
+                                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                                      {selectedTypes.includes("tableagent") && (
+                                        <FaCheck size={14} color="#9235e2" />
+                                      )}
+                                    </span>
+                                  </label>
+                                  <p className="font-agrandir text-sm font-bold text-white uppercase">TABLE AGENT</p>
                 </div>
 
             </div>
@@ -920,25 +1035,75 @@ const RestaurantCards = memo(
                     data.location.longitude
                   );
                 }
+                // Handle Tock restaurants - use distance from ranking (already converted to miles)
+                else if (data.restraunt_type === "tock" && data.distance) {
+                  const miles = data.distance;
+                  if (miles < 0.1) {
+                    restaurantDistance = `${Math.round(miles * 5280)} ft`;
+                  } else {
+                    restaurantDistance = `${miles.toFixed(1)} mi`;
+                  }
+                } else if (data.restraunt_type === "tock" && 
+                          data.tock_distance_meters) {
+                  // Fallback: convert from meters if distance not already converted
+                  const miles = data.tock_distance_meters * 0.000621371;
+                  if (miles < 0.1) {
+                    restaurantDistance = `${Math.round(miles * 5280)} ft`;
+                  } else {
+                    restaurantDistance = `${miles.toFixed(1)} mi`;
+                  }
+                } else if (data.restraunt_type === "tock" &&
+                          data.coordinates &&
+                          userLocationCoords) {
+                  // Final fallback: calculate from coordinates
+                  restaurantDistance = calculateDistance(
+                    userLocationCoords.lat,
+                    userLocationCoords.lng,
+                    data.coordinates.latitude,
+                    data.coordinates.longitude
+                  );
+                }
+
+              const getSearchParams = () => {
+                if (data?.restraunt_type === "tableagent") {
+                  const slug = data?.tableagent_slug || data?.slug || data?.id;
+                  let city = data?.tableagent_city || data?.city || formData?.location || formData?.city || "New York City";
+                  // Format city name - handle "New York" case
+                  if (city.toLowerCase().includes("new york") && !city.toLowerCase().includes("new york city")) {
+                    city = "New York City";
+                  }
+                  return `?tableagent_slug=${encodeURIComponent(slug)}&tableagent_city=${encodeURIComponent(city)}`;
+                } else {
+                  return `?${
+                    data?.restraunt_type === "yelp"
+                      ? "yelp_alias"
+                      : data?.restraunt_type === "open_table"
+                      ? "map_url"
+                      : data?.restraunt_type === "resy"
+                      ? "resy_alias"
+                      : data?.restraunt_type === "tock"
+                      ? "tock_domain"
+                      : "resy_alias"
+                  }=${encodeURIComponent(
+                    data?.restraunt_type === "yelp"
+                      ? data?.alias
+                      : data?.restraunt_type === "open_table"
+                      ? data?.urls?.profileLink?.link
+                      : data?.restraunt_type === "resy"
+                      ? data?.id?.resy
+                      : data?.restraunt_type === "tock"
+                      ? data?.tock_domain || data?.tock_business_id?.toString() || data?.id
+                      : data?.id?.resy
+                  )}`;
+                }
+              };
 
               return (
                 <Link
                   key={index}
                   to={{
                     pathname: "/restaurant-detail",
-                    search: `?${
-                      data?.restraunt_type === "yelp"
-                        ? "yelp_alias"
-                        :data?.restraunt_type === "open_table"
-                        ? "map_url"
-                        : "resy_alias"
-                    }=${encodeURIComponent(
-                      data?.restraunt_type === "yelp"
-                        ? data?.alias
-                        : data?.restraunt_type === "open_table"
-                        ? data?.urls?.profileLink?.link
-                        : data?.id?.resy
-                    )}`,
+                    search: getSearchParams(),
                   }}
                   className="block mb-4 sm:mb-6"
                 >

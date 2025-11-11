@@ -11,13 +11,22 @@ import FavoriteButton from "@/components/common/FavoriteButton";
 
 const RestaurantCard = ({ data, distance, formData, children, favoritesList, onFavoriteChange }) => {
   // Get restaurant alias and type for favorite button
+  // For Resy: id.resy (number) gets saved as string in restaurant_alias
+  // For TableAgent: id.tableagent (string slug) gets saved as string in restaurant_alias
   const getRestaurantAlias = () => {
     if (data?.restraunt_type === "yelp") {
       return data?.alias;
     } else if (data?.restraunt_type === "open_table") {
       return data?.urls?.profileLink?.link || data?.restaurant_alias;
     } else if (data?.restraunt_type === "resy") {
-      return data?.id?.resy || data?.restaurant_alias;
+      // Resy: id.resy is a number, MUST be converted to string for API
+      const resyId = data?.id?.resy || data?.restaurant_alias;
+      return resyId ? String(resyId) : undefined;
+    } else if (data?.restraunt_type === "tock") {
+      return data?.tock_domain || data?.tock_business_id?.toString() || data?.id;
+    } else if (data?.restraunt_type === "tableagent") {
+      // TableAgent: id.tableagent is a string slug, saved as string in restaurant_alias (like Resy)
+      return String(data?.id?.tableagent || data?.tableagent_slug || data?.slug || "");
     }
     return data?.restaurant_alias || data?.alias;
   };
@@ -39,6 +48,10 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
                 Array.isArray(data?.images) &&
                 data?.images.length > 0
               ? data?.images[0]
+              : data?.restraunt_type === "tock"
+              ? data?.image_url
+              : data?.restraunt_type === "tableagent"
+              ? data?.image_url
               : data?.photos?.gallery?.photos[0]?.thumbnails[0]?.url
               // : data?.photos?.profile?.medium?.url
           }
@@ -63,81 +76,193 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
           </p>
 
           <div className="text-grey-darkest py-4 sm:py-6 flex flex-col space-y-3 sm:space-y-4">
-            {/* Ratings */}
-            <div>
-              <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
-                <img
-                  src="/assets/ratings.png"
-                  alt="ratings logo"
-                  className="h-4 w-4 sm:h-5 sm:w-5"
-                />
-                <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
-                  Ratings:
-                </span>
-              </p>
-              <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
-                {data.restraunt_type === "yelp"
-                  ? (data?.rating?.toFixed(2) ?? "N/A")
-                  : data.restraunt_type === "open_table"
-                  ? (data?.statistics?.reviews?.ratings?.overall?.rating?.toFixed(2) ?? "N/A")
-                  : data.restraunt_type === "resy"
-                  ? (data?.rating?.average?.toFixed(2) ?? "N/A")
-                  : null}
-                <span className="text-sm sm:text-base">/5</span>
-              </p>
-            </div>
+            {/* For Tock: Show Price Range, Cuisine, and Address */}
+            {data.restraunt_type === "tock" ? (
+              <>
+                {/* Price Range */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/ratings.png"
+                      alt="price range logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Price Range:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.tock_price_range || data?.price || "N/A"}
+                  </p>
+                </div>
 
-            {/* Address */}
-            <div>
-              <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
-                <img
-                  src="/assets/address.png"
-                  alt="address logo"
-                  className="h-4 w-4 sm:h-5 sm:w-5"
-                />
-                <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
-                  Address:
-                </span>
-              </p>
-              <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
-                {data.restraunt_type === "yelp" ? (
-                  data?.location?.display_address?.join(" ")
-                ) : data?.restraunt_type === "open_table" ? (
-                  <>
-                    {data?.address?.line1 && `${data?.address?.line1} `}
-                    <span> {data?.address?.city}</span>
-                  </>
-                ) : data?.restraunt_type === "resy" ? (
-                  <>
-                    {data?.locality && `${data?.locality} `}
-                    <span> {data?.location?.name}</span>
-                  </>
-                ) : null}
-              </p>
-            </div>
+                {/* Cuisine */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/address.png"
+                      alt="cuisine logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Cuisine:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.tock_cuisines || data?.categories?.map(cat => cat.title).join(", ") || "N/A"}
+                  </p>
+                </div>
 
-            {/* Contact */}
-            <div>
-              <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
-                <img
-                  src="/assets/contact.png"
-                  alt="contact logo"
-                  className="h-4 w-4 sm:h-5 sm:w-5"
-                />
-                <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
-                  Contact:
-                </span>
-              </p>
-              <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
-                {data.restraunt_type === "yelp"
-                  ? data?.display_phone
-                  : data.restraunt_type === "open_table"
-                  ? data?.contactInformation?.formattedPhoneNumber
-                  : data.restraunt_type === "resy"
-                  ? data?.contact?.phone_number
-                  : null}
-              </p>
-            </div>
+                {/* Address */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/address.png"
+                      alt="address logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Address:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.location?.display_address?.join(" ") || `${data?.location?.address1 || ""} ${data?.location?.city || ""}`.trim() || "N/A"}
+                  </p>
+                </div>
+              </>
+            ) : data.restraunt_type === "tableagent" ? (
+              <>
+                {/* Price Range */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/ratings.png"
+                      alt="price range logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Price Range:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.tableagent_price_range || data?.price || "N/A"}
+                  </p>
+                </div>
+
+                {/* Ratings */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/ratings.png"
+                      alt="ratings logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Ratings:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.rating?.toFixed(2) ?? data?.tableagent_rating?.toFixed(2) ?? "N/A"}
+                    <span className="text-sm sm:text-base">/5</span>
+                  </p>
+                </div>
+
+                {/* Address */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/address.png"
+                      alt="address logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Address:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.location?.display_address?.join(" ") || data?.location?.address1 || data?.address || "N/A"}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Ratings */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/ratings.png"
+                      alt="ratings logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Ratings:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data.restraunt_type === "yelp"
+                      ? (data?.rating?.toFixed(2) ?? "N/A")
+                      : data.restraunt_type === "open_table"
+                      ? (data?.statistics?.reviews?.ratings?.overall?.rating?.toFixed(2) ?? "N/A")
+                      : data.restraunt_type === "resy"
+                      ? (data?.rating?.average?.toFixed(2) ?? "N/A")
+                      : null}
+                    <span className="text-sm sm:text-base">/5</span>
+                  </p>
+                </div>
+
+                {/* Address */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/address.png"
+                      alt="address logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Address:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data.restraunt_type === "yelp" ? (
+                      data?.location?.display_address?.join(" ")
+                    ) : data?.restraunt_type === "open_table" ? (
+                      <>
+                        {data?.address?.line1 && `${data?.address?.line1} `}
+                        <span> {data?.address?.city}</span>
+                      </>
+                    ) : data?.restraunt_type === "resy" ? (
+                      <>
+                        {data?.locality && `${data?.locality} `}
+                        <span> {data?.location?.name}</span>
+                      </>
+                    ) : null}
+                  </p>
+                </div>
+
+                {/* Contact */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/contact.png"
+                      alt="contact logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Contact:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data.restraunt_type === "yelp"
+                      ? data?.display_phone
+                      : data.restraunt_type === "open_table"
+                      ? data?.contactInformation?.formattedPhoneNumber
+                      : data.restraunt_type === "resy"
+                      ? data?.contact?.phone_number
+                      : null}
+                  </p>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -151,6 +276,10 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
                 ? "/assets/opentable.png"
                 : data.restraunt_type === "resy"
                 ? "/assets/resy_logo_new.png"
+                : data.restraunt_type === "tock"
+                ? "/assets/tock-logo.png"
+                : data.restraunt_type === "tableagent"
+                ? "/assets/tableagent-logo.png"
                 : ""
             }
             alt={`${data.restraunt_type} logo`}
@@ -172,6 +301,10 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
               ? "/assets/opentable.png"
               : data.restraunt_type === "resy"
               ? "/assets/resy_logo_new.png"
+              : data.restraunt_type === "tock"
+              ? "/assets/tock-logo.png"
+              : data.restraunt_type === "tableagent"
+              ? "/assets/tableagent.png"
               : ""
           }
           alt={`${data.restraunt_type} logo`}
