@@ -122,7 +122,19 @@ const FavoritesCard = ({ item, distance, onPress }) => {
     } else if (restType === "resy") {
       const resyId = data?.id?.resy || item?.restaurant_alias || item?.id?.resy;
       if (!resyId) return "#";
-      return `/restaurant-detail?resy_alias=${encodeURIComponent(resyId)}`;
+      
+      // Include url_slug and location if available
+      const urlSlug = data?.url_slug || item?.url_slug || item?.details?.url_slug;
+      const locationSlug = data?.location?.url_slug || item?.location?.url_slug || item?.details?.location?.url_slug;
+      
+      let url = `/restaurant-detail?resy_alias=${encodeURIComponent(resyId)}`;
+      if (urlSlug) {
+        url += `&url_slug=${encodeURIComponent(urlSlug)}`;
+      }
+      if (locationSlug) {
+        url += `&location=${encodeURIComponent(locationSlug)}`;
+      }
+      return url;
     } else if (restType === "tock") {
       const domain = item?.tock_domain || data?.tock_domain || item?.restaurant_alias;
       if (!domain) return "#";

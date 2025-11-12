@@ -605,27 +605,39 @@ const RestaurantCards = memo(
         }
         search = `?tableagent_slug=${encodeURIComponent(slug)}&tableagent_city=${encodeURIComponent(city)}`;
       } else {
-        search = `?${
-          restaurant?.restraunt_type === "yelp"
-            ? "yelp_alias"
-            : restaurant?.restraunt_type === "open_table"
-            ? "map_url"
-            : restaurant?.restraunt_type === "resy"
-            ? "resy_alias"
-            : restaurant?.restraunt_type === "tock"
-            ? "tock_domain"
-            : "resy_alias"
-        }=${encodeURIComponent(
-          restaurant?.restraunt_type === "yelp"
-            ? restaurant?.alias
-            : restaurant?.restraunt_type === "open_table"
-            ? restaurant?.urls?.profileLink?.link
-            : restaurant?.restraunt_type === "resy"
-            ? restaurant?.id?.resy
-            : restaurant?.restraunt_type === "tock"
-            ? restaurant?.tock_domain || restaurant?.tock_business_id?.toString() || restaurant?.id
-            : restaurant?.id?.resy
-        )}`;
+        if (restaurant?.restraunt_type === "resy") {
+          // For Resy, include url_slug and location if available
+          const resyId = restaurant?.id?.resy;
+          const urlSlug = restaurant?.url_slug;
+          const locationSlug = restaurant?.location?.url_slug;
+          
+          let searchParams = `resy_alias=${encodeURIComponent(resyId)}`;
+          if (urlSlug) {
+            searchParams += `&url_slug=${encodeURIComponent(urlSlug)}`;
+          }
+          if (locationSlug) {
+            searchParams += `&location=${encodeURIComponent(locationSlug)}`;
+          }
+          search = `?${searchParams}`;
+        } else {
+          search = `?${
+            restaurant?.restraunt_type === "yelp"
+              ? "yelp_alias"
+              : restaurant?.restraunt_type === "open_table"
+              ? "map_url"
+              : restaurant?.restraunt_type === "tock"
+              ? "tock_domain"
+              : "resy_alias"
+          }=${encodeURIComponent(
+            restaurant?.restraunt_type === "yelp"
+              ? restaurant?.alias
+              : restaurant?.restraunt_type === "open_table"
+              ? restaurant?.urls?.profileLink?.link
+              : restaurant?.restraunt_type === "tock"
+              ? restaurant?.tock_domain || restaurant?.tock_business_id?.toString() || restaurant?.id
+              : restaurant?.id?.resy
+          )}`;
+        }
       }
       navigate({ pathname, search });
     };
@@ -1073,14 +1085,26 @@ const RestaurantCards = memo(
                     city = "New York City";
                   }
                   return `?tableagent_slug=${encodeURIComponent(slug)}&tableagent_city=${encodeURIComponent(city)}`;
+                } else if (data?.restraunt_type === "resy") {
+                  // For Resy, include url_slug and location if available
+                  const resyId = data?.id?.resy;
+                  const urlSlug = data?.url_slug;
+                  const locationSlug = data?.location?.url_slug;
+                  
+                  let searchParams = `resy_alias=${encodeURIComponent(resyId)}`;
+                  if (urlSlug) {
+                    searchParams += `&url_slug=${encodeURIComponent(urlSlug)}`;
+                  }
+                  if (locationSlug) {
+                    searchParams += `&location=${encodeURIComponent(locationSlug)}`;
+                  }
+                  return `?${searchParams}`;
                 } else {
                   return `?${
                     data?.restraunt_type === "yelp"
                       ? "yelp_alias"
                       : data?.restraunt_type === "open_table"
                       ? "map_url"
-                      : data?.restraunt_type === "resy"
-                      ? "resy_alias"
                       : data?.restraunt_type === "tock"
                       ? "tock_domain"
                       : "resy_alias"
@@ -1089,8 +1113,6 @@ const RestaurantCards = memo(
                       ? data?.alias
                       : data?.restraunt_type === "open_table"
                       ? data?.urls?.profileLink?.link
-                      : data?.restraunt_type === "resy"
-                      ? data?.id?.resy
                       : data?.restraunt_type === "tock"
                       ? data?.tock_domain || data?.tock_business_id?.toString() || data?.id
                       : data?.id?.resy

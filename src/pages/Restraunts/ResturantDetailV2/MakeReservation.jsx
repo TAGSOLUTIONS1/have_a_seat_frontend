@@ -373,27 +373,43 @@ export default function MakeReservation({ restrauntDetail }) {
 
     const fetchResyTimeSlots = async () => {
     setLoading(true);
+    
+    // Extract parameters from reservationCard - support both old and new structure
+    const venueId = reservationCard?.results?.resy2?.id?.resy || 
+                    reservationCard?.id?.resy || 
+                    reservationCard?.results?.venues[0]?.venue?.id?.resy;
+    const location = reservationCard?.results?.resy2?.location?.url_slug || 
+                     reservationCard?.location?.url_slug;
+    const urlSlug = reservationCard?.results?.resy2?.url_slug || 
+                    reservationCard?.url_slug;
+    
     const resyTimeParams = {
-      venue_id: reservationCard?.results?.venues[0]?.venue?.id?.resy,
+      venue_id: venueId,
       date: formData?.reservation_date,
       persons: formData?.reservation_covers,
+      ...(location && { location }),
+      ...(urlSlug && { url_slug: urlSlug }),
     };
+    
     try {
       const response = await axios.get(
-        `${Base_Url}/api/v1/resy/get_restaurant_details?`,
+        `${Base_Url}/api/v1/resy/get_restaurant_details_v2?`,
         {
           params: resyTimeParams,
         }
       );
 
-      if (response.status === 200) {
-        setTimeSlots(
-          response?.data?.data?.results?.venues[0]?.slots
-        );
+      if (response.status === 200 && response?.data?.success) {
+        // New API structure: slots might be in results.venues[0].slots or data.slots
+        // Try both structures for backward compatibility
+        const slots = response?.data?.data?.results?.venues?.[0]?.slots || 
+                      response?.data?.data?.slots || 
+                      [];
+        setTimeSlots(slots);
         setLoading(false);
         setIsDataLoaded(true);
       } else {
-        setLoading(fasle);
+        setLoading(false);
         throw new Error("Network response was not ok.");
       }
     } catch (error) {

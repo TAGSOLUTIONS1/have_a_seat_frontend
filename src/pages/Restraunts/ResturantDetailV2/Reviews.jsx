@@ -98,7 +98,7 @@ export default function Reviews({ restrauntDetail }) {
 
   return (
     <div className="">
-      
+       {console.log("restrauntDetail  1  ", restrauntDetail)}
       {restrauntDetail?.restaurant_type!=="resy" ?
       (
         <div className=" py-8 lg:flex gap-10">
@@ -121,10 +121,10 @@ export default function Reviews({ restrauntDetail }) {
               ? restrauntDetail.description
               : restrauntDetail?.restaurant_type === "tock" && restrauntDetail?.description
               ? restrauntDetail.description
+              : restrauntDetail?.restaurant_type === "resy" && restrauntDetail?.description
+              ? restrauntDetail.description
               : restrauntDetail?.alias
               ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
-              : restrauntDetail?.restaurant?.description
-              ? convertHtmlToText(restrauntDetail.restaurant.description)
               : firstTemplate?.content?.['en-us']?.about?.body && (
               " " + convertHtmlToText(
                 firstTemplate?.content?.['en-us']?.about?.body 
@@ -239,7 +239,9 @@ export default function Reviews({ restrauntDetail }) {
         </h2>
         <p className="text-shipGrey font-roboto text-sm sm:text-base md:text-lg lg:text-xl font-normal">
           {
-            restrauntDetail?.restaurant_type === "tableagent" && restrauntDetail?.description
+            restrauntDetail?.restaurant_type === "resy" && restrauntDetail?.description
+              ? restrauntDetail.description
+              : restrauntDetail?.restaurant_type === "tableagent" && restrauntDetail?.description
               ? restrauntDetail.description
               : restrauntDetail?.restaurant_type === "tock" && restrauntDetail?.description
               ? restrauntDetail.description
@@ -258,7 +260,12 @@ export default function Reviews({ restrauntDetail }) {
         <p className="text-shipGrey font-roboto text-sm sm:text-base md:text-lg lg:text-xl mt-10">
           <p className="text-4xl font-bold font-agrandir text-shipGrey mb-4">Need to Know</p>
           {
-            firstTemplate?.content?.['en-us']?.need_to_know?.body && (
+            restrauntDetail?.restaurant_type === "resy" && restrauntDetail?.content
+              ? (() => {
+                  const needToKnow = restrauntDetail.content.find(c => c.name === "need_to_know");
+                  return needToKnow?.body || "";
+                })()
+              : firstTemplate?.content?.['en-us']?.need_to_know?.body && (
               " " + convertHtmlToText(
                 firstTemplate?.content?.['en-us']?.need_to_know?.body 
               )

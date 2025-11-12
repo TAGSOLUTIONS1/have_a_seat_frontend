@@ -146,27 +146,55 @@ const Favourites = () => {
               
               const today = new Date();
               const formattedDate = today.toISOString().split('T')[0];
+              
+              // First, get basic data to extract location and url_slug
               const detailsResp = await axios.get(
                 `${Base_Url}/api/v1/resy/get_restaurant_details?venue_id=${venueId}&persons=2&date=${formattedDate}`
               );
               const responseData = detailsResp?.data?.data || {};
               
+              // Extract location and url_slug from first response for v2 API call
+              const venueData = responseData?.results?.venues?.[0]?.venue || {};
+              const locationSlug = venueData?.location?.url_slug || responseData?.location?.url_slug;
+              const urlSlug = venueData?.url_slug || responseData?.url_slug;
+              
+              // Call v2 API with proper parameters
+              let v2Data = {};
+              if (locationSlug && urlSlug) {
+                try {
+                  const v2Params = new URLSearchParams({
+                    venue_id: venueId,
+                    persons: '2',
+                    date: formattedDate,
+                    location: locationSlug,
+                    url_slug: urlSlug,
+                  });
+                  const v2Resp = await axios.get(
+                    `${Base_Url}/api/v1/resy/get_restaurant_details_v2?${v2Params.toString()}`
+                  );
+                  v2Data = v2Resp?.data?.data || {};
+                } catch (error) {
+                  console.error("Error fetching v2 data:", error);
+                  // Fall back to using data from first response
+                }
+              }
+              
+              // Use v2 data if available, otherwise fall back to original response
+              const finalVenueData = v2Data || venueData;
+              
               // Convert venue_id string back to number for id.resy structure
               const resyIdNum = parseInt(venueId, 10);
               
-              // Resy response structure: data.results.venues[0].venue contains the restaurant data
-              const venueData = responseData?.results?.venues?.[0]?.venue || {};
-              
-              // Extract images from responsive_images
-              const images = venueData?.responsive_images?.originals 
-                ? Object.values(venueData.responsive_images.originals).map(img => img.url)
-                : [];
+              // Extract images from responsive_images (v2 structure)
+              const images = finalVenueData?.responsive_images?.originals 
+                ? Object.values(finalVenueData.responsive_images.originals).map(img => img.url)
+                : finalVenueData?.images || [];
               
               // Get first image URL for image_url
               const imageUrl = images.length > 0 ? images[0] : null;
               
               // Convert cuisine type (string) to array format
-              const cuisine = venueData?.type ? [venueData.type] : [];
+              const cuisine = finalVenueData?.type ? [finalVenueData.type] : [];
               
               return {
                 ...fav,
@@ -174,9 +202,9 @@ const Favourites = () => {
                   // Spread the full response data to preserve structure
                   ...responseData,
                   // Spread venue data at top level for easier access
-                  ...venueData,
+                  ...finalVenueData,
                   // Ensure name is at top level (required for filtering)
-                  name: venueData?.name || "",
+                  name: finalVenueData?.name || "",
                   // Extract images array
                   images: images,
                   image_url: imageUrl,
@@ -184,11 +212,11 @@ const Favourites = () => {
                   cuisine: cuisine,
                   // Rating structure
                   rating: {
-                    average: venueData?.rating || 0,
-                    total: venueData?.total_ratings || 0
+                    average: finalVenueData?.rater?.[0]?.score || finalVenueData?.rating || 0,
+                    total: finalVenueData?.rater?.[0]?.total || finalVenueData?.total_ratings || 0
                   },
                   // Location structure for address display
-                  locality: venueData?.location?.neighborhood || "",
+                  locality: finalVenueData?.location?.neighborhood || "",
                   // ID structure: id.resy (number) - saved as string in restaurant_alias
                   id: {
                     resy: resyIdNum
@@ -650,7 +678,17 @@ const Favourites = () => {
                     } else if (restType === "resy") {
                       const resyId = restaurantItem?.details?.id?.resy || restaurantItem?.restaurant_alias || restaurantItem?.id?.resy;
                       if (resyId) {
+                        // Include url_slug and location if available
+                        const urlSlug = restaurantItem?.details?.url_slug || restaurantItem?.url_slug;
+                        const locationSlug = restaurantItem?.details?.location?.url_slug || restaurantItem?.location?.url_slug;
+                        
                         url = `/restaurant-detail?resy_alias=${encodeURIComponent(resyId)}`;
+                        if (urlSlug) {
+                          url += `&url_slug=${encodeURIComponent(urlSlug)}`;
+                        }
+                        if (locationSlug) {
+                          url += `&location=${encodeURIComponent(locationSlug)}`;
+                        }
                       }
                     } else if (restType === "tock") {
                       const domain = restaurantItem?.tock_domain || restaurantItem?.details?.tock_domain || restaurantItem?.restaurant_alias;
