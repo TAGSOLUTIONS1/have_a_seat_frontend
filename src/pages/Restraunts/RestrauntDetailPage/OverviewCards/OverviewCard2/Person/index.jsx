@@ -8,8 +8,19 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 
-const PersonCard = ({ setFormData }) => {
-  const [selectedPersons, setSelectedPersons] = useState("2"); // Default to 2 persons
+const PersonCard = ({ setFormData, initialGuests }) => {
+  // Initialize guests from prop if provided, otherwise use default 2
+  const getInitialGuests = () => {
+    if (initialGuests) {
+      const guestsNum = parseInt(initialGuests, 10);
+      if (!isNaN(guestsNum) && guestsNum >= 1 && guestsNum <= 9) {
+        return guestsNum.toString();
+      }
+    }
+    return "2";
+  };
+  
+  const [selectedPersons, setSelectedPersons] = useState(getInitialGuests());
 
   useEffect(() => {
     setFormData((prev) => ({
@@ -17,6 +28,16 @@ const PersonCard = ({ setFormData }) => {
       reservation_covers: parseInt(selectedPersons, 10),
     }));
   }, [selectedPersons, setFormData]);
+
+  // Update selectedPersons when initialGuests prop changes
+  useEffect(() => {
+    if (initialGuests) {
+      const guestsNum = parseInt(initialGuests, 10);
+      if (!isNaN(guestsNum) && guestsNum >= 1 && guestsNum <= 9) {
+        setSelectedPersons(guestsNum.toString());
+      }
+    }
+  }, [initialGuests]);
 
   const handleSelectChange = (persons) => {
     setSelectedPersons(persons); // Update state when selection changes

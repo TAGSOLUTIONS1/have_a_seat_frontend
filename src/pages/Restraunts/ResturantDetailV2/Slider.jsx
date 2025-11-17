@@ -44,10 +44,32 @@ export default function ImageSlider({ restrauntDetail }) {
   }, [restrauntDetail]);
 
   let imageUrls = [];
-  // if (pictures?.alias) {
-  //   imageUrls = pictures?.photos || [];
-  // } else 
-    if (pictures?.images || pictures?.photos) {
+  
+  // Handle Tock restaurants - use logo
+  if (restrauntDetail?.restaurant_type === "tock" || restrauntDetail?.restraunt_type === "tock") {
+    if (restrauntDetail?.logo) {
+      imageUrls = [restrauntDetail.logo];
+    } else if (restrauntDetail?.image_url) {
+      imageUrls = [restrauntDetail.image_url];
+    }
+  }
+  // Handle Table Agent restaurants - use gallery_photos, images, or image_url
+  else if (restrauntDetail?.restaurant_type === "tableagent" || restrauntDetail?.restraunt_type === "tableagent") {
+    if (restrauntDetail?.gallery_photos && restrauntDetail.gallery_photos.length > 0) {
+      // Use gallery_photos with original_url or thumbnail_url
+      imageUrls = restrauntDetail.gallery_photos.map(photo => 
+        photo.original_url || photo.thumbnail_url || photo
+      );
+    } else if (restrauntDetail?.images && restrauntDetail.images.length > 0) {
+      // Fallback to images array
+      imageUrls = restrauntDetail.images;
+    } else if (restrauntDetail?.image_url) {
+      // Final fallback to single image_url
+      imageUrls = [restrauntDetail.image_url];
+    }
+  }
+  // Handle other restaurant types
+  else if (pictures?.images || pictures?.photos) {
     const galleryPhotos = pictures?.images || pictures?.photos;
 
     if (galleryPhotos && galleryPhotos.length > 0) {

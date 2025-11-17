@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaHeart } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
+import CancelReservation from './CancelReservation';
+import ReviewModal from '@/components/common/ReviewModal';
 
-export default function ReservationsHistory({reservations}) {
+export default function ReservationsHistory({reservations, onRefresh}) {
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+    const [selectedReservation, setSelectedReservation] = useState(null);
+    
     const now = new Date();
     const pastReservations = reservations.filter(
     (reservation) => new Date(reservation.reservation_date) < now
@@ -11,6 +16,22 @@ export default function ReservationsHistory({reservations}) {
     (reservation) => new Date(reservation.reservation_date) >= now
   );
 
+  const handleCancel = (cancelledReservation) => {
+    alert(`Reservation at ${cancelledReservation?.restaurant_name} cancelled!`);
+  };
+
+  const handleLeaveReview = (reservation) => {
+    setSelectedReservation(reservation);
+    setIsReviewModalOpen(true);
+  };
+
+  const handleReviewSubmitted = () => {
+    // Refresh the reservations list if callback provided
+    if (onRefresh) {
+      onRefresh();
+    }
+  };
+  
   return (
 <>
 
@@ -18,7 +39,7 @@ export default function ReservationsHistory({reservations}) {
     <div className="flex flex-col md:flex-row justify-between items-center">
       <p className='font-bold text-4xl text-center md:text-left font-agrandir text-shipGrey my-4'>Upcoming Reservations</p>
     <Link className='bg-plum p-3 px-4 rounded-full font-agrandir font-bold text-base text-white' to="/user-profile">
-    Go to your Dining History
+    Go to your Dining Insights
     </Link>
     </div>
   {upcomingReservations.length >0? upcomingReservations.map((reservation) =>(
@@ -111,10 +132,18 @@ export default function ReservationsHistory({reservations}) {
           <div className="flex-grow"></div>
           {new Date (reservation?.reservation_date) < new Date() &&  <div className="bg-grey-lighter  flex items-center justify-between transition hover:bg-grey-light cursor-pointer mt-2">
             <button className="rounded-full p-3 bg-plum text-white ">
-        <span>Reserve again</span>
+              <span>Reserve again</span>
             </button>
             <i className="fas fa-chevron-right"></i>
           </div>}
+
+          {new Date(reservation?.reservation_date) >= new Date() && (
+              <CancelReservation
+                reservation={reservation}
+                onCancel={handleCancel}
+              />
+            )}
+
         </div>
       </div>
     </div>
@@ -203,10 +232,13 @@ export default function ReservationsHistory({reservations}) {
           {/* Reserve Again & Leave Review Buttons */}
           {new Date(reservation?.reservation_date) < new Date() && (
             <div className="bg-grey-lighter flex flex-col md:flex-row items-center justify-center transition hover:bg-grey-light cursor-pointer mt-2 gap-3 p-2 rounded-lg">
-              <button className="text-sm font-agrandir px-4 py-2 bg-plum text-white rounded-lg">
+              <button className="text-sm font-agrandir px-4 py-2 bg-plum text-white rounded-lg hover:bg-purple-700 transition-colors">
                 Reserve Again
               </button>
-              <button className=" flex gap-2 text-sm font-agrandir px-4 py-2 bg-plum text-white rounded-lg">
+              <button 
+                onClick={() => handleLeaveReview(reservation)}
+                className="flex gap-2 text-sm font-agrandir px-4 py-2 bg-plum text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
                 <FaHeart size={17} color='#ffffff'></FaHeart>
                 Leave Review
               </button>
@@ -219,6 +251,16 @@ export default function ReservationsHistory({reservations}) {
 
 </div>
 
+      {/* Review Modal */}
+      <ReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={() => {
+          setIsReviewModalOpen(false);
+          setSelectedReservation(null);
+        }}
+        reservation={selectedReservation}
+        onReviewSubmitted={handleReviewSubmitted}
+      />
 
 </>
   )

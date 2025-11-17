@@ -8,8 +8,21 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 
-const Time = ({ setFormData }) => {
-  const [selectedTime, setSelectedTime] = useState("19:00"); // Set default time to 19:00
+const Time = ({ setFormData, initialTime }) => {
+
+  // Initialize time from prop if provided, otherwise use default
+  const getInitialTime = () => {
+    if (initialTime) {
+      // Validate time format
+      const timeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
+      if (timeRegex.test(initialTime)) {
+        return initialTime;
+      }
+    }
+    return "19:00";
+  };
+  
+  const [selectedTime, setSelectedTime] = useState(getInitialTime());
   const [timeOptions, setTimeOptions] = useState([]);
 
   useEffect(() => {
@@ -21,13 +34,31 @@ const Time = ({ setFormData }) => {
       }
     }
 
-    // Set time options and the default selected time in formData
+    // Validate and add initialTime to options if it's not already there
+    const timeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
+    if (initialTime && timeRegex.test(initialTime) && !newTimeOptions.includes(initialTime)) {
+      newTimeOptions.push(initialTime);
+      // Sort timeOptions to keep them in chronological order
+      newTimeOptions.sort((a, b) => {
+        const [aHours, aMinutes] = a.split(":").map(Number);
+        const [bHours, bMinutes] = b.split(":").map(Number);
+        return aHours * 60 + aMinutes - (bHours * 60 + bMinutes);
+      });
+    }
+
+    // Set time options
     setTimeOptions(newTimeOptions);
+    
+    // Use initial time if valid, otherwise default to 19:00
+    const timeToSet = (initialTime && timeRegex.test(initialTime)) ? initialTime : "19:00";
+    
+    // Set formData and selectedTime
     setFormData((prev) => ({
       ...prev,
-      reservation_time: "19:00", // Set default formData time to 19:00
+      reservation_time: timeToSet,
     }));
-  }, [setFormData]);
+    setSelectedTime(timeToSet);
+  }, [setFormData, initialTime]);
 
   const handleTimeSelection = (time) => {
     setSelectedTime(time);

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Edit, Save, HistoryIcon } from "lucide-react";
+import { Edit, Save, HistoryIcon, Camera } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import Loader from "@/components/Loader";
 import LinkPageDialogue from "../linkPageDialogue";
@@ -17,8 +17,29 @@ const MainLinkingPage = () => {
     email: "",
     password: "",
   });
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [selectedAvatarFile, setSelectedAvatarFile] = useState(null);
+  const fileInputRef = useRef(null);
 
   const storageToken = localStorage.getItem("accessToken");
+
+  // Handle avatar URL from backend - construct full URL if needed
+  const getAvatarUrl = () => {
+    if (avatarPreview) {
+      return avatarPreview;
+    }
+    if (!user?.avatar_url) {
+      return "https://t3.ftcdn.net/jpg/04/17/45/28/360_F_417452853_zX2uSxhLns2Ei2nRmXjnpjPw5Ox5V7EK.jpg";
+    }
+    
+    // If avatar_url is already a full URL, use it
+    if (user.avatar_url.startsWith('http')) {
+      return user.avatar_url;
+    }
+    
+    // If it's a relative path, construct full URL
+    return `https://have-a-seatonline.com/${user.avatar_url}`;
+  };
 
   useEffect(() => {
     const localToken = localStorage.getItem("accessToken");
@@ -65,6 +86,177 @@ const MainLinkingPage = () => {
       last_name: user?.last_name || "",
       email: user?.email || "",
     });
+    // Reset avatar preview when entering edit mode
+    setAvatarPreview(null);
+    setSelectedAvatarFile(null);
+  };
+
+  const validateImageFile = (file) => {
+    // Check file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      toast({
+        title: "Invalid File Type",
+        description: "Please select a valid image file (JPEG, PNG, GIF, or WEBP).",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return false;
+    }
+    
+    // Check file size (limit to 5MB)
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSizeInBytes) {
+      toast({
+        title: "File Too Large",
+        description: "Please select an image smaller than 5MB. The current image is too large to upload.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return false;
+    }
+    
+    return true;
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!validateImageFile(file)) {
+      return;
+    }
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      // Check image dimensions
+      const img = new Image();
+      img.onload = () => {
+        const maxDimension = 2048;
+        if (img.width > maxDimension || img.height > maxDimension) {
+          toast({
+            title: "Image Too Large",
+            description: "Please select an image with dimensions smaller than 2048x2048 pixels.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          return;
+        }
+        setAvatarPreview(reader.result);
+        setSelectedAvatarFile(file);
+        // Automatically enter edit mode when an image is selected
+        if (!isEditMode) {
+          setIsEditMode(true);
+          setEditedData({
+            first_name: user?.first_name || "",
+            last_name: user?.last_name || "",
+            email: user?.email || "",
+          });
+        }
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleAvatarClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.nativeEvent) {
+      e.nativeEvent.stopImmediatePropagation();
+    }
+    // Use setTimeout to ensure the file input click happens after event propagation stops
+    setTimeout(() => {
+      if (fileInputRef.current) {
+        fileInputRef.current.click();
+      }
+    }, 0);
+  };
+
+  const uploadAvatar = async (file, token) => {
+    try {
+      // Get user ID first
+      const userResponse = await axios.get(
+        "https://have-a-seatonline.com/api/v1/users/me",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!userResponse.data?.id) {
+        throw new Error("User ID not found");
+      }
+
+      const userId = userResponse.data.id;
+
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Upload avatar using the backend API
+      const avatarResponse = await axios.post(
+        `https://have-a-seatonline.com/api/v1/users/${userId}/avatar`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      if (avatarResponse.status === 200) {
+        console.log("Avatar uploaded successfully:", avatarResponse.data);
+        return avatarResponse.data;
+      } else {
+        throw new Error("Failed to upload avatar");
+      }
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      
+      // Handle specific error cases
+      if (error.response?.status === 413) {
+        toast({
+          title: "File Too Large",
+          description: "The image file is too large to upload. Please select a smaller image.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else if (error.response?.status === 400) {
+        toast({
+          title: "Invalid File",
+          description: "The selected file is not a valid image. Please try selecting a different image.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else if (error.response?.status === 401) {
+        toast({
+          title: "Authentication Error",
+          description: "Your session has expired. Please log in again.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Upload Failed",
+          description: "Failed to upload avatar. Please check your internet connection and try again.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+      
+      throw error;
+    }
   };
 
   const handleSaveClick = async () => {
@@ -76,23 +268,55 @@ const MainLinkingPage = () => {
         },
       };
 
+      // Update profile data (excluding avatar)
+      const profileData = {
+        first_name: editedData.first_name,
+        last_name: editedData.last_name,
+        email: editedData.email,
+      };
+
       const response = await axios.patch(
         "https://have-a-seatonline.com/api/v1/users/me",
-        editedData,
+        profileData,
         config
       );
 
+      // If avatar was changed, upload it separately
+      if (selectedAvatarFile) {
+        try {
+          await uploadAvatar(selectedAvatarFile, localToken);
+          toast({
+            title: "Profile Updated Successfully",
+            description: "Your profile and avatar have been updated.",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
+        } catch (avatarError) {
+          console.error("Avatar upload failed:", avatarError);
+          toast({
+            title: "Profile Updated, Avatar Failed",
+            description: "Your profile was updated but avatar upload failed. You can try uploading the avatar again.",
+            status: "warning",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      }
+
       if (response.status === 200) {
-        // console.log("User data updated successfully");
-        toast({
-          title: "Data Updated Successfuly",
-          // description: "Please try again.",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
+        if (!selectedAvatarFile) {
+          toast({
+            title: "Data Updated Successfuly",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
         fetchUserInfo(localToken);
         setIsEditMode(false);
+        setAvatarPreview(null);
+        setSelectedAvatarFile(null);
       } else {
         console.error(
           "Error updating user data. Non-200 status code:",
@@ -121,6 +345,8 @@ const MainLinkingPage = () => {
 
   const handleCancelClick = () => {
     setIsEditMode(false);
+    setAvatarPreview(null);
+    setSelectedAvatarFile(null);
   };
 
   const handleInputChange = (field, value) => {
@@ -141,15 +367,44 @@ const MainLinkingPage = () => {
           <div className="md:col-span-2 flex justify-center">
             <div className="bg-white shadow-lg rounded-lg w-full max-w-sm">
               <div className="card-body p-6 flex flex-col items-center text-center">
-                <img
-                  src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                  alt="Admin"
-                  className="rounded-full mt-4"
-                  width="150"
-                />
+                <div className="relative mt-4 inline-block group">
+                  <img
+                    src={getAvatarUrl()}
+                    alt="Profile"
+                    className="rounded-full w-[150px] h-[150px] object-cover border-4 border-gray-200 transition-opacity group-hover:opacity-80"
+                  />
+                  <button
+                    onClick={handleAvatarClick}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onMouseUp={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    className="absolute bottom-0 right-0 bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white rounded-full shadow-2xl transition-all z-30 border-2 border-white hover:scale-110 cursor-pointer flex items-center justify-center w-11 h-11"
+                    type="button"
+                    aria-label="Change profile photo"
+                  >
+                    <Camera className="w-5 h-5 text-white" />
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                  />
+                </div>
                 <h4 className="text-lg font-semibold mt-4">
                   {user?.first_name || "N/A"} {user?.last_name || "N/A"}
                 </h4>
+                {selectedAvatarFile && (
+                  <p className="text-sm text-purple-600 mt-2 font-medium">
+                    New photo selected - Click Save to update
+                  </p>
+                )}
                 <div className="mt-4 w-full">
                   <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
                     <LinkPageDialogue />

@@ -16,11 +16,30 @@ export default function MakeReservation({ restrauntDetail }) {
   const { toast } = useToast();
   const [reservationCard, setReservationCard] = useState();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    reservation_covers: null,
-    reservation_date: null,
-    reservation_time: null,
-  });
+  
+  // Initialize formData from localStorage if available (filter search data)
+  const getInitialFormData = () => {
+    const savedFormData = localStorage.getItem("searchFormData");
+    if (savedFormData) {
+      try {
+        const parsed = JSON.parse(savedFormData);
+        return {
+          reservation_covers: parsed.reservation_covers || parsed.persons || 2,
+          reservation_date: parsed.reservation_date || parsed.date || null,
+          reservation_time: parsed.reservation_time || null,
+        };
+      } catch (e) {
+        console.error("Error parsing saved form data:", e);
+      }
+    }
+    return {
+      reservation_covers: null,
+      reservation_date: null,
+      reservation_time: null,
+    };
+  };
+  
+  const [formData, setFormData] = useState(getInitialFormData());
   const [error, setError] = useState("");
   const [nextData, setNextData] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -354,27 +373,43 @@ export default function MakeReservation({ restrauntDetail }) {
 
     const fetchResyTimeSlots = async () => {
     setLoading(true);
+    
+    // Extract parameters from reservationCard - support both old and new structure
+    const venueId = reservationCard?.results?.resy2?.id?.resy || 
+                    reservationCard?.id?.resy || 
+                    reservationCard?.results?.venues[0]?.venue?.id?.resy;
+    const location = reservationCard?.results?.resy2?.location?.url_slug || 
+                     reservationCard?.location?.url_slug;
+    const urlSlug = reservationCard?.results?.resy2?.url_slug || 
+                    reservationCard?.url_slug;
+    
     const resyTimeParams = {
-      venue_id: reservationCard?.results?.venues[0]?.venue?.id?.resy,
+      venue_id: venueId,
       date: formData?.reservation_date,
       persons: formData?.reservation_covers,
+      ...(location && { location }),
+      ...(urlSlug && { url_slug: urlSlug }),
     };
+    
     try {
       const response = await axios.get(
-        `${Base_Url}/api/v1/resy/get_restaurant_details?`,
+        `${Base_Url}/api/v1/resy/get_restaurant_details_v2?`,
         {
           params: resyTimeParams,
         }
       );
 
-      if (response.status === 200) {
-        setTimeSlots(
-          response?.data?.data?.results?.venues[0]?.slots
-        );
+      if (response.status === 200 && response?.data?.success) {
+        // New API structure: slots might be in results.venues[0].slots or data.slots
+        // Try both structures for backward compatibility
+        const slots = response?.data?.data?.results?.venues?.[0]?.slots || 
+                      response?.data?.data?.slots || 
+                      [];
+        setTimeSlots(slots);
         setLoading(false);
         setIsDataLoaded(true);
       } else {
-        setLoading(fasle);
+        setLoading(false);
         throw new Error("Network response was not ok.");
       }
     } catch (error) {
@@ -483,6 +518,26 @@ export default function MakeReservation({ restrauntDetail }) {
     };
 
 
+    const handlenotimeslots = () => {
+      console.log("no time slots available" , reservationCard);
+      if (reservationCard?.restaurant_type === "yelp") {
+        window.location.href = `https://www.yelp.com/biz/${reservationCard?.alias}?osq=${reservationCard?.name}`;
+      }
+      else if (reservationCard?.restaurant_type === "open_table") {
+        window.location.href = `https://www.opentable.com/r/${reservationCard?.url_slug}`;
+      }
+      else if (reservationCard?.restaurant_type === "resy") {
+        window.location.href = `${reservationCard?.links?.web}`;
+      }
+      else if (reservationCard?.restaurant_type === "tableagent" || reservationCard?.restaurant_type === "tock") {
+        window.location.href = `${reservationCard?.url}`;
+      }
+      else{
+        window.location.href = `https://www.google.com/search?q=${reservationCard?.name}`;
+      }
+    };
+
+
   return (
     <>
     <div className="overflow-hidden">
@@ -494,22 +549,22 @@ export default function MakeReservation({ restrauntDetail }) {
       
     <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
         <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Date</span>
-            <DatePicker setFormData={setFormData} />
+            <DatePicker setFormData={setFormData} initialDate={formData.reservation_date} />
           </div>
 
           <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
         <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Time</span>
-            <Time setFormData={setFormData} />
+            <Time setFormData={setFormData} initialTime={formData.reservation_time} />
           </div>
 
           <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
         <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Guests</span>
-            <PersonCard setFormData={setFormData} />
+            <PersonCard setFormData={setFormData} initialGuests={formData.reservation_covers} />
           </div>
 
           <div className="w-full md:w-auto">
             <button
-              onClick={handleTimeSlots}
+              onClick={handlenotimeslots}
               className="bg-plum px-4 py-2 text-white rounded-full w-full md:w-auto"
             >
               Find a Table
@@ -544,7 +599,8 @@ export default function MakeReservation({ restrauntDetail }) {
                                   hour: "2-digit",
                                   minute: "2-digit",
                                 })} */}
-                                {isCheckingConflicts ? "Checking..." : data.formatted_time}
+                                {/* {isCheckingConflicts ? "Checking..." : data.formatted_time} */}
+                                {data.formatted_time}
                               </button>
                             ))}
                         </div>
@@ -567,10 +623,14 @@ export default function MakeReservation({ restrauntDetail }) {
                                 onClick={() => !isCheckingConflicts && handleOpenTableReservation(data)}
                                 disabled={isCheckingConflicts}
                               >
-                                {isCheckingConflicts ? "Checking..." : convertOffsetToTime(
+                                {convertOffsetToTime(
                                   data.timeOffsetMinutes,
                                   formData?.reservation_time
                                 )}
+                                {/* {isCheckingConflicts ? "Checking..." : convertOffsetToTime(
+                                  data.timeOffsetMinutes,
+                                  formData?.reservation_time
+                                )} */}
                               </button>
                             ))}
                         </div>

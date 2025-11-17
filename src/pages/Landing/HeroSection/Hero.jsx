@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { IoIosSend } from "react-icons/io";
-
 import useLocation from "@/services/useLocation";
 import GeoApiAuto from "@/components/home/HomeAutoComplete";
 import { useToast } from "@/components/ui/use-toast";
@@ -44,6 +43,8 @@ export default function Hero() {
       reservation_time: getCurrentTime(),
       location: "",
       term: "",
+      latitude: "",
+      longitude: "",
     };
   };
 
@@ -52,7 +53,17 @@ export default function Hero() {
 
   const getLocationData = (value) => {
     setFormData((prevData) => {
-      const updatedData = { ...prevData, location: value };
+      // Handle both string and object with coordinates
+      const locationString = typeof value === 'string' ? value : value?.location || value;
+      const latitude = typeof value === 'object' && value?.latitude ? value.latitude : null;
+      const longitude = typeof value === 'object' && value?.longitude ? value.longitude : null;
+      
+      const updatedData = { 
+        ...prevData, 
+        location: locationString,
+        latitude: latitude || prevData.latitude || "",
+        longitude: longitude || prevData.longitude || ""
+      };
       localStorage.setItem("searchFormData", JSON.stringify(updatedData));
       return updatedData;
     });

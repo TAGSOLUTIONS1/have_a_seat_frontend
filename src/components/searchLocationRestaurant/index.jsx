@@ -13,6 +13,7 @@ import { BsCalendarDateFill } from "react-icons/bs";
 import { IoTime } from "react-icons/io5";
 import { Sliders } from "lucide-react";
 import { FaCheck } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
 import { ImFilter } from "react-icons/im";
 import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
@@ -42,7 +43,9 @@ const SearchLocationV2 = memo(
     onCuisineChange,
     onReviewChange,
     onShowMore,
-    onClearFilters
+    onClearFilters,
+    userStatistics,
+    filtersFromPreferences
   }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -85,8 +88,18 @@ const SearchLocationV2 = memo(
   }, []);
 
   const getLocationData = (value) => {
-    const firstWord = value.split(",")[0].trim();
-    setFormData((prevData) => ({ ...prevData, location: firstWord }));
+    // Handle both string and object with coordinates
+    const locationString = typeof value === 'string' ? value : value?.location || value;
+    const firstWord = locationString.split(",")[0].trim();
+    const latitude = typeof value === 'object' && value?.latitude ? value.latitude : null;
+    const longitude = typeof value === 'object' && value?.longitude ? value.longitude : null;
+    
+    setFormData((prevData) => ({ 
+      ...prevData, 
+      location: firstWord,
+      latitude: latitude || prevData.latitude || "",
+      longitude: longitude || prevData.longitude || ""
+    }));
   };
 
   const handleSearch = () => {
@@ -314,6 +327,10 @@ const SearchLocationV2 = memo(
     const fillallcuisines = () => {
       const extractedCuisines = new Set(cuisinestypes);
       
+      // Add favorite cuisines from user stats if available
+      const favoriteCuisines = userStatistics?.most_common_cuisine_types || [];
+      favoriteCuisines.forEach(cuisine => extractedCuisines.add(cuisine));
+      
       filteredRestaurants.forEach((restaurant) => {
         if (restaurant.primaryCuisine?.name) {
           extractedCuisines.add(restaurant.primaryCuisine.name );
@@ -332,8 +349,35 @@ const SearchLocationV2 = memo(
       });
     };
   
-
-    const displayedCuisines = showmore ? allCuisines : cuisinestypes;
+    // Get favorite cuisines from user stats
+    const favoriteCuisines = userStatistics?.most_common_cuisine_types || [];
+    
+    // Prepare displayed cuisines with favorites at top
+    const prepareDisplayedCuisines = () => {
+      const baseCuisines = showmore ? allCuisines : cuisinestypes;
+      const cuisineSet = new Set(baseCuisines);
+      
+      // Add favorite cuisines if not present
+      favoriteCuisines.forEach(cuisine => cuisineSet.add(cuisine));
+      
+      const allCuisinesList = Array.from(cuisineSet);
+      
+      // Sort: favorites first, then others
+      return allCuisinesList.sort((a, b) => {
+        const aIsFavorite = favoriteCuisines.includes(a);
+        const bIsFavorite = favoriteCuisines.includes(b);
+        if (aIsFavorite && !bIsFavorite) return -1;
+        if (!aIsFavorite && bIsFavorite) return 1;
+        return a.localeCompare(b);
+      });
+    };
+    
+    const displayedCuisines = prepareDisplayedCuisines();
+    
+    // Check if a cuisine is favorite
+    const isFavoriteCuisine = (cuisine) => {
+      return favoriteCuisines.includes(cuisine);
+    };
 
     const handleCheckboxChange = (type) => {
       const newSelectedTypes = selectedTypes.includes(type)
@@ -345,14 +389,14 @@ const SearchLocationV2 = memo(
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="w-full max-w-[990px] mx-auto bg-lightGrey rounded-lg md:rounded-[3rem] p-4 md:py-4 md:px-6 flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center">
+      <div className="w-full max-w-[1550px] mx-auto bg-white rounded-2xl md:rounded-[3rem] shadow-lg border border-gray-100 p-4 md:py-5 md:px-8 flex flex-col md:flex-row gap-4 md:gap-6 items-stretch md:items-center">
         {/* Location */}
-        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
-          <MdLocationOn size={24} color="#9235E2" className="mr-2" />
+        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 flex-1 min-w-0">
+          <MdLocationOn size={24} color="#9235E2" className=" flex-shrink-0" />
           <div
-            className={`text-base font-roboto font-normal z-10 w-full text-black ${
-              error ? "border-red-500" : "border-gray-200"
-            } focus:border-gray-200 focus:outline-none`}
+            className={`text-sm md:text-base font-roboto font-normal z-10 w-full text-shipGrey ${
+              error ? "border-red-500" : ""
+            }`}
           >
             <GeoApiAuto
               getLocationData={getLocationData}
@@ -362,58 +406,57 @@ const SearchLocationV2 = memo(
         </div>
 
         {/* Restaurant/Cuisine */}
-        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 text-black pr-2 flex-1">
-          <MdOutlineRestaurantMenu size={22} color="#9235E2" className="mr-2" />
+        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 text-shipGrey md:pr-4 flex-1 min-w-0">
+          <MdOutlineRestaurantMenu size={22} color="#9235E2" className="mr-3 flex-shrink-0" />
           <TermApiAuto getTermData={handleTermChange} />
         </div>
 
         {/* Date */}
-        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
-              <BsCalendarDateFill size={18} color="#9235E2" className="mr-2" />
-              <DatePicker
-                selected={new Date(formData.date)}
-                onChange={(date) =>
-                  handleInputChange("date","reservation_date", date.toISOString().split("T")[0])
-                }
-                dateFormat="yyyy-MM-dd"
-                className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
-                onKeyDown={(e) => e.preventDefault()}
-                // calendarStartDay={0}
-                placeholderText="Select a date"
-              />
-            </div>
+        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 md:pr-4 flex-1 min-w-0">
+          <BsCalendarDateFill size={20} color="#9235E2" className="mr-3 flex-shrink-0" />
+          <DatePicker
+            selected={new Date(formData.date)}
+            onChange={(date) =>
+              handleInputChange("date","reservation_date", date.toISOString().split("T")[0])
+            }
+            dateFormat="MMM dd, yyyy"
+            className="text-sm md:text-base w-full text-shipGrey font-roboto focus:outline-none bg-transparent cursor-pointer"
+            onKeyDown={(e) => e.preventDefault()}
+            placeholderText="Select date"
+            wrapperClassName="w-full"
+          />
+        </div>
         
-        
-        
-            <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 pr-2 flex-1">
-                <IoTime size={20} color="#9235E2" className="mr-2" />
-                <DatePicker
-                  selected={new Date(`${formData.date}T${formData.reservation_time}`)}
-                  onChange={(date) =>
-                        handleInputChange(
-                          "reservation_time",
-                          "reservation_time",
-                          date.toTimeString().slice(0, 5)
-                        )
-                      }
-                  showTimeSelect
-                  showTimeSelectOnly
-                  timeIntervals={15}
-                  timeCaption="Time"
-                  dateFormat="HH:mm"
-                  className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
-                  onKeyDown={(e) => e.preventDefault()}
-                  placeholderText="Select time"
-                />
-              </div>
-        
+        {/* Time */}
+        <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 md:pr-4 flex-1 min-w-0">
+          <IoTime size={22} color="#9235E2" className="mr-3 flex-shrink-0" />
+          <DatePicker
+            selected={new Date(`${formData.date}T${formData.reservation_time}`)}
+            onChange={(date) =>
+              handleInputChange(
+                "reservation_time",
+                "reservation_time",
+                date.toTimeString().slice(0, 5)
+              )
+            }
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="h:mm aa"
+            className="text-sm md:text-base w-full text-shipGrey font-roboto focus:outline-none bg-transparent cursor-pointer"
+            onKeyDown={(e) => e.preventDefault()}
+            placeholderText="Select time"
+            wrapperClassName="w-full"
+          />
+        </div>
 
         {/* Persons */}
-        <div className="flex items-center border-b md:border-b-0 border-gray-200 pr-2 flex-1">
+        <div className="flex items-center border-b md:border-b-0 border-gray-200 md:pr-4 flex-1 min-w-0">
           <select
             value={formData.persons}
-            onChange={(e) => handleInputChange("persons", e.target.value)}
-            className="text-sm w-full text-slate-400 focus:outline-none bg-transparent"
+            onChange={(e) => handleInputChange("persons", "reservation_covers", e.target.value)}
+            className="text-sm md:text-base w-full text-shipGrey font-roboto focus:outline-none bg-transparent cursor-pointer appearance-none"
           >
             {[...Array(10)].map((_, i) => (
               <option key={i + 1} value={i + 1}>
@@ -424,32 +467,41 @@ const SearchLocationV2 = memo(
         </div>
 
         {/* Search Button */}
-        <div className="flex items-center justify-center mt-2 md:mt-0">
+        <div className="flex items-center justify-center pt-2 md:pt-0">
           <button
-            className="bg-plum hover:bg-purple-800 transition p-3 md:p-4 rounded-full text-white"
+            className="bg-plum hover:bg-purple-700 active:bg-purple-800 transition-all duration-200 p-3 md:p-4 rounded-full text-white shadow-md hover:shadow-lg transform hover:scale-105"
             onClick={handleSearch}
+            aria-label="Search restaurants"
           >
-            <CiSearch className="w-4 h-4 md:w-5 md:h-5" />
+            <CiSearch className="w-5 h-5 md:w-6 md:h-6" />
           </button>
         </div>
-
       </div>
 
-      <div className="flex text-[10px] md:text-base items-center justify-center">
-        <div className="max-w-sm m-auto font-pt my-3 flex">
+      <div className="flex text-xs md:text-sm items-center justify-center text-shipGrey">
+        <div className="max-w-sm m-auto font-roboto my-2 md:my-3 flex">
           <LocationTracker onLocationUpdate={handleLocationUpdate} />
         </div>
       </div>
 
       {isSidebarOpen && (
-          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 z-40">
-          <div className="fixed top-0 left-0 w-[85%] h-full bg-white shadow-lg z-50 p-4 overflow-y-auto max-h-screen">
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-40 animate-in fade-in duration-200" onClick={toggleSidebar}>
+          <div className="fixed top-0 left-0 w-[85%] sm:w-[400px] h-full bg-white shadow-2xl z-50 p-5 sm:p-6 overflow-y-auto animate-in slide-in-from-left duration-300" onClick={(e) => e.stopPropagation()}>
 
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">Filters</h2>
+            <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <ImFilter color="#9235E2" size={24} />
+                <h2 className="text-xl font-agrandir font-bold text-shipGrey">Filters</h2>
+                {(ratings.length + cuisinefilter.length + reviewedFilter.length) > 0 && (
+                  <span className="bg-plum text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                    {ratings.length + cuisinefilter.length + reviewedFilter.length}
+                  </span>
+                )}
+              </div>
               <button
-                className="text-2xl font-bold text-gray-600 hover:text-black"
+                className="text-3xl font-bold text-gray-400 hover:text-gray-700 transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100"
                 onClick={toggleSidebar}
+                aria-label="Close filters"
               >
                 ×
               </button>
@@ -473,7 +525,7 @@ const SearchLocationV2 = memo(
 
                   <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
                 
-                  <div className="flex justify-between">
+                  <div className="flex flex-wrap gap-x-4 gap-y-3">
                                
                                <div className="flex gap-2 sm:gap-3 items-center">
                                   <label className="relative">
@@ -525,6 +577,40 @@ const SearchLocationV2 = memo(
                                     </span>
                                   </label>
                                   <p className="font-agrandir text-sm font-bold text-white uppercase">Open Table</p>
+                                </div>
+
+                                <div className="flex gap-2 sm:gap-3 items-center">
+                                  <label className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedTypes.includes("tock")}
+                                      onChange={() => handleCheckboxChange("tock")}
+                                      className="hidden peer"
+                                    />
+                                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                                      {selectedTypes.includes("tock") && (
+                                        <FaCheck size={14} color="#9235e2" />
+                                      )}
+                                    </span>
+                                  </label>
+                                  <p className="font-agrandir text-sm font-bold text-white uppercase">TOCK</p>
+                                </div>
+
+                                <div className="flex gap-2 sm:gap-3 items-center">
+                                  <label className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedTypes.includes("tableagent")}
+                                      onChange={() => handleCheckboxChange("tableagent")}
+                                      className="hidden peer"
+                                    />
+                                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                                      {selectedTypes.includes("tableagent") && (
+                                        <FaCheck size={14} color="#9235e2" />
+                                      )}
+                                    </span>
+                                  </label>
+                                  <p className="font-agrandir text-sm font-bold text-white uppercase">TABLE AGENT</p>
                                 </div>
                 
                             </div>
@@ -628,7 +714,12 @@ const SearchLocationV2 = memo(
                                     {cuisinefilter.includes(cuisine) && <FaCheck size={13} color="#9235e2" />}
                                   </span>
                                 </label>
-                                <p className="font-roboto font-medium text-sm text-white">{cuisine}</p>
+                                <div className="flex items-center gap-2">
+                                  <p className="font-roboto font-medium text-sm text-white">{cuisine}</p>
+                                  {isFavoriteCuisine(cuisine) && (
+                                    <FaHeart size={14} color="#FFD700" className="ml-1" />
+                                  )}
+                                </div>
                               </div>
                             ))}
                 
@@ -646,13 +737,18 @@ const SearchLocationV2 = memo(
         </div>
         )}
 
-      <div className="lg:hidden flex justify-center">
+      <div className="lg:hidden flex justify-center mt-2">
           <button
-            className="lg:block bg-plum text-white font-inter px-8 p-1 rounded-full shadow-md"
+            className="inline-flex items-center gap-2 bg-plum hover:bg-purple-700 text-white font-roboto font-medium px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
             onClick={toggleSidebar}
           >
-            <Sliders size={15} className="inline-block mr-2" />
+            <Sliders size={18} className="inline-block" />
             Filters
+            {(ratings.length + cuisinefilter.length + reviewedFilter.length) > 0 && (
+              <span className="bg-white text-plum text-xs font-bold px-2 py-0.5 rounded-full">
+                {ratings.length + cuisinefilter.length + reviewedFilter.length}
+              </span>
+            )}
           </button>
       </div>
 
