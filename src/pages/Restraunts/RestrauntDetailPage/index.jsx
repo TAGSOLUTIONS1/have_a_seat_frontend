@@ -17,7 +17,7 @@ const RestrauntDetail = () => {
   const [key, setKey] = useState();
   const today = new Date();
   const formattedDate = today.toISOString().split('T')[0];
-  console.log("restrauntDetail", restrauntDetail);
+  // console.log("restrauntDetail", restrauntDetail);
   const location = useLocation();
 
   useEffect(() => {

@@ -518,6 +518,26 @@ export default function MakeReservation({ restrauntDetail }) {
     };
 
 
+    const handlenotimeslots = () => {
+      console.log("no time slots available" , reservationCard);
+      if (reservationCard?.restaurant_type === "yelp") {
+        window.location.href = `https://www.yelp.com/biz/${reservationCard?.alias}?osq=${reservationCard?.name}`;
+      }
+      else if (reservationCard?.restaurant_type === "open_table") {
+        window.location.href = `https://www.opentable.com/r/${reservationCard?.url_slug}`;
+      }
+      else if (reservationCard?.restaurant_type === "resy") {
+        window.location.href = `${reservationCard?.links?.web}`;
+      }
+      else if (reservationCard?.restaurant_type === "tableagent" || reservationCard?.restaurant_type === "tock") {
+        window.location.href = `${reservationCard?.url}`;
+      }
+      else{
+        window.location.href = `https://www.google.com/search?q=${reservationCard?.name}`;
+      }
+    };
+
+
   return (
     <>
     <div className="overflow-hidden">
@@ -544,7 +564,7 @@ export default function MakeReservation({ restrauntDetail }) {
 
           <div className="w-full md:w-auto">
             <button
-              onClick={handleTimeSlots}
+              onClick={handlenotimeslots}
               className="bg-plum px-4 py-2 text-white rounded-full w-full md:w-auto"
             >
               Find a Table

@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function Restaurant({ restrauntDetail }) {
-  console.log("restrauntDetail  1  ", restrauntDetail);
+  // console.log("restrauntDetail  1  ", restrauntDetail);
   // const getRandomKey = (obj) => {
   //   const keys = Object.keys(obj);
   //   const randomKey = keys[Math.floor(Math.random() * keys.length)];

@@ -98,7 +98,7 @@ export default function Reviews({ restrauntDetail }) {
 
   return (
     <div className="">
-       {console.log("restrauntDetail  1  ", restrauntDetail)}
+       {/* {console.log("restrauntDetail  1  ", restrauntDetail)} */}
       {restrauntDetail?.restaurant_type!=="resy" ?
       (
         <div className=" py-8 lg:flex gap-10">
