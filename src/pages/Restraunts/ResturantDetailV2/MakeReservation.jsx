@@ -393,7 +393,7 @@ export default function MakeReservation({ restrauntDetail }) {
     
     try {
       const response = await axios.get(
-        `${Base_Url}/api/v1/resy/get_restaurant_details_v2?`,
+        `${Base_Url}/api/v1/resy/get_restaurant_details?`,
         {
           params: resyTimeParams,
         }
@@ -564,7 +564,7 @@ export default function MakeReservation({ restrauntDetail }) {
 
           <div className="w-full md:w-auto">
             <button
-              onClick={handlenotimeslots}
+              onClick={reservationCard?.restaurant_type === "resy" ? handleTimeSlots : handlenotimeslots}
               className="bg-plum px-4 py-2 text-white rounded-full w-full md:w-auto"
             >
               Find a Table

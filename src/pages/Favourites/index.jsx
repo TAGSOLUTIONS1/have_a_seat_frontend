@@ -159,7 +159,8 @@ const Favourites = () => {
               const urlSlug = venueData?.url_slug || responseData?.url_slug;
               
               // Call v2 API with proper parameters
-              let v2Data = {};
+              let v2ResponseData = {};
+              let v2VenueData = {};
               if (locationSlug && urlSlug) {
                 try {
                   const v2Params = new URLSearchParams({
@@ -170,17 +171,19 @@ const Favourites = () => {
                     url_slug: urlSlug,
                   });
                   const v2Resp = await axios.get(
-                    `${Base_Url}/api/v1/resy/get_restaurant_details_v2?${v2Params.toString()}`
+                    `${Base_Url}/api/v1/resy/get_restaurant_details?${v2Params.toString()}`
                   );
-                  v2Data = v2Resp?.data?.data || {};
+                  v2ResponseData = v2Resp?.data?.data || {};
+                  // Extract venue data from nested structure: data.results.venues[0].venue
+                  v2VenueData = v2ResponseData?.results?.venues?.[0]?.venue || {};
                 } catch (error) {
                   console.error("Error fetching v2 data:", error);
                   // Fall back to using data from first response
                 }
               }
               
-              // Use v2 data if available, otherwise fall back to original response
-              const finalVenueData = v2Data || venueData;
+              // Use v2 venue data if available, otherwise fall back to original response
+              const finalVenueData = v2VenueData && Object.keys(v2VenueData).length > 0 ? v2VenueData : venueData;
               
               // Convert venue_id string back to number for id.resy structure
               const resyIdNum = parseInt(venueId, 10);
@@ -210,10 +213,10 @@ const Favourites = () => {
                   image_url: imageUrl,
                   // Cuisine as array
                   cuisine: cuisine,
-                  // Rating structure
+                  // Rating structure - rating is directly on venue object in v2 API
                   rating: {
-                    average: finalVenueData?.rater?.[0]?.score || finalVenueData?.rating || 0,
-                    total: finalVenueData?.rater?.[0]?.total || finalVenueData?.total_ratings || 0
+                    average: finalVenueData?.rating || 0,
+                    total: finalVenueData?.total_ratings || 0
                   },
                   // Location structure for address display
                   locality: finalVenueData?.location?.neighborhood || "",
