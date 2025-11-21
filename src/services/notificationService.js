@@ -14,25 +14,51 @@ class NotificationService {
     };
   }
 
-  // GET User Notifications
-  async getNotifications(authState, page = 1, size = 20, unreadOnly = false) {
+  // GET User Notifications (with pagination using limit/offset)
+  async getNotifications(authState, limit = 50, offset = 0) {
     try {
       const params = new URLSearchParams({
-        page: page.toString(),
-        size: size.toString()
+        limit: limit.toString(),
+        offset: offset.toString()
       });
-      
-      if (unreadOnly) {
-        params.append('unread_only', 'true');
-      }
 
       const response = await axios.get(
-        `${this.baseURL}/api/v1/notifications?${params}`,
+        `${this.baseURL}/api/v1/notifications/?${params}`,
+        { headers: this.getAuthHeaders(authState) }
+      );
+      // API returns array directly
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      throw error;
+    }
+  }
+
+  // GET Unread Notifications
+  async getUnreadNotifications(authState) {
+    try {
+      const response = await axios.get(
+        `${this.baseURL}/api/v1/notifications/unread/`,
+        { headers: this.getAuthHeaders(authState) }
+      );
+      // API returns array directly
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching unread notifications:', error);
+      throw error;
+    }
+  }
+
+  // GET Notification Count
+  async getNotificationCount(authState) {
+    try {
+      const response = await axios.get(
+        `${this.baseURL}/api/v1/notifications/count/`,
         { headers: this.getAuthHeaders(authState) }
       );
       return response.data;
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      console.error('Error fetching notification count:', error);
       throw error;
     }
   }
@@ -55,7 +81,7 @@ class NotificationService {
   async markAsRead(authState, notificationId) {
     try {
       const response = await axios.patch(
-        `${this.baseURL}/api/v1/notifications/${notificationId}/read`,
+        `${this.baseURL}/api/v1/notifications/${notificationId}/read/`,
         {},
         { headers: this.getAuthHeaders(authState) }
       );
@@ -70,7 +96,7 @@ class NotificationService {
   async markAllAsRead(authState) {
     try {
       const response = await axios.patch(
-        `${this.baseURL}/api/v1/notifications/read-all`,
+        `${this.baseURL}/api/v1/notifications/read-all/`,
         {},
         { headers: this.getAuthHeaders(authState) }
       );
@@ -81,14 +107,34 @@ class NotificationService {
     }
   }
 
-  // GET Notification Statistics
-  async getNotificationStats(authState) {
+  // DELETE Notification
+  async deleteNotification(authState, notificationId) {
     try {
-      const response = await axios.get(
-        `${this.baseURL}/api/v1/notifications/stats`,
+      const response = await axios.delete(
+        `${this.baseURL}/api/v1/notifications/${notificationId}/`,
         { headers: this.getAuthHeaders(authState) }
       );
       return response.data;
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+      throw error;
+    }
+  }
+
+  // GET Notification Statistics (legacy - uses count endpoint)
+  async getNotificationStats(authState) {
+    try {
+      // Use the count endpoint which returns unread_count and total_count
+      const response = await axios.get(
+        `${this.baseURL}/api/v1/notifications/count/`,
+        { headers: this.getAuthHeaders(authState) }
+      );
+      // Transform to match expected format
+      return {
+        unread_count: response.data.unread_count || 0,
+        total_notifications: response.data.total_count || 0,
+        total_count: response.data.total_count || 0
+      };
     } catch (error) {
       console.error('Error fetching notification stats:', error);
       throw error;
@@ -127,14 +173,61 @@ class NotificationService {
   // CREATE New Notification
   async createNotification(authState, notificationData) {
     try {
+      // Remove user_id from payload as it's automatically set from authenticated user
+      const { user_id, ...payload } = notificationData;
+      
       const response = await axios.post(
         `${this.baseURL}/api/v1/notifications/create/`,
-        notificationData,
+        payload,
         { headers: this.getAuthHeaders(authState) }
       );
       return response.data;
     } catch (error) {
       console.error('Error creating notification:', error);
+      throw error;
+    }
+  }
+
+  // REGISTER Device for Push Notifications
+  async registerDevice(authState, deviceData) {
+    try {
+      const response = await axios.post(
+        `${this.baseURL}/api/v1/notifications/register-device`,
+        deviceData,
+        { headers: this.getAuthHeaders(authState) }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error registering device:', error);
+      throw error;
+    }
+  }
+
+  // REGISTER Device (Legacy Endpoint)
+  async registerDeviceLegacy(authState, expoPushToken) {
+    try {
+      const response = await axios.post(
+        `${this.baseURL}/api/v1/notifications/register-device-legacy`,
+        { expo_push_token: expoPushToken },
+        { headers: this.getAuthHeaders(authState) }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error registering device (legacy):', error);
+      throw error;
+    }
+  }
+
+  // GET Device Status
+  async getDeviceStatus(authState) {
+    try {
+      const response = await axios.get(
+        `${this.baseURL}/api/v1/notifications/device-status`,
+        { headers: this.getAuthHeaders(authState) }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching device status:', error);
       throw error;
     }
   }

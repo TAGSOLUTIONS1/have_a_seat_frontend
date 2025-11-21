@@ -315,3 +315,121 @@ export const PostYelpReservation = async (reservationId, restaurantType, finalDa
       throw error;
     }
   };
+
+export const PostResyReservation = async (reservationId, restaurantType, finalData) => {
+    try {
+      if (!finalData) {
+        throw new Error("Final data is required for reservation creation");
+      }
+
+      // Extract data from Resy booking response
+      const bookingResponse = finalData?.bookingResponse;
+      const bookingDetails = finalData?.bookingDetails;
+      const formData = finalData?.formData;
+      const reservationDate = finalData?.reservationDate;
+      const selectedTimeSlot = finalData?.selectedTimeSlot;
+      const partySize = finalData?.partySize;
+
+      // Get venue information
+      const venue = bookingDetails?.venue || bookingResponse?.data?.venue;
+      const restaurantName = venue?.name || finalData?.restaurantName || 'Restaurant';
+      const restaurantId = venue?.id?.resy || venue?.id || finalData?.restaurantId || 'unknown';
+      const location = venue?.location;
+      const city = location?.locality || location?.city || 'Unknown';
+
+      // Format date and time
+      let formattedDate = reservationDate;
+      let formattedTime = null;
+      
+      if (selectedTimeSlot?.date?.start) {
+        try {
+          const timeDate = new Date(selectedTimeSlot.date.start);
+          if (!isNaN(timeDate.getTime())) {
+            const hours = timeDate.getHours().toString().padStart(2, '0');
+            const minutes = timeDate.getMinutes().toString().padStart(2, '0');
+            formattedTime = `${hours}:${minutes}`;
+          }
+        } catch (e) {
+          console.error("Error formatting time:", e);
+        }
+      }
+
+      // Format date as YYYY-MM-DD
+      if (formattedDate) {
+        if (formattedDate.includes('T')) {
+          formattedDate = formattedDate.split('T')[0];
+        } else if (typeof formattedDate === 'string' && formattedDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          // Already in YYYY-MM-DD format
+          formattedDate = formattedDate;
+        } else {
+          // Try to parse and format
+          const dateObj = new Date(formattedDate);
+          if (!isNaN(dateObj.getTime())) {
+            formattedDate = dateObj.toISOString().split('T')[0];
+          }
+        }
+      }
+
+      const DateAndTime = formattedTime && formattedDate ? `${formattedDate}T${formattedTime}` : formattedDate;
+
+      // Get reservation ID from booking response
+      const resyReservationId = reservationId || 
+                                bookingResponse?.data?.reservation_id || 
+                                bookingResponse?.data?.id ||
+                                'unknown';
+
+      // Calculate price from payment amounts if available
+      const paymentAmounts = bookingDetails?.payment?.amounts || bookingResponse?.data?.payment?.amounts;
+      const price = paymentAmounts?.total || paymentAmounts?.reservation_charge || 0;
+
+      // Get cuisine type from venue
+      const cuisineType = venue?.content?.find(c => c.name === "about")?.body ? 
+                         'Unknown' : 'Unknown'; // Resy doesn't always provide cuisine type
+
+      const requiredApiParams = {
+        reservation_id: resyReservationId,
+        reservation_type: restaurantType || "RESY",
+        reservation_status: "CONFIRMED",
+        reservation_date: DateAndTime,
+        restaurant_id: restaurantId.toString(),
+        restaurant_name: restaurantName,
+        location: city,
+        price: price,
+        num_diners: partySize || 2,
+        cuisine_type: cuisineType,
+        indoor_outdoor: "Indoor",
+      };
+
+      console.log('Creating Resy reservation for authenticated user:', requiredApiParams);
+      
+      // Get accessToken from localStorage
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        throw new Error("No access token found. User must be authenticated.");
+      }
+
+      const response = await axios.post(
+        `${API_URL}/reservation/create_reservation/`, 
+        null, 
+        {
+          params: requiredApiParams,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "application/json",
+          },
+        }
+      );
+      
+      // ✅ Trigger notification for successful backend save
+      if (response.status === 200 || response.status === 201) {
+        console.log('Resy reservation saved to backend successfully');
+        return { success: true, data: response.data };
+      } else {
+        throw new Error(`Unexpected response status: ${response.status}`);
+      }
+      
+    } catch (error) {
+      console.error("Error creating Resy reservation:", error);
+      throw error;
+    }
+  };

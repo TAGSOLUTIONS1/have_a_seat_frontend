@@ -149,7 +149,7 @@ const Favourites = () => {
               
               // First, get basic data to extract location and url_slug
               const detailsResp = await axios.get(
-                `${Base_Url}/api/v1/resy/get_restaurant_details?venue_id=${venueId}&persons=2&date=${formattedDate}`
+                `https://have-a-seatonline.com/api/v1/resy/get_restaurant_details?venue_id=${venueId}&persons=2&date=${formattedDate}`
               );
               const responseData = detailsResp?.data?.data || {};
               
@@ -171,7 +171,7 @@ const Favourites = () => {
                     url_slug: urlSlug,
                   });
                   const v2Resp = await axios.get(
-                    `${Base_Url}/api/v1/resy/get_restaurant_details?${v2Params.toString()}`
+                    `https://have-a-seatonline.com/api/v1/resy/get_restaurant_details?${v2Params.toString()}`
                   );
                   v2ResponseData = v2Resp?.data?.data || {};
                   // Extract venue data from nested structure: data.results.venues[0].venue

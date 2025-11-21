@@ -9,11 +9,15 @@ import Time from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Time";
 import PersonCard from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Person";
 import GuestSignInModal from "@/components/common/GuestSignInModal";
 import ReservationConflictModal from "@/components/common/ReservationConflictModal";
+import ResyDetailsModal from "@/components/common/ResyDetailsModal";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { useToast } from "@/components/ui/use-toast";
+import { useNotificationToast } from '@/hooks/useNotificationToast';
+import { PostResyReservation } from "@/services/reservationwithemail";
 export default function MakeReservation({ restrauntDetail }) {
   const { authState } = useAuth();
   const { toast } = useToast();
+  const { showNotification } = useNotificationToast();
   const [reservationCard, setReservationCard] = useState();
   const [loading, setLoading] = useState(false);
   
@@ -393,7 +397,7 @@ export default function MakeReservation({ restrauntDetail }) {
     
     try {
       const response = await axios.get(
-        `${Base_Url}/api/v1/resy/get_restaurant_details?`,
+        `https://have-a-seatonline.com/api/v1/resy/get_restaurant_details?`,
         {
           params: resyTimeParams,
         }
@@ -466,19 +470,15 @@ export default function MakeReservation({ restrauntDetail }) {
 };
 
 
-    const [showModal, setShowModal] = useState(false);
+    const [showResyDetailsModal, setShowResyDetailsModal] = useState(false);
     const [selectedResySlot, setSelectedResySlot] = useState(null);
 
     const handleResyClick = (clickedData) => {
       setSelectedTimeSlot(clickedData);
       setSelectedReservationType('resy');
-      setShowGuestModal(true);
-    };
-
-    // Close modal handler
-    const closeModal = () => {
-      setShowModal(false);
-      setSelectedResySlot(null);
+      // For Resy, always show the details modal directly
+      setSelectedResySlot(restrauntDetail?.results?.resy2);
+      setShowResyDetailsModal(true);
     };
 
     // Handle guest continuation
@@ -511,10 +511,111 @@ export default function MakeReservation({ restrauntDetail }) {
         navigate(route);
         setFormData("");
       } else if (selectedReservationType === 'resy') {
-        // For Resy, show the existing Resy modal
+        // For Resy, show the Resy details modal
         setSelectedResySlot(restrauntDetail?.results?.resy2);
-        setShowModal(true);
+        setShowResyDetailsModal(true);
       }
+    };
+
+    // Handle Resy details save
+    const handleResyDetailsSave = async (details, saveForFuture) => {
+      console.log("Resy details saved:", details, saveForFuture);
+      
+      const bookingResponse = details?.bookingResponse;
+      const bookingDetails = details?.bookingDetails;
+      // Use reservationDate from details if available, otherwise from formData
+      const reservationDate = details?.reservationDate || formData?.reservation_date;
+      // Use selectedTimeSlot from details if available, otherwise from state
+      const timeSlot = details?.selectedTimeSlot || selectedTimeSlot;
+      // Use partySize from details if available, otherwise from formData
+      const partySize = details?.partySize || formData?.reservation_covers;
+      
+      // Extract reservation ID from booking response
+      const reservationId = bookingResponse?.data?.reservation_id || 
+                           bookingResponse?.data?.id ||
+                           bookingResponse?.data?.data?.reservation_id ||
+                           bookingResponse?.reservation_id ||
+                           null;
+
+      // Get restaurant name
+      const venue = bookingDetails?.venue || bookingResponse?.data?.venue;
+      const restaurantName = venue?.name || reservationCard?.name || reservationCard?.results?.resy2?.name || 'Restaurant';
+      
+      // Format time for display
+      const formattedTime = timeSlot?.date?.start ? 
+        new Date(timeSlot.date.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 
+        null;
+      
+      // Show notification for successful booking
+      if (bookingResponse?.success) {
+        showNotification(
+          'reservation_confirmation',
+          'Reservation Confirmed! 🎉',
+          `Your table at ${restaurantName} is confirmed for ${reservationDate}${formattedTime ? ' at ' + formattedTime : ''}`,
+          {
+            restaurant_name: restaurantName,
+            reservation_date: reservationDate,
+            reservation_time: formattedTime,
+            num_diners: partySize || 2,
+            reservation_id: reservationId?.toString() || 'unknown',
+            reservation_type: 'RESY'
+          }
+        );
+      }
+
+      // Save to backend if user is authenticated
+      if (authState?.isAuthenticated && reservationId) {
+        try {
+          const finalData = {
+            bookingResponse: { success: bookingResponse?.success, data: bookingResponse },
+            bookingDetails: bookingDetails,
+            formData: details,
+            reservationDate: reservationDate,
+            selectedTimeSlot: timeSlot,
+            partySize: partySize,
+            restaurantName: restaurantName,
+            restaurantId: reservationCard?.id?.resy || reservationCard?.results?.resy2?.id?.resy || null,
+          };
+
+          const reservationResult = await PostResyReservation(reservationId, "RESY", finalData);
+          console.log("Backend reservation result:", reservationResult);
+          if (reservationResult?.success) {
+            console.log("Resy reservation successfully saved to backend");
+          } else {
+            console.error("Failed to save Resy reservation to backend");
+          }
+        } catch (error) {
+          console.error("Error saving Resy reservation to backend:", error);
+          showNotification(
+            'reservation_cancellation',
+            'Backend Save Failed ⚠️',
+            'Your reservation was created successfully, but there was an issue saving it to your account. Please contact support.',
+            {
+              error: error.message,
+              reservation_type: 'RESY'
+            }
+          );
+        }
+      }
+
+      // Close the modal
+      setShowResyDetailsModal(false);
+      setSelectedResySlot(null);
+      setSelectedTimeSlot(null);
+    };
+
+    // Handle Resy details skip
+    const handleResyDetailsSkip = () => {
+      console.log("Skipping Resy details" , reservationCard);
+      // Just redirect to Resy without saving
+      if (reservationCard?.links?.web) {
+        window.open(reservationCard?.links?.web, '_blank', 'noopener,noreferrer');
+      }
+      else{
+        window.open(`https://resy.com/cities/${reservationCard?.location?.url_slug}/venues/${reservationCard?.url_slug}`, '_blank', 'noopener,noreferrer');
+      }
+      setShowResyDetailsModal(false);
+      setSelectedResySlot(null);
     };
 
 
@@ -672,46 +773,21 @@ export default function MakeReservation({ restrauntDetail }) {
       </div>
       </div>
 
-      {showModal && selectedResySlot && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-          onClick={closeModal}
-        >
-          <div
-            className="bg-white p-6 rounded shadow-lg text-center max-w-sm relative"
-            onClick={e => e.stopPropagation()}
-          >
-            <button
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-xl"
-              onClick={closeModal}
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <p className="text-lg font-semibold mb-4">
-              Redirect to Resy
-            </p>
-            <p className="text-sm text-gray-600 mb-4">
-              Have a seat development is underway. Thank you for choosing us. Meanwhile, you can book a table on Resy for this slot.
-            </p>
-            <a
-              href={`${selectedResySlot?.links?.web}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
-              onClick={closeModal}
-            >
-              Go to Resy
-            </a>
-            <button
-              className="mt-4 block w-full text-gray-600 hover:text-gray-900 underline"
-              onClick={closeModal}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
+      <ResyDetailsModal
+        isOpen={showResyDetailsModal}
+        onClose={() => {
+          setShowResyDetailsModal(false);
+          setSelectedResySlot(null);
+          setSelectedTimeSlot(null);
+        }}
+        onSave={handleResyDetailsSave}
+        onSkip={handleResyDetailsSkip}
+        selectedTimeSlot={selectedTimeSlot}
+        reservationDate={formData.reservation_date}
+        partySize={formData.reservation_covers}
+        venueLocationSlug={reservationCard?.results?.resy2?.location?.url_slug || reservationCard?.location?.url_slug}
+        venueSlug={reservationCard?.results?.resy2?.url_slug || reservationCard?.url_slug}
+      />
 
       <GuestSignInModal
         isOpen={showGuestModal}
