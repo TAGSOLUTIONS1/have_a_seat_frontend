@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { Base_Url } from "@/baseUrl";
 import { LucideLoader } from "lucide-react";
@@ -60,6 +60,27 @@ export default function MakeReservation({ restrauntDetail }) {
   const [isCheckingConflicts, setIsCheckingConflicts] = useState(false);
   
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get map_url from URL params for OpenTable
+  const getMapUrl = () => {
+    const searchParams = new URLSearchParams(location.search);
+    return searchParams.get("map_url");
+  };
+
+  // Extract OpenTable slug from map_url
+  const getOpenTableSlug = () => {
+    const mapUrl = getMapUrl();
+    if (mapUrl && mapUrl.includes('opentable.com/r/')) {
+      // Extract the slug from URLs like: https://www.opentable.com/r/restaurant-slug
+      const match = mapUrl.match(/opentable\.com\/r\/([^/?]+)/);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+    // Fallback to alias if map_url is not available
+    return reservationCard?.alias;
+  };
 
   useEffect(() => {
     setReservationCard(restrauntDetail);
@@ -519,7 +540,7 @@ export default function MakeReservation({ restrauntDetail }) {
 
     // Handle Resy details save
     const handleResyDetailsSave = async (details, saveForFuture) => {
-      console.log("Resy details saved:", details, saveForFuture);
+      // console.log("Resy details saved:", details, saveForFuture);
       
       const bookingResponse = details?.bookingResponse;
       const bookingDetails = details?.bookingDetails;
@@ -618,14 +639,15 @@ export default function MakeReservation({ restrauntDetail }) {
       setSelectedResySlot(null);
     };
 
-
     const handlenotimeslots = () => {
       console.log("no time slots available" , reservationCard);
       if (reservationCard?.restaurant_type === "yelp") {
         window.location.href = `https://www.yelp.com/biz/${reservationCard?.alias}?osq=${reservationCard?.name}`;
       }
       else if (reservationCard?.restaurant_type === "open_table") {
-        window.location.href = `https://www.opentable.com/r/${reservationCard?.url_slug}`;
+        // Use map_url slug if available, otherwise fallback to alias
+        const openTableSlug = getOpenTableSlug();
+        window.location.href = `https://www.opentable.com/r/${openTableSlug}`;
       }
       else if (reservationCard?.restaurant_type === "resy") {
         window.location.href = `${reservationCard?.links?.web}`;
@@ -638,6 +660,7 @@ export default function MakeReservation({ restrauntDetail }) {
       }
     };
 
+    console.log("reservation " , reservationCard);
 
   return (
     <>
@@ -666,6 +689,7 @@ export default function MakeReservation({ restrauntDetail }) {
           <div className="w-full md:w-auto">
             <button
               onClick={reservationCard?.restaurant_type === "resy" ? handleTimeSlots : handlenotimeslots}
+              // onClick={handlenotimeslots}
               className="bg-plum px-4 py-2 text-white rounded-full w-full md:w-auto"
             >
               Find a Table

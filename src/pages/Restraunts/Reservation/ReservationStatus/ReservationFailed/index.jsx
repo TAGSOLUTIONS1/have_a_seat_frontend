@@ -1,15 +1,18 @@
-const ReservationFailed = ({ formData }) => {
+const ReservationFailed = ({ formData, errorTitle, errorMessage }) => {
+  // Default messages if not provided
+  const title = errorTitle || 'Oops! Reservation Failed';
+  const message = errorMessage || 'We apologize, there was an issue processing your reservation. Please try again later.';
+  
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="max-w-3xl  w-full mx-4 md:mx-auto rounded-lg overflow-hidden shadow-lg bg-white flex md:flex-row flex-col">
         <div className="md:w-1/2 px-6 py-8 mt-12 md:p-12">
           <div className="text-center md:text-left">
             <h2 className="font-bold text-3xl text-red-600 mb-4">
-              Oops! Reservation Failed
+              {title}
             </h2>
             <p className="text-gray-700 text-base">
-              We apologize, there was an issue processing your reservation due
-              to some confidential reasons. Please try again later.
+              {message}
             </p>
           </div>
         </div>
