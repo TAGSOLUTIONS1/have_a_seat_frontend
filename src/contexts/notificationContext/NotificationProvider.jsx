@@ -32,50 +32,77 @@ export const NotificationProvider = ({ children }) => {
     
     setLoading(true);
     try {
-      const data = await notificationService.getNotifications(page, size, unreadOnly);
-      setNotifications(data.notifications || []);
+      // Convert page/size to limit/offset for API
+      const limit = size;
+      const offset = (page - 1) * size;
+      
+      let data;
+      if (unreadOnly) {
+        // Use unread endpoint if filtering for unread only
+        data = await notificationService.getUnreadNotifications(authState);
+      } else {
+        // Use paginated endpoint
+        data = await notificationService.getNotifications(authState, limit, offset);
+      }
+      
+      // API returns array directly, map is_read to status and created_at to sent_at
+      const mappedNotifications = Array.isArray(data) 
+        ? data.map(notif => ({
+            ...notif,
+            status: notif.is_read === 'read' ? 'read' : 'unread',
+            type: notif.notification_type || notif.type,
+            sent_at: notif.created_at || notif.sent_at // Map created_at to sent_at for compatibility
+          }))
+        : [];
+      
+      setNotifications(mappedNotifications);
     } catch (error) {
       console.error('Failed to load notifications:', error);
     } finally {
       setLoading(false);
     }
-  }, [authState.isAuthenticated]);
+  }, [authState]);
 
   // Load notification stats
   const loadStats = useCallback(async () => {
     if (!authState.isAuthenticated) return;
     
     try {
-      const data = await notificationService.getNotificationStats();
-      setStats(data);
+      const data = await notificationService.getNotificationStats(authState);
+      setStats({
+        total_notifications: data.total_count || data.total_notifications || 0,
+        unread_count: data.unread_count || 0,
+        sent_today: data.sent_today || 0,
+        failed_today: data.failed_today || 0
+      });
       setUnreadCount(data.unread_count || 0);
     } catch (error) {
       console.error('Failed to load notification stats:', error);
     }
-  }, [authState.isAuthenticated]);
+  }, [authState]);
 
   // Load preferences
   const loadPreferences = useCallback(async () => {
     if (!authState.isAuthenticated) return;
     
     try {
-      const data = await notificationService.getPreferences();
+      const data = await notificationService.getPreferences(authState);
       setPreferences(data.preferences || []);
     } catch (error) {
       console.error('Failed to load preferences:', error);
     }
-  }, [authState.isAuthenticated]);
+  }, [authState]);
 
   // Mark notification as read
   const markAsRead = useCallback(async (notificationId) => {
     try {
-      await notificationService.markAsRead(notificationId);
+      await notificationService.markAsRead(authState, notificationId);
       
       // Update local state
       setNotifications(prev => 
         prev.map(notification => 
           notification.id === notificationId 
-            ? { ...notification, status: 'read' }
+            ? { ...notification, status: 'read', is_read: 'read' }
             : notification
         )
       );
@@ -85,16 +112,16 @@ export const NotificationProvider = ({ children }) => {
     } catch (error) {
       console.error('Failed to mark notification as read:', error);
     }
-  }, [loadStats]);
+  }, [authState, loadStats]);
 
   // Mark all notifications as read
   const markAllAsRead = useCallback(async () => {
     try {
-      await notificationService.markAllAsRead();
+      await notificationService.markAllAsRead(authState);
       
       // Update local state
       setNotifications(prev => 
-        prev.map(notification => ({ ...notification, status: 'read' }))
+        prev.map(notification => ({ ...notification, status: 'read', is_read: 'read' }))
       );
       
       // Refresh stats
@@ -102,19 +129,19 @@ export const NotificationProvider = ({ children }) => {
     } catch (error) {
       console.error('Failed to mark all notifications as read:', error);
     }
-  }, [loadStats]);
+  }, [authState, loadStats]);
 
   // Update preference
   const updatePreference = useCallback(async (notificationType, preferenceData) => {
     try {
-      await notificationService.updatePreference(notificationType, preferenceData);
+      await notificationService.updatePreference(authState, notificationType, preferenceData);
       
       // Refresh preferences
       await loadPreferences();
     } catch (error) {
       console.error('Failed to update preference:', error);
     }
-  }, [loadPreferences]);
+  }, [authState, loadPreferences]);
 
   // Setup WebSocket connection
   const setupWebSocket = useCallback(() => {
@@ -128,8 +155,14 @@ export const NotificationProvider = ({ children }) => {
         
         switch (data.type) {
           case 'notification':
-            // New notification received
-            setNotifications(prev => [data.notification, ...prev]);
+            // New notification received - map is_read to status and created_at to sent_at
+            const newNotification = {
+              ...data.notification,
+              status: data.notification.is_read === 'read' ? 'read' : 'unread',
+              type: data.notification.notification_type || data.notification.type,
+              sent_at: data.notification.created_at || data.notification.sent_at
+            };
+            setNotifications(prev => [newNotification, ...prev]);
             setUnreadCount(prev => prev + 1);
             break;
             

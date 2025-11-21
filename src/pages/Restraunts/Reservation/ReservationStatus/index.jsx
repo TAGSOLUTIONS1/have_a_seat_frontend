@@ -16,6 +16,8 @@ const ReservationStatus = () => {
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorTitle, setErrorTitle] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -81,6 +83,100 @@ const ReservationStatus = () => {
         console.log("OpenTable API Response:" , response)
         console.log("Response success:", response.data.success)
         console.log("Response data:", response.data.data)
+        console.log("Response detail:", response.data.detail)
+        
+        // Check for slot lock errors
+        if (response.data.detail?.slotLockErrors && Array.isArray(response.data.detail.slotLockErrors)) {
+          const slotLockError = response.data.detail.slotLockErrors.find(
+            error => error.code === 'SlotNotAvailableError'
+          );
+          
+          if (slotLockError) {
+            console.error("Slot lock error detected:", slotLockError);
+            const errorMsg = 'Sorry, the time slot you selected is no longer available. Please try selecting a different time.';
+            setErrorTitle('Slot No Longer Available');
+            setErrorMessage(errorMsg);
+            setStatus(false);
+            setLoading(false);
+            
+            showNotification(
+              'reservation_cancellation',
+              'Slot No Longer Available',
+              errorMsg,
+              {
+                error: slotLockError.exceptionMessage || 'Slot not available',
+                reservation_type: 'OPENTABLE',
+                restaurant_name: finalData[3] || 'Restaurant',
+                reservation_date: finalData[0]?.reservation_date,
+                reservation_time: finalData[0]?.reservation_time
+              }
+            );
+            return;
+          }
+        }
+        
+        // Check for reservation transaction errors (409 Conflict)
+        // Check both error field and response field for error details
+        if (response.data.detail?.error || response.data.detail?.response) {
+          const errorDetail = response.data.detail;
+          let parsedErrorMessage = 'The selected time slot is no longer available.';
+          let isReservationTransactionError = false;
+          
+          // Try to parse the error response if it's a string
+          if (typeof errorDetail.response === 'string') {
+            try {
+              const parsedError = JSON.parse(errorDetail.response);
+              console.log("Parsed error:", parsedError);
+              
+              // Check multiple possible paths for the error message
+              if (parsedError?.error?.exceptionMessage) {
+                parsedErrorMessage = parsedError.error.exceptionMessage;
+                isReservationTransactionError = parsedError.error.code === 'ReservationTransactionError';
+              } else if (parsedError?.Error?.apiError?.error?.errors?.[0]?.exceptionMessage) {
+                parsedErrorMessage = parsedError.Error.apiError.error.errors[0].exceptionMessage;
+                isReservationTransactionError = parsedError.Error.apiError.error.errors[0].code === 'ReservationTransactionError';
+              } else if (parsedError?.Error?.error?.error?.errors?.[0]?.exceptionMessage) {
+                parsedErrorMessage = parsedError.Error.error.error.errors[0].exceptionMessage;
+                isReservationTransactionError = parsedError.Error.error.error.errors[0].code === 'ReservationTransactionError';
+              }
+            } catch (e) {
+              console.error("Error parsing error response:", e);
+            }
+          }
+          
+          // Check if it's a ReservationTransactionError or 409 Conflict
+          // Check both the error string and the parsed error code
+          const has409Error = errorDetail.error?.includes('409') || errorDetail.error?.includes('Conflict');
+          
+          if (isReservationTransactionError || has409Error) {
+            console.error("Reservation transaction error detected:", errorDetail);
+            
+            // Format the error message to be more user-friendly
+            let userFriendlyMessage = parsedErrorMessage;
+            if (parsedErrorMessage.includes('Slot') && parsedErrorMessage.includes('not available')) {
+              userFriendlyMessage = 'Sorry, the time slot you selected is no longer available. Please try selecting a different time.';
+            }
+            
+            setErrorTitle('Time Slot Unavailable ⏰');
+            setErrorMessage(userFriendlyMessage);
+            setStatus(false);
+            setLoading(false);
+            
+            showNotification(
+              'reservation_cancellation',
+              'Time Slot Unavailable ⏰',
+              userFriendlyMessage,
+              {
+                error: parsedErrorMessage,
+                reservation_type: 'OPENTABLE',
+                restaurant_name: finalData[3] || 'Restaurant',
+                reservation_date: finalData[0]?.reservation_date,
+                reservation_time: finalData[0]?.reservation_time
+              }
+            );
+            return;
+          }
+        }
         
         if (response.data.success === true) {
           console.log("OpenTable reservation API call successful");
@@ -184,6 +280,55 @@ const ReservationStatus = () => {
           }
         } else {
           console.error("OpenTable reservation failed - success is false");
+          console.error("Error details:", response.data.detail);
+          
+          // Check if there are any error details we haven't handled yet
+          let fallbackErrorMessage = 'There was an issue processing your reservation. Please try again.';
+          let fallbackErrorTitle = 'Reservation Failed ❌';
+          
+          // Try to parse error from response if available
+          if (response.data.detail?.response && typeof response.data.detail.response === 'string') {
+            try {
+              const parsedError = JSON.parse(response.data.detail.response);
+              if (parsedError?.error?.exceptionMessage) {
+                fallbackErrorMessage = parsedError.error.exceptionMessage;
+                if (parsedError.error.code === 'ReservationTransactionError') {
+                  fallbackErrorTitle = 'Time Slot Unavailable ⏰';
+                  fallbackErrorMessage = 'Sorry, the time slot you selected is no longer available. Please try selecting a different time.';
+                }
+              }
+            } catch (e) {
+              console.error("Error parsing error response in fallback:", e);
+            }
+          }
+          
+          if (response.data.detail?.slotLockErrors) {
+            const slotError = response.data.detail.slotLockErrors[0];
+            fallbackErrorMessage = slotError?.exceptionMessage || 'The selected time slot is no longer available.';
+            fallbackErrorTitle = 'Slot No Longer Available ⏰';
+          } else if (response.data.detail?.error) {
+            if (response.data.detail.error.includes('409') || response.data.detail.error.includes('Conflict')) {
+              fallbackErrorTitle = 'Time Slot Unavailable ⏰';
+              fallbackErrorMessage = 'The selected time slot is no longer available. Please try a different time.';
+            }
+          }
+          
+          setErrorTitle(fallbackErrorTitle);
+          setErrorMessage(fallbackErrorMessage);
+          
+          showNotification(
+            'reservation_cancellation',
+            fallbackErrorTitle,
+            fallbackErrorMessage,
+            {
+              error: response.data.detail || 'Unknown error',
+              reservation_type: 'OPENTABLE',
+              restaurant_name: finalData[3] || 'Restaurant',
+              reservation_date: finalData[0]?.reservation_date,
+              reservation_time: finalData[0]?.reservation_time
+            }
+          );
+          
           setStatus(false);
           setLoading(false);
         }
@@ -194,14 +339,59 @@ const ReservationStatus = () => {
     } catch (error) {
       console.error("Error :", error);
       
+      // Check if error response contains slot availability errors
+      let errorMessage = 'There was an issue processing your OpenTable reservation. Please try again.';
+      let errorTitle = 'Reservation Failed ❌';
+      let restaurantName = 'Restaurant';
+      
+      // Try to get restaurant name from formData if available
+      try {
+        if (data) {
+          const myData = JSON.parse(decodeURIComponent(data));
+          restaurantName = myData?.formData?.[3] || 'Restaurant';
+        }
+      } catch (e) {
+        // If parsing fails, use fallback
+        console.error("Error parsing data in catch block:", e);
+      }
+      
+      if (error.response?.data?.detail) {
+        const errorDetail = error.response.data.detail;
+        
+        // Check for slot lock errors
+        if (errorDetail.slotLockErrors && Array.isArray(errorDetail.slotLockErrors)) {
+          const slotError = errorDetail.slotLockErrors.find(
+            err => err.code === 'SlotNotAvailableError'
+          );
+          if (slotError) {
+            errorTitle = 'Slot No Longer Available ⏰';
+            errorMessage = 'Sorry, the time slot you selected is no longer available. Please try selecting a different time.';
+          }
+        }
+        
+        // Check for reservation transaction errors
+        if (errorDetail.error && (
+          errorDetail.error.includes('ReservationTransactionError') ||
+          errorDetail.error.includes('409') ||
+          errorDetail.error.includes('Conflict')
+        )) {
+          errorTitle = 'Time Slot Unavailable ⏰';
+          errorMessage = 'Sorry, the time slot you selected is no longer available. Please try selecting a different time.';
+        }
+      }
+      
+      setErrorTitle(errorTitle);
+      setErrorMessage(errorMessage);
+      
       // ✅ Trigger notification for failed reservation
       showNotification(
         'reservation_cancellation',
-        'Reservation Failed ❌',
-        'There was an issue processing your OpenTable reservation. Please try again.',
+        errorTitle,
+        errorMessage,
         {
-          error: error.message,
-          reservation_type: 'OPENTABLE'
+          error: error.response?.data?.detail || error.message,
+          reservation_type: 'OPENTABLE',
+          restaurant_name: restaurantName
         }
       );
       
@@ -362,7 +552,7 @@ const ReservationStatus = () => {
       ) : status === true ? (
         <ReservationSuccessFul formData={formData} />
       ) : status === false ? (
-        <ReservationFailed formData={formData} />
+        <ReservationFailed formData={formData} errorTitle={errorTitle} errorMessage={errorMessage} />
       ) : (
         <p>No status available</p>
       )}

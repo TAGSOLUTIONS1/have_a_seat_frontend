@@ -74,12 +74,12 @@ const RestrauntDetail = () => {
           url_slug: resy_url_slug,
         });
         setEndPoint(
-          `${Base_Url}/api/v1/resy/get_restaurant_details_v2?${v2Params.toString()}`
+          `https://have-a-seatonline.com/api/v1/resy/get_restaurant_details?${v2Params.toString()}`
         );
       } else {
         // Fall back to old endpoint to get location and url_slug, then call v2
         setEndPoint(
-          `${Base_Url}/api/v1/resy/get_restaurant_details?venue_id=${resy_alias}&persons=2&date=${formattedDate}`
+          `https://have-a-seatonline.com/api/v1/resy/get_restaurant_details?venue_id=${resy_alias}&persons=2&date=${formattedDate}`
         );
       }
     } 
@@ -127,45 +127,46 @@ const RestrauntDetail = () => {
             // Check if this is already a v2 response (has success field and data structure)
             if (response?.data?.success && response?.data?.data) {
               // This is already a v2 response, transform it to match expected structure
-              const v2Data = response?.data?.data;
+              const responseData = response?.data?.data;
+              console.log("Resy V2 Response Data:", responseData);
+              // Extract venue data from nested structure: data.results.venues[0].venue
+              const venueData = responseData?.results?.venues?.[0]?.venue || {};
+              const templates = responseData?.results?.venues?.[0]?.templates || {};
+              const slots = responseData?.results?.venues?.[0]?.slots || [];
               
               // Extract images from responsive_images
-              const images = v2Data?.responsive_images?.originals 
-                ? Object.values(v2Data.responsive_images.originals).map(img => img.url)
-                : v2Data?.images || [];
+              const images = venueData?.responsive_images?.originals 
+                ? Object.values(venueData.responsive_images.originals).map(img => img.url)
+                : venueData?.images || [];
               
               // Get first image URL
               const imageUrl = images.length > 0 ? images[0] : null;
               
-              // Extract rating from rater array
-              const rating = v2Data?.rater?.[0]?.score || null;
-              const ratingTotal = v2Data?.rater?.[0]?.total || 0;
+              // Extract rating - directly from venue object
+              const rating = venueData?.rating || null;
+              const ratingTotal = venueData?.total_ratings || 0;
               
               // Transform cuisine type (string) to array format
-              const cuisine = v2Data?.type ? [v2Data.type] : [];
+              const cuisine = venueData?.type ? [venueData.type] : [];
               
-              // Build address display array
+              // Build address display array - location structure is different in this API
               const displayAddress = [];
-              if (v2Data?.location?.address_1) {
-                displayAddress.push(v2Data.location.address_1);
+              const locationData = venueData?.location || {};
+              const neighborhood = locationData?.neighborhood || "";
+              const cityName = locationData?.name || "";
+              
+              if (neighborhood) {
+                displayAddress.push(neighborhood);
               }
-              if (v2Data?.location?.address_2) {
-                displayAddress.push(v2Data.location.address_2);
-              }
-              const cityStateZip = [
-                v2Data?.location?.locality,
-                v2Data?.location?.region,
-                v2Data?.location?.postal_code
-              ].filter(Boolean).join(", ");
-              if (cityStateZip) {
-                displayAddress.push(cityStateZip);
+              if (cityName) {
+                displayAddress.push(cityName);
               }
               
               // Transform the data to match expected structure
               const transformedData = {
                 // Basic info
-                name: v2Data?.name || "",
-                url_slug: v2Data?.url_slug || "",
+                name: venueData?.name || "",
+                url_slug: venueData?.url_slug || "",
                 
                 // Images
                 images: images,
@@ -179,83 +180,91 @@ const RestrauntDetail = () => {
                 
                 // Cuisine
                 cuisine: cuisine,
-                type: v2Data?.type || "",
+                type: venueData?.type || "",
                 
                 // Location/Address
                 location: {
-                  address1: v2Data?.location?.address_1 || "",
-                  address2: v2Data?.location?.address_2 || "",
-                  city: v2Data?.location?.locality || "",
-                  state: v2Data?.location?.region || "",
-                  zipCode: v2Data?.location?.postal_code || "",
-                  postal_code: v2Data?.location?.postal_code || "",
-                  neighborhood: v2Data?.location?.neighborhood || "",
-                  country: v2Data?.location?.country || "",
-                  latitude: v2Data?.location?.latitude || null,
-                  longitude: v2Data?.location?.longitude || null,
-                  url_slug: v2Data?.location?.url_slug || "",
+                  address1: locationData?.address_1 || "",
+                  address2: locationData?.address_2 || "",
+                  city: cityName,
+                  state: locationData?.code || "",
+                  zipCode: locationData?.postal_code || "",
+                  postal_code: locationData?.postal_code || "",
+                  neighborhood: neighborhood,
+                  country: locationData?.country || "",
+                  latitude: locationData?.geo?.lat || null,
+                  longitude: locationData?.geo?.lon || null,
+                  url_slug: locationData?.url_slug || "",
+                  time_zone: locationData?.time_zone || "",
                   display_address: displayAddress.length > 0 ? displayAddress : [
-                    v2Data?.location?.address_1,
-                    v2Data?.location?.locality,
-                    v2Data?.location?.region
+                    neighborhood,
+                    cityName
                   ].filter(Boolean),
                 },
                 
                 // Address object (for compatibility)
                 address: {
-                  street: v2Data?.location?.address_1 || "",
-                  city: v2Data?.location?.locality || "",
-                  state: v2Data?.location?.region || "",
-                  zipCode: v2Data?.location?.postal_code || "",
-                  postal_code: v2Data?.location?.postal_code || "",
+                  street: locationData?.address_1 || "",
+                  city: cityName,
+                  state: locationData?.code || "",
+                  zipCode: locationData?.postal_code || "",
+                  postal_code: locationData?.postal_code || "",
                 },
                 
                 // Contact
-                phone: v2Data?.contact?.phone_number || "",
-                contact: v2Data?.contact || {},
+                phone: venueData?.contact?.phone_number || "",
+                contact: venueData?.contact || {},
                 
                 // Content
-                content: v2Data?.content || [],
-                description: v2Data?.content?.find(c => c.name === "about")?.body || 
-                            v2Data?.metadata?.description || "",
+                content: venueData?.content || [],
+                description: venueData?.content?.find(c => c.name === "about")?.body || 
+                            venueData?.content?.find(c => c.name === "why_we_like_it")?.body || "",
                 
                 // Collections
-                collections: v2Data?.collections || [],
+                collections: venueData?.collections || [],
                 
                 // Price
-                price_range_id: v2Data?.price_range_id || null,
-                currency_symbol: v2Data?.currency_symbol || "$",
+                price_range: venueData?.price_range || null,
+                price_range_id: venueData?.price_range || null,
+                currency_symbol: venueData?.currency_symbol || "$",
+                currency: venueData?.currency || {},
                 
                 // ID
                 id: {
-                  resy: v2Data?.id?.resy || null,
-                  google: v2Data?.id?.google || null,
+                  resy: venueData?.id?.resy || null,
+                  google: venueData?.id?.google || null,
                 },
                 
                 // Links
-                links: v2Data?.links || {},
+                links: venueData?.links || {},
                 
                 // Social
-                social: v2Data?.social || [],
+                social: venueData?.social || [],
                 
                 // Config
-                config: v2Data?.config || {},
+                config: venueData?.config || {},
                 
                 // Other fields
-                min_party_size: v2Data?.min_party_size || 1,
-                max_party_size: v2Data?.max_party_size || 10,
-                favorite: v2Data?.favorite || false,
+                min_party_size: venueData?.min_party_size || 1,
+                max_party_size: venueData?.max_party_size || 10,
+                favorite: venueData?.favorite || false,
                 
-                // Store original v2 data
+                // Templates and slots (important for reservation booking)
+                templates: templates,
+                slots: slots,
+                
+                // Store original v2 data structure
                 results: {
-                  resy2: v2Data,
-                  venues: [{
-                    venue: v2Data // For backward compatibility with old structure
-                  }]
+                  ...responseData.results,
+                  resy2: venueData,
+                  venues: responseData?.results?.venues || [],
                 },
                 
+                // Query info
+                query: responseData?.query || {},
+                
                 // Responsive images (keep original structure)
-                responsive_images: v2Data?.responsive_images || {},
+                responsive_images: venueData?.responsive_images || {},
                 
                 // Restaurant type
                 restaurant_type: "resy",
@@ -286,39 +295,40 @@ const RestrauntDetail = () => {
               if (locationSlug) v2Params.append('location', locationSlug);
               if (urlSlug) v2Params.append('url_slug', urlSlug);
               
-              const additionalApiUrl = `${Base_Url}/api/v1/resy/get_restaurant_details_v2?${v2Params.toString()}`;
+              const additionalApiUrl = `https://have-a-seatonline.com/api/v1/resy/get_restaurant_details?${v2Params.toString()}`;
               const additionalResponse = await axios.get(additionalApiUrl);
-              const additionalData = additionalResponse?.data?.data || {};
+              const additionalResponseData = additionalResponse?.data?.data || {};
+              
+              // Extract venue data from nested structure: data.results.venues[0].venue
+              const additionalVenueData = additionalResponseData?.results?.venues?.[0]?.venue || {};
+              const additionalTemplates = additionalResponseData?.results?.venues?.[0]?.templates || {};
+              const additionalSlots = additionalResponseData?.results?.venues?.[0]?.slots || [];
               
               // Transform v2 data to match expected structure (same transformation as above)
-              const images = additionalData?.responsive_images?.originals 
-                ? Object.values(additionalData.responsive_images.originals).map(img => img.url)
-                : additionalData?.images || [];
+              const images = additionalVenueData?.responsive_images?.originals 
+                ? Object.values(additionalVenueData.responsive_images.originals).map(img => img.url)
+                : additionalVenueData?.images || [];
               
               const imageUrl = images.length > 0 ? images[0] : null;
-              const rating = additionalData?.rater?.[0]?.score || null;
-              const ratingTotal = additionalData?.rater?.[0]?.total || 0;
-              const cuisine = additionalData?.type ? [additionalData.type] : [];
+              const rating = additionalVenueData?.rating || null;
+              const ratingTotal = additionalVenueData?.total_ratings || 0;
+              const cuisine = additionalVenueData?.type ? [additionalVenueData.type] : [];
               
               const displayAddress = [];
-              if (additionalData?.location?.address_1) {
-                displayAddress.push(additionalData.location.address_1);
+              const additionalLocationData = additionalVenueData?.location || {};
+              const additionalNeighborhood = additionalLocationData?.neighborhood || "";
+              const additionalCityName = additionalLocationData?.name || "";
+              
+              if (additionalNeighborhood) {
+                displayAddress.push(additionalNeighborhood);
               }
-              if (additionalData?.location?.address_2) {
-                displayAddress.push(additionalData.location.address_2);
-              }
-              const cityStateZip = [
-                additionalData?.location?.locality,
-                additionalData?.location?.region,
-                additionalData?.location?.postal_code
-              ].filter(Boolean).join(", ");
-              if (cityStateZip) {
-                displayAddress.push(cityStateZip);
+              if (additionalCityName) {
+                displayAddress.push(additionalCityName);
               }
               
               const transformedV2Data = {
-                name: additionalData?.name || "",
-                url_slug: additionalData?.url_slug || "",
+                name: additionalVenueData?.name || "",
+                url_slug: additionalVenueData?.url_slug || "",
                 images: images,
                 image_url: imageUrl,
                 photos: images,
@@ -326,57 +336,62 @@ const RestrauntDetail = () => {
                 rating_value: rating,
                 total_ratings: ratingTotal,
                 cuisine: cuisine,
-                type: additionalData?.type || "",
+                type: additionalVenueData?.type || "",
                 location: {
-                  address1: additionalData?.location?.address_1 || "",
-                  address2: additionalData?.location?.address_2 || "",
-                  city: additionalData?.location?.locality || "",
-                  state: additionalData?.location?.region || "",
-                  zipCode: additionalData?.location?.postal_code || "",
-                  postal_code: additionalData?.location?.postal_code || "",
-                  neighborhood: additionalData?.location?.neighborhood || "",
-                  country: additionalData?.location?.country || "",
-                  latitude: additionalData?.location?.latitude || null,
-                  longitude: additionalData?.location?.longitude || null,
-                  url_slug: additionalData?.location?.url_slug || "",
+                  address1: additionalLocationData?.address_1 || "",
+                  address2: additionalLocationData?.address_2 || "",
+                  city: additionalCityName,
+                  state: additionalLocationData?.code || "",
+                  zipCode: additionalLocationData?.postal_code || "",
+                  postal_code: additionalLocationData?.postal_code || "",
+                  neighborhood: additionalNeighborhood,
+                  country: additionalLocationData?.country || "",
+                  latitude: additionalLocationData?.geo?.lat || null,
+                  longitude: additionalLocationData?.geo?.lon || null,
+                  url_slug: additionalLocationData?.url_slug || "",
+                  time_zone: additionalLocationData?.time_zone || "",
                   display_address: displayAddress.length > 0 ? displayAddress : [
-                    additionalData?.location?.address_1,
-                    additionalData?.location?.locality,
-                    additionalData?.location?.region
+                    additionalNeighborhood,
+                    additionalCityName
                   ].filter(Boolean),
                 },
                 address: {
-                  street: additionalData?.location?.address_1 || "",
-                  city: additionalData?.location?.locality || "",
-                  state: additionalData?.location?.region || "",
-                  zipCode: additionalData?.location?.postal_code || "",
-                  postal_code: additionalData?.location?.postal_code || "",
+                  street: additionalLocationData?.address_1 || "",
+                  city: additionalCityName,
+                  state: additionalLocationData?.code || "",
+                  zipCode: additionalLocationData?.postal_code || "",
+                  postal_code: additionalLocationData?.postal_code || "",
                 },
-                phone: additionalData?.contact?.phone_number || "",
-                contact: additionalData?.contact || {},
-                content: additionalData?.content || [],
-                description: additionalData?.metadata?.description || "",
-                collections: additionalData?.collections || [],
-                price_range_id: additionalData?.price_range_id || null,
-                currency_symbol: additionalData?.currency_symbol || "$",
+                phone: additionalVenueData?.contact?.phone_number || "",
+                contact: additionalVenueData?.contact || {},
+                content: additionalVenueData?.content || [],
+                description: additionalVenueData?.content?.find(c => c.name === "about")?.body || 
+                            additionalVenueData?.content?.find(c => c.name === "why_we_like_it")?.body || "",
+                collections: additionalVenueData?.collections || [],
+                price_range: additionalVenueData?.price_range || null,
+                price_range_id: additionalVenueData?.price_range || null,
+                currency_symbol: additionalVenueData?.currency_symbol || "$",
+                currency: additionalVenueData?.currency || {},
                 id: {
-                  resy: additionalData?.id?.resy || null,
-                  google: additionalData?.id?.google || null,
+                  resy: additionalVenueData?.id?.resy || null,
+                  google: additionalVenueData?.id?.google || null,
                 },
-                links: additionalData?.links || {},
-                social: additionalData?.social || [],
-                config: additionalData?.config || {},
-                min_party_size: additionalData?.min_party_size || 1,
-                max_party_size: additionalData?.max_party_size || 10,
-                favorite: additionalData?.favorite || false,
+                links: additionalVenueData?.links || {},
+                social: additionalVenueData?.social || [],
+                config: additionalVenueData?.config || {},
+                min_party_size: additionalVenueData?.min_party_size || 1,
+                max_party_size: additionalVenueData?.max_party_size || 10,
+                favorite: additionalVenueData?.favorite || false,
+                templates: additionalTemplates,
+                slots: additionalSlots,
                 results: {
                   ...data.results,
-                  resy2: additionalData,
-                  venues: [{
-                    venue: additionalData
-                  }]
+                  ...additionalResponseData.results,
+                  resy2: additionalVenueData,
+                  venues: additionalResponseData?.results?.venues || [],
                 },
-                responsive_images: additionalData?.responsive_images || {},
+                query: additionalResponseData?.query || {},
+                responsive_images: additionalVenueData?.responsive_images || {},
                 restaurant_type: "resy",
                 restraunt_type: "resy",
               };
