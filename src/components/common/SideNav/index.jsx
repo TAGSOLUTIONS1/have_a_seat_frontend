@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { cn } from "@/lib/utils";
-import { User } from "lucide-react";
+import { User, History, Bell, LogOut, Gift, Heart } from "lucide-react";
 
 import {
   Sheet,
@@ -113,36 +113,83 @@ const SideNav = () => {
                 </ul>
               </div>
             ) : (
-                <div className="">
+                <div className="w-full">
                   <ul>
-                    <li className="p-4  text-center mt-2 decoration-solid text-purple-600 text-sm">
+                    <li className="p-4 text-center mt-2 decoration-solid text-purple-600 text-sm">
+                      {authState.user?.first_name} {authState.user?.last_name}
+                    </li>
+                    <li className="p-2 text-center text-xs text-gray-500">
                       {authState.user?.email}
                     </li>
                   </ul>
-                  <ul className="flex flex-col w-full gap-3 justify-center items-center ml-2">
-                    <li className="w-full">
-                      <Button
-                        className={cn("rounded-full bg-purple-600 w-3/4")}
-                        asChild
-                        onClick={handleLogout}
+                  <ul className="flex flex-col w-full gap-2 mt-4 px-4">
+                    <li>
+                      <Link
+                        to="/user-profile"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 rounded-lg group"
                       >
-                        <Link to="/">Logout</Link>
-                      </Button>
-                    </li>
-                    <li className="w-full">
-                      <Button
-                        className={cn("rounded-full bg-purple-600 w-3/4")}
-                        asChild
-                      >
-                        <Link to="/user-history">Reservations</Link>
-                      </Button>
+                        <User className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
+                        <span className="font-medium">Profile Insights</span>
+                      </Link>
                     </li>
                     <li>
-                      <div className="relative flex justify-center items-center w-[50px] h-[50px] mt-1 bg-purple-600 rounded-full p-2">
-                        <Link to="account-links">
-                          <User className="cursor-pointer text-white w-6 h-6" />
-                        </Link>
-                      </div>
+                      <Link
+                        to="/demographics"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 rounded-lg group"
+                      >
+                        <Gift className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
+                        <span className="font-medium">Demographics</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/favourites"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 rounded-lg group"
+                      >
+                        <Heart className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
+                        <span className="font-medium">Favourites</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/user-history"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 rounded-lg group"
+                      >
+                        <History className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
+                        <span className="font-medium">Reservations</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/notifications"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 rounded-lg group"
+                      >
+                        <Bell className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
+                        <span className="font-medium">Notifications</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/account-links"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-plum transition-colors duration-150 rounded-lg group"
+                      >
+                        <User className="w-5 h-5 text-gray-400 group-hover:text-plum transition-colors" />
+                        <span className="font-medium">Account Links</span>
+                      </Link>
+                    </li>
+                    
+                    {/* Divider */}
+                    <div className="border-t border-gray-200 my-2"></div>
+                    
+                    {/* Logout */}
+                    <li>
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 w-full px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-150 rounded-lg group"
+                      >
+                        <LogOut className="w-5 h-5 text-red-500 group-hover:text-red-600 transition-colors" />
+                        <span className="font-medium">Logout</span>
+                      </button>
                     </li>
                   </ul>
                 </div>

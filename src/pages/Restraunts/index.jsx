@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import Filters from "./Filters";
 import RestrautCards from "./RestrauntCards";
 import Loader from "@/components/Loader";
+import LoadingScreens from "@/pages/Landing/Section2/LoadingScreens";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import getCoordinates from "@/lib/utils";
 
@@ -680,7 +681,7 @@ const clearFilters = (keepFavorites = false) => {
             </div>
           </>
         ) : (
-          <Loader />
+          <LoadingScreens />
         )}
       </div>
       </div>
