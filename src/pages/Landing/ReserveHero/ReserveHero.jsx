@@ -48,14 +48,14 @@ export default function ReserveHero() {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden mb-10">
       {/* Loading Screens Overlay */}
       {isLoading && <LoadingScreens />}
 
       {/* Background Image */}
       <img
         className="absolute top-0 left-0 w-full h-full object-cover"
-        src="/assets/haveaseatheader1.png"
+        src="/assets/1.png"
         alt="Reserve Hero Background"
       />
       
@@ -63,13 +63,18 @@ export default function ReserveHero() {
       <div className="absolute top-0 left-0 w-full h-full bg-black/30"></div>
 
       {/* Content */}
-      <div className={`relative z-10 h-full flex flex-col items-center justify-center text-center px-5 transition-opacity duration-500 ${isLoading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
-        <div className="max-w-4xl mx-auto flex flex-col gap-8 items-center">
+      <div className={`relative z-10 h-full flex flex-col gap-64 items-center justify-center text-center px-5 transition-opacity duration-500 ${isLoading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+
+      <div className="text-plum text-4xl sm:text-5xl w-[100%] sm:w-[70%] md:text-6xl lg:text-7xl md:w-[50%] font-bold font-agrandir uppercase"> 
+          <p>Dine Smarter, Reserve Faster</p>
+        </div>
+
+        <div className="max-w-4xl mx-auto flex flex-col items-center">
           {/* Reserve Now Button */}
           <button
             onClick={handleReserveNow}
             disabled={isLoading}
-            className="bg-red-600 hover:bg-red-700 transition-all duration-300 px-8 py-4 md:px-10 md:py-5 rounded-lg text-white font-bold text-lg md:text-xl uppercase tracking-wide shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-plum hover:bg-purple-800 transition-all duration-300 px-8 py-4 md:px-10 md:py-5 rounded-lg text-white font-bold text-lg md:text-xl uppercase tracking-wide shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? "Loading..." : "Reserve Now"}
           </button>
