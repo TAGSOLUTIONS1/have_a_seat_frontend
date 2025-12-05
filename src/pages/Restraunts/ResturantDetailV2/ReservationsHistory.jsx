@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { FaHeart } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CancelReservation from './CancelReservation';
 import ReviewModal from '@/components/common/ReviewModal';
 
 export default function ReservationsHistory({reservations, onRefresh}) {
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [selectedReservation, setSelectedReservation] = useState(null);
+    const navigate = useNavigate();
     
     const now = new Date();
     const pastReservations = reservations.filter(
@@ -29,6 +30,80 @@ export default function ReservationsHistory({reservations, onRefresh}) {
     // Refresh the reservations list if callback provided
     if (onRefresh) {
       onRefresh();
+    }
+  };
+
+  // Function to get search params for restaurant detail page based on reservation
+  const getSearchParams = (reservation) => {
+    const reservationType = reservation?.reservation_type?.toLowerCase();
+    const restaurantId = reservation?.restaurant_id;
+
+    if (!restaurantId) {
+      console.warn("Restaurant ID not found in reservation:", reservation);
+      return "";
+    }
+
+    // Handle different reservation types
+    if (reservationType === "tableagent" || reservationType === "table_agent") {
+      // For TableAgent, we need slug and city
+      // Try to extract from restaurant_id or use defaults
+      const slug = restaurantId;
+      const city = reservation?.location?.split(',')[0] || reservation?.city || "New York City";
+      // Format city name - handle "New York" case
+      let formattedCity = city;
+      if (city.toLowerCase().includes("new york") && !city.toLowerCase().includes("new york city")) {
+        formattedCity = "New York City";
+      }
+      return `?tableagent_slug=${encodeURIComponent(slug)}&tableagent_city=${encodeURIComponent(formattedCity)}`;
+    } else if (reservationType === "resy") {
+      // For Resy, include url_slug and location if available
+      const resyId = restaurantId;
+      const urlSlug = reservation?.url_slug;
+      const locationSlug = reservation?.location_slug || reservation?.location?.url_slug;
+      
+      let searchParams = `resy_alias=${encodeURIComponent(resyId)}`;
+      if (urlSlug) {
+        searchParams += `&url_slug=${encodeURIComponent(urlSlug)}`;
+      }
+      if (locationSlug) {
+        searchParams += `&location=${encodeURIComponent(locationSlug)}`;
+      }
+      return `?${searchParams}`;
+    } else if (reservationType === "yelp") {
+      return `?yelp_alias=${encodeURIComponent(restaurantId)}`;
+    } else if (reservationType === "opentable" || reservationType === "open_table") {
+      // For OpenTable, restaurant_id might be a map_url or ID
+      // If it's a full URL, extract the path; otherwise use as is
+      let mapUrl = restaurantId;
+      if (restaurantId.includes("opentable.com")) {
+        mapUrl = restaurantId.replace("https://www.opentable.com/", "");
+      } else if (!restaurantId.startsWith("http")) {
+        // If it's just an ID, construct the URL
+        mapUrl = `r/${restaurantId}`;
+      }
+      return `?map_url=${encodeURIComponent(mapUrl)}`;
+    } else if (reservationType === "tock") {
+      return `?tock_domain=${encodeURIComponent(restaurantId)}`;
+    } else {
+      // Default fallback - try to determine from restaurant_id format
+      // If it looks like a Resy ID (numeric), use resy
+      if (/^\d+$/.test(restaurantId)) {
+        return `?resy_alias=${encodeURIComponent(restaurantId)}`;
+      }
+      // Otherwise default to yelp
+      return `?yelp_alias=${encodeURIComponent(restaurantId)}`;
+    }
+  };
+
+  const handleReserveAgain = (reservation) => {
+    const searchParams = getSearchParams(reservation);
+    if (searchParams) {
+      navigate({
+        pathname: "/restaurant-detail",
+        search: searchParams,
+      });
+    } else {
+      console.error("Could not generate search params for reservation:", reservation);
     }
   };
   
@@ -130,12 +205,17 @@ export default function ReservationsHistory({reservations, onRefresh}) {
           />
 
           <div className="flex-grow"></div>
-          {new Date (reservation?.reservation_date) < new Date() &&  <div className="bg-grey-lighter  flex items-center justify-between transition hover:bg-grey-light cursor-pointer mt-2">
-            <button className="rounded-full p-3 bg-plum text-white ">
-              <span>Reserve again</span>
-            </button>
-            <i className="fas fa-chevron-right"></i>
-          </div>}
+          {new Date (reservation?.reservation_date) < new Date() &&  (
+            <div 
+              className="bg-grey-lighter  flex items-center justify-between transition hover:bg-grey-light cursor-pointer mt-2"
+              onClick={() => handleReserveAgain(reservation)}
+            >
+              <button className="rounded-full p-3 bg-plum text-white ">
+                <span>Reserve again</span>
+              </button>
+              <i className="fas fa-chevron-right"></i>
+            </div>
+          )}
 
           {new Date(reservation?.reservation_date) >= new Date() && (
               <CancelReservation
@@ -232,7 +312,10 @@ export default function ReservationsHistory({reservations, onRefresh}) {
           {/* Reserve Again & Leave Review Buttons */}
           {new Date(reservation?.reservation_date) < new Date() && (
             <div className="bg-grey-lighter flex flex-col md:flex-row items-center justify-center transition hover:bg-grey-light cursor-pointer mt-2 gap-3 p-2 rounded-lg">
-              <button className="text-sm font-agrandir px-4 py-2 bg-plum text-white rounded-lg hover:bg-purple-700 transition-colors">
+              <button 
+                onClick={() => handleReserveAgain(reservation)}
+                className="text-sm font-agrandir px-4 py-2 bg-plum text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
                 Reserve Again
               </button>
               <button 

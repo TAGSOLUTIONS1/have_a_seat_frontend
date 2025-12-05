@@ -27,19 +27,25 @@ const ReviewModal = ({
   const [reviewText, setReviewText] = useState('');
   const [starRating, setStarRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-
+  const [postAsAnonymous, setPostAsAnonymous] = useState(false);
+  const [displayName, setDisplayName] = useState(authState?.user?.first_name);
+  // console.log("for review" ,authState?.user?.first_name);
   // Reset form when modal opens/closes or reservation changes
   useEffect(() => {
     if (isOpen && reservation) {
       // Pre-populate if review already exists
       setReviewText(reservation?.review || '');
       setStarRating(reservation?.star_rating || 0);
+      setDisplayName(reservation?.reviewer_name || "");
     } else if (!isOpen) {
       // Reset when closing
       setReviewText('');
       setStarRating(0);
+      setDisplayName("");
+      setPostAsAnonymous(false);
     }
   }, [isOpen, reservation]);
+ 
 
   const handleSubmit = async () => {
     // Validation
@@ -82,7 +88,6 @@ const ReviewModal = ({
 
     try {
       setSubmitting(true);
-      
       const response = await axios.patch(
         `${Base_Url}/api/v1/reservation/add_review/${reservation.id}/`,
         null,
@@ -94,6 +99,10 @@ const ReviewModal = ({
           params: {
             review: reviewText.trim(),
             star_rating: starRating,
+            restaurant_id: reservation?.restaurant_id || reservation?.restaurant?.id || reservation?.id,
+            restaurant_alias: reservation?.restaurant_alias || reservation?.alias,
+            anonymous: postAsAnonymous,
+            reviewer_name: postAsAnonymous ? 'Anonymous' : (authState?.user?.first_name|| undefined),
           },
         }
       );
@@ -214,6 +223,38 @@ const ReviewModal = ({
             <div className="flex justify-between items-center text-xs text-gray-500">
               <span>Be honest and helpful in your review</span>
               <span>{reviewText.length}/1000 characters</span>
+            </div>
+          </div>
+
+          {/* Identity Preference */}
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-gray-700">
+              How should we show your name?
+            </label>
+            <div className="flex flex-col gap-2">
+              <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={postAsAnonymous}
+                  onChange={(e) => setPostAsAnonymous(e.target.checked)}
+                  className="h-4 w-4 text-plum border-gray-300 rounded focus:ring-plum"
+                />
+                Post as Anonymous
+              </label>
+              {!postAsAnonymous && (
+                <div className="flex flex-col gap-1">
+                  <input
+                    type="text"
+                    placeholder="Display name (optional)"
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-plum focus:border-plum"
+                  />
+                  <p className="text-xs text-gray-500">
+                    Leave blank to use your account name.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
