@@ -246,7 +246,7 @@ export default function Reviews({ restrauntDetail }) {
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-shipGrey font-roboto">
-                                {review.user?.name || review.user?.email || "Anonymous"}
+                                {review?.reviewer_name || "Anonymous"}
                               </span>
                               {review.star_rating && (
                                 <div className="flex">{renderStars(review.star_rating)}</div>
@@ -308,7 +308,7 @@ export default function Reviews({ restrauntDetail }) {
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-shipGrey font-roboto">
-                                {review.user?.name || review.user?.email || "Anonymous"}
+                                {review?.reviewer_name || "Anonymous"}
                               </span>
                               {review.star_rating && (
                                 <div className="flex">{renderStars(review.star_rating)}</div>
@@ -413,7 +413,7 @@ export default function Reviews({ restrauntDetail }) {
                                 <div className="flex items-center justify-between mb-2">
                                   <div className="flex items-center gap-2">
                                     <span className="font-semibold text-shipGrey font-roboto text-sm">
-                                      {review.user?.name || review.user?.email || "Anonymous"}
+                                      {review?.reviewer_name || "Anonymous"}
                                     </span>
                                     {review.star_rating && (
                                       <div className="flex">{renderStars(review.star_rating)}</div>
@@ -479,7 +479,7 @@ export default function Reviews({ restrauntDetail }) {
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-shipGrey font-roboto">
-                                {review.user?.name || review.user?.email || "Anonymous"}
+                                {review?.reviewer_name || "Anonymous"}
                               </span>
                               {review.star_rating && (
                                 <div className="flex">{renderStars(review.star_rating)}</div>
@@ -530,7 +530,7 @@ export default function Reviews({ restrauntDetail }) {
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
                                 <span className="font-semibold text-shipGrey font-roboto text-sm">
-                                  {review.user?.name || review.user?.email || "Anonymous"}
+                                  {review?.reviewer_name || "Anonymous"}
                                 </span>
                                 {review.star_rating && (
                                   <div className="flex">{renderStars(review.star_rating)}</div>
