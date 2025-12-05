@@ -10,11 +10,13 @@ import Hero from "./HeroSection/Hero";
 import ContactForm from "./contactForm/ContactForm";
 import Slider from "./SuperFast/Slider";
 import JuglingSites from "./JugglingSites/JuglingSites";
+import ReserveHero from "./ReserveHero/ReserveHero";
+import Section2 from "./Section2/Section2";
 
 export default function Landing() {
   return (
     <div>
-      <Hero />
+      <ReserveHero />
       <Slider></Slider>
       <JuglingSites></JuglingSites>
       <WhyChooseUs />

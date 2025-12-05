@@ -83,7 +83,7 @@ const TermApiAuto = ({ getTermData, term: initialTerm }) => {
         value={term}
         onChange={handleTermChange}
         onBlur={handleBlur}
-        placeholder="Restaurant"
+        placeholder="Cuisine, restaurant name..."
         className="w-full rounded border-none focus:outline-none bg-transparent text-plum"
       />
       {suggestions.length > 0 && (

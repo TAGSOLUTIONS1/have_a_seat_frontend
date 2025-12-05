@@ -68,6 +68,8 @@ const RestaurantCards = memo(
     const [searchTerm, setSearchTerm] = useState(formData?.term || "");
     const [viewMode, setViewMode] = useState("list"); // "list" or "map"
     const [userLocationCoords, setUserLocationCoords] = useState(null);
+    const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+    const [isFiltering, setIsFiltering] = useState(false);
     const navigate = useNavigate();
 
     const handleCheckboxChange = (type) => {
@@ -742,8 +744,186 @@ const RestaurantCards = memo(
           </div>
         )}
 
+        {/* Mobile Filter Overlay */}
+        {isMobileFilterOpen && (
+          <div className="lg:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileFilterOpen(false)}>
+            <div 
+              className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl max-h-[85vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Mobile Filter Header */}
+              <div className="sticky top-0 bg-plum p-4 flex justify-between items-center rounded-t-3xl z-10">
+                <div className="flex items-center gap-2">
+                  <ImFilter color="#ffffff" size={20} />
+                  <p className="font-agrandir text-lg font-bold text-white">Filter By</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={onClearFilters}
+                    className="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full text-xs font-agrandir font-bold transition-colors"
+                  >
+                    Clear
+                  </button>
+                  <button
+                    onClick={() => setIsMobileFilterOpen(false)}
+                    className="text-white text-2xl font-bold w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition-colors"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+
+              {/* Mobile Filter Content */}
+              <div className="p-4 bg-plum">
+                {/* Platform Types */}
+                <div className="mb-6">
+                  <p className="font-agrandir text-xs font-bold text-white uppercase mb-3">Platforms</p>
+                  <div className="flex flex-wrap gap-3">
+                    {["yelp", "resy", "open_table", "tock", "tableagent"].map((type) => (
+                      <div key={type} className="flex gap-2 items-center">
+                        <label className="relative">
+                          <input
+                            type="checkbox"
+                            checked={selectedTypes.includes(type)}
+                            onChange={() => handleCheckboxChange(type)}
+                            className="hidden peer"
+                          />
+                          <span className="w-5 h-5 bg-white cursor-pointer rounded-full flex items-center justify-center shadow-md">
+                            {selectedTypes.includes(type) && <FaCheck size={12} color="#9235e2" />}
+                          </span>
+                        </label>
+                        <p className="font-agrandir text-xs font-bold text-white uppercase">
+                          {type === "open_table" ? "Open Table" : type === "tableagent" ? "Table Agent" : type.toUpperCase()}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-white/20 border-t my-4"></div>
+
+                {/* Restaurant Rating */}
+                <div className="mb-6">
+                  <p className="font-agrandir text-xs font-bold text-white uppercase mb-3">Restaurant Rating</p>
+                  <div className="flex flex-col gap-3">
+                    {ratingtypes.map((rating) => (
+                      <div key={rating} className="flex gap-3 items-center">
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={ratings.includes(rating)}
+                            onChange={() => onRatingsChange(rating)}
+                            className="hidden peer"
+                          />
+                          <span className="w-5 h-5 rounded-sm bg-white cursor-pointer flex items-center justify-center">
+                            {ratings.includes(rating) && <FaCheck size={12} color="#9235e2" />}
+                          </span>
+                        </label>
+                        <div className="flex gap-1">
+                          {[...Array(5)].map((_, index) =>
+                            index < parseInt(rating) ? (
+                              <IoIosStar key={index} color="#FFCC00" size={18} />
+                            ) : (
+                              <IoIosStarOutline key={index} color="#ffffff" size={18} />
+                            )
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-white/20 border-t my-4"></div>
+
+                {/* Reviews */}
+                <div className="mb-6">
+                  <p className="font-agrandir text-xs font-bold text-white uppercase mb-3">Reviews</p>
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-3 items-center">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={reviewedFilter.includes("most")}
+                          onChange={() => onReviewChange("most")}
+                          className="hidden peer"
+                        />
+                        <span className="w-5 h-5 rounded-sm bg-white cursor-pointer flex items-center justify-center">
+                          {reviewedFilter.includes("most") && <FaCheck size={12} color="#9235e2" />}
+                        </span>
+                      </label>
+                      <p className="font-roboto font-medium text-sm text-white">Most Reviewed</p>
+                    </div>
+                    <div className="flex gap-3 items-center">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={reviewedFilter.includes("least")}
+                          onChange={() => onReviewChange("least")}
+                          className="hidden peer"
+                        />
+                        <span className="w-5 h-5 rounded-sm bg-white cursor-pointer flex items-center justify-center">
+                          {reviewedFilter.includes("least") && <FaCheck size={12} color="#9235e2" />}
+                        </span>
+                      </label>
+                      <p className="font-roboto font-medium text-sm text-white">Least Reviewed</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-white/20 border-t my-4"></div>
+
+                {/* Cuisines */}
+                <div className="mb-6">
+                  <p className="font-agrandir text-xs font-bold text-white uppercase mb-3">Cuisines</p>
+                  <div className="flex flex-col gap-3 max-h-60 overflow-y-auto">
+                    {displayedCuisines.map((cuisine) => (
+                      <div key={cuisine} className="flex gap-3 items-center">
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={cuisinefilter.includes(cuisine)}
+                            onChange={() => onCuisineChange(cuisine)}
+                            className="hidden peer"
+                          />
+                          <span className="w-5 h-5 rounded-sm bg-white cursor-pointer flex items-center justify-center">
+                            {cuisinefilter.includes(cuisine) && <FaCheck size={12} color="#9235e2" />}
+                          </span>
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <p className="font-roboto font-medium text-sm text-white">{cuisine}</p>
+                          {isFavoriteCuisine(cuisine) && <FaHeart size={12} color="#FFD700" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={showmore ? () => onShowMore() : fillallcuisines}
+                    className="mt-3 font-roboto font-medium text-sm text-white underline"
+                  >
+                    {showmore ? "Show Less" : "Show More"}
+                  </button>
+                </div>
+
+                {/* Apply Button */}
+                <button
+                  onClick={() => {
+                    setIsFiltering(true);
+                    setTimeout(() => {
+                      setIsFiltering(false);
+                      setIsMobileFilterOpen(false);
+                    }, 300);
+                  }}
+                  className="w-full bg-white text-plum py-3 rounded-xl font-agrandir font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] active:scale-100"
+                >
+                  {isFiltering ? "Applying..." : "Apply Filters"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Filtered Restaurants List */}
-        <div className="mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-7">
+        <div className="mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-7 pb-20 lg:pb-0">
         <div className="hidden lg:block bg-plum p-4 sm:p-5 w-full lg:w-80 xl:w-96 h-fit rounded-3xl border-2 border-[#B9B9B9]">
               <div className="flex justify-between">
                 <div className="flex gap-2 sm:gap-4 items-center">

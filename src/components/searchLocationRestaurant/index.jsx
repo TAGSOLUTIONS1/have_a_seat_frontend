@@ -6,6 +6,7 @@ import TermApiAuto from "../home/HometermAutoComplete";
 import LocationTracker from "@/components/LocationTracker";
 import { useToast } from "@/components/ui/use-toast";
 import { CiSearch } from "react-icons/ci";
+import { Search, Users, X } from "lucide-react";
 import { getCurrentTime } from "../constants/constants";
 import { MdLocationOn } from "react-icons/md";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
@@ -70,6 +71,9 @@ const SearchLocationV2 = memo(
 
   const [error, setError] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showPeopleSelector, setShowPeopleSelector] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   // Filters state
   const [shuffledRestaurants, setShuffledRestaurants] = useState([]);
@@ -86,6 +90,23 @@ const SearchLocationV2 = memo(
       setFormData(JSON.parse(savedFormData));
     }
   }, []);
+
+  // Close selectors when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showPeopleSelector && !event.target.closest('.people-selector-container')) {
+        setShowPeopleSelector(false);
+      }
+      if (showDatePicker && !event.target.closest('.date-picker-container')) {
+        setShowDatePicker(false);
+      }
+      if (showTimePicker && !event.target.closest('.time-picker-container')) {
+        setShowTimePicker(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showPeopleSelector, showDatePicker, showTimePicker]);
 
   const getLocationData = (value) => {
     // Handle both string and object with coordinates
@@ -174,6 +195,14 @@ const SearchLocationV2 = memo(
   const handleLocationUpdate = (location) => {
     setFormData((prevData) => {
       const updatedData = { ...prevData, location };
+      localStorage.setItem("searchFormData", JSON.stringify(updatedData));
+      return updatedData;
+    });
+  };
+
+  const clearLocation = () => {
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, location: "", latitude: "", longitude: "" };
       localStorage.setItem("searchFormData", JSON.stringify(updatedData));
       return updatedData;
     });
@@ -389,7 +418,139 @@ const SearchLocationV2 = memo(
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="w-full max-w-[1550px] mx-auto bg-white rounded-2xl md:rounded-[3rem] shadow-lg border border-gray-100 p-4 md:py-5 md:px-8 flex flex-col md:flex-row gap-4 md:gap-6 items-stretch md:items-center">
+      {/* Mobile Layout - Simple and Compact */}
+      <div className="md:hidden">
+        <div className="flex flex-col gap-3">
+          {/* Location Search - Simple like Cuisine Search */}
+          <div className="bg-white rounded-xl p-3 border border-gray-200">
+            <div className="flex items-center gap-2">
+              <Search size={18} color="#9235E2" className="flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <GeoApiAuto
+                  getLocationData={getLocationData}
+                  location={formData.location}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Cuisine/Restaurant Search */}
+          <div className="bg-white rounded-xl p-3 border border-gray-200">
+            <div className="flex items-center gap-2">
+              <Search size={18} color="#9235E2" className="flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <TermApiAuto getTermData={handleTermChange} />
+              </div>
+            </div>
+          </div>
+
+          {/* Date, Time, Persons Row - Blue Outlined Box */}
+          <div className="bg-white rounded-xl p-3 border-2 border-plum">
+            <div className="flex items-center justify-between gap-2">
+              {/* Date */}
+              <div className="relative date-picker-container flex-1">
+                <button
+                  onClick={() => {
+                    setShowDatePicker(!showDatePicker);
+                    setShowTimePicker(false);
+                    setShowPeopleSelector(false);
+                  }}
+                  className="flex items-center gap-2 w-full text-left"
+                >
+                  <BsCalendarDateFill size={18} color="#9235E2" />
+                  <span className="text-sm font-roboto text-gray-700">Date</span>
+                  <span className="text-xs text-gray-400 ml-auto">▼</span>
+                </button>
+                {showDatePicker && (
+                  <div className="absolute top-full mt-1 left-0 bg-white rounded-lg shadow-xl border border-gray-200 z-50 p-2">
+                    <DatePicker
+                      selected={new Date(formData.date)}
+                      onChange={(date) => {
+                        handleInputChange("date", "reservation_date", date.toISOString().split("T")[0]);
+                        setShowDatePicker(false);
+                      }}
+                      inline
+                      minDate={new Date()}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="w-px h-6 bg-gray-300"></div>
+
+              {/* Time */}
+              <div className="relative time-picker-container flex-1">
+                <button
+                  onClick={() => {
+                    setShowTimePicker(!showTimePicker);
+                    setShowDatePicker(false);
+                    setShowPeopleSelector(false);
+                  }}
+                  className="flex items-center gap-2 w-full text-left"
+                >
+                  <IoTime size={18} color="#9235E2" />
+                  <span className="text-sm font-roboto text-gray-700">Time</span>
+                  <span className="text-xs text-gray-400 ml-auto">▼</span>
+                </button>
+                {showTimePicker && (
+                  <div className="absolute top-full mt-1 left-0 bg-white rounded-lg shadow-xl border border-gray-200 z-50 p-2">
+                    <DatePicker
+                      selected={new Date(`${formData.date}T${formData.reservation_time}`)}
+                      onChange={(date) => {
+                        handleInputChange("reservation_time", "reservation_time", date.toTimeString().slice(0, 5));
+                        setShowTimePicker(false);
+                      }}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={15}
+                      inline
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="w-px h-6 bg-gray-300"></div>
+
+              {/* Persons */}
+              <div className="relative people-selector-container flex-1">
+                <button
+                  onClick={() => {
+                    setShowPeopleSelector(!showPeopleSelector);
+                    setShowDatePicker(false);
+                    setShowTimePicker(false);
+                  }}
+                  className="flex items-center gap-2 w-full text-left"
+                >
+                  <Users size={18} color="#9235E2" />
+                  <span className="text-sm font-roboto text-gray-700">Pers.</span>
+                  <span className="text-xs text-gray-400 ml-auto">▼</span>
+                </button>
+                {showPeopleSelector && (
+                  <div className="absolute top-full mt-1 right-0 bg-white rounded-lg shadow-xl border border-gray-200 z-50 min-w-[120px] max-h-48 overflow-y-auto">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                      <button
+                        key={num}
+                        onClick={() => {
+                          handleInputChange("persons", "reservation_covers", num);
+                          setShowPeopleSelector(false);
+                        }}
+                        className={`w-full text-left px-4 py-2 text-sm font-roboto hover:bg-plum/10 transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                          formData.persons === num ? "bg-plum/20 text-plum font-semibold" : "text-gray-700"
+                        }`}
+                      >
+                        {num} {num === 1 ? "Person" : "People"}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div className="w-full hidden md:flex max-w-[1550px] mx-auto bg-white rounded-2xl md:rounded-[3rem] shadow-lg border border-gray-100 p-4 md:py-5 md:px-8 flex-col md:flex-row gap-4 md:gap-6 items-stretch md:items-center">
         {/* Location */}
         <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 flex-1 min-w-0">
           <MdLocationOn size={24} color="#9235E2" className=" flex-shrink-0" />
@@ -478,6 +639,8 @@ const SearchLocationV2 = memo(
         </div>
       </div>
 
+      {/* Desktop Location Tracker */}
+      {/* <div className="hidden md:flex text-xs md:text-sm items-center justify-center text-shipGrey"> */}
       <div className="flex text-xs md:text-sm items-center justify-center text-shipGrey">
         <div className="max-w-sm m-auto font-roboto my-2 md:my-3 flex">
           <LocationTracker onLocationUpdate={handleLocationUpdate} />
