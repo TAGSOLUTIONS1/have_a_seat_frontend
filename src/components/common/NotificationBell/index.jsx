@@ -7,10 +7,10 @@ const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
   
   // Debug logging to see what we're getting
-  console.log("NotificationBell - notifications:", notifications);
-  console.log("NotificationBell - unreadCount:", unreadCount);
-  console.log("NotificationBell - unreadCount type:", typeof unreadCount);
-  console.log("NotificationBell - unreadCount > 0:", unreadCount > 0);
+  // console.log("NotificationBell - notifications:", notifications);
+  // console.log("NotificationBell - unreadCount:", unreadCount);
+  // console.log("NotificationBell - unreadCount type:", typeof unreadCount);
+  // console.log("NotificationBell - unreadCount > 0:", unreadCount > 0);
 
   const handleNotificationClick = async (notification) => {
     // Handle both field name variations

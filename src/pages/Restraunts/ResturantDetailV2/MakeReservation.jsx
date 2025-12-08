@@ -239,6 +239,11 @@ export default function MakeReservation({ restrauntDetail }) {
         )}`;
         navigate(route);
         setFormData("");
+      } else if (reservationType === 'resy') {
+        // For Resy, open the Resy details modal after conflict acknowledgement
+        setSelectedResySlot(restrauntDetail?.results?.resy2);
+        setSelectedTimeSlot(timeSlotData);
+        setShowResyDetailsModal(true);
       }
       // Clear pending data after navigation
       setPendingReservationData(null);
@@ -494,10 +499,35 @@ export default function MakeReservation({ restrauntDetail }) {
     const [showResyDetailsModal, setShowResyDetailsModal] = useState(false);
     const [selectedResySlot, setSelectedResySlot] = useState(null);
 
-    const handleResyClick = (clickedData) => {
-      setSelectedTimeSlot(clickedData);
+    const handleResyClick = async (clickedData) => {
+      // Prevent rapid clicking during conflict checks
+      if (isCheckingConflicts) return;
+
       setSelectedReservationType('resy');
-      // For Resy, always show the details modal directly
+      setSelectedTimeSlot(clickedData);
+
+      // If authenticated, check for conflicts before proceeding
+      if (authState?.isAuthenticated) {
+        const reservationDateTime = clickedData?.date?.start || (formData?.reservation_date && formData?.reservation_time ? `${formData.reservation_date}T${formData.reservation_time}` : null);
+        if (reservationDateTime) {
+          const conflictResult = await checkReservationConflicts(reservationDateTime);
+          if (conflictResult?.has_conflict) {
+            setConflictingReservations(conflictResult.conflicting_reservations || []);
+            setPendingReservationData({
+              restaurant_name: reservationCard?.name,
+              reservation_date: formData?.reservation_date,
+              reservation_time: formData?.reservation_time,
+              num_diners: formData?.reservation_covers,
+              reservationType: 'resy',
+              timeSlotData: clickedData
+            });
+            setShowConflictModal(true);
+            return;
+          }
+        }
+      }
+
+      // For Resy, show the details modal directly
       setSelectedResySlot(restrauntDetail?.results?.resy2);
       setShowResyDetailsModal(true);
     };
@@ -688,8 +718,10 @@ export default function MakeReservation({ restrauntDetail }) {
 
           <div className="w-full md:w-auto">
             <button
-              onClick={reservationCard?.restaurant_type === "resy" ? handleTimeSlots : handlenotimeslots}
-              // onClick={handlenotimeslots}
+              onClick={(reservationCard?.restaurant_type === "resy" ||
+                reservationCard?.restaurant_type === "open_table"
+              ) ? handleTimeSlots : handlenotimeslots}
+              // onClick={handleTimeSlots}
               className="bg-plum px-4 py-2 text-white rounded-full w-full md:w-auto"
             >
               Find a Table

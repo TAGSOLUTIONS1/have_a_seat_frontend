@@ -33,9 +33,7 @@ const LinkPageDialogue = () => {
           <DialogFooter>
             <DialogClose asChild>
               <div>
-              <Button className="w-24 text-md">Link</Button>
               <Button className="w-24 ml-4 text-md">Cancel</Button>
-
               </div>
             </DialogClose>
           </DialogFooter>
