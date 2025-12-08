@@ -37,7 +37,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return `${miles.toFixed(1)} mi`;
   }
 };
-const initialTypes = ["yelp", "open_table", "resy", "tock", "tableagent"];
+const initialTypes = ["open_table", "yelp", "resy", "tock", "tableagent"];
 const ratingtypes = ["5" , "4" , "3" , "2" , "1"];
 const cuisinestypes=["Italian" , "Mediterranean" , "Mexican" , "Chinese" , "Thai"];
 const Reviewedtype=["most" , "least"];
@@ -90,20 +90,20 @@ const RestaurantCards = memo(
       ) {
         const mergedRestaurants = [];
 
-        if (yelpData && selectedTypes.includes("yelp")) {
-          mergedRestaurants.push(
-            ...yelpData.map((restaurant) => ({
-              ...restaurant,
-              restraunt_type: "yelp",
-            }))
-          );
-        }
-
         if (openTableData && selectedTypes.includes("open_table")) {
           mergedRestaurants.push(
             ...openTableData.map((restaurant) => ({
               ...restaurant,
               restraunt_type: "open_table",
+            }))
+          );
+        }
+
+        if (yelpData && selectedTypes.includes("yelp")) {
+          mergedRestaurants.push(
+            ...yelpData.map((restaurant) => ({
+              ...restaurant,
+              restraunt_type: "yelp",
             }))
           );
         }
