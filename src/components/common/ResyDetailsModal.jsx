@@ -28,14 +28,24 @@ const ResyDetailsModal = ({ isOpen, onClose, onSave, onSkip, selectedTimeSlot, r
   const [showBookingSuccessModal, setShowBookingSuccessModal] = useState(false);
   const [legacyToken, setLegacyToken] = useState(null);
   const [successReservationDetails, setSuccessReservationDetails] = useState(null);
+  const [isCheckingExistingCredentials, setIsCheckingExistingCredentials] = useState(false);
+  const [showCredentialsForm, setShowCredentialsForm] = useState(true);
 
   // Load saved data and user data if available
   React.useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+
+    // Reset state on open
+    setErrors({});
+    setShowBookingDetails(false);
+    setBookingDetails(null);
+    setShowPaymentRequiredModal(false);
+    setShowBookingSuccessModal(false);
+    setLegacyToken(null);
+    setShowCredentialsForm(false); // start hidden; show only if needed
+
+    const loadInitialData = async () => {
       setIsLoadingUserData(true);
-      // Reset legacy_token when modal opens
-      setLegacyToken(null);
-      
       // First, try to load from localStorage (saved Resy details)
       const savedDetails = localStorage.getItem("resyDetails");
       let initialData = {
@@ -57,39 +67,80 @@ const ResyDetailsModal = ({ isOpen, onClose, onSave, onSkip, selectedTimeSlot, r
       
       // If user is authenticated, fetch their profile data to auto-populate
       if (authState?.isAuthenticated && authState?.accessToken) {
-        const fetchUserData = async () => {
-          try {
-            const config = {
-              headers: {
-                Authorization: `Bearer ${authState.accessToken}`,
-              },
-            };
-            const response = await axios.get(`${Base_Url}/api/v1/users/me`, config);
-            
-            if (response.status === 200 && response.data) {
-              const userData = response.data;
-              // Auto-populate with user data, but keep saved Resy details if they exist
-              setFormData({
-                email: initialData.email || userData.email || "",
-                password: "", // Never auto-populate password
-              });
-            }
-          } catch (error) {
-            console.error("Error fetching user data:", error);
-            // If fetch fails, use saved details or empty
+        try {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${authState.accessToken}`,
+            },
+          };
+          const response = await axios.get(`${Base_Url}/api/v1/users/me`, config);
+          
+          if (response.status === 200 && response.data) {
+            const userData = response.data;
+            // Auto-populate with user data, but keep saved Resy details if they exist
+            setFormData({
+              email: initialData.email || userData.email || "",
+              password: "", // Never auto-populate password
+            });
+          } else {
             setFormData(initialData);
-          } finally {
-            setIsLoadingUserData(false);
           }
-        };
-        
-        fetchUserData();
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          // If fetch fails, use saved details or empty
+          setFormData(initialData);
+        } finally {
+          setIsLoadingUserData(false);
+        }
       } else {
         // Not authenticated, just use saved details
         setFormData(initialData);
         setIsLoadingUserData(false);
       }
-    }
+    };
+
+    const tryExistingCredentials = async () => {
+      if (!authState?.isAuthenticated || !authState?.accessToken) {
+        setShowCredentialsForm(true);
+        return;
+      }
+
+      setIsCheckingExistingCredentials(true);
+      try {
+        const response = await axios.post(
+          `${Base_Url}/api/v1/resy/user_verify`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${authState.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const legacyTokenValue = response?.data?.data?.legacy_token;
+        if (legacyTokenValue) {
+          setLegacyToken(legacyTokenValue);
+          setShowCredentialsForm(false);
+          await fetchBookingDetails(legacyTokenValue);
+        } else {
+          setShowCredentialsForm(true);
+        }
+      } catch (error) {
+        // If verification fails, fall back to showing the credentials form
+        setShowCredentialsForm(true);
+        console.error("Error checking existing Resy credentials:", error);
+      } finally {
+        setIsCheckingExistingCredentials(false);
+      }
+    };
+
+    const initialize = async () => {
+      await loadInitialData();
+      await tryExistingCredentials();
+    };
+
+    initialize();
   }, [isOpen, authState?.isAuthenticated, authState?.accessToken]);
 
   const validateForm = () => {
@@ -109,6 +160,67 @@ const ResyDetailsModal = ({ isOpen, onClose, onSave, onSkip, selectedTimeSlot, r
     return Object.keys(newErrors).length === 0;
   };
 
+  const saveResyUserData = async (email, password) => {
+    if (!authState?.isAuthenticated || !authState?.accessToken) return;
+    try {
+      await axios.post(
+        `${Base_Url}/api/v1/resy/save_user_data`,
+        { email: email.trim(), password },
+        {
+          headers: {
+            Authorization: `Bearer ${authState.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error saving Resy user data:", error);
+    }
+  };
+
+  const fetchBookingDetails = async (legacyTokenValue) => {
+    setIsVerifying(false);
+    setIsFetchingDetails(true);
+    try {
+      const configId = selectedTimeSlot?.config?.token || selectedTimeSlot?.config_id;
+      if (!configId) {
+        setErrors({ submit: "Missing booking configuration. Please select a slot again." });
+        return;
+      }
+
+      const bookingPayload = {
+        commit: 1,
+        config_id: configId,
+        day: reservationDate,
+        party_size: String(partySize || 2),
+      };
+      
+      const bookingResponse = await axios.post(
+        `${Base_Url}/api/v1/resy/booking_details`,
+        bookingPayload
+      );
+      
+      if (bookingResponse.status === 200 && bookingResponse.data?.success) {
+        if (legacyTokenValue) {
+          setLegacyToken(legacyTokenValue);
+        }
+        setBookingDetails(bookingResponse.data.data);
+        setShowBookingDetails(true);
+        setShowCredentialsForm(false);
+      } else {
+        setErrors({ submit: bookingResponse.data?.message || "Failed to fetch booking details. Please try again." });
+        setShowCredentialsForm(true);
+      }
+    } catch (bookingError) {
+      console.error("Error fetching booking details:", bookingError);
+      setErrors({ submit: bookingError.response?.data?.message || "Failed to fetch booking details. Please try again." });
+      setShowCredentialsForm(true);
+    } finally {
+      setIsFetchingDetails(false);
+      setIsSaving(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -122,7 +234,7 @@ const ResyDetailsModal = ({ isOpen, onClose, onSave, onSkip, selectedTimeSlot, r
     try {
       // First, verify credentials with Resy
       const verificationResponse = await axios.post(
-        "https://have-a-seatonline.com/api/v1/resy/verification",
+        `${Base_Url}/api/v1/resy/verification`,
         {
           email: formData.email,
           password: formData.password,
@@ -146,35 +258,13 @@ const ResyDetailsModal = ({ isOpen, onClose, onSave, onSkip, selectedTimeSlot, r
           localStorage.setItem("resyDetails", JSON.stringify(dataToSave));
         }
         
-        // Fetch booking details
-        setIsVerifying(false);
-        setIsFetchingDetails(true);
-        
-        try {
-          const configId = selectedTimeSlot?.config?.token || selectedTimeSlot?.config_id;
-          const bookingPayload = {
-            commit: 1,
-            config_id: configId,
-            day: reservationDate,
-            party_size: String(partySize || 2),
-          };
-          
-          const bookingResponse = await axios.post(
-            "https://have-a-seatonline.com/api/v1/resy/booking_details",
-            bookingPayload
-          );
-          
-          if (bookingResponse.status === 200 && bookingResponse.data?.success) {
-            setBookingDetails(bookingResponse.data.data);
-            setShowBookingDetails(true);
-          }
-        } catch (bookingError) {
-          console.error("Error fetching booking details:", bookingError);
-          setErrors({ submit: bookingError.response?.data?.message || "Failed to fetch booking details. Please try again." });
-        } finally {
-          setIsFetchingDetails(false);
-          setIsSaving(false);
+        // Persist to backend linked platform when authenticated
+        if (saveForFuture && authState?.isAuthenticated) {
+          await saveResyUserData(formData.email, formData.password);
         }
+
+        setShowCredentialsForm(false);
+        await fetchBookingDetails(legacyTokenValue);
       }
     } catch (error) {
       console.error("Error verifying Resy credentials:", error);
@@ -590,124 +680,141 @@ const ResyDetailsModal = ({ isOpen, onClose, onSave, onSkip, selectedTimeSlot, r
           ×
         </button>
         
-        <h2 className="text-2xl font-semibold mb-2 text-gray-800">
-          Add Your Details for Resy
-        </h2>
-        <p className="text-sm text-gray-600 mb-6">
-          Please provide your Resy account credentials and details to create a reservation. You can save this information for faster future bookings.
-        </p>
-        
-        {isLoadingUserData && (
-          <p className="text-sm text-gray-500 mb-4">Loading your information...</p>
-        )}
-        
-        {(isVerifying || isFetchingDetails) && (
-          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-700">
-              {isVerifying ? "Verifying..." : "Fetching booking details..."}
+        {/* Show loading state while checking/fetching; show form only after failures */}
+        {(!showCredentialsForm || isCheckingExistingCredentials || isFetchingDetails || isVerifying) ? (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold mb-2 text-gray-800">Fetching booking details…</h2>
+            <p className="text-sm text-gray-600">
+              We’re using your saved Resy account to retrieve booking details. You’ll only be asked for email/password if that fails.
             </p>
-          </div>
-        )}
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email *
-            </label>
-            <Mail size={20} className="absolute top-9 left-3 text-gray-400" />
-            <Input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
-              placeholder="john.doe@example.com"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+            {(isLoadingUserData || isCheckingExistingCredentials || isVerifying || isFetchingDetails) && (
+              <div className="mb-2 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700">
+                {isVerifying || isFetchingDetails ? "Contacting Resy…" : "Checking saved credentials…"}
+              </div>
             )}
           </div>
+        ) : (
+          <>
+          <h2 className="text-2xl font-semibold mb-2 text-gray-800">
+            Add Your Details for Resy
+          </h2>
+          <p className="text-sm text-gray-600 mb-6">
+            Please provide your Resy account credentials and details to create a reservation. You can save this information for faster future bookings.
+          </p>
           
-          <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password *
-            </label>
-            <Lock size={20} className="absolute top-9 left-3 text-gray-400" />
-            <Input
-              type={showPassword ? "text" : "password"}
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className={`pl-10 pr-10 ${errors.password ? "border-red-500" : ""}`}
-              placeholder="Enter your Resy password"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-9 right-3 text-gray-400 hover:text-gray-600"
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-            )}
-          </div>
-          
-          <div className="flex gap-2 text-sm">
-            <a
-              href="https://resy.com/reset-password"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-purple-600 hover:text-purple-700 underline"
-            >
-              Change password at Resy
-            </a>
-            <span className="text-gray-400">|</span>
-            <a
-              href="https://resy.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-purple-600 hover:text-purple-700 underline"
-            >
-              Create account on Resy
-            </a>
-          </div>
-          
-          {errors.submit && (
-            <p className="text-red-500 text-sm">{errors.submit}</p>
+          {(isLoadingUserData || isCheckingExistingCredentials) && (
+            <p className="text-sm text-gray-500 mb-4">Loading your information...</p>
           )}
           
-          <div className="pt-2">
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={saveForFuture}
-                onChange={(e) => setSaveForFuture(e.target.checked)}
-                className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-              />
-              <span className="text-sm text-gray-700">
-                Save this information for future Resy reservations
-              </span>
-            </label>
-          </div>
+          {(isVerifying || isFetchingDetails) && (
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-700">
+                {isVerifying ? "Verifying..." : "Fetching booking details..."}
+              </p>
+            </div>
+          )}
           
-          <div className="flex gap-3 pt-4">
-            <Button
-              type="submit"
-              className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
-              disabled={isSaving || isLoadingUserData || isVerifying || isFetchingDetails}
-            >
-              {isVerifying ? "Verifying..." : isFetchingDetails ? "Fetching Details..." : isSaving ? "Saving..." : "Continue Booking"}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleSkip}
-              className="flex-1"
-              disabled={isSaving}
-            >
-              Skip & Go to Resy
-            </Button>
-          </div>
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email *
+              </label>
+              <Mail size={20} className="absolute top-9 left-3 text-gray-400" />
+              <Input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
+                placeholder="john.doe@example.com"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
+            </div>
+            
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password *
+              </label>
+              <Lock size={20} className="absolute top-9 left-3 text-gray-400" />
+              <Input
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className={`pl-10 pr-10 ${errors.password ? "border-red-500" : ""}`}
+                placeholder="Enter your Resy password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-9 right-3 text-gray-400 hover:text-gray-600"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+              )}
+            </div>
+            
+            <div className="flex gap-2 text-sm">
+              <a
+                href="https://resy.com/reset-password"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-purple-600 hover:text-purple-700 underline"
+              >
+                Change password at Resy
+              </a>
+              <span className="text-gray-400">|</span>
+              <a
+                href="https://resy.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-purple-600 hover:text-purple-700 underline"
+              >
+                Create account on Resy
+              </a>
+            </div>
+            
+            {errors.submit && (
+              <p className="text-red-500 text-sm">{errors.submit}</p>
+            )}
+            
+            <div className="pt-2">
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={saveForFuture}
+                  onChange={(e) => setSaveForFuture(e.target.checked)}
+                  className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                />
+                <span className="text-sm text-gray-700">
+                  Save this information for future Resy reservations
+                </span>
+              </label>
+            </div>
+            
+            <div className="flex gap-3 pt-4">
+              <Button
+                type="submit"
+                className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+                disabled={isSaving || isLoadingUserData || isVerifying || isFetchingDetails}
+              >
+                {isVerifying ? "Verifying..." : isFetchingDetails ? "Fetching Details..." : isSaving ? "Saving..." : "Continue Booking"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleSkip}
+                className="flex-1"
+                disabled={isSaving}
+              >
+                Skip & Go to Resy
+              </Button>
+            </div>
+          </form>
+          </>
+        )}
       </div>
     </div>
           )}

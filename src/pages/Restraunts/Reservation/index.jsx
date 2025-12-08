@@ -12,7 +12,7 @@ const Reservation = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const data = params.get("data");
-  console.log("accessTokenforReservation" , localStorage.getItem('accessToken'))
+  // console.log("accessTokenforReservation" , localStorage.getItem('accessToken'))
 
   useEffect(() => {
     let finalData = null;
@@ -54,7 +54,7 @@ const Reservation = () => {
     };
 
     try {
-      console.log("booking info", bookingInfoParams);
+      // console.log("booking info", bookingInfoParams);
       const response = await axios.get(
         `${Base_Url}/api/v1/yelp/get_restaurant_booking_info`,
         {

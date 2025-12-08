@@ -25,8 +25,8 @@ const ReservationStatus = () => {
 
   useEffect(() => {
     const finalData = JSON.parse(data);
-        
-        if (finalData?.bookingInfo) {
+      // console.log("finalData" , finalData?.formData?.[0]?.restaurant_type);
+    if (finalData?.formData?.[0]?.restaurant_type === "yelp") {
       yelpReservation();
     } else {
       openTableReservation();
