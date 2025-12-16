@@ -174,11 +174,11 @@ export default function Restaurant({ restrauntDetail }) {
       <div className="flex sm:my-10  justify-between items-center">
         <div className="flex flex-col gap-4">
           <div className="flex gap-4">
-            <img
+            {/* <img
               src="/assets/ratings.png"
               alt="ratings logo"
-              className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
-            />
+              className="h-4 w-4 md:h-5 md:w-5 mt-[6px] text-white"
+            /> */}
             <div className="flex flex-col gap-2">
               <p className="font-semibold  md:text-[1.25rem]">
               <span className="font-roboto font-semibold text-xl text-white">Ratings:</span>
@@ -191,11 +191,11 @@ export default function Restaurant({ restrauntDetail }) {
           </div>
 
           <div className="flex gap-4">
-            <img
+            {/* <img
               src="/assets/cuisine.png"
               alt="cuisine logo"
               className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
-            />
+            /> */}
             <div className="flex flex-col gap-2">
               <p className="font-semibold md:text-[1.25rem]">
                 <span className="font-roboto font-semibold text-xl text-white">Cuisine:</span>
@@ -209,11 +209,11 @@ export default function Restaurant({ restrauntDetail }) {
 
         <div className="flex flex-col gap-4">
           <div className="flex gap gap-4">
-            <img
+            {/* <img
               src="/assets/address.png"
               alt="address logo"
-              className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
-            />
+              className="h-4 w-4 md:h-5 md:w-5 mt-[6px] text-white"
+            /> */}
             <div className="flex flex-col gap-2">
               <p className="font-semibo md:text-[1.25rem]">
               <span className="font-roboto font-semibold text-xl text-white">Address:</span>
@@ -224,11 +224,11 @@ export default function Restaurant({ restrauntDetail }) {
             </div>
           </div>
           <div className="flex gap gap-4">
-            <img
+            {/* <img
               src="/assets/contact.png"
               alt="address logo"
               className="h-4 w-4 md:h-5 md:w-5 mt-[6px]"
-            />
+            /> */}
             <div className="flex flex-col gap-2">
               <p className="font-semibo md:text-[1.25rem]">
               <span className="font-roboto font-semibold text-xl text-white">Contact:</span>
