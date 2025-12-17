@@ -1360,7 +1360,7 @@ const RestaurantCards = memo(
                   // For TheFork, include both slug and id if available
                   const theforkSlug = data?.thefork_slug || data?.alias || data?.slug;
                   const theforkId = data?.thefork_id || data?.id;
-                  
+                  const fork_legacyId = data?.fork_legacyId || "";
                   let searchParams = "";
                   if (theforkSlug) {
                     searchParams = `thefork_slug=${encodeURIComponent(theforkSlug)}`;
@@ -1368,6 +1368,10 @@ const RestaurantCards = memo(
                   if (theforkId) {
                     if (searchParams) searchParams += "&";
                     searchParams += `thefork_id=${encodeURIComponent(theforkId)}`;
+                  }
+                  if (fork_legacyId) {
+                    if (searchParams) searchParams += "&";
+                    searchParams += `fork_legacyId=${encodeURIComponent(fork_legacyId)}`;
                   }
                   return `?${searchParams}`;
                 } else {

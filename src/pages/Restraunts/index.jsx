@@ -425,6 +425,7 @@ const Search = () => {
               rating: restaurant?.aggregateRatings?.thefork?.ratingValue || 0,
               categories,
               price: convertPrice(restaurant?.avgPrice?.value),
+              fork_legacyId: restaurant?.legacyId,
               coordinates: coordinates
                 ? {
                     latitude: coordinates?.latitude,

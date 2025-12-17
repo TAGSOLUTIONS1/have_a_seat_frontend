@@ -723,7 +723,6 @@ export default function MakeReservation({ restrauntDetail }) {
     };
 
     const handlenotimeslots = () => {
-      console.log("no time slots available" , reservationCard);
       if (reservationCard?.restaurant_type === "yelp") {
         window.location.href = `https://www.yelp.com/biz/${reservationCard?.alias}?osq=${reservationCard?.name}`;
       }
@@ -737,6 +736,9 @@ export default function MakeReservation({ restrauntDetail }) {
       }
       else if (reservationCard?.restaurant_type === "tableagent" || reservationCard?.restaurant_type === "tock") {
         window.location.href = `${reservationCard?.url}`;
+      }
+      else if (reservationCard?.restaurant_type === "thefork") {
+        window.location.href = `https://www.thefork.com/restaurant/${reservationCard?.slug}-r${reservationCard?.legacyId}`;
       }
       else{
         window.location.href = `https://www.google.com/search?q=${reservationCard?.name}`;
@@ -770,10 +772,10 @@ export default function MakeReservation({ restrauntDetail }) {
 
           <div className="w-full md:w-auto">
             <button
-              // onClick={(reservationCard?.restaurant_type === "resy" ||
-              //   reservationCard?.restaurant_type === "open_table"
-              // ) ? handleTimeSlots : handlenotimeslots}
-              onClick={handleTimeSlots}
+              onClick={(reservationCard?.restaurant_type === "resy" ||
+                reservationCard?.restaurant_type === "open_table"
+              ) ? handleTimeSlots : handlenotimeslots}
+              // onClick={handleTimeSlots}
               className="bg-plum px-4 py-2 text-white rounded-full w-full md:w-auto"
             >
               Find a Table

@@ -15,6 +15,7 @@ const RestrauntDetail = () => {
   const [loading, setLoading] = useState(true);
   const [endpoint, setEndPoint] = useState();
   const [key, setKey] = useState();
+  const [forkLegacyId, setForkLegacyId] = useState(null);
   const today = new Date();
   const formattedDate = today.toISOString().split('T')[0];
   // console.log("restrauntDetail", restrauntDetail);
@@ -42,6 +43,9 @@ const RestrauntDetail = () => {
     const tableagent_city = params.get("tableagent_city");
     const thefork_id = params.get("thefork_id");
     const thefork_slug = params.get("thefork_slug");
+    const fork_legacyId = params.get("fork_legacyId");
+    console.log("fork_legacyId details", fork_legacyId);
+    setForkLegacyId(fork_legacyId);
     if (map_url) {
       setPrevId(map_url);
       const openTableParamUrl = map_url?.replace(
@@ -711,12 +715,19 @@ const RestrauntDetail = () => {
               id: restaurantBaseInfo?.restaurantId || restaurantBaseInfo?.id || "",
               restaurantUuid: restaurantBaseInfo?.restaurantUuid || restaurantBaseInfo?.id || "",
               slug: restaurantBaseInfo?.restaurantSlug || restaurantData?.slug || "",
-              
+
+              // Legacy ID (passed via URL or present in the data)
+              legacyId:
+                restaurantBaseInfo?.legacyId ||
+                restaurantData?.legacyId ||
+                forkLegacyId ||
+                null,
+
               // Images
               images: allImages,
               image_url: allImages[0] || "",
               photos: allImages,
-              
+            
               // Rating
               rating: theforkRating?.ratingValue || 0,
               rating_value: theforkRating?.ratingValue || 0,
