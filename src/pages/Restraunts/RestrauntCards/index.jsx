@@ -37,7 +37,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return `${miles.toFixed(1)} mi`;
   }
 };
-const initialTypes = ["open_table", "yelp", "resy", "tock", "tableagent"];
+const initialTypes = ["open_table", "yelp", "resy", "tock", "tableagent", "thefork"];
 const ratingtypes = ["5" , "4" , "3" , "2" , "1"];
 const cuisinestypes=["Italian" , "Mediterranean" , "Mexican" , "Chinese" , "Thai"];
 const Reviewedtype=["most" , "least"];
@@ -48,6 +48,7 @@ const RestaurantCards = memo(
     resyData,
     tockData,
     tableAgentData,
+    theForkData,
     formData,
     selectedStarFilter,
     selectedPriceFilter,
@@ -86,7 +87,8 @@ const RestaurantCards = memo(
         (openTableData && selectedTypes.includes("open_table")) ||
         (resyData && selectedTypes.includes("resy")) ||
         (tockData && selectedTypes.includes("tock")) ||
-        (tableAgentData && selectedTypes.includes("tableagent"))
+        (tableAgentData && selectedTypes.includes("tableagent")) ||
+        (theForkData && selectedTypes.includes("thefork"))
       ) {
         const mergedRestaurants = [];
 
@@ -135,6 +137,15 @@ const RestaurantCards = memo(
           );
         }
 
+        if (theForkData && selectedTypes.includes("thefork")) {
+          mergedRestaurants.push(
+            ...theForkData.map((restaurant) => ({
+              ...restaurant,
+              restraunt_type: "thefork",
+            }))
+          );
+        }
+
 
         // const shuffledRestaurants = mergedRestaurants.sort((a, b) => {
         //   const keyA = (a.name + a.id).toLowerCase();
@@ -146,7 +157,7 @@ const RestaurantCards = memo(
       } else {
         setShuffledRestaurants([]);
       }
-    }, [yelpData, openTableData, resyData, tockData, tableAgentData, selectedTypes]);
+    }, [yelpData, openTableData, resyData, tockData, tableAgentData, theForkData, selectedTypes]);
 
     useEffect(() => {
       let filteredRestaurants = shuffledRestaurants;
@@ -155,7 +166,12 @@ const RestaurantCards = memo(
         filteredRestaurants = filteredRestaurants.filter((restaurant) => {
           let price = null;
 
-          if (restaurant.restraunt_type === "yelp" || restaurant.restraunt_type === "tock" || restaurant.restraunt_type === "tableagent") {
+          if (
+            restaurant.restraunt_type === "yelp" ||
+            restaurant.restraunt_type === "tock" ||
+            restaurant.restraunt_type === "tableagent" ||
+            restaurant.restraunt_type === "thefork"
+          ) {
             switch (restaurant.price) {
               case "$":
                 price = 1;
@@ -199,6 +215,8 @@ const RestaurantCards = memo(
             rating = null;
           } else if (restaurant.restraunt_type === "tableagent") {
             rating = Math.floor(parseFloat(restaurant.rating || restaurant.tableagent_rating || 0));
+          } else if (restaurant.restraunt_type === "thefork") {
+            rating = Math.floor(parseFloat(restaurant.rating || 0));
           }
           return rating != null && rating === selectedStarFilter;
         });
@@ -207,7 +225,7 @@ const RestaurantCards = memo(
       if (selectedCuisineFilter != null) {
         filteredRestaurants = filteredRestaurants.filter((restaurant) => {
           let cuisine = null;
-          if (restaurant.restraunt_type === "yelp") {
+          if (restaurant.restraunt_type === "yelp" || restaurant.restraunt_type === "thefork") {
             cuisine = restaurant?.categories
               ?.map((category) => category.title.toLowerCase())
               .join(", ");
@@ -476,6 +494,11 @@ const RestaurantCards = memo(
           lat: restaurant.coordinates.latitude,
           lng: restaurant.coordinates.longitude,
         };
+      } else if (restaurant.restraunt_type === "thefork" && restaurant.coordinates) {
+        return {
+          lat: restaurant.coordinates.latitude,
+          lng: restaurant.coordinates.longitude,
+        };
       }
       // Table Agent restaurants are excluded from map
       return null;
@@ -498,11 +521,13 @@ const RestaurantCards = memo(
               ? `${restaurant.locality || ""} ${restaurant.location?.name || ""}`.trim()
               : restaurant.restraunt_type === "tock"
               ? restaurant.location?.display_address?.join(" ") || `${restaurant.location?.address1 || ""} ${restaurant.location?.city || ""}`.trim()
+            : restaurant.restraunt_type === "thefork"
+              ? restaurant.location?.display_address?.join(" ") || `${restaurant.location?.address1 || ""} ${restaurant.location?.city || ""}`.trim()
               : "";
 
           // Extract cuisine information
           let cuisine = "";
-          if (restaurant.restraunt_type === "yelp" || restaurant.restraunt_type === "tock") {
+          if (restaurant.restraunt_type === "yelp" || restaurant.restraunt_type === "tock" || restaurant.restraunt_type === "thefork") {
             cuisine = restaurant.categories?.map(cat => cat.title).join(", ") || "N/A";
           } else if (restaurant.restraunt_type === "open_table") {
             cuisine = restaurant.primaryCuisine?.name || "N/A";
@@ -555,6 +580,19 @@ const RestaurantCards = memo(
               restaurant.location.latitude,
               restaurant.location.longitude
             );
+          }
+          // Handle TheFork restaurants
+          else if (restaurant.restraunt_type === "thefork") {
+            if (restaurant.distance) {
+              distance = `${restaurant.distance.toFixed(1)} mi`;
+            } else if (restaurant.coordinates && userLocationCoords) {
+              distance = calculateDistance(
+                userLocationCoords.lat,
+                userLocationCoords.lng,
+                restaurant.coordinates.latitude,
+                restaurant.coordinates.longitude
+              );
+            }
           }
 
           return {
@@ -629,6 +667,8 @@ const RestaurantCards = memo(
               ? "map_url"
               : restaurant?.restraunt_type === "tock"
               ? "tock_domain"
+            : restaurant?.restraunt_type === "thefork"
+              ? "thefork_id"
               : "resy_alias"
           }=${encodeURIComponent(
             restaurant?.restraunt_type === "yelp"
@@ -637,6 +677,8 @@ const RestaurantCards = memo(
               ? restaurant?.urls?.profileLink?.link
               : restaurant?.restraunt_type === "tock"
               ? restaurant?.tock_domain || restaurant?.tock_business_id?.toString() || restaurant?.id
+            : restaurant?.restraunt_type === "thefork"
+              ? restaurant?.thefork_slug || restaurant?.alias || restaurant?.id
               : restaurant?.id?.resy
           )}`;
         }
@@ -779,7 +821,7 @@ const RestaurantCards = memo(
                 <div className="mb-6">
                   <p className="font-agrandir text-xs font-bold text-white uppercase mb-3">Platforms</p>
                   <div className="flex flex-wrap gap-3">
-                    {["yelp", "resy", "open_table", "tock", "tableagent"].map((type) => (
+                    {["yelp", "resy", "open_table", "tock", "tableagent", "thefork"].map((type) => (
                       <div key={type} className="flex gap-2 items-center">
                         <label className="relative">
                           <input
@@ -793,7 +835,13 @@ const RestaurantCards = memo(
                           </span>
                         </label>
                         <p className="font-agrandir text-xs font-bold text-white uppercase">
-                          {type === "open_table" ? "Open Table" : type === "tableagent" ? "Table Agent" : type.toUpperCase()}
+                          {type === "open_table"
+                            ? "Open Table"
+                            : type === "tableagent"
+                            ? "Table Agent"
+                            : type === "thefork"
+                            ? "TheFork"
+                            : type.toUpperCase()}
                         </p>
                       </div>
                     ))}
@@ -1030,6 +1078,23 @@ const RestaurantCards = memo(
                                   <p className="font-agrandir text-sm font-bold text-white uppercase">TABLE AGENT</p>
                 </div>
 
+                <div className="flex gap-2 sm:gap-3 items-center">
+                                  <label className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedTypes.includes("thefork")}
+                                      onChange={() => handleCheckboxChange("thefork")}
+                                      className="hidden peer"
+                                    />
+                                    <span className="w-5 h-5 bg-white cursor-pointer rounded-full shadow-spanshadow flex items-center justify-center">
+                                      {selectedTypes.includes("thefork") && (
+                                        <FaCheck size={14} color="#9235e2" />
+                                      )}
+                                    </span>
+                                  </label>
+                                  <p className="font-agrandir text-sm font-bold text-white uppercase">THEFORK</p>
+                </div>
+
             </div>
 
           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
@@ -1227,6 +1292,18 @@ const RestaurantCards = memo(
                     data.location.longitude
                   );
                 }
+                else if (data.restraunt_type === "thefork") {
+                  if (data.distance) {
+                    restaurantDistance = `${data.distance.toFixed(1)} mi`;
+                  } else if (data.coordinates && userLocationCoords) {
+                    restaurantDistance = calculateDistance(
+                      userLocationCoords.lat,
+                      userLocationCoords.lng,
+                      data.coordinates.latitude,
+                      data.coordinates.longitude
+                    );
+                  }
+                }
                 // Handle Tock restaurants - use distance from ranking (already converted to miles)
                 else if (data.restraunt_type === "tock" && data.distance) {
                   const miles = data.distance;
@@ -1277,6 +1354,20 @@ const RestaurantCards = memo(
                   }
                   if (locationSlug) {
                     searchParams += `&location=${encodeURIComponent(locationSlug)}`;
+                  }
+                  return `?${searchParams}`;
+                } else if (data?.restraunt_type === "thefork") {
+                  // For TheFork, include both slug and id if available
+                  const theforkSlug = data?.thefork_slug || data?.alias || data?.slug;
+                  const theforkId = data?.thefork_id || data?.id;
+                  
+                  let searchParams = "";
+                  if (theforkSlug) {
+                    searchParams = `thefork_slug=${encodeURIComponent(theforkSlug)}`;
+                  }
+                  if (theforkId) {
+                    if (searchParams) searchParams += "&";
+                    searchParams += `thefork_id=${encodeURIComponent(theforkId)}`;
                   }
                   return `?${searchParams}`;
                 } else {

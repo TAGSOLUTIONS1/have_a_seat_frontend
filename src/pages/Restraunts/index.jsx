@@ -44,6 +44,7 @@ const Search = () => {
   const [openTableData, setOpenTableData] = useState();
   const [tockData, setTockData] = useState();
   const [tableAgentData, setTableAgentData] = useState();
+  const [theForkData, setTheForkData] = useState();
   const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedStarFilter, setSelectedStarFilter] = useState(null);
@@ -58,9 +59,13 @@ const Search = () => {
     const savedFilters = loadFiltersFromStorage();
     
     if (savedFilters) {
+      // Ensure TheFork is included when old saved filters are missing it
+      const savedSelectedTypes = Array.isArray(savedFilters.selectedTypes)
+        ? Array.from(new Set([...savedFilters.selectedTypes, "thefork"]))
+        : ["yelp", "open_table", "resy", "tock", "tableagent", "thefork"];
       // Ensure all required properties exist
     return {
-      selectedTypes: savedFilters.selectedTypes || ["yelp", "open_table", "resy", "tock", "tableagent"],
+      selectedTypes: savedSelectedTypes,
       ratings: savedFilters.ratings || [],
       cuisinefilter: savedFilters.cuisinefilter || [],
       reviewedFilter: savedFilters.reviewedFilter || [],
@@ -70,7 +75,7 @@ const Search = () => {
   }
   
   return {
-    selectedTypes: ["yelp", "open_table", "resy", "tock", "tableagent"],
+    selectedTypes: ["yelp", "open_table", "resy", "tock", "tableagent", "thefork"],
     ratings: [],
     cuisinefilter: [],
     reviewedFilter: [],
@@ -82,7 +87,7 @@ const Search = () => {
   const [filters, setFilters] = useState(initializeFilters);
   const fetchData = async (apiEndpoint, customFormData) => {
     try {
-      console.log("apiEndpoint ", customFormData);
+      // console.log("apiEndpoint ", customFormData);
       const response = await axios.get(`${Base_Url}${apiEndpoint}`, {
         params: customFormData,
         headers: {
@@ -324,6 +329,140 @@ const Search = () => {
     }
   };
 
+  // Fetch and normalize TheFork restaurants
+  const fetchTheForkData = async (customFormData, userCoords = null) => {
+    try {
+      const latitude =
+        customFormData.latitude ||
+        customFormData.lat ||
+        userCoords?.lat ||
+        40.7127753;
+      const longitude =
+        customFormData.longitude ||
+        customFormData.lng ||
+        userCoords?.lng ||
+        -74.0059728;
+
+      // Ensure we have coordinates before calling the API
+      if (!latitude || !longitude) {
+        return [];
+      }
+
+      const params = { latitude, longitude };
+      const response = await axios.get(
+        `http://localhost:8000/api/v1/thefork/get_restaurants`,
+        {
+          params,
+          headers: { accept: "application/json" },
+        }
+      );
+
+      const convertPrice = (valueInCents) => {
+        if (!valueInCents && valueInCents !== 0) return "";
+        const dollars = valueInCents / 100;
+        if (dollars < 20) return "$";
+        if (dollars < 50) return "$$";
+        if (dollars < 80) return "$$$";
+        return "$$$$";
+      };
+
+      if (response.data?.success) {
+        const list =
+          response.data?.data?.pageProps?.searchPageResultsFetchResult?.list || [];
+        // console.log("list ", list);
+        return list
+          .map((item) => {
+            // Handle both structures: item.restaurant or item directly
+            const restaurant = item?.restaurant || item || {};
+            console.log("restaurant 1", restaurant);
+            const coordinates =
+              restaurant?.geolocation || restaurant?.attributes?.geolocation;
+
+            const categories = [];
+            if (restaurant?.servesCuisine) {
+              categories.push({
+                alias: restaurant.servesCuisine
+                  ?.toLowerCase()
+                  ?.replace(/\s+/g, "-"),
+                title: restaurant.servesCuisine,
+              });
+            }
+            if (Array.isArray(restaurant?.tags)) {
+              restaurant.tags.forEach((tag) => {
+                if (tag?.name) {
+                  categories.push({
+                    alias: tag.name.toLowerCase().replace(/\s+/g, "-"),
+                    title: tag.name,
+                  });
+                }
+              });
+            }
+
+            const formattedAddress =
+              restaurant?.attributes?.formattedAddress ||
+              restaurant?.address?.street;
+
+              const value = Number(restaurant?.avgPrice?.value);
+              const decimalPosition = restaurant?.avgPrice?.currency?.decimalPosition;
+
+            return {
+              id: restaurant?.id,
+              alias: restaurant?.slug || restaurant?.id,
+              name: restaurant?.name,
+              tags: restaurant?.tags || [],
+              avgPriceValue : (value / Math.pow(10, decimalPosition)).toFixed(decimalPosition),
+              image_url:
+                restaurant?.mainPhotoUrl ||
+                restaurant?.photos?.[0]?.src ||
+                restaurant?.photos?.[0]?.url ||
+                restaurant?.photos?.[0],
+              is_closed: false,
+              url: restaurant?.slug
+                ? `https://www.thefork.com/restaurant/${restaurant.slug}`
+                : restaurant?.attributes?.formattedAddress,
+              review_count:
+                restaurant?.aggregateRatings?.thefork?.reviewCount || 0,
+              rating: restaurant?.aggregateRatings?.thefork?.ratingValue || 0,
+              categories,
+              price: convertPrice(restaurant?.avgPrice?.value),
+              coordinates: coordinates
+                ? {
+                    latitude: coordinates?.latitude,
+                    longitude: coordinates?.longitude,
+                  }
+                : null,
+              transactions: [],
+              distance: restaurant?.attributes?.distanceFromGeolocation
+                ? restaurant.attributes.distanceFromGeolocation * 0.000621371
+                : null,
+              location: {
+                address1: restaurant?.address?.street || "",
+                address2: "",
+                address3: "",
+                city: restaurant?.address?.locality || "",
+                zip_code: restaurant?.address?.zipCode || "",
+                country: restaurant?.address?.country || "",
+                state: "",
+                display_address: formattedAddress ? [formattedAddress] : [],
+              },
+              phone: "",
+              display_phone: "",
+              restaurant_type: "thefork",
+              restraunt_type: "thefork",
+              thefork_slug: restaurant?.slug,
+              thefork_main_photo: restaurant?.mainPhotoUrl,
+            };
+          })
+          .filter((item) => item?.name);
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error fetching TheFork data:", error);
+      return [];
+    }
+  };
+
   // Fetch user statistics to get favorite cuisines
   useEffect(() => {
     const fetchUserStatistics = async () => {
@@ -346,7 +485,7 @@ const Search = () => {
             // Auto-apply favorite cuisines as default filters
             const favoriteCuisines = response.data.most_common_cuisine_types.slice(0, 3); // Top 3 favorites
             const defaultFilters = {
-              selectedTypes: ["yelp", "open_table", "resy", "tock", "tableagent"],
+              selectedTypes: ["yelp", "open_table", "resy", "tock", "tableagent", "thefork"],
               ratings: [],
               cuisinefilter: favoriteCuisines,
               reviewedFilter: [],
@@ -481,16 +620,18 @@ const Search = () => {
     // Fetch and set data for Yelp, Resy, and OpenTable immediately (non-blocking)
     const fetchMainData = async () => {
       // Fetch all three in parallel for faster loading
-      const [yelpData, resyData, openTableData] = await Promise.all([
+      const [yelpData, resyData, openTableData, theForkData] = await Promise.all([
         fetchData("/api/v1/yelp/get_restaurants", formData),
         fetchData("/api/v1/resy/get_restaurants", formData),
-        fetchData("/api/v1/opentable/get_restaurants", customFormData)
+        fetchData("/api/v1/opentable/get_restaurants", customFormData),
+        fetchTheForkData(formData, userLocationCoords)
       ]);
 
       // Set data immediately so UI can show results
       setYelpData(yelpData || []);
       setResyData(resyData || []);
       setOpenTableData(openTableData || []);
+      setTheForkData(theForkData || []);
     };
 
     // Fetch Tock separately (non-blocking) - will update when ready
@@ -664,6 +805,7 @@ const clearFilters = (keepFavorites = false) => {
                 openTableData={openTableData}
                 tockData={tockData}
                 tableAgentData={tableAgentData}
+                theForkData={theForkData}
                 formData={formData}
                 selectedStarFilter={selectedStarFilter}
                 selectedPriceFilter={selectedPriceFilter}

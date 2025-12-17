@@ -129,6 +129,9 @@ export default function Restaurant({ restrauntDetail }) {
       }
       return null;
     }
+    if (restrauntDetail?.restaurant_type === "thefork") {
+      return `${restrauntDetail?.location?.display_address?.join(" ")}`;
+    }
 
     const venueLocation = restrauntDetail?.results?.venues?.[0]?.venue?.location;
     if (venueLocation) {
@@ -234,7 +237,7 @@ export default function Restaurant({ restrauntDetail }) {
               <span className="font-roboto font-semibold text-xl text-white">Contact:</span>
               </p>
               <p className="text-sm sm:text-base min-h-[40px]">
-                {contactDisplay}
+                {contactDisplay || "Contact Information not available"}
               </p>
             </div>
           </div>

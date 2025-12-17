@@ -153,7 +153,7 @@ export default function Reviews({ restrauntDetail }) {
 
   return (
     <div className="">
-       {console.log("restrauntDetail  1  ", restrauntDetail)}
+       {/* {console.log("restrauntDetail  1  ", restrauntDetail)} */}
       {restrauntDetail?.restaurant_type!=="resy" ?
       (
         <div className=" py-8 lg:flex gap-10">
@@ -180,6 +180,8 @@ export default function Reviews({ restrauntDetail }) {
               ? restrauntDetail.description
               : restrauntDetail?.restaurant_type === "open_table" && restrauntDetail?.description
               ? restrauntDetail.description
+              : restrauntDetail?.restaurant_type === "thefork"
+              ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
               : restrauntDetail?.alias
               ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
               : firstTemplate?.content?.['en-us']?.about?.body && (
