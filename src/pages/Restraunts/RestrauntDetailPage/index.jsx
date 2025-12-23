@@ -15,6 +15,7 @@ const RestrauntDetail = () => {
   const [loading, setLoading] = useState(true);
   const [endpoint, setEndPoint] = useState();
   const [key, setKey] = useState();
+  const [forkLegacyId, setForkLegacyId] = useState(null);
   const today = new Date();
   const formattedDate = today.toISOString().split('T')[0];
   // console.log("restrauntDetail", restrauntDetail);
@@ -40,6 +41,11 @@ const RestrauntDetail = () => {
     const tock_domain = params.get("tock_domain");
     const tableagent_slug = params.get("tableagent_slug");
     const tableagent_city = params.get("tableagent_city");
+    const thefork_id = params.get("thefork_id");
+    const thefork_slug = params.get("thefork_slug");
+    const fork_legacyId = params.get("fork_legacyId");
+    console.log("fork_legacyId details", fork_legacyId);
+    setForkLegacyId(fork_legacyId);
     if (map_url) {
       setPrevId(map_url);
       const openTableParamUrl = map_url?.replace(
@@ -95,6 +101,21 @@ const RestrauntDetail = () => {
       setKey("tableagent");
       setEndPoint(
         `${Base_Url}/api/v1/tableagent/get_restaurant_details/${encodeURIComponent(tableagent_city)}/${encodeURIComponent(tableagent_slug)}`
+      );
+    }
+    else if(thefork_id || thefork_slug){
+      setPrevId(thefork_id || thefork_slug);
+      setKey("thefork");
+      // Build query params for TheFork API
+      const theforkParams = new URLSearchParams();
+      if (thefork_slug) {
+        theforkParams.append("restaurant_slug", thefork_slug);
+      }
+      if (thefork_id) {
+        theforkParams.append("restaurant_id", thefork_id);
+      }
+      setEndPoint(
+        `${Base_Url}/api/v1/thefork/get_restaurant_details?${theforkParams.toString()}`
       );
     }
     else {
@@ -511,6 +532,278 @@ const RestrauntDetail = () => {
               // Store original data for reference
               tableagent_data: data
             };
+            setRestrauntDetail(transformedData);
+          }
+          else if (key === "thefork") {
+            // Handle TheFork response structure
+            console.log("the fork data " , response?.data?.data)
+            const responseData = response?.data?.data?.pageProps || {};
+            const restaurantBaseInfo = responseData?.restaurantBaseInfo || {};
+            const initialApolloState = responseData?.initialApolloState || {};
+            // Extract restaurant data from Apollo state
+            const restaurantKey = `Restaurant:{"id":"${restaurantBaseInfo?.restaurantUuid || restaurantBaseInfo?.id}"}`;
+            const restaurantData = initialApolloState[restaurantKey] || {};
+            
+            // Extract HeaderPhoto objects from restaurantData
+            // HeaderPhoto objects are stored as properties like "HeaderPhoto:1d00ff93-0fd6-4c6d-a64c-1d0069f929b9"
+            const headerPhotoRefs = Object.keys(initialApolloState)
+              .filter(key => key.startsWith("HeaderPhoto"))
+              .map(key => initialApolloState[key])
+              .filter(photo => photo || photo?.__typename === "HeaderPhoto");
+            
+            // Extract image URLs from HeaderPhoto objects
+            const images = headerPhotoRefs.map(photo => {
+              // If it's a reference, resolve it from initialApolloState
+              if (photo?.__ref) {
+                const photoData = initialApolloState[photo.__ref];
+                return photoData?.imageUrl || photoData?.url || photoData?.src || "";
+              }
+              // If it's already the photo object, use imageUrl directly
+              return photo?.imageUrl || photo?.url || photo?.src || "";
+            }).filter(Boolean);
+            
+            // Extract menu photos
+            const menuPhotos = restaurantData?.menu?.photos?.list || [];
+            const menuImages = menuPhotos.map(photoRef => {
+              const photoKey = photoRef?.__ref || photoRef;
+              const photoData = initialApolloState[photoKey];
+              return photoData?.imageUrl || photoData?.url || photoData?.src || "";
+            }).filter(Boolean);
+            
+            // Combine all images
+            const allImages = [...images, ...menuImages];
+            
+            // Extract address
+            const address = restaurantData?.address || {};
+            const cityData = initialApolloState[`City:${restaurantBaseInfo?.city?.id}`] || restaurantBaseInfo?.city || {};
+            const countryData = initialApolloState[`Country:${restaurantBaseInfo?.country?.id}`] || restaurantBaseInfo?.country || {};
+            
+            // Extract rating
+            const aggregateRatings = restaurantData?.aggregateRatings || {};
+            const theforkRating = aggregateRatings?.thefork?.__ref ? 
+              initialApolloState[aggregateRatings.thefork.__ref] : 
+              aggregateRatings?.thefork || {};
+            
+            // Extract menus - TheFork uses aLaCarte menu structure
+            // For TheFork, each section becomes a separate tab
+            const transformedMenus = [];
+            
+            // Get the aLaCarte menu reference from restaurant data
+            const aLaCarteMenuRef = restaurantData?.menu?.aLaCarte?.__ref;
+            if (aLaCarteMenuRef) {
+              const aLaCarteMenu = initialApolloState[aLaCarteMenuRef] || {};
+              const sections = (aLaCarteMenu?.sections || []).map(sectionRef => {
+                const sectionKey = sectionRef?.__ref || sectionRef;
+                const sectionData = initialApolloState[sectionKey] || {};
+                
+                // Resolve menu items
+                const items = (sectionData?.items || []).map(itemRef => {
+                  const itemKey = itemRef?.__ref || itemRef;
+                  const itemData = initialApolloState[itemKey] || {};
+                  
+                  // Calculate price - value is in cents, convert to dollars
+                  let price = null;
+                  if (itemData?.priceAmount?.value !== undefined && itemData?.priceAmount?.value !== null) {
+                    const decimalPosition = itemData.priceAmount.currency?.decimalPosition || 2;
+                    price = (itemData.priceAmount.value / Math.pow(10, decimalPosition)).toFixed(decimalPosition);
+                  }
+                  
+                  return {
+                    id: itemData?.id || "",
+                    title: itemData?.name || "",
+                    description: itemData?.description || "",
+                    price: price,
+                    currency: itemData?.priceAmount?.currency?.isoCurrency || "USD",
+                    isMainDish: itemData?.isMainDish || false
+                  };
+                });
+                
+                // For TheFork, each section becomes a separate menu tab
+                transformedMenus.push({
+                  title: sectionData?.name || "",
+                  description: sectionData?.description || null,
+                  sections: [{
+                    title: sectionData?.name || "",
+                    description: sectionData?.description || null,
+                    items: items
+                  }]
+                });
+              });
+            }
+            
+            // Also check if there are other menus in restaurantData.menus (non-A_LA_CARTE)
+            const otherMenus = (restaurantData?.menus || []).filter(menu => {
+              return menu?.menuType !== "A_LA_CARTE";
+            });
+            
+            otherMenus.forEach(menu => {
+              const sections = (menu?.sections || []).map(sectionRef => {
+                const sectionKey = sectionRef?.__ref || sectionRef;
+                const sectionData = initialApolloState[sectionKey] || {};
+                
+                const items = (sectionData?.items || []).map(itemRef => {
+                  const itemKey = itemRef?.__ref || itemRef;
+                  const itemData = initialApolloState[itemKey] || {};
+                  
+                  let price = null;
+                  if (itemData?.priceAmount?.value !== undefined && itemData?.priceAmount?.value !== null) {
+                    const decimalPosition = itemData.priceAmount.currency?.decimalPosition || 2;
+                    price = (itemData.priceAmount.value / Math.pow(10, decimalPosition)).toFixed(decimalPosition);
+                  }
+                  
+                  return {
+                    id: itemData?.id || "",
+                    title: itemData?.name || "",
+                    description: itemData?.description || "",
+                    price: price,
+                    currency: itemData?.priceAmount?.currency?.isoCurrency || "USD",
+                    isMainDish: itemData?.isMainDish || false
+                  };
+                });
+                
+                return {
+                  title: sectionData?.name || "",
+                  description: sectionData?.description || null,
+                  items: items
+                };
+              });
+              
+              // For non-aLaCarte menus, keep the original structure (menu as tab, sections below)
+              transformedMenus.push({
+                title: menu?.name || "",
+                description: menu?.description || null,
+                sections: sections
+              });
+            });
+            
+            // Extract tags
+            const tags = (restaurantData?.tags || []).map(tagRef => {
+              const tagKey = tagRef?.__ref || tagRef;
+              const tagData = initialApolloState[tagKey] || {};
+              return {
+                id: tagData?.id || "",
+                name: tagData?.name || ""
+              };
+            });
+            
+            // Extract cuisine
+            const cuisine = restaurantData?.servesCuisine || "";
+            const categories = cuisine ? [{ title: cuisine, alias: cuisine.toLowerCase().replace(/\s+/g, "-") }] : [];
+            
+            // Extract price range
+            const avgPrice = restaurantData?.avgPrice || {};
+            const priceValue = avgPrice?.value ? 
+              (avgPrice.value / Math.pow(10, avgPrice.currency?.decimalPosition || 2)) : 
+              null;
+            const convertPrice = (valueInCents) => {
+              if (!valueInCents && valueInCents !== 0) return "";
+              const dollars = valueInCents / 100;
+              if (dollars < 20) return "$";
+              if (dollars < 50) return "$$";
+              if (dollars < 80) return "$$$";
+              return "$$$$";
+            };
+            const priceRange = convertPrice(avgPrice?.value);
+            
+            // Extract geolocation
+            const geolocation = restaurantData?.geolocation || restaurantBaseInfo?.geolocation || {};
+            
+            // Transform to expected structure
+            const transformedData = {
+              // Basic info
+              name: restaurantData?.name || "",
+              id: restaurantBaseInfo?.restaurantId || restaurantBaseInfo?.id || "",
+              restaurantUuid: restaurantBaseInfo?.restaurantUuid || restaurantBaseInfo?.id || "",
+              slug: restaurantBaseInfo?.restaurantSlug || restaurantData?.slug || "",
+
+              // Legacy ID (passed via URL or present in the data)
+              legacyId:
+                restaurantBaseInfo?.legacyId ||
+                restaurantData?.legacyId ||
+                forkLegacyId ||
+                null,
+
+              // Images
+              images: allImages,
+              image_url: allImages[0] || "",
+              photos: allImages,
+            
+              // Rating
+              rating: theforkRating?.ratingValue || 0,
+              rating_value: theforkRating?.ratingValue || 0,
+              total_ratings: theforkRating?.reviewCount || 0,
+              review_count: theforkRating?.reviewCount || 0,
+              aggregateRatings: {
+                thefork: {
+                  ratingValue: theforkRating?.ratingValue || null,
+                  reviewCount: theforkRating?.reviewCount || 0
+                }
+              },
+              
+              // Cuisine
+              cuisine: cuisine ? [cuisine] : [],
+              categories: categories,
+              servesCuisine: cuisine,
+              
+              // Tags
+              tags: tags,
+              
+              // Price
+              price: priceRange,
+              price_range: priceRange,
+              avgPrice: {
+                value: priceValue,
+                currency: avgPrice?.currency || { isoCurrency: "USD", decimalPosition: 2 }
+              },
+              
+              // Location/Address
+              location: {
+                address1: address?.street || "",
+                city: address?.locality || cityData?.name || "",
+                state: "",
+                zipCode: address?.zipCode || "",
+                country: countryData?.name || "",
+                latitude: geolocation?.latitude || null,
+                longitude: geolocation?.longitude || null,
+                display_address: [
+                  address?.street || "",
+                  `${address?.locality || cityData?.name || ""}, ${address?.zipCode || ""}`.trim()
+                ].filter(Boolean)
+              },
+              
+              // Address object
+              address: {
+                street: address?.street || "",
+                locality: address?.locality || cityData?.name || "",
+                zipCode: address?.zipCode || "",
+                city: address?.locality || cityData?.name || ""
+              },
+              
+              // Coordinates
+              coordinates: geolocation?.latitude && geolocation?.longitude ? {
+                latitude: geolocation.latitude,
+                longitude: geolocation.longitude
+              } : null,
+              geolocation: geolocation,
+              
+              // City and Country
+              city: cityData,
+              country: countryData,
+              
+              // Menus
+              menus: transformedMenus,
+              
+              // Additional TheFork specific fields
+              isBookable: restaurantData?.isBookable || false,
+              acceptedCurrency: restaurantData?.acceptedCurrency || "USD",
+              hasStock: restaurantData?.hasStock || false,
+              
+              // Restaurant type
+              restaurant_type: "thefork",
+              restraunt_type: "thefork",
+              
+            };
+            
             setRestrauntDetail(transformedData);
           }
           else {

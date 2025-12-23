@@ -260,8 +260,21 @@ export default function MakeReservation({ restrauntDetail }) {
     setError("");
     reservationCard?.restaurant_type ==="yelp" ? fetchYelpTimeSlots() :
     reservationCard?.restaurant_type ==="open_table" ? fetchOpenTableTimeSlots() :
+    reservationCard?.restaurant_type ==="tock" ? fetchTockTimeSlots() :
     fetchResyTimeSlots();
   };
+
+  // If Tock details already include open times, seed the slots so the user sees them immediately.
+  useEffect(() => {
+    if (
+      restrauntDetail?.restaurant_type === "tock" &&
+      Array.isArray(restrauntDetail?.tock_open_time) &&
+      restrauntDetail.tock_open_time.length > 0
+    ) {
+      setTimeSlots(restrauntDetail.tock_open_time);
+      setIsDataLoaded(true);
+    }
+  }, [restrauntDetail]);
 
   const handleYelpReservation = async (clickedData) => {
     // Prevent rapid clicking
@@ -362,6 +375,46 @@ export default function MakeReservation({ restrauntDetail }) {
       setSelectedTimeSlot(clickedData);
       setSelectedReservationType('open_table');
       setShowGuestModal(true);
+    }
+  };
+
+  const fetchTockTimeSlots = async () => {
+    setLoading(true);
+    // Try domain from props first, then fall back to parsing the URL
+    const tockDomain =
+      restrauntDetail?.tock_domain ||
+      restrauntDetail?.restaurant_alias ||
+      restrauntDetail?.url?.split("/")?.filter(Boolean)?.[2];
+
+    if (!tockDomain) {
+      setLoading(false);
+      setIsDataLoaded(true);
+      setTimeSlots([]);
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `${Base_Url}/api/v1/tock/get_restaurant_timings/${encodeURIComponent(
+          tockDomain
+        )}`
+      );
+
+      if (response.status === 200) {
+        const calendarOfferings =
+          response?.data?.data?.calendar?.offerings || {};
+        // Tock returns open dates and open times; we surface available times directly.
+        const openTimes = calendarOfferings?.openTime || [];
+        setTimeSlots(Array.isArray(openTimes) ? openTimes : []);
+        setLoading(false);
+        setIsDataLoaded(true);
+      } else {
+        setLoading(fasle);
+        throw new Error("Network response was not ok.");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -670,7 +723,6 @@ export default function MakeReservation({ restrauntDetail }) {
     };
 
     const handlenotimeslots = () => {
-      console.log("no time slots available" , reservationCard);
       if (reservationCard?.restaurant_type === "yelp") {
         window.location.href = `https://www.yelp.com/biz/${reservationCard?.alias}?osq=${reservationCard?.name}`;
       }
@@ -685,12 +737,14 @@ export default function MakeReservation({ restrauntDetail }) {
       else if (reservationCard?.restaurant_type === "tableagent" || reservationCard?.restaurant_type === "tock") {
         window.location.href = `${reservationCard?.url}`;
       }
+      else if (reservationCard?.restaurant_type === "thefork") {
+        window.location.href = `https://www.thefork.com/restaurant/${reservationCard?.slug}-r${reservationCard?.legacyId}`;
+      }
       else{
         window.location.href = `https://www.google.com/search?q=${reservationCard?.name}`;
       }
     };
 
-    console.log("reservation " , reservationCard);
 
   return (
     <>
@@ -820,7 +874,26 @@ export default function MakeReservation({ restrauntDetail }) {
                     ) : (
                       <p className="text-lg text-red-600">No resy slots available.</p>
                     )
-                  ) :  <p className="text-lg text-red-600">Couldnot get slots.</p>
+              ) : restrauntDetail?.restaurant_type === "tock" ? (
+                Array.isArray(timeSlots) && timeSlots.length > 0 ? (
+                  <>
+                    <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
+                    <div className="flex flex-wrap justify-center">
+                      {timeSlots.map((time, index) => (
+                        <button
+                          key={index}
+                          className="bg-purple-600 text-white p-3 m-1 rounded-lg"
+                          onClick={() => window.open(restrauntDetail?.url || reservationCard?.url, "_blank", "noopener,noreferrer")}
+                        >
+                          {time}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-lg text-red-600">No tock slots available.</p>
+                )
+              ) :  <p className="text-lg text-red-600">Couldnot get slots.</p>
                 ) : null}
 
             </div>

@@ -28,6 +28,14 @@ export default function MenuDetails({ restrauntDetail }) {
     fetchYelpMenu();
   }, [restrauntDetail?.alias, restrauntDetail?.restaurant_type]);
 
+  // Update menus when restrauntDetail changes (for TheFork and other types)
+  useEffect(() => {
+    if (restrauntDetail?.menus) {
+      setMenus(restrauntDetail.menus);
+      setActiveTab(0); // Reset to first tab when menus change
+    }
+  }, [restrauntDetail?.menus]);
+
   if (restrauntDetail?.restaurant_type === "resy" || restrauntDetail?.restaurant_type === "tock" || restrauntDetail?.restaurant_type === "tableagent") {
     return (
       <div className="py-10 text-center text-gray-500">
@@ -51,6 +59,34 @@ export default function MenuDetails({ restrauntDetail }) {
             </>
           ) : (
             "No menu available."
+          )}
+        </p>
+      </div>
+    );
+  }
+
+  // Handle TheFork restaurants with no menu
+  if (restrauntDetail?.restaurant_type === "thefork" && (!menus || menus.length === 0)) {
+    return (
+      <div className="py-10 text-center text-gray-500">
+        <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-4">
+          <strong>Menu</strong>
+        </h2>
+        <p className="text-gray-500 font-roboto">
+          At present, we do not have menu information for this restaurant.
+          {restrauntDetail?.url && (
+            <>
+              {" "}Please see the{" "}
+              <a
+                href={restrauntDetail?.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-plum underline hover:text-purple-800"
+              >
+                website
+              </a>{" "}
+              or wait to visit the restaurant to learn more.
+            </>
           )}
         </p>
       </div>
@@ -81,6 +117,9 @@ export default function MenuDetails({ restrauntDetail }) {
   }
 
 
+
+  // For TheFork restaurants, each menu item is a section tab
+  const isTheFork = restrauntDetail?.restaurant_type === "thefork";
 
   return (
     <div className="py-6 sm:py-10 flex flex-col text-white space-y-8">
@@ -115,64 +154,98 @@ export default function MenuDetails({ restrauntDetail }) {
 
       {menus[activeTab] && (
         <div className="space-y-4 w-full lg:w-2/3">
-          <div>
-            <h3 className="text-2xl font-semibold text-black">{menus[activeTab].title}</h3>
-            {menus[activeTab].description && (
-              <p className="text-black text-sm">{menus[activeTab].description}</p>
-            )}
-          </div>
-
-          {menus[activeTab].sections?.map((section, sectionIndex) => (
-            <div key={sectionIndex} className="mt-4 space-y-2">
-              <h4 className="text-xl font-semibold text-black">{section.title}</h4>
-              {section.description && (
-                <p className="text-black text-sm">{section.description}</p>
+          {!isTheFork && (
+            <div>
+              <h3 className="text-2xl font-semibold text-black">{menus[activeTab].title}</h3>
+              {menus[activeTab].description && (
+                <p className="text-black text-sm">{menus[activeTab].description}</p>
               )}
-              <div className="divide-y divide-gray-200 mt-2">
-                {section.items?.map((item, itemIndex) => (
-                  <div
-                    key={itemIndex}
-                    className="flex flex-col sm:flex-row sm:justify-between py-2"
-                  >
-                    <div>
-                      <p className="font-medium text-black">{item.title}</p>
-                      {item.description && (
-                        <p className="text-sm text-black">{item.description}</p>
-                      )}
+            </div>
+          )}
+
+          {isTheFork ? (
+            // For TheFork: Each menu is a section, show items directly
+            menus[activeTab].sections?.[0] && (
+              <div className="mt-4 space-y-2">
+                {menus[activeTab].sections[0].description && (
+                  <p className="text-black text-sm mb-4">{menus[activeTab].sections[0].description}</p>
+                )}
+                <div className="divide-y divide-gray-200 mt-2">
+                  {menus[activeTab].sections[0].items?.map((item, itemIndex) => (
+                    <div
+                      key={itemIndex}
+                      className="flex flex-col sm:flex-row sm:justify-between py-2"
+                    >
+                      <div>
+                        <p className="font-medium text-black">{item.title}</p>
+                        {item.description && (
+                          <p className="text-sm text-black">{item.description}</p>
+                        )}
+                      </div>
+                      <div className="text-right text-sm text-black sm:pl-4">
+                        {item.price ? `$${parseFloat(item.price).toFixed(2)}` : "N/A"}
+                      </div>
                     </div>
-                    <div className="text-right text-sm text-black sm:pl-4">
-                      ${parseFloat(item.price).toFixed(2)}
+                  ))}
+                </div>
+              </div>
+            )
+          ) : (
+            // For other restaurant types: Show sections within menu
+            menus[activeTab].sections?.map((section, sectionIndex) => (
+              <div key={sectionIndex} className="mt-4 space-y-2">
+                <h4 className="text-xl font-semibold text-black">{section.title}</h4>
+                {section.description && (
+                  <p className="text-black text-sm">{section.description}</p>
+                )}
+                <div className="divide-y divide-gray-200 mt-2">
+                  {section.items?.map((item, itemIndex) => (
+                    <div
+                      key={itemIndex}
+                      className="flex flex-col sm:flex-row sm:justify-between py-2"
+                    >
+                      <div>
+                        <p className="font-medium text-black">{item.title}</p>
+                        {item.description && (
+                          <p className="text-sm text-black">{item.description}</p>
+                        )}
+                      </div>
+                      <div className="text-right text-sm text-black sm:pl-4">
+                        {item.price ? `$${parseFloat(item.price).toFixed(2)}` : "N/A"}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {restrauntDetail?.restaurant_type === "yelp" && menus["Popular Dishes"]?.itemListElement && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {menus["Popular Dishes"].itemListElement.map((photo, index) => (
+            <div key={index} className="bg-white rounded shadow p-2">
+              <img
+                src={photo.thumbnailUrl || photo.url}
+                alt={photo.caption || `Business Photo ${index + 1}`}
+                className="w-full h-48 object-cover rounded"
+              />
+              <div className="mt-2">
+                <p className="font-medium text-black">{photo.caption || "No Caption"}</p>
+                {photo.review?.reviewRating?.ratingValue && (
+                  <p className="text-sm text-gray-600">
+                    Rating: {photo.review.reviewRating.ratingValue}/5
+                  </p>
+                )}
+                <p className="text-sm text-gray-600">
+                  {photo.keywords.join(" , ")}
+                </p>
               </div>
             </div>
           ))}
         </div>
       )}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {menus["Popular Dishes"]?.itemListElement.map((photo, index) => (
-          <div key={index} className="bg-white rounded shadow p-2">
-            <img
-              src={photo.thumbnailUrl || photo.url}
-              alt={photo.caption || `Business Photo ${index + 1}`}
-              className="w-full h-48 object-cover rounded"
-            />
-            <div className="mt-2">
-              <p className="font-medium text-black">{photo.caption || "No Caption"}</p>
-              {photo.review?.reviewRating?.ratingValue && (
-                <p className="text-sm text-gray-600">
-                  Rating: {photo.review.reviewRating.ratingValue}/5
-                </p>
-              )}
-              <p className="text-sm text-gray-600">
-                {photo.keywords.join(" , ")}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

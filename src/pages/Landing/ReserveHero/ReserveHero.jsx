@@ -63,9 +63,9 @@ export default function ReserveHero() {
       <div className="absolute top-0 left-0 w-full h-full bg-black/30"></div>
 
       {/* Content */}
-      <div className={`relative z-10 h-full flex flex-col gap-64 items-center justify-center text-center px-5 transition-opacity duration-500 ${isLoading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+      <div className={`relative z-10 h-full flex flex-col gap-32 sm:gap-40 md:gap-48 lg:gap-52 items-center justify-center text-center px-5 transition-opacity duration-500 ${isLoading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
 
-      <div className="text-plum text-4xl sm:text-5xl w-[100%] sm:w-[70%] md:text-6xl lg:text-7xl md:w-[50%] font-bold font-agrandir uppercase"> 
+      <div className="text-plum text-4xl -mt-12 sm:text-5xl w-[100%] sm:w-[70%] md:text-5xl lg:text-6xl xl:text-7xl md:w-[50%] font-bold font-agrandir uppercase"> 
           <p>Dine Smarter, Reserve Faster</p>
         </div>
 

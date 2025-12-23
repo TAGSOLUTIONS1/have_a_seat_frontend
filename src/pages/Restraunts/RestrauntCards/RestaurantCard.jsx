@@ -27,6 +27,8 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
     } else if (data?.restraunt_type === "tableagent") {
       // TableAgent: id.tableagent is a string slug, saved as string in restaurant_alias (like Resy)
       return String(data?.id?.tableagent || data?.tableagent_slug || data?.slug || "");
+    } else if (data?.restraunt_type === "thefork") {
+      return data?.thefork_slug || data?.alias || data?.id;
     }
     return data?.restaurant_alias || data?.alias;
   };
@@ -34,6 +36,30 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
   const getRestaurantType = () => {
     return data?.restraunt_type || data?.restaurant_type || "yelp";
   };
+
+  // Helpers specific to TheFork display
+  const getTheForkCuisine = () => {
+    // Prefer the 3rd tag name if present, otherwise fallback to first category title
+    const tagCuisine = data?.tags?.[2]?.name || data?.tags?.[0]?.name;
+    if (tagCuisine) return tagCuisine;
+    if (Array.isArray(data?.categories) && data.categories.length > 0) {
+      return data.categories[0]?.title || data.categories[0];
+    }
+    return null;
+  };
+
+  // const getTheForkPrice = () => {
+  //   if (data?.price) return data.price; // already mapped to $/$$...
+  //   if (typeof data?.avgPriceValue === "number") {
+  //     // convert cents to approximate dollars and bucket
+  //     const dollars = data.avgPriceValue / 100;
+  //     if (dollars < 20) return "$";
+  //     if (dollars < 50) return "$$";
+  //     if (dollars < 80) return "$$$";
+  //     return "$$$$";
+  //   }
+  //   return null;
+  // };
 
   return (
     <div className="bg-white w-full p-4 sm:p-6 md:p-8 lg:p-10 shadow-cardshadow rounded-[20px] sm:rounded-[30px] flex flex-col md:flex-row">
@@ -51,6 +77,8 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
               : data?.restraunt_type === "tock"
               ? data?.image_url
               : data?.restraunt_type === "tableagent"
+              ? data?.image_url
+            : data?.restraunt_type === "thefork"
               ? data?.image_url
               : data?.photos?.gallery?.photos[0]?.thumbnails[0]?.url
               // : data?.photos?.profile?.medium?.url
@@ -195,7 +223,7 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
                       className="h-4 w-4 sm:h-5 sm:w-5"
                     />
                     <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
-                      Ratings:
+                      {data.restraunt_type === "thefork" ? "Average Price:" : "Ratings:"}
                     </span>
                   </p>
                   <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
@@ -205,8 +233,12 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
                       ? (data?.statistics?.reviews?.ratings?.overall?.rating?.toFixed(2) ?? "N/A")
                       : data.restraunt_type === "resy"
                       ? (data?.rating?.average?.toFixed(2) ?? "N/A")
+                      : data.restraunt_type === "thefork"
+                      ? `$ ${data?.avgPriceValue ?? "N/A"}`
                       : null}
-                    <span className="text-sm sm:text-base">/5</span>
+                    {data.restraunt_type !== "thefork" && (
+                      <span className="text-sm sm:text-base">/5</span>
+                    )}
                   </p>
                 </div>
 
@@ -235,6 +267,11 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
                         {data?.locality && `${data?.locality} `}
                         <span> {data?.location?.name}</span>
                       </>
+                    ) : data?.restraunt_type === "thefork" ? (
+                      <>
+                        {data?.location?.display_address?.join(" ") ||
+                          `${data?.location?.address1 || ""} ${data?.location?.city || ""}`.trim()}
+                      </>
                     ) : null}
                   </p>
                 </div>
@@ -248,7 +285,7 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
                       className="h-4 w-4 sm:h-5 sm:w-5"
                     />
                     <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
-                      Contact:
+                      {data.restraunt_type === "thefork" ? "Cuisine:" : "Contact:"}
                     </span>
                   </p>
                   <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
@@ -258,6 +295,8 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
                       ? data?.contactInformation?.formattedPhoneNumber
                       : data.restraunt_type === "resy"
                       ? data?.contact?.phone_number
+                      : data.restraunt_type === "thefork"
+                      ? getTheForkCuisine() || "N/A"
                       : null}
                   </p>
                 </div>
@@ -280,6 +319,8 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
                 ? "/assets/tock-logo.png"
                 : data.restraunt_type === "tableagent"
                 ? "/assets/tableagent-logo.png"
+              : data.restraunt_type === "thefork"
+                ? "/assets/thefork.png"
                 : ""
             }
             alt={`${data.restraunt_type} logo`}
@@ -305,6 +346,8 @@ const RestaurantCard = ({ data, distance, formData, children, favoritesList, onF
               ? "/assets/tock-logo.png"
               : data.restraunt_type === "tableagent"
               ? "/assets/tableagent.png"
+            : data.restraunt_type === "thefork"
+              ? "/assets/thefork.png"
               : ""
           }
           alt={`${data.restraunt_type} logo`}
