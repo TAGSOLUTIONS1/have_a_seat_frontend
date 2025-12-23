@@ -395,7 +395,7 @@ export default function MakeReservation({ restrauntDetail }) {
 
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/v1/tock/get_restaurant_timings/${encodeURIComponent(
+        `${Base_Url}/api/v1/tock/get_restaurant_timings/${encodeURIComponent(
           tockDomain
         )}`
       );

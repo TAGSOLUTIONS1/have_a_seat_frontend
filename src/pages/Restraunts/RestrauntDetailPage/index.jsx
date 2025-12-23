@@ -115,7 +115,7 @@ const RestrauntDetail = () => {
         theforkParams.append("restaurant_id", thefork_id);
       }
       setEndPoint(
-        `http://localhost:8000/api/v1/thefork/get_restaurant_details?${theforkParams.toString()}`
+        `${Base_Url}/api/v1/thefork/get_restaurant_details?${theforkParams.toString()}`
       );
     }
     else {

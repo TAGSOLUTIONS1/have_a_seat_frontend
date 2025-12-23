@@ -350,7 +350,7 @@ const Search = () => {
 
       const params = { latitude, longitude };
       const response = await axios.get(
-        `http://localhost:8000/api/v1/thefork/get_restaurants`,
+        `${Base_Url}/api/v1/thefork/get_restaurants`,
         {
           params,
           headers: { accept: "application/json" },
