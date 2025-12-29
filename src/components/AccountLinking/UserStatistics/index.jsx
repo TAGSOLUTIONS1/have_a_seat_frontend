@@ -251,7 +251,7 @@ const UserStatistics = () => {
                       </span>
                     </div>
                     <p className="text-sm text-shipGrey/70 font-agrandir">
-                      You typically book {formatTimeBetweenReservationAndDate((statistics?.average_time_between_reservation_and_date || 7) + 2)} days in advance
+                      You typically book {formatTimeBetweenReservationAndDate((statistics?.average_time_between_reservation_and_date || 7))} days in advance
                     </p>
                   </div>
                 </div>

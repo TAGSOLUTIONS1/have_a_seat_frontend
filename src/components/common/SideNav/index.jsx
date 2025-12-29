@@ -42,7 +42,10 @@ import {
 const SideNav = () => {
   const { logout, authState } = useAuth();
   const navigate = useNavigate();
-  const [currentScreen, setCurrentScreen] = useState("search"); // "search" or "menu"
+  // Show menu directly if logged in, otherwise show search
+  const [currentScreen, setCurrentScreen] = useState(
+    authState.isAuthenticated && authState.user ? "menu" : "search"
+  );
   const [location, setLocation] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -60,6 +63,15 @@ const SideNav = () => {
       }
     }
   }, []);
+
+  // Update screen when authentication state changes
+  useEffect(() => {
+    if (authState.isAuthenticated && authState.user) {
+      setCurrentScreen("menu");
+    } else {
+      setCurrentScreen("search");
+    }
+  }, [authState.isAuthenticated, authState.user]);
 
   const handleLogout = async () => {
     try {
@@ -191,17 +203,6 @@ const SideNav = () => {
                 <Search className="w-4 h-4 mr-2 text-xs"  />
                 Find Restaurants
               </Button>
-
-              {/* Menu Button (if logged in) */}
-              {authState.isAuthenticated && authState.user && (
-                <Button
-                  variant="ghost"
-                  onClick={() => setCurrentScreen("menu")}
-                  className="w-full mt-2 text-gray-600 hover:text-plum hover:bg-purple-50"
-                >
-                  View Menu
-                </Button>
-              )}
             </div>
           </div>
         ) : (
@@ -212,12 +213,12 @@ const SideNav = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setCurrentScreen("search")}
+                onClick={() => setIsOpen(false)}
                 className="h-8 w-8"
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h2 className="text-xl font-bold text-black">Menu</h2>
+              {/* <h2 className="text-xl font-bold text-plum">PROFILE</h2> */}
             </div>
 
             {/* User Info */}

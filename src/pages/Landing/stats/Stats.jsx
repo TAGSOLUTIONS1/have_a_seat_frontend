@@ -20,7 +20,7 @@ function Stats() {
               className={`flex-1 p-4 w-full md:w-auto flex flex-col items-center text-center
               ${index !== stats.length - 1 ? "border-b-[2px] md:border-b-0 border-plum md:border-r-[3px] md:border-plum" : ""}`}
             >
-              <p className="sm:text-2xl md:text-3xl lg:text-4xl text-shipGrey font-extrabold font-agrandirHeavy">
+              <p className="sm:text-2xl md:text-3xl lg:text-4xl text-shipGrey font-extrabold font-agrandirBold">
                 {stat.stat}
               </p>
               <p className="text-sm md:text-base text-shipGrey font-roboto">
