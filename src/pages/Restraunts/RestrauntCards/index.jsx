@@ -725,7 +725,7 @@ const RestaurantCards = memo(
     return (
       <div>
         {/* <div className="bg-plum px-4 sm:px-8 lg:px-24 py-8 sm:py-12 rounded-3xl"> */}
-        <div className=" sm:p-10 lg:p-14 max-w-[1550px] mx-auto">
+        <div className="py-4 sm:py-6 lg:py-8 max-w-[1550px] mx-auto">
             <SearchLocationV2 
             yelpData={yelpData}
             resyData={resyData}
@@ -750,7 +750,7 @@ const RestaurantCards = memo(
 
         {/* Cuisine Selector Section - Show Favorites Only */}
         {favoriteCuisines.length > 0 && (
-          <div className="mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8 max-w-[1550px] mx-auto">
+          <div className="hidden md:block my-3 px-4 sm:px-6 lg:px-8 max-w-[1550px] mx-auto">
             <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200">
               <h3 className="font-agrandir text-lg sm:text-xl font-bold text-shipGrey mb-4">Select Cuisines</h3>
               <div className="flex flex-wrap gap-2 sm:gap-3">
