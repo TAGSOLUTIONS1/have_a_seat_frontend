@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaComments, FaTimes, FaUtensils, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -9,6 +9,18 @@ export default function ChatBotWidget() {
   const [input, setInput] = useState("");
   const [chatId, setChatId] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Add welcome message when chat opens
+  useEffect(() => {
+    if (open && messages.length === 0) {
+      const welcomeMessage = {
+        id: "welcome_message",
+        sender: "bot",
+        text: "Hi! How can we help you? Let's find your favorite restaurant with us. What would you like to explore today?",
+      };
+      setMessages([welcomeMessage]);
+    }
+  }, [open]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -56,7 +68,7 @@ export default function ChatBotWidget() {
         <div className="w-80 h-96 bg-white rounded-xl shadow-lg flex flex-col overflow-hidden">
           {/* Header */}
           <div className="bg-purple-600 text-white px-4 py-2 flex justify-between items-center">
-            <span className="font-medium">Chat with us</span>
+            <span className="font-medium">Chat with Have a Seat</span>
             <FaTimes className="cursor-pointer" onClick={() => setOpen(false)} />
           </div>
 
@@ -121,7 +133,7 @@ export default function ChatBotWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Type your message..."
+              placeholder="Lets find your favorite restaurant..."
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
