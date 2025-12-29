@@ -10,6 +10,7 @@ import { MapPin, List } from "lucide-react";
 import RestaurantCard from "./RestaurantCard";
 import Map from "@/components/shared/Map";
 import getCoordinates from "@/lib/utils";
+import SmallCard from "./SmallCard";
 
 // Calculate distance between two coordinates using Haversine formula
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -723,8 +724,8 @@ const RestaurantCards = memo(
     // console.log("userLocationCoords", userLocationCoords);
     return (
       <div>
-        <div className="bg-plum px-4 sm:px-8 lg:px-24 py-8 sm:py-12 rounded-3xl">
-        <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-6 sm:p-10 lg:p-14 bg-white max-w-[1550px] mx-auto">
+        {/* <div className="bg-plum px-4 sm:px-8 lg:px-24 py-8 sm:py-12 rounded-3xl"> */}
+        <div className=" sm:p-10 lg:p-14 max-w-[1550px] mx-auto">
             <SearchLocationV2 
             yelpData={yelpData}
             resyData={resyData}
@@ -745,7 +746,7 @@ const RestaurantCards = memo(
             />
           </div>
 
-        </div>
+        {/* </div> */}
 
         {/* Cuisine Selector Section - Show Favorites Only */}
         {favoriteCuisines.length > 0 && (
@@ -971,7 +972,7 @@ const RestaurantCards = memo(
         )}
 
         {/* Filtered Restaurants List */}
-        <div className="mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-7 pb-20 lg:pb-0">
+        <div className=" lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-7 pb-20 lg:pb-0">
         <div className="hidden lg:block bg-plum p-4 sm:p-5 w-full lg:w-80 xl:w-96 h-fit rounded-3xl border-2 border-[#B9B9B9]">
               <div className="flex justify-between">
                 <div className="flex gap-2 sm:gap-4 items-center">
@@ -1216,30 +1217,44 @@ const RestaurantCards = memo(
         
         {/* List/Map Toggle and View Section */}
         <div className="flex-1">
-          {/* Toggle Buttons */}
-          <div className="mb-6 flex justify-end gap-4 px-4 sm:px-6 lg:px-8">
+          {/* Toggle Buttons - Mobile: Icon-only in one line, Desktop: With text */}
+          <div className="py-2 flex justify-between items-center gap-2 px-4 sm:px-6 lg:px-8">
+            {/* Filter Button - Mobile only */}
             <button
-              onClick={() => setViewMode("list")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-agrandir font-semibold transition-all ${
-                viewMode === "list"
-                  ? "bg-plum text-white shadow-md"
-                  : "bg-white text-plum border-2 border-plum hover:bg-plum/10"
-              }`}
+              onClick={() => setIsMobileFilterOpen(true)}
+              className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg bg-plum text-white shadow-md hover:bg-purple-800 transition-all active:scale-95"
+              aria-label="Filter"
             >
-              <List className="w-5 h-5" />
-              List
+              <ImFilter size={16} />
             </button>
-            <button
-              onClick={() => setViewMode("map")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-agrandir font-semibold transition-all ${
-                viewMode === "map"
-                  ? "bg-plum text-white shadow-md"
-                  : "bg-white text-plum border-2 border-plum hover:bg-plum/10"
-              }`}
-            >
-              <MapPin className="w-5 h-5" />
-              Map
-            </button>
+            
+            {/* List/Map Toggle Buttons */}
+            <div className="flex gap-2 lg:gap-4 ml-auto">
+              <button
+                onClick={() => setViewMode("list")}
+                className={`flex items-center justify-center lg:gap-2 px-2 py-2 lg:px-4 rounded-lg font-agrandir font-semibold transition-all ${
+                  viewMode === "list"
+                    ? "bg-plum text-white shadow-md"
+                    : "bg-white text-plum border-2 border-plum hover:bg-plum/10"
+                }`}
+                aria-label="List view"
+              >
+                <List className="w-5 h-4" />
+                <span className="hidden lg:inline">List</span>
+              </button>
+              <button
+                onClick={() => setViewMode("map")}
+                className={`flex items-center justify-center lg:gap-2 px-2 py-2 lg:px-4 rounded-lg font-agrandir font-semibold transition-all ${
+                  viewMode === "map"
+                    ? "bg-plum text-white shadow-md"
+                    : "bg-white text-plum border-2 border-plum hover:bg-plum/10"
+                }`}
+                aria-label="Map view"
+              >
+                <MapPin className="w-4 h-4" />
+                <span className="hidden lg:inline">Map</span>
+              </button>
+            </div>
           </div>
 
           {/* List View */}
@@ -1404,7 +1419,12 @@ const RestaurantCards = memo(
                   }}
                   className="block mb-4 sm:mb-6"
                 >
+                <div className="hidden md:block">
                   <RestaurantCard data={data} distance={restaurantDistance} formData={formData} />
+                  </div>
+                <div className="md:hidden">
+                    <SmallCard data={data} distance={restaurantDistance} formData={formData} />
+                  </div>
                 </Link>
               );
             })}

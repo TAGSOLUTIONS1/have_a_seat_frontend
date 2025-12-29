@@ -103,8 +103,8 @@ export default function ReserveHero() {
         </div>
 
         <div className="max-w-4xl mx-auto flex flex-col items-center gap-6 w-full px-4">
-          {/* Location Search Bar */}
-          <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">
+          {/* Location Search Bar - On top */}
+          <div className="w-full max-w-md md:max-w-lg lg:max-w-xl relative z-30">
             <div className="flex items-center bg-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-5 shadow-2xl border-2 border-white/50 hover:shadow-3xl transition-all duration-300 hover:scale-[1.02]">
               <MdLocationOn size={28} color="#9235E2" className="mr-3 md:mr-4 flex-shrink-0" />
               <div className="flex-1 min-w-0">
@@ -116,11 +116,11 @@ export default function ReserveHero() {
             </div>
           </div>
 
-          {/* Reserve Now Button */}
+          {/* Reserve Now Button - Behind dropdown */}
           <button
             onClick={handleReserveNow}
             disabled={isLoading}
-            className="bg-plum hover:bg-purple-800 transition-all duration-300 px-8 py-4 md:px-10 md:py-5 rounded-lg text-white font-bold text-lg md:text-xl uppercase tracking-wide shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="relative z-0 bg-plum hover:bg-purple-800 transition-all duration-300 px-8 py-4 md:px-10 md:py-5 rounded-lg text-white font-bold text-lg md:text-xl uppercase tracking-wide shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? "Loading..." : "Reserve Now"}
           </button>

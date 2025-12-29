@@ -417,12 +417,12 @@ const SearchLocationV2 = memo(
 
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-2 w-full">
       {/* Mobile Layout - Simple and Compact */}
       <div className="md:hidden">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
           {/* Location Search - Simple like Cuisine Search */}
-          <div className="bg-white rounded-xl p-3 border border-gray-200">
+          <div className="bg-white rounded-xl px-2 py-1 border border-gray-200">
             <div className="flex items-center gap-2">
               <Search size={18} color="#9235E2" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
@@ -435,7 +435,7 @@ const SearchLocationV2 = memo(
           </div>
 
           {/* Cuisine/Restaurant Search */}
-          <div className="bg-white rounded-xl p-3 border border-gray-200">
+          <div className="bg-white rounded-xl p-2 border border-gray-200">
             <div className="flex items-center gap-2">
               <Search size={18} color="#9235E2" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
@@ -900,7 +900,7 @@ const SearchLocationV2 = memo(
         </div>
         )}
 
-      <div className="lg:hidden flex justify-center mt-2">
+      {/* <div className="lg:hidden flex justify-center mt-2">
           <button
             className="inline-flex items-center gap-2 bg-plum hover:bg-purple-700 text-white font-roboto font-medium px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
             onClick={toggleSidebar}
@@ -913,7 +913,7 @@ const SearchLocationV2 = memo(
               </span>
             )}
           </button>
-      </div>
+      </div> */}
 
     </div>
   );
