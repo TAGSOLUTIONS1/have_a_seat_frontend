@@ -10,6 +10,21 @@ export default function ChatBotWidget() {
   const [chatId, setChatId] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Prevent body scroll when chatbot is open
+  useEffect(() => {
+    if (open) {
+      // Save the current overflow value
+      const originalOverflow = document.body.style.overflow;
+      // Disable body scroll
+      document.body.style.overflow = 'hidden';
+      
+      // Cleanup: restore scroll when component unmounts or chat closes
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [open]);
+
   // Add welcome message when chat opens
   useEffect(() => {
     if (open && messages.length === 0) {
