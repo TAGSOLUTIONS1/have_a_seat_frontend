@@ -72,7 +72,11 @@ const RestaurantCards = memo(
     const [userLocationCoords, setUserLocationCoords] = useState(null);
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
     const [isFiltering, setIsFiltering] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(20); // Initial items to show
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
     const navigate = useNavigate();
+    
+    const ITEMS_PER_PAGE = 20; // Items to load per scroll/page
 
     const handleCheckboxChange = (type) => {
       const newSelectedTypes = selectedTypes.includes(type)
@@ -147,14 +151,16 @@ const RestaurantCards = memo(
           );
         }
 
-
-        // const shuffledRestaurants = mergedRestaurants.sort((a, b) => {
-        //   const keyA = (a.name + a.id).toLowerCase();
-        //   const keyB = (b.name + b.id).toLowerCase();
-        //   return keyA.localeCompare(keyB);
-        // });
+        // Shuffle all restaurants initially (OpenTable prioritization happens after filtering)
+        const processedRestaurants = [...mergedRestaurants];
+        for (let i = processedRestaurants.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [processedRestaurants[i], processedRestaurants[j]] = [processedRestaurants[j], processedRestaurants[i]];
+        }
         
-        setShuffledRestaurants(mergedRestaurants);
+        setShuffledRestaurants(processedRestaurants);
+        // Reset visible count when restaurants change
+        setVisibleCount(ITEMS_PER_PAGE);
       } else {
         setShuffledRestaurants([]);
       }
@@ -395,8 +401,57 @@ const RestaurantCards = memo(
           });
       }
     
+      // Apply restaurant name filter if provided
+      if (formData?.restaurant_name && formData.restaurant_name.trim().length > 0) {
+        const normalizeString = (str) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const searchName = normalizeString(formData.restaurant_name);
+        
+        updatedRestaurants = updatedRestaurants.filter(restaurant => {
+          const restaurantName = normalizeString(restaurant.name || "");
+          return restaurantName.includes(searchName) || searchName.includes(restaurantName);
+        });
+      }
+    
+      // Check if there's a search (cuisine filter or restaurant name or term)
+      const hasSearch = (cuisinefilter && cuisinefilter.length > 0) || 
+                       (formData?.restaurant_name && formData.restaurant_name.trim().length > 0) ||
+                       (formData?.term && formData.term.trim().length > 0);
+      
+      // If searching, prioritize OpenTable restaurants, otherwise keep shuffled order
+      if (hasSearch) {
+        // Separate OpenTable and other restaurants
+        const openTableRestaurants = updatedRestaurants.filter(r => r.restraunt_type === "open_table");
+        const otherRestaurants = updatedRestaurants.filter(r => r.restraunt_type !== "open_table");
+        
+        // Shuffle both groups separately
+        const shuffleArray = (array) => {
+          const shuffled = [...array];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          return shuffled;
+        };
+        
+        // Put OpenTable first, then shuffle the rest
+        updatedRestaurants = [
+          ...shuffleArray(openTableRestaurants),
+          ...shuffleArray(otherRestaurants)
+        ];
+      } else {
+        // No search - keep the shuffled order from shuffledRestaurants
+        // But we need to maintain the order from shuffledRestaurants for non-filtered items
+        // Since we're filtering, we'll just shuffle the filtered results
+        for (let i = updatedRestaurants.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [updatedRestaurants[i], updatedRestaurants[j]] = [updatedRestaurants[j], updatedRestaurants[i]];
+        }
+      }
+    
       setFilteredRestaurants(updatedRestaurants);
-    }, [selectedTypes, selectedPriceFilter, selectedStarFilter, cuisinefilter, reviewedFilter, ratings, shuffledRestaurants]);
+      // Reset visible count when filters change
+      setVisibleCount(ITEMS_PER_PAGE);
+    }, [selectedTypes, selectedPriceFilter, selectedStarFilter, cuisinefilter, reviewedFilter, ratings, shuffledRestaurants, formData]);
     
     // console.log("filters " , cuisinefilter ,reviewedFilter ,ratings)
     // console.log("filtered " , filteredRestaurants);
@@ -405,6 +460,39 @@ const RestaurantCards = memo(
       const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
       setCopiedRestaurants(copiedRestaurantsData);
     }, [filteredRestaurants]);
+    
+    // Handle infinite scroll
+    useEffect(() => {
+      const handleScroll = () => {
+        if (isLoadingMore) return;
+        
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        
+        // Load more when user is near bottom (within 200px)
+        if (scrollTop + windowHeight >= documentHeight - 200) {
+          if (visibleCount < filteredRestaurants.length) {
+            setIsLoadingMore(true);
+            // Simulate slight delay for smooth UX
+            setTimeout(() => {
+              setVisibleCount(prev => Math.min(prev + ITEMS_PER_PAGE, filteredRestaurants.length));
+              setIsLoadingMore(false);
+            }, 300);
+          }
+        }
+      };
+      
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, [visibleCount, filteredRestaurants.length, isLoadingMore]);
+    
+    // Get visible restaurants based on pagination
+    const visibleRestaurants = useMemo(() => {
+      return copiedRestaurants.slice(0, visibleCount);
+    }, [copiedRestaurants, visibleCount]);
+    
+    const hasMore = visibleCount < filteredRestaurants.length;
 
     
     const fillallcuisines = () => {
@@ -1260,7 +1348,7 @@ const RestaurantCards = memo(
           {/* List View */}
           {viewMode === "list" && (
             <div>
-              {copiedRestaurants?.map((data, index) => {
+              {visibleRestaurants?.map((data, index) => {
                 // Calculate distance for this restaurant
                 let restaurantDistance = null;
                 
@@ -1428,6 +1516,34 @@ const RestaurantCards = memo(
                 </Link>
               );
             })}
+            
+            {/* Load More Button / Loading Indicator */}
+            {hasMore && (
+              <div className="flex justify-center items-center py-8">
+                <button
+                  onClick={() => {
+                    setIsLoadingMore(true);
+                    setTimeout(() => {
+                      setVisibleCount(prev => Math.min(prev + ITEMS_PER_PAGE, filteredRestaurants.length));
+                      setIsLoadingMore(false);
+                    }, 300);
+                  }}
+                  disabled={isLoadingMore}
+                  className="px-6 py-3 bg-plum text-white rounded-xl font-agrandir font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] active:scale-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoadingMore ? "Loading..." : `Load More (${filteredRestaurants.length - visibleCount} remaining)`}
+                </button>
+              </div>
+            )}
+            
+            {/* End of results message */}
+            {!hasMore && filteredRestaurants.length > 0 && (
+              <div className="flex justify-center items-center py-8">
+                <p className="text-gray-500 font-roboto text-sm">
+                  Showing all {filteredRestaurants.length} restaurants
+                </p>
+              </div>
+            )}
             </div>
           )}
 
