@@ -18,6 +18,7 @@ import { FaHeart } from "react-icons/fa6";
 import { ImFilter } from "react-icons/im";
 import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
+import { FaTimes } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -159,14 +160,8 @@ const SearchLocationV2 = memo(
 
   const handleTermChange = (value) => {
     setFormData((prevData) => {
-      // console.log("values " , value)
-      const words = value.name.trim().split(/\s+/);
-      if (!words.length) return null;
-      let word = words[0];
-      if (word.endsWith("'s")) {
-       word = word.slice(0, -2);
-      }
-      const result = word.toLowerCase();
+      // Use the full suggestion name instead of just the first word
+      const result = value.name.trim();
       // console.log("result is " , value);
       let updatedData;
       if (value.latitude || value.longitude)
@@ -203,6 +198,29 @@ const SearchLocationV2 = memo(
   const clearLocation = () => {
     setFormData((prevData) => {
       const updatedData = { ...prevData, location: "", latitude: "", longitude: "" };
+      localStorage.setItem("searchFormData", JSON.stringify(updatedData));
+      return updatedData;
+    });
+  };
+
+  // Remove cuisine filter
+  const handleRemoveCuisine = (cuisine) => {
+    onCuisineChange(cuisine); // Toggle to remove
+  };
+
+  // Remove restaurant name filter
+  const handleRemoveRestaurantName = () => {
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, restaurant_name: "" };
+      localStorage.setItem("searchFormData", JSON.stringify(updatedData));
+      return updatedData;
+    });
+  };
+
+  // Remove term filter
+  const handleRemoveTerm = () => {
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, term: ""};
       localStorage.setItem("searchFormData", JSON.stringify(updatedData));
       return updatedData;
     });
@@ -438,8 +456,60 @@ const SearchLocationV2 = memo(
           <div className="bg-white rounded-xl p-2 border border-gray-200">
             <div className="flex items-center gap-2">
               <Search size={18} color="#9235E2" className="flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <TermApiAuto getTermData={handleTermChange} />
+              <div className="flex-1 min-w-0 flex flex-wrap items-center gap-1.5">
+                {/* Selected Filters as Tags */}
+                {cuisinefilter.map((cuisine, index) => (
+                  <span
+                    key={`cuisine-tag-${index}`}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full text-xs font-medium"
+                  >
+                    <span>{cuisine}</span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveCuisine(cuisine);
+                      }}
+                      className="hover:bg-purple-200 rounded-full p-0.5 transition-colors"
+                      aria-label={`Remove ${cuisine} filter`}
+                    >
+                      <FaTimes size={10} />
+                    </button>
+                  </span>
+                ))}
+                {formData.restaurant_name && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                    <span>{formData.restaurant_name}</span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveRestaurantName();
+                      }}
+                      className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
+                      aria-label="Remove restaurant name filter"
+                    >
+                      <FaTimes size={10} />
+                    </button>
+                  </span>
+                )}
+                {formData.term && !formData.restaurant_name && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                    <span>{formData.term}</span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveTerm();
+                      }}
+                      className="hover:bg-green-200 rounded-full p-0.5 transition-colors"
+                      aria-label="Remove search term filter"
+                    >
+                      <FaTimes size={10} />
+                    </button>
+                  </span>
+                )}
+                {/* Input Field */}
+                <div className="flex-1 min-w-[120px]">
+                  <TermApiAuto getTermData={handleTermChange} />
+                </div>
               </div>
             </div>
           </div>
@@ -569,7 +639,61 @@ const SearchLocationV2 = memo(
         {/* Restaurant/Cuisine */}
         <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 text-shipGrey md:pr-4 flex-1 min-w-0">
           <MdOutlineRestaurantMenu size={22} color="#9235E2" className="mr-3 flex-shrink-0" />
-          <TermApiAuto getTermData={handleTermChange} />
+          <div className="flex-1 min-w-0 flex flex-wrap items-center gap-1.5">
+            {/* Selected Filters as Tags */}
+            {cuisinefilter.map((cuisine, index) => (
+              <span
+                key={`cuisine-tag-desktop-${index}`}
+                className="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full text-xs font-medium"
+              >
+                <span>{cuisine}</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveCuisine(cuisine);
+                  }}
+                  className="hover:bg-purple-200 rounded-full p-0.5 transition-colors"
+                  aria-label={`Remove ${cuisine} filter`}
+                >
+                  <FaTimes size={10} />
+                </button>
+              </span>
+            ))}
+            {formData.restaurant_name && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                <span>{formData.restaurant_name}</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveRestaurantName();
+                  }}
+                  className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
+                  aria-label="Remove restaurant name filter"
+                >
+                  <FaTimes size={10} />
+                </button>
+              </span>
+            )}
+            {formData.term && !formData.restaurant_name && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                <span>{formData.term}</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveTerm();
+                  }}
+                  className="hover:bg-green-200 rounded-full p-0.5 transition-colors"
+                  aria-label="Remove search term filter"
+                >
+                  <FaTimes size={10} />
+                </button>
+              </span>
+            )}
+            {/* Input Field */}
+            <div className="flex-1 min-w-[120px]">
+              <TermApiAuto getTermData={handleTermChange} />
+            </div>
+          </div>
         </div>
 
         {/* Date */}

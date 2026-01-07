@@ -151,11 +151,34 @@ const RestaurantCards = memo(
           );
         }
 
-        // Shuffle all restaurants initially (OpenTable prioritization happens after filtering)
-        const processedRestaurants = [...mergedRestaurants];
-        for (let i = processedRestaurants.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [processedRestaurants[i], processedRestaurants[j]] = [processedRestaurants[j], processedRestaurants[i]];
+        // Check if there's a search (cuisine filter, restaurant name, or term)
+        const hasSearch = (cuisinefilter && cuisinefilter.length > 0) || 
+                         (formData?.restaurant_name && formData.restaurant_name.trim().length > 0) ||
+                         (formData?.term && formData.term.trim().length > 0);
+        
+        let processedRestaurants = [];
+        
+        if (hasSearch) {
+          // When searching, preserve OpenTable order and put them first
+          const openTableRestaurants = mergedRestaurants.filter(r => r.restraunt_type === "open_table");
+          const otherRestaurants = mergedRestaurants.filter(r => r.restraunt_type !== "open_table");
+          
+          // Shuffle only other restaurants, keep OpenTable in original order
+          const shuffledOthers = [...otherRestaurants];
+          for (let i = shuffledOthers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledOthers[i], shuffledOthers[j]] = [shuffledOthers[j], shuffledOthers[i]];
+          }
+          
+          // Put OpenTable first (in original order), then shuffled others
+          processedRestaurants = [...openTableRestaurants, ...shuffledOthers];
+        } else {
+          // No search - shuffle all restaurants
+          processedRestaurants = [...mergedRestaurants];
+          for (let i = processedRestaurants.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [processedRestaurants[i], processedRestaurants[j]] = [processedRestaurants[j], processedRestaurants[i]];
+          }
         }
         
         setShuffledRestaurants(processedRestaurants);
@@ -164,7 +187,7 @@ const RestaurantCards = memo(
       } else {
         setShuffledRestaurants([]);
       }
-    }, [yelpData, openTableData, resyData, tockData, tableAgentData, theForkData, selectedTypes]);
+    }, [yelpData, openTableData, resyData, tockData, tableAgentData, theForkData, selectedTypes, cuisinefilter, formData]);
 
     useEffect(() => {
       let filteredRestaurants = shuffledRestaurants;
@@ -417,13 +440,13 @@ const RestaurantCards = memo(
                        (formData?.restaurant_name && formData.restaurant_name.trim().length > 0) ||
                        (formData?.term && formData.term.trim().length > 0);
       
-      // If searching, prioritize OpenTable restaurants, otherwise keep shuffled order
+      // If searching, prioritize OpenTable restaurants and preserve their order
       if (hasSearch) {
         // Separate OpenTable and other restaurants
         const openTableRestaurants = updatedRestaurants.filter(r => r.restraunt_type === "open_table");
         const otherRestaurants = updatedRestaurants.filter(r => r.restraunt_type !== "open_table");
         
-        // Shuffle both groups separately
+        // Shuffle only other restaurants, keep OpenTable in original order
         const shuffleArray = (array) => {
           const shuffled = [...array];
           for (let i = shuffled.length - 1; i > 0; i--) {
@@ -433,9 +456,9 @@ const RestaurantCards = memo(
           return shuffled;
         };
         
-        // Put OpenTable first, then shuffle the rest
+        // Put OpenTable first (in original order), then shuffled others
         updatedRestaurants = [
-          ...shuffleArray(openTableRestaurants),
+          ...openTableRestaurants, // Keep original order
           ...shuffleArray(otherRestaurants)
         ];
       } else {
