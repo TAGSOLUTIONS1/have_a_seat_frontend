@@ -263,7 +263,7 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
       {/* Restaurant Info - Right side */}
       <div className="flex-1 min-w-0 flex flex-col gap-1 sm:gap-1.5">
         {/* Restaurant Name - Full name with wrapping */}
-        <h3 className="text-base mr-8 sm:text-lg font-bold font-agrandir text-shipGrey break-words">
+        <h3 className="text-base mr-14 sm:text-lg font-bold font-agrandir text-shipGrey break-words">
           {data?.name}
         </h3>
 
@@ -330,7 +330,7 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
       </div>
 
       {/* Logo - Top right */}
-      <div className="absolute top-3 right-3 w-8 flex-shrink-0">
+      <div className="absolute top-3 right-2 w-14 flex-shrink-0">
         <img
           src={
             data.restraunt_type === "yelp"
