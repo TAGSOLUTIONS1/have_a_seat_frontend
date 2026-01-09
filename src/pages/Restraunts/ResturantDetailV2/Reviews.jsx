@@ -76,6 +76,9 @@ export default function Reviews({ restrauntDetail }) {
   useEffect(() => {
     if (Object.keys(restrauntDetail).length !== 0) {
       setReviewsData(restrauntDetail);
+      // Reset reviews when restaurant changes
+      setYelpReviews(null);
+      setHaveASeatReviews([]);
     }
   }, [restrauntDetail]);
 
@@ -87,6 +90,7 @@ export default function Reviews({ restrauntDetail }) {
       setYelpReviews(response.data.data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
+      setYelpReviews(null);
     }
   };
 
@@ -94,9 +98,9 @@ export default function Reviews({ restrauntDetail }) {
     if (restrauntDetail?.alias) {
       fetchReviews(restrauntDetail?.alias);
     } else {
-      null;
+      setYelpReviews(null);
     }
-  }, [restrauntDetail?.restaurant_flag]);
+  }, [restrauntDetail?.alias, restrauntDetail?.restaurant_type]);
 
   // Fetch Have a Seat reviews
   const fetchHaveASeatReviews = async () => {
@@ -116,6 +120,8 @@ export default function Reviews({ restrauntDetail }) {
         restaurantId = restrauntDetail?.id?.tableagent || restrauntDetail?.slug;
       } else if (restrauntDetail?.restaurant_type === "tock") {
         restaurantId = restrauntDetail?.id?.tock || restrauntDetail?.domain;
+      } else if (restrauntDetail?.restaurant_type === "thefork") {
+        restaurantId = restrauntDetail?.thefork_slug || restrauntDetail?.alias || restrauntDetail?.id;
       }
 
       if (restaurantId) {
@@ -132,6 +138,8 @@ export default function Reviews({ restrauntDetail }) {
         } else {
           setHaveASeatReviews([]);
         }
+      } else {
+        setHaveASeatReviews([]);
       }
     } catch (error) {
       console.error("Error fetching Have a Seat reviews:", error);
@@ -141,11 +149,29 @@ export default function Reviews({ restrauntDetail }) {
     }
   };
 
+  // Create a unique key for the restaurant to detect changes
+  const restaurantKey = restrauntDetail?.restaurant_type === "open_table" 
+    ? restrauntDetail?.id 
+    : restrauntDetail?.restaurant_type === "yelp"
+    ? restrauntDetail?.alias
+    : restrauntDetail?.restaurant_type === "resy"
+    ? restrauntDetail?.id?.resy || restrauntDetail?.results?.resy2?.id?.resy
+    : restrauntDetail?.restaurant_type === "tableagent"
+    ? restrauntDetail?.id?.tableagent || restrauntDetail?.slug
+    : restrauntDetail?.restaurant_type === "tock"
+    ? restrauntDetail?.id?.tock || restrauntDetail?.domain
+    : restrauntDetail?.restaurant_type === "thefork"
+    ? restrauntDetail?.thefork_slug || restrauntDetail?.alias || restrauntDetail?.id
+    : null;
+
   useEffect(() => {
-    if (restrauntDetail && Object.keys(restrauntDetail).length > 0) {
+    if (restrauntDetail && Object.keys(restrauntDetail).length > 0 && restaurantKey) {
       fetchHaveASeatReviews();
+    } else {
+      setHaveASeatReviews([]);
     }
-  }, [restrauntDetail]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restaurantKey, restrauntDetail?.restaurant_type]);
 
   // const firstAbout = Object.values(data)[0]?.content?.["en-us"]?.about?.body;
     const templates = restrauntDetail?.results?.venues[0]?.templates;

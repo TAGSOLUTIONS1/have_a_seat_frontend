@@ -508,7 +508,7 @@ const SearchLocationV2 = memo(
                 )}
                 {/* Input Field */}
                 <div className="flex-1 min-w-[120px]">
-                  <TermApiAuto getTermData={handleTermChange} />
+                <TermApiAuto getTermData={handleTermChange} />
                 </div>
               </div>
             </div>
@@ -691,7 +691,7 @@ const SearchLocationV2 = memo(
             )}
             {/* Input Field */}
             <div className="flex-1 min-w-[120px]">
-              <TermApiAuto getTermData={handleTermChange} />
+          <TermApiAuto getTermData={handleTermChange} />
             </div>
           </div>
         </div>
