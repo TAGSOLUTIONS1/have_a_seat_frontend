@@ -53,6 +53,7 @@
     "react-router-dom": "^6.18.0",
     "react-scroll": "^1.9.0",
     "react-slick": "^0.30.2",
+    "react-speech-recognition": "^4.0.1",
     "react-time-picker": "^7.0.0",
     "react-timeit": "^1.2.12",
     "slick-carousel": "^1.8.1",
