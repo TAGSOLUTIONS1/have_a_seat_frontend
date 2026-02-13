@@ -53,24 +53,83 @@ const ReservationStatus = () => {
         const formattedHours = ("0" + calculatedHours).slice(-2);
         const formattedMinutes = ("0" + calculatedMinutes).slice(-2);
         const finalTime = `${formattedHours}:${formattedMinutes}`;
+        
+        // Format reservationDateTime in ISO format (YYYY-MM-DDTHH:mm)
+        const reservationDateTime = `${finalData[0]?.reservation_date}T${finalTime}`;
+        
+        // Extract phone number and country
+        const phoneNumber = myData?.reservationFormData?.phone || '';
+        const phoneCountryId = myData?.reservationFormData?.phone_country_id || 'US';
+        
+        // Get dining area ID from slot data or default
+        const diningAreaId = finalData[1]?.diningAreaId || finalData[1]?.dining_area_id || 1;
+        
+        // Get slot lock ID if available
+        const slotLockId = finalData[1]?.slotLockId || finalData[1]?.slot_lock_id;
 
         setLoading(true);
         const apiParams = {
+          // Basic reservation info
           first_name: myData?.reservationFormData?.first_name,
           last_name: myData?.reservationFormData?.last_name,
-          mobile_number: myData?.reservationFormData?.phone,
-          mobile_country_id: "US",
+          firstName: myData?.reservationFormData?.first_name, // OpenTable uses both
+          lastName: myData?.reservationFormData?.last_name, // OpenTable uses both
           email: myData?.reservationFormData?.email,
+          
+          // Phone number (multiple formats)
+          mobile_number: phoneNumber,
+          mobile_country_id: phoneCountryId,
+          phoneNumber: phoneNumber,
+          phoneNumberCountryId: phoneCountryId,
+          
+          // Reservation details
           persons: finalData[0]?.reservation_covers || 1,
+          partySize: finalData[0]?.reservation_covers || 1,
           restaurant_id: finalData[2] || 'unknown',
+          restaurantId: finalData[2] || 'unknown',
           restaurant_name: finalData[3] || "the restaurant",
-          seating_option: "default",
-          dining_area_id: 1,
-          slot_hash: finalData[1]?.slotHash,
-          slot_availability_token: finalData[1]?.slotAvailabilityToken,
-          country_id: "US",
+          
+          // Date and time
           date: finalData[0]?.reservation_date,
           time: finalTime,
+          reservationDateTime: reservationDateTime,
+          
+          // Slot information
+          slot_hash: finalData[1]?.slotHash,
+          slot_availability_token: finalData[1]?.slotAvailabilityToken,
+          slotHash: finalData[1]?.slotHash,
+          slotAvailabilityToken: finalData[1]?.slotAvailabilityToken,
+          ...(slotLockId && { slotLockId: slotLockId }),
+          
+          // Dining area
+          dining_area_id: diningAreaId,
+          diningAreaId: diningAreaId,
+          seating_option: "default",
+          reservationAttribute: "default",
+          
+          // Country
+          country_id: "US",
+          country: "US",
+          
+          // Reservation type
+          reservationType: "Standard",
+          
+          // Optional fields with defaults
+          isModify: false,
+          confirmPoints: true,
+          optInEmailRestaurant: true,
+          tipAmount: 0,
+          tipPercent: 0,
+          points: 100,
+          pointsType: "Standard",
+          additionalServiceFees: "[]",
+          nonBookableExperiences: "[]",
+          katakanaFirstName: "",
+          katakanaLastName: "",
+          
+          // Optional tracking fields (if available from slot data)
+          ...(finalData[1]?.attributionToken && { attributionToken: finalData[1].attributionToken }),
+          ...(finalData[1]?.correlationId && { correlationId: finalData[1].correlationId }),
         };
 
         const response = await axios.post(

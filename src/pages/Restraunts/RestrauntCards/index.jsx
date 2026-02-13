@@ -10,6 +10,7 @@ import { MapPin, List } from "lucide-react";
 import RestaurantCard from "./RestaurantCard";
 import Map from "@/components/shared/Map";
 import getCoordinates from "@/lib/utils";
+import SmallCard from "./SmallCard";
 
 // Calculate distance between two coordinates using Haversine formula
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -71,7 +72,11 @@ const RestaurantCards = memo(
     const [userLocationCoords, setUserLocationCoords] = useState(null);
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
     const [isFiltering, setIsFiltering] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(20); // Initial items to show
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
     const navigate = useNavigate();
+    
+    const ITEMS_PER_PAGE = 20; // Items to load per scroll/page
 
     const handleCheckboxChange = (type) => {
       const newSelectedTypes = selectedTypes.includes(type)
@@ -146,18 +151,43 @@ const RestaurantCards = memo(
           );
         }
 
-
-        // const shuffledRestaurants = mergedRestaurants.sort((a, b) => {
-        //   const keyA = (a.name + a.id).toLowerCase();
-        //   const keyB = (b.name + b.id).toLowerCase();
-        //   return keyA.localeCompare(keyB);
-        // });
+        // Check if there's a search (cuisine filter, restaurant name, or term)
+        const hasSearch = (cuisinefilter && cuisinefilter.length > 0) || 
+                         (formData?.restaurant_name && formData.restaurant_name.trim().length > 0) ||
+                         (formData?.term && formData.term.trim().length > 0);
         
-        setShuffledRestaurants(mergedRestaurants);
+        let processedRestaurants = [];
+        
+        if (hasSearch) {
+          // When searching, preserve OpenTable order and put them first
+          const openTableRestaurants = mergedRestaurants.filter(r => r.restraunt_type === "open_table");
+          const otherRestaurants = mergedRestaurants.filter(r => r.restraunt_type !== "open_table");
+          
+          // Shuffle only other restaurants, keep OpenTable in original order
+          const shuffledOthers = [...otherRestaurants];
+          for (let i = shuffledOthers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledOthers[i], shuffledOthers[j]] = [shuffledOthers[j], shuffledOthers[i]];
+          }
+          
+          // Put OpenTable first (in original order), then shuffled others
+          processedRestaurants = [...openTableRestaurants, ...shuffledOthers];
+        } else {
+          // No search - shuffle all restaurants
+          processedRestaurants = [...mergedRestaurants];
+          for (let i = processedRestaurants.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [processedRestaurants[i], processedRestaurants[j]] = [processedRestaurants[j], processedRestaurants[i]];
+          }
+        }
+        
+        setShuffledRestaurants(processedRestaurants);
+        // Reset visible count when restaurants change
+        setVisibleCount(ITEMS_PER_PAGE);
       } else {
         setShuffledRestaurants([]);
       }
-    }, [yelpData, openTableData, resyData, tockData, tableAgentData, theForkData, selectedTypes]);
+    }, [yelpData, openTableData, resyData, tockData, tableAgentData, theForkData, selectedTypes, cuisinefilter, formData]);
 
     useEffect(() => {
       let filteredRestaurants = shuffledRestaurants;
@@ -394,8 +424,57 @@ const RestaurantCards = memo(
           });
       }
     
+      // Apply restaurant name filter if provided
+      if (formData?.restaurant_name && formData.restaurant_name.trim().length > 0) {
+        const normalizeString = (str) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const searchName = normalizeString(formData.restaurant_name);
+        
+        updatedRestaurants = updatedRestaurants.filter(restaurant => {
+          const restaurantName = normalizeString(restaurant.name || "");
+          return restaurantName.includes(searchName) || searchName.includes(restaurantName);
+        });
+      }
+    
+      // Check if there's a search (cuisine filter or restaurant name or term)
+      const hasSearch = (cuisinefilter && cuisinefilter.length > 0) || 
+                       (formData?.restaurant_name && formData.restaurant_name.trim().length > 0) ||
+                       (formData?.term && formData.term.trim().length > 0);
+      
+      // If searching, prioritize OpenTable restaurants and preserve their order
+      if (hasSearch) {
+        // Separate OpenTable and other restaurants
+        const openTableRestaurants = updatedRestaurants.filter(r => r.restraunt_type === "open_table");
+        const otherRestaurants = updatedRestaurants.filter(r => r.restraunt_type !== "open_table");
+        
+        // Shuffle only other restaurants, keep OpenTable in original order
+        const shuffleArray = (array) => {
+          const shuffled = [...array];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          return shuffled;
+        };
+        
+        // Put OpenTable first (in original order), then shuffled others
+        updatedRestaurants = [
+          ...openTableRestaurants, // Keep original order
+          ...shuffleArray(otherRestaurants)
+        ];
+      } else {
+        // No search - keep the shuffled order from shuffledRestaurants
+        // But we need to maintain the order from shuffledRestaurants for non-filtered items
+        // Since we're filtering, we'll just shuffle the filtered results
+        for (let i = updatedRestaurants.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [updatedRestaurants[i], updatedRestaurants[j]] = [updatedRestaurants[j], updatedRestaurants[i]];
+        }
+      }
+    
       setFilteredRestaurants(updatedRestaurants);
-    }, [selectedTypes, selectedPriceFilter, selectedStarFilter, cuisinefilter, reviewedFilter, ratings, shuffledRestaurants]);
+      // Reset visible count when filters change
+      setVisibleCount(ITEMS_PER_PAGE);
+    }, [selectedTypes, selectedPriceFilter, selectedStarFilter, cuisinefilter, reviewedFilter, ratings, shuffledRestaurants, formData]);
     
     // console.log("filters " , cuisinefilter ,reviewedFilter ,ratings)
     // console.log("filtered " , filteredRestaurants);
@@ -404,6 +483,39 @@ const RestaurantCards = memo(
       const copiedRestaurantsData = JSON.parse(JSON.stringify(filteredRestaurants)); 
       setCopiedRestaurants(copiedRestaurantsData);
     }, [filteredRestaurants]);
+    
+    // Handle infinite scroll
+    useEffect(() => {
+      const handleScroll = () => {
+        if (isLoadingMore) return;
+        
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        
+        // Load more when user is near bottom (within 200px)
+        if (scrollTop + windowHeight >= documentHeight - 200) {
+          if (visibleCount < filteredRestaurants.length) {
+            setIsLoadingMore(true);
+            // Simulate slight delay for smooth UX
+            setTimeout(() => {
+              setVisibleCount(prev => Math.min(prev + ITEMS_PER_PAGE, filteredRestaurants.length));
+              setIsLoadingMore(false);
+            }, 300);
+          }
+        }
+      };
+      
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, [visibleCount, filteredRestaurants.length, isLoadingMore]);
+    
+    // Get visible restaurants based on pagination
+    const visibleRestaurants = useMemo(() => {
+      return copiedRestaurants.slice(0, visibleCount);
+    }, [copiedRestaurants, visibleCount]);
+    
+    const hasMore = visibleCount < filteredRestaurants.length;
 
     
     const fillallcuisines = () => {
@@ -723,8 +835,8 @@ const RestaurantCards = memo(
     // console.log("userLocationCoords", userLocationCoords);
     return (
       <div>
-        <div className="bg-plum px-4 sm:px-8 lg:px-24 py-8 sm:py-12 rounded-3xl">
-        <div className="border-[0.4px] border-[#B9B9B9] rounded-[30px] p-6 sm:p-10 lg:p-14 bg-white max-w-[1550px] mx-auto">
+        {/* <div className="bg-plum px-4 sm:px-8 lg:px-24 py-8 sm:py-12 rounded-3xl"> */}
+        <div className="py-4 sm:py-6 lg:py-8 max-w-[1550px] mx-auto">
             <SearchLocationV2 
             yelpData={yelpData}
             resyData={resyData}
@@ -745,11 +857,11 @@ const RestaurantCards = memo(
             />
           </div>
 
-        </div>
+        {/* </div> */}
 
         {/* Cuisine Selector Section - Show Favorites Only */}
         {favoriteCuisines.length > 0 && (
-          <div className="mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8 max-w-[1550px] mx-auto">
+          <div className="hidden md:block my-3 px-4 sm:px-6 lg:px-8 max-w-[1550px] mx-auto">
             <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200">
               <h3 className="font-agrandir text-lg sm:text-xl font-bold text-shipGrey mb-4">Select Cuisines</h3>
               <div className="flex flex-wrap gap-2 sm:gap-3">
@@ -971,7 +1083,7 @@ const RestaurantCards = memo(
         )}
 
         {/* Filtered Restaurants List */}
-        <div className="mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-7 pb-20 lg:pb-0">
+        <div className=" lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-7 pb-20 lg:pb-0">
         <div className="hidden lg:block bg-plum p-4 sm:p-5 w-full lg:w-80 xl:w-96 h-fit rounded-3xl border-2 border-[#B9B9B9]">
               <div className="flex justify-between">
                 <div className="flex gap-2 sm:gap-4 items-center">
@@ -1216,36 +1328,50 @@ const RestaurantCards = memo(
         
         {/* List/Map Toggle and View Section */}
         <div className="flex-1">
-          {/* Toggle Buttons */}
-          <div className="mb-6 flex justify-end gap-4 px-4 sm:px-6 lg:px-8">
+          {/* Toggle Buttons - Mobile: Icon-only in one line, Desktop: With text */}
+          <div className="py-2 flex justify-between items-center gap-2 px-4 sm:px-6 lg:px-8">
+            {/* Filter Button - Mobile only */}
             <button
-              onClick={() => setViewMode("list")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-agrandir font-semibold transition-all ${
-                viewMode === "list"
-                  ? "bg-plum text-white shadow-md"
-                  : "bg-white text-plum border-2 border-plum hover:bg-plum/10"
-              }`}
+              onClick={() => setIsMobileFilterOpen(true)}
+              className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg bg-plum text-white shadow-md hover:bg-purple-800 transition-all active:scale-95"
+              aria-label="Filter"
             >
-              <List className="w-5 h-5" />
-              List
+              <ImFilter size={16} />
             </button>
-            <button
-              onClick={() => setViewMode("map")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-agrandir font-semibold transition-all ${
-                viewMode === "map"
-                  ? "bg-plum text-white shadow-md"
-                  : "bg-white text-plum border-2 border-plum hover:bg-plum/10"
-              }`}
-            >
-              <MapPin className="w-5 h-5" />
-              Map
-            </button>
+            
+            {/* List/Map Toggle Buttons */}
+            <div className="flex gap-2 lg:gap-4 ml-auto">
+              <button
+                onClick={() => setViewMode("list")}
+                className={`flex items-center justify-center lg:gap-2 px-2 py-2 lg:px-4 rounded-lg font-agrandir font-semibold transition-all ${
+                  viewMode === "list"
+                    ? "bg-plum text-white shadow-md"
+                    : "bg-white text-plum border-2 border-plum hover:bg-plum/10"
+                }`}
+                aria-label="List view"
+              >
+                <List className="w-5 h-4" />
+                <span className="hidden lg:inline">List</span>
+              </button>
+              <button
+                onClick={() => setViewMode("map")}
+                className={`flex items-center justify-center lg:gap-2 px-2 py-2 lg:px-4 rounded-lg font-agrandir font-semibold transition-all ${
+                  viewMode === "map"
+                    ? "bg-plum text-white shadow-md"
+                    : "bg-white text-plum border-2 border-plum hover:bg-plum/10"
+                }`}
+                aria-label="Map view"
+              >
+                <MapPin className="w-4 h-4" />
+                <span className="hidden lg:inline">Map</span>
+              </button>
+            </div>
           </div>
 
           {/* List View */}
           {viewMode === "list" && (
             <div>
-              {copiedRestaurants?.map((data, index) => {
+              {visibleRestaurants?.map((data, index) => {
                 // Calculate distance for this restaurant
                 let restaurantDistance = null;
                 
@@ -1404,10 +1530,43 @@ const RestaurantCards = memo(
                   }}
                   className="block mb-4 sm:mb-6"
                 >
+                <div className="hidden md:block">
                   <RestaurantCard data={data} distance={restaurantDistance} formData={formData} />
+                  </div>
+                <div className="md:hidden">
+                    <SmallCard data={data} distance={restaurantDistance} formData={formData} />
+                  </div>
                 </Link>
               );
             })}
+            
+            {/* Load More Button / Loading Indicator */}
+            {hasMore && (
+              <div className="flex justify-center items-center py-8">
+                <button
+                  onClick={() => {
+                    setIsLoadingMore(true);
+                    setTimeout(() => {
+                      setVisibleCount(prev => Math.min(prev + ITEMS_PER_PAGE, filteredRestaurants.length));
+                      setIsLoadingMore(false);
+                    }, 300);
+                  }}
+                  disabled={isLoadingMore}
+                  className="px-6 py-3 bg-plum text-white rounded-xl font-agrandir font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] active:scale-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoadingMore ? "Loading..." : `Load More (${filteredRestaurants.length - visibleCount} remaining)`}
+                </button>
+              </div>
+            )}
+            
+            {/* End of results message */}
+            {!hasMore && filteredRestaurants.length > 0 && (
+              <div className="flex justify-center items-center py-8">
+                <p className="text-gray-500 font-roboto text-sm">
+                  Showing all {filteredRestaurants.length} restaurants
+                </p>
+              </div>
+            )}
             </div>
           )}
 
