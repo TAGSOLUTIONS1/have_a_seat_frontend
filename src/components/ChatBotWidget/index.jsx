@@ -42,12 +42,28 @@ export default function ChatBotWidget() {
 
     const userMsg = { id: Date.now().toString(), sender: "user", text: input };
     setMessages((prev) => [...prev, userMsg]);
+    const currentInput = input;
     setInput("");
     setLoading(true);
 
     try {
-      const params = chatId ? { query: input, chat_id: chatId } : { query: input };
-      const res = await axios.get("https://have-a-seatonline.com/api/v1/yelp/chat", { params });
+      const requestBody = {
+        query: currentInput,
+        ...(chatId && { chat_id: chatId }),
+        request_context: {
+          skip_text_generation: false,
+        },
+      };
+
+      const res = await axios.post(
+        "https://have-a-seatonline.com/api/v1/yelp/chat",
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const data = res.data;
       const botMsg = {
@@ -61,6 +77,7 @@ export default function ChatBotWidget() {
       if (data?.data?.chat_id && !chatId) setChatId(data.data.chat_id);
 
     } catch (err) {
+      console.error("Error fetching response:", err);
       setMessages((prev) => [
         ...prev,
         { id: Date.now().toString() + "_err", sender: "bot", text: "Error fetching response." },
