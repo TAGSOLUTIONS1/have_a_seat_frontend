@@ -64,6 +64,9 @@ const ReservationStatus = () => {
         // Get dining area ID from slot data or default
         const diningAreaId = finalData[1]?.diningAreaId || finalData[1]?.dining_area_id || 1;
         
+        // Get seating option from slot data or default
+        const seatingOption = finalData[1]?.seating_option || "default";
+        
         // Get slot lock ID if available
         const slotLockId = finalData[1]?.slotLockId || finalData[1]?.slot_lock_id;
 
@@ -104,7 +107,7 @@ const ReservationStatus = () => {
           // Dining area
           dining_area_id: diningAreaId,
           diningAreaId: diningAreaId,
-          seating_option: "default",
+          seating_option: seatingOption,
           reservationAttribute: "default",
           
           // Country
