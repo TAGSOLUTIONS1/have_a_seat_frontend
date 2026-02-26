@@ -10,6 +10,7 @@ import PersonCard from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Perso
 import GuestSignInModal from "@/components/common/GuestSignInModal";
 import ReservationConflictModal from "@/components/common/ReservationConflictModal";
 import ResyDetailsModal from "@/components/common/ResyDetailsModal";
+import DiningAreaSelectionModal from "@/components/common/DiningAreaSelectionModal";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { useNotificationToast } from '@/hooks/useNotificationToast';
@@ -58,6 +59,10 @@ export default function MakeReservation({ restrauntDetail }) {
   const [conflictingReservations, setConflictingReservations] = useState([]);
   const [pendingReservationData, setPendingReservationData] = useState(null);
   const [isCheckingConflicts, setIsCheckingConflicts] = useState(false);
+  
+  // Dining area selection state
+  const [showDiningAreaModal, setShowDiningAreaModal] = useState(false);
+  const [pendingTimeSlotData, setPendingTimeSlotData] = useState(null);
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -221,24 +226,7 @@ export default function MakeReservation({ restrauntDetail }) {
         navigate(route);
         setFormData("");
       } else if (reservationType === 'open_table') {
-        const restaurant_id = reservationCard?.id;
-        const restaurantName = reservationCard?.name;
-        const restaurantAddress = reservationCard?.address;
-        const restaurantCuisines = reservationCard?.cuisines;
-        const updatedNextData = [
-          formData,
-          timeSlotData,
-          restaurant_id,
-          restaurantName,
-          restaurantAddress,
-          restaurantCuisines,
-        ];
-        setNextData(updatedNextData);
-        const route = `/reservation?data=${encodeURIComponent(
-          JSON.stringify(updatedNextData)
-        )}`;
-        navigate(route);
-        setFormData("");
+        proceedWithOpenTableReservation(timeSlotData);
       } else if (reservationType === 'resy') {
         // For Resy, open the Resy details modal after conflict acknowledgement
         setSelectedResySlot(restrauntDetail?.results?.resy2);
@@ -321,10 +309,29 @@ export default function MakeReservation({ restrauntDetail }) {
     // Prevent rapid clicking
     if (isCheckingConflicts) return;
 
+    // Store the time slot data and show dining area selection modal
+    setPendingTimeSlotData(clickedData);
+    setShowDiningAreaModal(true);
+  };
+
+  // Handle dining area selection
+  const handleDiningAreaSelected = async (selectedData) => {
+    setShowDiningAreaModal(false);
+    
+    // Merge dining area data with time slot data
+    const timeSlotWithDiningArea = {
+      ...pendingTimeSlotData,
+      diningAreaId: selectedData.dining_area_id,
+      dining_area_id: selectedData.dining_area_id,
+      dining_area_name: selectedData.dining_area_name,
+      seating_option: selectedData.seating_option,
+      seating_description: selectedData.seating_description,
+    };
+
     if(authState?.isAuthenticated){
       // Convert offset to time format for OpenTable
       const reservationTime = formData.reservation_time;
-      const timeDifference = clickedData?.timeOffsetMinutes;
+      const timeDifference = timeSlotWithDiningArea?.timeOffsetMinutes;
       const [hours, minutes] = reservationTime?.split(":");
       const formattedTimeMinutes = parseInt(hours, 10) * 60 + parseInt(minutes, 10);
       const calculatedTime = formattedTimeMinutes + timeDifference;
@@ -345,37 +352,44 @@ export default function MakeReservation({ restrauntDetail }) {
           reservation_time: finalTime,
           num_diners: formData.reservation_covers,
           reservationType: 'open_table',
-          timeSlotData: clickedData
+          timeSlotData: timeSlotWithDiningArea
         });
         setShowConflictModal(true);
       } else {
         // No conflicts, proceed directly
-        const restaurant_id = reservationCard?.id;
-        const restaurantName = reservationCard?.name;
-        const restaurantAddress = reservationCard?.address;
-        const restaurantCuisines = reservationCard?.cuisines;
-        const updatedNextData = [
-          formData,
-          clickedData,
-          restaurant_id,
-          restaurantName,
-          restaurantAddress,
-          restaurantCuisines,
-        ];
-
-        setNextData(updatedNextData);
-        const route = `/reservation?data=${encodeURIComponent(
-          JSON.stringify(updatedNextData)
-        )}`;
-        navigate(route);
-        setFormData("");
+        proceedWithOpenTableReservation(timeSlotWithDiningArea);
       }
     }
     else{
-      setSelectedTimeSlot(clickedData);
+      setSelectedTimeSlot(timeSlotWithDiningArea);
       setSelectedReservationType('open_table');
       setShowGuestModal(true);
     }
+    
+    setPendingTimeSlotData(null);
+  };
+
+  // Helper function to proceed with OpenTable reservation
+  const proceedWithOpenTableReservation = (timeSlotData) => {
+    const restaurant_id = reservationCard?.id;
+    const restaurantName = reservationCard?.name;
+    const restaurantAddress = reservationCard?.address;
+    const restaurantCuisines = reservationCard?.cuisines;
+    const updatedNextData = [
+      formData,
+      timeSlotData,
+      restaurant_id,
+      restaurantName,
+      restaurantAddress,
+      restaurantCuisines,
+    ];
+
+    setNextData(updatedNextData);
+    const route = `/reservation?data=${encodeURIComponent(
+      JSON.stringify(updatedNextData)
+    )}`;
+    navigate(route);
+    setFormData("");
   };
 
   const fetchTockTimeSlots = async () => {
@@ -596,24 +610,7 @@ export default function MakeReservation({ restrauntDetail }) {
         navigate(route);
         setFormData("");
       } else if (selectedReservationType === 'open_table') {
-        const restaurant_id = reservationCard?.id;
-        const restaurantName = reservationCard?.name;
-        const restaurantAddress = reservationCard?.address;
-        const restaurantCuisines = reservationCard?.cuisines;
-        const updatedNextData = [
-          formData,
-          timeSlot,
-          restaurant_id,
-          restaurantName,
-          restaurantAddress,
-          restaurantCuisines,
-        ];
-        setNextData(updatedNextData);
-        const route = `/reservation?data=${encodeURIComponent(
-          JSON.stringify(updatedNextData)
-        )}`;
-        navigate(route);
-        setFormData("");
+        proceedWithOpenTableReservation(timeSlot);
       } else if (selectedReservationType === 'resy') {
         // For Resy, show the Resy details modal
         setSelectedResySlot(restrauntDetail?.results?.resy2);
@@ -933,6 +930,18 @@ export default function MakeReservation({ restrauntDetail }) {
         onContinue={handleConflictContinue}
         conflictingReservations={conflictingReservations}
         newReservationDetails={pendingReservationData}
+      />
+
+      <DiningAreaSelectionModal
+        isOpen={showDiningAreaModal}
+        onClose={() => {
+          setShowDiningAreaModal(false);
+          setPendingTimeSlotData(null);
+        }}
+        onSelect={handleDiningAreaSelected}
+        timeSlotData={pendingTimeSlotData}
+        formData={formData}
+        restaurantId={reservationCard?.id}
       />
     </>
   );
