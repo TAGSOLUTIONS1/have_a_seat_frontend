@@ -16,7 +16,7 @@ const VerifyUserForm = () => {
       const currentDate = new Date();
       const date = currentDate.toString();
       const response = await axios.post(
-        "https://have-a-seatonline.com/api/v1/auth/verify",
+        "http://127.0.0.1:8000/api/v1/auth/verify",
         {
           token,
         }

@@ -365,7 +365,7 @@ const ResyDetailsModal = ({ isOpen, onClose, onSave, onSkip, selectedTimeSlot, r
       }
       
       const bookingResponse = await axios.post(
-        "https://have-a-seatonline.com/api/v1/resy/book",
+        "http://127.0.0.1:8000/api/v1/resy/book",
         bookingPayload
       );
 

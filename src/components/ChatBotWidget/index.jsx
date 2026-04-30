@@ -56,7 +56,7 @@ export default function ChatBotWidget() {
       };
 
       const res = await axios.post(
-        "https://have-a-seatonline.com/api/v1/yelp/chat",
+        "http://127.0.0.1:8000/api/v1/yelp/chat",
         requestBody,
         {
           headers: {
@@ -149,7 +149,8 @@ export default function ChatBotWidget() {
                             </p>
                             </div>
                         </Link>  
-                        ))}
+                                       </p>
+             ))}
                     </div>
                     )}
 

@@ -39,7 +39,7 @@ const Navbar = () => {
     }
     
     // If it's a relative path, construct full URL
-    return `https://have-a-seatonline.com/${authState.user.avatar_url}`;
+    return `http://127.0.0.1:8000/${authState.user.avatar_url}`;
   };
 
   // Update avatar URL when authState changes
@@ -49,7 +49,7 @@ const Navbar = () => {
       if (authState.user.avatar_url.startsWith('http')) {
         url = authState.user.avatar_url;
       } else {
-        url = `https://have-a-seatonline.com/${authState.user.avatar_url}`;
+        url = `http://127.0.0.1:8000/${authState.user.avatar_url}`;
       }
       // Add timestamp to force refresh
       setAvatarUrl(`${url}?t=${Date.now()}`);
@@ -203,7 +203,7 @@ const Navbar = () => {
 
       // Get user ID
       const userResponse = await axios.get(
-        "https://have-a-seatonline.com/api/v1/users/me",
+        "http://127.0.0.1:8000/api/v1/users/me",
         {
           headers: {
             Authorization: `Bearer ${localToken}`,
@@ -223,7 +223,7 @@ const Navbar = () => {
 
       // Upload avatar
       const avatarResponse = await axios.post(
-        `https://have-a-seatonline.com/api/v1/users/${userId}/avatar`,
+        `http://127.0.0.1:8000/api/v1/users/${userId}/avatar`,
         formData,
         {
           headers: {
@@ -236,7 +236,7 @@ const Navbar = () => {
       if (avatarResponse.status === 200) {
         // Fetch updated user data immediately after upload
         const updatedUserResponse = await axios.get(
-          "https://have-a-seatonline.com/api/v1/users/me",
+          "http://127.0.0.1:8000/api/v1/users/me",
           {
             headers: {
               Authorization: `Bearer ${localToken}`,
@@ -253,7 +253,7 @@ const Navbar = () => {
           if (updatedUserResponse.data.avatar_url?.startsWith('http')) {
             newAvatarUrl = updatedUserResponse.data.avatar_url;
           } else if (updatedUserResponse.data.avatar_url) {
-            newAvatarUrl = `https://have-a-seatonline.com/${updatedUserResponse.data.avatar_url}`;
+            newAvatarUrl = `http://127.0.0.1:8000/${updatedUserResponse.data.avatar_url}`;
           }
           
           if (newAvatarUrl) {

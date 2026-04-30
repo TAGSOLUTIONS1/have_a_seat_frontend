@@ -80,12 +80,12 @@ const RestrauntDetail = () => {
           url_slug: resy_url_slug,
         });
         setEndPoint(
-          `https://have-a-seatonline.com/api/v1/resy/get_restaurant_details?${v2Params.toString()}`
+          `http://127.0.0.1:8000/api/v1/resy/get_restaurant_details?${v2Params.toString()}`
         );
       } else {
         // Fall back to old endpoint to get location and url_slug, then call v2
         setEndPoint(
-          `https://have-a-seatonline.com/api/v1/resy/get_restaurant_details?venue_id=${resy_alias}&persons=2&date=${formattedDate}`
+          `http://127.0.0.1:8000/api/v1/resy/get_restaurant_details?venue_id=${resy_alias}&persons=2&date=${formattedDate}`
         );
       }
     } 
@@ -316,7 +316,7 @@ const RestrauntDetail = () => {
               if (locationSlug) v2Params.append('location', locationSlug);
               if (urlSlug) v2Params.append('url_slug', urlSlug);
               
-              const additionalApiUrl = `https://have-a-seatonline.com/api/v1/resy/get_restaurant_details?${v2Params.toString()}`;
+              const additionalApiUrl = `http://127.0.0.1:8000/api/v1/resy/get_restaurant_details?${v2Params.toString()}`;
               const additionalResponse = await axios.get(additionalApiUrl);
               const additionalResponseData = additionalResponse?.data?.data || {};
               

@@ -37,7 +37,7 @@ const ResetFormOne = () => {
       const currentDate = new Date();
       const date = currentDate.toString();
       const response = await axios.post(
-        "https://have-a-seatonline.com/api/v1/auth/reset-password-one-time",
+        "http://127.0.0.1:8000/api/v1/auth/reset-password-one-time",
         {
           token: paramsToken,
           new_password: data.newPassword,

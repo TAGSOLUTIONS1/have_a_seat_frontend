@@ -490,7 +490,7 @@ export default function MakeReservation({ restrauntDetail }) {
     
     try {
       const response = await axios.get(
-        `https://have-a-seatonline.com/api/v1/resy/get_restaurant_details?`,
+        `http://127.0.0.1:8000/api/v1/resy/get_restaurant_details?`,
         {
           params: resyTimeParams,
         }

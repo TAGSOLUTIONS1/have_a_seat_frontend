@@ -38,7 +38,7 @@ const MainLinkingPage = () => {
     }
     
     // If it's a relative path, construct full URL
-    return `https://have-a-seatonline.com/${user.avatar_url}`;
+    return `http://127.0.0.1:8000/${user.avatar_url}`;
   };
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const MainLinkingPage = () => {
         },
       };
       const response = await axios.get(
-        "https://have-a-seatonline.com/api/v1/users/me",
+        "http://127.0.0.1:8000/api/v1/users/me",
         config
       );
       if (response.status === 200) {
@@ -181,7 +181,7 @@ const MainLinkingPage = () => {
     try {
       // Get user ID first
       const userResponse = await axios.get(
-        "https://have-a-seatonline.com/api/v1/users/me",
+        "http://127.0.0.1:8000/api/v1/users/me",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -201,7 +201,7 @@ const MainLinkingPage = () => {
 
       // Upload avatar using the backend API
       const avatarResponse = await axios.post(
-        `https://have-a-seatonline.com/api/v1/users/${userId}/avatar`,
+        `http://127.0.0.1:8000/api/v1/users/${userId}/avatar`,
         formData,
         {
           headers: {
@@ -276,7 +276,7 @@ const MainLinkingPage = () => {
       };
 
       const response = await axios.patch(
-        "https://have-a-seatonline.com/api/v1/users/me",
+        "http://127.0.0.1:8000/api/v1/users/me",
         profileData,
         config
       );
