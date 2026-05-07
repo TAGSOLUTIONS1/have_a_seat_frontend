@@ -26,9 +26,13 @@ const StepComponent = () => {
 
   return (
     <div>
-      <div className="flex flex-col gap-5">
-      <p className="text-3xl sm:text-5xl md:text-6xl font-agrandir font-bold text-shipGrey">Why Choose <span className="text-plum">Us</span></p>
-      <p className="text-sm sm:text-xl font-agrandir text-shipGrey">We make the dining experience simple and effortless.</p>
+      <div className="flex flex-col gap-5 max-w-2xl">
+        <h2 className="text-3xl md:text-4xl font-agrandir font-bold text-shipGrey mb-1">
+          Why Choose <span className="text-plum">Us</span>
+        </h2>
+        <p className="text-graysublabel font-inter leading-relaxed">
+          We make the dining experience simple and effortless.
+        </p>
       </div>
     <div className="flex flex-col items-start gap-8 p-0 sm:p-4 mt-5 relative">
       <div className="absolute left-4 sm:left-9 lg:left-10 top-10 md:top-11 w-0.5 bg-gray-300 h-[70%] "></div>
@@ -47,10 +51,12 @@ const StepComponent = () => {
             {/* Step Content */}
             <div >
               <span className="text-xs sm:text-sm font-inter text-stepclr">STEP 0{index + 1}</span>
-              <h3 className="text-sm sm:text-base md:text-xl font-bold font-agrandir text-plum">
+              <h3 className="text-xl font-agrandir font-bold text-shipGrey mb-1">
                 {step.title}
               </h3>
-              <p className="text-shipGrey font-normal font-inter text-xs sm:text-sm md:text-base">{step.description}</p>
+              <p className="text-shipGrey/80 font-inter leading-relaxed text-xs sm:text-sm md:text-base">
+                {step.description}
+              </p>
             </div>
           </div>
         ))}

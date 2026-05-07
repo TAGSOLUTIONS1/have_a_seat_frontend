@@ -9,7 +9,7 @@ import "@geoapify/geocoder-autocomplete/styles/minimal.css";
 import "@geoapify/geocoder-autocomplete/styles/round-borders.css";
 import "./autocomplete.css";
 
-const GeoApiAuto = ({ getLocationData, location }) => {
+const GeoApiAuto = ({ getLocationData, location, placeholder = "Location" }) => {
   const [isFetchingCoords, setIsFetchingCoords] = useState(false);
 
   // Fetch coordinates from OpenStreetMap using location string
@@ -74,7 +74,7 @@ const GeoApiAuto = ({ getLocationData, location }) => {
         placeSelect={onPlaceSelect}
         suggestionsChange={onSuggestionChange}
         onUserInput={handleChange}
-        placeholder="Location"
+        placeholder={placeholder}
         className="geoapify-autocomplete-input"
         listClassName="geoapify-autocomplete-items  "
         itemClassName="geoapify-autocomplete-item "

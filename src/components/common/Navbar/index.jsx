@@ -293,7 +293,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky top-2 start-0 px-2 sm:px-4 md:px-4 lg:px-4 xl:px-4 2xl:px-4 z-20">
+      <nav className="sticky top-2 start-0 px-2 sm:px-4 md:px-4 lg:px-4 xl:px-4 2xl:px-4 z-40">
         <div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto backdrop-blur-navigation px-5 rounded-full">
           <div className="flex items-center rtl:space-x-reverse">
             <Link className="flex" to="/">

@@ -20,11 +20,13 @@ function freshBookingFields() {
   };
 }
 
-function mergeFormFromSaved(saved) {
+function mergeFeaturedParams(locationOverrides) {
   const dates = freshBookingFields();
   return {
     ...initialBookingState,
-    ...(saved && typeof saved === "object" ? saved : {}),
+    ...(locationOverrides && typeof locationOverrides === "object"
+      ? locationOverrides
+      : {}),
     ...dates,
   };
 }
@@ -44,28 +46,12 @@ export default function Featured() {
       setAreaLabel(label);
     };
 
-    const trySavedLocation = () => {
-      try {
-        const raw = localStorage.getItem("searchFormData");
-        if (!raw) return false;
-        const parsed = JSON.parse(raw);
-        const loc = parsed?.location != null ? String(parsed.location).trim() : "";
-        if (!loc) return false;
-        applyParams(mergeFormFromSaved(parsed), loc.split(",")[0].trim());
-        return true;
-      } catch {
-        return false;
-      }
-    };
-
     const fallbackNewYork = () => {
-      const params = mergeFormFromSaved({ location: "New York" });
+      const params = mergeFeaturedParams({ location: "New York" });
       applyParams(params, "New York");
     };
 
-    if (trySavedLocation()) return () => {
-      cancelled = true;
-    };
+    /* Featured ignores hero/search bar localStorage — browser location or New York only */
 
     if (!navigator.geolocation) {
       fallbackNewYork();
@@ -103,7 +89,7 @@ export default function Featured() {
           /* keep label */
         }
         applyParams(
-          mergeFormFromSaved({
+          mergeFeaturedParams({
             location: label,
             latitude: lat,
             longitude: lon,

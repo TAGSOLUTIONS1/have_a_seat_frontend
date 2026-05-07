@@ -76,7 +76,9 @@ const handleNewsletterSubmit = async (e) => {
         />
         <div></div>
         <div>
-          <h1 className="text-plum text-2xl font-poppins font-bold mb-2">Home</h1>
+          <h2 className="text-xl font-agrandir font-bold text-shipGrey mb-3">
+            Home
+          </h2>
           <ul className="flex flex-col gap-2">
             {FooterLinks.map((link) => (
               <li key={link} className="cursor-pointer text-ftext text-base font-normal font-roboto">
@@ -95,8 +97,10 @@ const handleNewsletterSubmit = async (e) => {
         </div>
 
         {/* social media web*/}
-        <ul className=" text-plum text-lg flex flex-col gap-[1.25rem]">
-          <li className="text-plum text-2xl font-poppins font-bold mb-2">Social media</li>
+        <ul className="flex flex-col gap-[1.25rem]">
+          <li className="text-xl font-agrandir font-bold text-shipGrey mb-3">
+            Social media
+          </li>
 
           <ul className="flex flex-col gap-5">
             <li className="flex items-center gap-3 text-sm">
@@ -117,8 +121,10 @@ const handleNewsletterSubmit = async (e) => {
 
       <div className="flex flex-col w-full gap-6 md:gap-0 md:flex-row justify-between items-center">
         <div className="w-[90%] text-center sm:text-left sm:w-1/2">
-          <h2 className="text-xl sm:text-3xl font-agrandir text-ftext font-bold text-center md:text-left ">Join Our Newsletter</h2>
-          <p className="text-sm sm:text-xl text-grayblu font-roboto">
+          <h2 className="text-2xl md:text-3xl font-agrandir font-bold text-shipGrey mb-3 text-center md:text-left">
+            Join Our Newsletter
+          </h2>
+          <p className="text-graysublabel font-inter leading-relaxed text-center md:text-left">
             Only updates and special offers. No spams.
           </p>
         </div>

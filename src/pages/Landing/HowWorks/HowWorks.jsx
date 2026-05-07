@@ -27,7 +27,7 @@ export default function HowWorks() {
           <h2 className="text-3xl md:text-4xl font-agrandir font-bold text-shipGrey mb-4">
             How It Works
           </h2>
-          <p className="text-graysublabel max-w-2xl mx-auto font-inter">
+          <p className="text-graysublabel max-w-2xl mx-auto font-inter leading-relaxed">
             Simple, fast, and reliable. Your next great meal is just three steps
             away.
           </p>

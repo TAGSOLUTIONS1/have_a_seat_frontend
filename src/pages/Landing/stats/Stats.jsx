@@ -23,7 +23,7 @@ function Stats() {
               <p className="sm:text-2xl md:text-3xl lg:text-4xl text-shipGrey font-extrabold font-agrandirBold">
                 {stat.stat}
               </p>
-              <p className="text-sm md:text-base text-shipGrey font-roboto">
+              <p className="text-sm md:text-base text-graysublabel font-inter leading-snug">
                 {stat.heading}
               </p>
             </div>
