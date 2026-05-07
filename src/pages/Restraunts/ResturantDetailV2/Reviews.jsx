@@ -46,25 +46,6 @@ const renderStars = (rating) => {
   }
   return stars;
 };
-const convertHtmlToText = (html) => {
-  // Create a temporary element
-  var tempElement = document.createElement("div");
-
-  // Set the HTML content
-  tempElement.innerHTML = html;
-
-  // Append the temporary element to the document body
-  document.body.appendChild(tempElement);
-
-  // Extract text content
-  var textContent = tempElement.textContent || tempElement.innerText;
-
-  // Remove the temporary element
-  document.body.removeChild(tempElement);
-
-  return textContent;
-};
-
 export default function Reviews({ restrauntDetail }) {
   const [reviewsData, setReviewsData] = useState();
   const [yelpReviews, setYelpReviews] = useState();
@@ -173,64 +154,9 @@ export default function Reviews({ restrauntDetail }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restaurantKey, restrauntDetail?.restaurant_type]);
 
-  // const firstAbout = Object.values(data)[0]?.content?.["en-us"]?.about?.body;
-    const templates = restrauntDetail?.results?.venues[0]?.templates;
-    const firstTemplate = Object.values(templates || {})[0];
-
   return (
     <div className="">
-       {/* {console.log("restrauntDetail  1  ", restrauntDetail)} */}
-      {restrauntDetail?.restaurant_type!=="resy" ?
-      (
-        <div className=" py-8 lg:flex gap-10">
-           <div className="lg:w-1/2">
-        <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-4">
-          About{" "}
-          {restrauntDetail?.restaurant_type === "tableagent" || restrauntDetail?.restraunt_type === "tableagent"
-            ? restrauntDetail?.name
-            : restrauntDetail?.alias
-            ? restrauntDetail?.name
-            : restrauntDetail?.restaurant
-            ? restrauntDetail?.restaurant?.name
-            : restrauntDetail?.name
-            ? restrauntDetail?.name
-            : "Restaurant"}
-        </h2>
-        <p className="text-shipGrey font-roboto text-sm sm:text-base md:text-lg lg:text-xl font-normal">
-          {
-            restrauntDetail?.restaurant_type === "tableagent" && restrauntDetail?.description
-              ? restrauntDetail.description
-              : restrauntDetail?.restaurant_type === "tock" && restrauntDetail?.description
-              ? restrauntDetail.description
-              : restrauntDetail?.restaurant_type === "resy" && restrauntDetail?.description
-              ? restrauntDetail.description
-              : restrauntDetail?.restaurant_type === "open_table" && restrauntDetail?.description
-              ? restrauntDetail.description
-              : restrauntDetail?.restaurant_type === "thefork"
-              ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
-              : restrauntDetail?.alias
-              ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
-              : firstTemplate?.content?.['en-us']?.about?.body && (
-              " " + convertHtmlToText(
-                firstTemplate?.content?.['en-us']?.about?.body 
-              )
-            ) 
-            // :" "
-          }
-        </p>
-        <p className="text-shipGrey font-roboto text-sm sm:text-base md:text-lg lg:text-xl font-bold mt-5">
-          {
-            firstTemplate?.content?.['en-us']?.need_to_know?.body && (
-              " " + convertHtmlToText(
-                firstTemplate?.content?.['en-us']?.need_to_know?.body 
-              )
-            ) 
-            // :" "
-          }
-        </p>
-
-      </div>
-      <div className="lg:w-1/2 mt-8 lg:mt-0 border-[0.4px] border-[#B9B9B9] shadow-lg bg-white p-5 rounded-[30px]">
+      <div className="py-2 border-[0.4px] border-[#B9B9B9] shadow-lg bg-white p-5 rounded-[30px]">
         <h2 className="text-4xl text-shipGrey font-agrandir font-bold mb-4">Reviews</h2>
         
         {/* Tabs */}
@@ -615,58 +541,6 @@ export default function Reviews({ restrauntDetail }) {
           )}
         </div>
       </div>
-      </div>):
-      (<div className="">
-        <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-4">
-          About{" "}
-          {restrauntDetail?.restaurant_type === "tableagent" || restrauntDetail?.restraunt_type === "tableagent"
-            ? restrauntDetail?.name
-            : restrauntDetail?.alias
-            ? restrauntDetail?.name
-            : restrauntDetail?.restaurant
-            ? restrauntDetail?.restaurant?.name
-            : restrauntDetail?.name
-            ? restrauntDetail?.name
-            : "Restaurant"}
-        </h2>
-        <p className="text-shipGrey font-roboto text-sm sm:text-base md:text-lg lg:text-xl font-normal">
-          {
-            restrauntDetail?.restaurant_type === "resy" && restrauntDetail?.description
-              ? restrauntDetail.description
-              : restrauntDetail?.restaurant_type === "tableagent" && restrauntDetail?.description
-              ? restrauntDetail.description
-              : restrauntDetail?.restaurant_type === "tock" && restrauntDetail?.description
-              ? restrauntDetail.description
-              : restrauntDetail?.alias
-              ? "Enjoy a delightful dining experience where exceptional cuisine, warm ambiance, and top-notch service come together. Whether you're looking for a casual meal or a special occasion, our restaurant offers a variety of dishes crafted to satisfy every palate."
-              : restrauntDetail?.restaurant?.description
-              ? convertHtmlToText(restrauntDetail.restaurant.description)
-              : firstTemplate?.content?.['en-us']?.about?.body && (
-              " " + convertHtmlToText(
-                firstTemplate?.content?.['en-us']?.about?.body 
-              )
-            ) 
-            // :" "
-          }
-        </p>
-        <p className="text-shipGrey font-roboto text-sm sm:text-base md:text-lg lg:text-xl mt-10">
-          <p className="text-4xl font-bold font-agrandir text-shipGrey mb-4">Need to Know</p>
-          {
-            restrauntDetail?.restaurant_type === "resy" && restrauntDetail?.content
-              ? (() => {
-                  const needToKnow = restrauntDetail.content.find(c => c.name === "need_to_know");
-                  return needToKnow?.body || "";
-                })()
-              : firstTemplate?.content?.['en-us']?.need_to_know?.body && (
-              " " + convertHtmlToText(
-                firstTemplate?.content?.['en-us']?.need_to_know?.body 
-              )
-            ) 
-            // :" "
-          }
-        </p>
-
-      </div>)}
     </div>
   );
 }
