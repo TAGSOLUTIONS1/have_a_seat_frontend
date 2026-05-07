@@ -7,7 +7,6 @@ import { ImFilter } from "react-icons/im";
 import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
 import { MapPin, List } from "lucide-react";
-import RestaurantCard from "./RestaurantCard";
 import Map from "@/components/shared/Map";
 import getCoordinates from "@/lib/utils";
 import SmallCard from "./SmallCard";
@@ -962,6 +961,40 @@ const RestaurantCards = memo(
 
                 <div className="border-white/20 border-t my-4"></div>
 
+                {/* Cuisines */}
+                <div className="mb-6">
+                  <p className="font-agrandir text-xs font-bold text-white uppercase mb-3">Cuisines</p>
+                  <div className="flex flex-col gap-3 max-h-60 overflow-y-auto">
+                    {displayedCuisines.map((cuisine) => (
+                      <div key={cuisine} className="flex gap-3 items-center">
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={cuisinefilter.includes(cuisine)}
+                            onChange={() => onCuisineChange(cuisine)}
+                            className="hidden peer"
+                          />
+                          <span className="w-5 h-5 rounded-sm bg-white cursor-pointer flex items-center justify-center">
+                            {cuisinefilter.includes(cuisine) && <FaCheck size={12} color="#9235e2" />}
+                          </span>
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <p className="font-roboto font-medium text-sm text-white">{cuisine}</p>
+                          {isFavoriteCuisine(cuisine) && <FaHeart size={12} color="#FFD700" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={showmore ? () => onShowMore() : fillallcuisines}
+                    className="mt-3 font-roboto font-medium text-sm text-white underline"
+                  >
+                    {showmore ? "Show Less" : "Show More"}
+                  </button>
+                </div>
+
+                <div className="border-white/20 border-t my-4"></div>
+
                 {/* Restaurant Rating */}
                 <div className="mb-6">
                   <p className="font-agrandir text-xs font-bold text-white uppercase mb-3">Restaurant Rating</p>
@@ -1030,40 +1063,6 @@ const RestaurantCards = memo(
                   </div>
                 </div>
 
-                <div className="border-white/20 border-t my-4"></div>
-
-                {/* Cuisines */}
-                <div className="mb-6">
-                  <p className="font-agrandir text-xs font-bold text-white uppercase mb-3">Cuisines</p>
-                  <div className="flex flex-col gap-3 max-h-60 overflow-y-auto">
-                    {displayedCuisines.map((cuisine) => (
-                      <div key={cuisine} className="flex gap-3 items-center">
-                        <label>
-                          <input
-                            type="checkbox"
-                            checked={cuisinefilter.includes(cuisine)}
-                            onChange={() => onCuisineChange(cuisine)}
-                            className="hidden peer"
-                          />
-                          <span className="w-5 h-5 rounded-sm bg-white cursor-pointer flex items-center justify-center">
-                            {cuisinefilter.includes(cuisine) && <FaCheck size={12} color="#9235e2" />}
-                          </span>
-                        </label>
-                        <div className="flex items-center gap-2">
-                          <p className="font-roboto font-medium text-sm text-white">{cuisine}</p>
-                          {isFavoriteCuisine(cuisine) && <FaHeart size={12} color="#FFD700" />}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={showmore ? () => onShowMore() : fillallcuisines}
-                    className="mt-3 font-roboto font-medium text-sm text-white underline"
-                  >
-                    {showmore ? "Show Less" : "Show More"}
-                  </button>
-                </div>
-
                 {/* Apply Button */}
                 <button
                   onClick={() => {
@@ -1084,7 +1083,7 @@ const RestaurantCards = memo(
 
         {/* Filtered Restaurants List */}
         <div className=" lg:px-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-7 pb-20 lg:pb-0">
-        <div className="hidden lg:block bg-plum p-4 sm:p-5 w-full lg:w-80 xl:w-96 h-fit rounded-3xl border-2 border-[#B9B9B9]">
+        <div className="hidden lg:block bg-plum p-4 sm:p-5 w-full lg:w-64 xl:w-72 h-fit rounded-3xl border-2 border-[#B9B9B9]">
               <div className="flex justify-between">
                 <div className="flex gap-2 sm:gap-4 items-center">
                   <ImFilter color="#ffffff" />
@@ -1211,6 +1210,43 @@ const RestaurantCards = memo(
 
           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
 
+            <div className="flex flex-col gap-3">
+            <p className="font-agrandir text-xs font-bold text-white uppercase">Cuisines</p>
+
+            {displayedCuisines.map((cuisine) => (
+              <div key={cuisine} className="flex gap-4 items-center">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={cuisinefilter.includes(cuisine)}
+                    onChange={() => onCuisineChange(cuisine)}
+                    className="hidden peer"
+                  />
+                  <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
+                    flex items-center justify-center"
+                  >
+                    {cuisinefilter.includes(cuisine) && <FaCheck size={13} color="#9235e2" />}
+                  </span>
+                </label>
+                <div className="flex items-center gap-2">
+                  <p className="font-roboto font-medium text-sm text-white">{cuisine}</p>
+                  {isFavoriteCuisine(cuisine) && (
+                    <FaHeart size={14} color="#FFD700" className="ml-1" />
+                  )}
+                </div>
+              </div>
+            ))}
+
+              <p
+                className="font-roboto font-medium text-sm text-white underline cursor-pointer"
+                onClick={showmore ? () => onShowMore() : fillallcuisines}
+              >
+                {showmore ? "Show Less" : "Show More"}
+              </p>
+            </div>
+
+            <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
+
             <p className="font-agrandir text-xs font-bold text-white uppercase">Restaurant Rating</p>
             <div className="my-7 flex flex-col gap-3">
             {ratingtypes.map((rating) => (
@@ -1287,43 +1323,6 @@ const RestaurantCards = memo(
           </div>
            </div>
 
-           <div className="border-[#FFFFFF] border-t-[0.7px] my-5"></div>
-
-            <div className="flex flex-col gap-3">
-            <p className="font-agrandir text-xs font-bold text-white uppercase">Cuisines</p>
-
-            {displayedCuisines.map((cuisine) => (
-              <div key={cuisine} className="flex gap-4 items-center">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={cuisinefilter.includes(cuisine)}
-                    onChange={() => onCuisineChange(cuisine)}
-                    className="hidden peer"
-                  />
-                  <span className="w-5 h-5 sm:w-5 sm:h-5 rounded-sm bg-white cursor-pointer 
-                    flex items-center justify-center"
-                  >
-                    {cuisinefilter.includes(cuisine) && <FaCheck size={13} color="#9235e2" />}
-                  </span>
-                </label>
-                <div className="flex items-center gap-2">
-                  <p className="font-roboto font-medium text-sm text-white">{cuisine}</p>
-                  {isFavoriteCuisine(cuisine) && (
-                    <FaHeart size={14} color="#FFD700" className="ml-1" />
-                  )}
-                </div>
-              </div>
-            ))}
-
-              <p
-                className="font-roboto font-medium text-sm text-white underline cursor-pointer"
-                onClick={showmore ? () => onShowMore() : fillallcuisines}
-              >
-                {showmore ? "Show Less" : "Show More"}
-              </p>
-            </div>
-
         </div>
         
         {/* List/Map Toggle and View Section */}
@@ -1370,7 +1369,8 @@ const RestaurantCards = memo(
 
           {/* List View */}
           {viewMode === "list" && (
-            <div>
+            <div className="px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-5">
               {visibleRestaurants?.map((data, index) => {
                 // Calculate distance for this restaurant
                 let restaurantDistance = null;
@@ -1528,17 +1528,13 @@ const RestaurantCards = memo(
                     pathname: "/restaurant-detail",
                     search: getSearchParams(),
                   }}
-                  className="block mb-4 sm:mb-6"
+                  className="block"
                 >
-                <div className="hidden md:block">
-                  <RestaurantCard data={data} distance={restaurantDistance} formData={formData} />
-                  </div>
-                <div className="md:hidden">
-                    <SmallCard data={data} distance={restaurantDistance} formData={formData} />
-                  </div>
+                  <SmallCard data={data} distance={restaurantDistance} formData={formData} />
                 </Link>
               );
             })}
+            </div>
             
             {/* Load More Button / Loading Indicator */}
             {hasMore && (
