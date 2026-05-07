@@ -1,38 +1,36 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { getCurrentDate } from "@/lib/utils";
-import { getCurrentTime, initialBookingState } from "@/components/constants/constants";
+import {
+  getCurrentTime,
+  initialBookingState,
+} from "@/components/constants/constants";
 import LoadingScreens from "../Section2/LoadingScreens";
 import GeoApiAuto from "@/components/home/HomeAutoComplete";
 import { MdLocationOn } from "react-icons/md";
+
+const HERO_IMG =
+  "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1934&auto=format&fit=crop";
 
 export default function ReserveHero() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [location, setLocation] = useState("");
-  const [locationData, setLocationData] = useState({ location: "", latitude: null, longitude: null });
+  const locationRef = useRef({
+    location: "",
+    latitude: null,
+    longitude: null,
+  });
 
-  const getLocationData = (value) => {
-    const locationString = typeof value === 'string' ? value : value?.location || value;
-    const latitude = typeof value === 'object' && value?.latitude ? value.latitude : null;
-    const longitude = typeof value === 'object' && value?.longitude ? value.longitude : null;
-    
-    setLocation(locationString);
-    // Store location data without navigating
-    setLocationData({
-      location: locationString,
-      latitude: latitude,
-      longitude: longitude
-    });
-  };
+  const goToRestaurants = (override) => {
+    const effective = override ?? locationRef.current;
 
-  const handleNavigateToRestaurants = () => {
     setIsLoading(true);
-    
-    // Load saved form data or use initial state
+
     const savedData = localStorage.getItem("searchFormData");
     let formData;
-    
+
     if (savedData) {
       try {
         formData = JSON.parse(savedData);
@@ -48,85 +46,126 @@ export default function ReserveHero() {
         reservation_time: getCurrentTime(),
       };
     }
-    
-    // Update location if provided
-    if (locationData.location) {
-      const firstWord = locationData.location.split(",")[0].trim();
+
+    if (effective.location) {
+      const firstWord = effective.location.split(",")[0].trim();
       formData = {
         ...formData,
         location: firstWord,
-        latitude: locationData.latitude || formData.latitude || "",
-        longitude: locationData.longitude || formData.longitude || "",
+        latitude: effective.latitude ?? formData.latitude ?? "",
+        longitude: effective.longitude ?? formData.longitude ?? "",
       };
     }
-    
-    // Save form data
+
     localStorage.setItem("searchFormData", JSON.stringify(formData));
-    
-    // Navigate to restaurants page with loading screens
+
     const route = `/restraunts?data=${encodeURIComponent(
       JSON.stringify(formData)
     )}`;
-    
-    // Small delay to show loading screen briefly before navigation
+
     setTimeout(() => {
       navigate(route);
-      // Reset loading state after navigation
       setTimeout(() => setIsLoading(false), 100);
-    }, 500); // Brief delay for smooth transition
+    }, 500);
   };
 
-  const handleReserveNow = () => {
-    handleNavigateToRestaurants();
+  const getLocationData = (value) => {
+    const locationString =
+      typeof value === "string" ? value : value?.location || value;
+    const latitude =
+      typeof value === "object" && value?.latitude ? value.latitude : null;
+    const longitude =
+      typeof value === "object" && value?.longitude ? value.longitude : null;
+
+    const next = { location: locationString, latitude, longitude };
+    locationRef.current = next;
+    setLocation(locationString);
+
+    if (
+      typeof value === "object" &&
+      value?.latitude != null &&
+      value?.longitude != null
+    ) {
+      goToRestaurants(next);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (!locationRef.current.location?.trim()) return;
+    goToRestaurants();
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden mb-10">
-      {/* Loading Screens Overlay */}
+    <>
       {isLoading && <LoadingScreens />}
 
-      {/* Background Image */}
-      <img
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        src="/assets/1.png"
-        alt="Reserve Hero Background"
-      />
-      
-      {/* Overlay for better text readability */}
-      <div className="absolute top-0 left-0 w-full h-full bg-black/30"></div>
-
-      {/* Content */}
-      <div className={`relative z-10 h-full flex flex-col gap-8 sm:gap-12 md:gap-16 lg:gap-20 items-center justify-center text-center px-5 transition-opacity duration-500 ${isLoading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
-
-      <div className="text-plum text-4xl -mt-12 sm:text-5xl w-[100%] sm:w-[70%] md:text-5xl lg:text-6xl xl:text-7xl md:w-[50%] font-bold font-agrandir uppercase"> 
-          <p>Dine Smarter, Reserve Faster</p>
+      <section className="relative h-[90vh] min-h-[600px] flex items-center justify-center pt-20 mb-10 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={HERO_IMG}
+            alt="Restaurant atmosphere"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-shipGrey/60 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-b from-shipGrey/80 via-transparent to-lightGrey" />
         </div>
 
-        <div className="max-w-4xl mx-auto flex flex-col items-center gap-6 w-full px-4">
-          {/* Location Search Bar - On top */}
-          <div className="w-full max-w-md md:max-w-lg lg:max-w-xl relative z-30">
-            <div className="flex items-center bg-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-5 shadow-2xl border-2 border-white/50 hover:shadow-3xl transition-all duration-300 hover:scale-[1.02]">
-              <MdLocationOn size={28} color="#9235E2" className="mr-3 md:mr-4 flex-shrink-0" />
-              <div className="flex-1 min-w-0">
+        <div
+          className={`relative z-10 max-w-7xl mx-auto px-6 w-full text-center mt-10 transition-opacity duration-500 ${
+            isLoading ? "opacity-50 pointer-events-none" : "opacity-100"
+          }`}
+        >
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-5xl md:text-7xl font-agrandir font-bold text-white mb-6 tracking-tight"
+          >
+            Find Your{" "}
+            <span className="text-plum italic font-semibold drop-shadow-[0_2px_14px_rgba(0,0,0,0.5)]">
+              Perfect
+            </span>{" "}
+            Table
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-lg md:text-xl text-white/90 mb-12 max-w-2xl mx-auto font-light font-inter leading-relaxed"
+          >
+            Dine smarter, reserve faster. Discover the best culinary experiences
+            in your city and secure your spot in seconds.
+          </motion.p>
+
+          <motion.form
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            onSubmit={handleSearchSubmit}
+            className="max-w-xl mx-auto w-full relative z-30"
+          >
+            <div className="flex items-center bg-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-5 shadow-2xl border-2 border-white/60 ring-1 ring-plum/15 focus-within:ring-plum/35 transition-shadow">
+              <MdLocationOn
+                size={28}
+                color="#9235E2"
+                className="mr-3 md:mr-4 flex-shrink-0"
+                aria-hidden
+              />
+              <div className="flex-1 min-w-0 text-left">
                 <GeoApiAuto
                   getLocationData={getLocationData}
                   location={location}
                 />
               </div>
             </div>
-          </div>
-
-          {/* Reserve Now Button - Behind dropdown */}
-          <button
-            onClick={handleReserveNow}
-            disabled={isLoading}
-            className="relative z-0 bg-plum hover:bg-purple-800 transition-all duration-300 px-8 py-4 md:px-10 md:py-5 rounded-lg text-white font-bold text-lg md:text-xl uppercase tracking-wide shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? "Loading..." : "Reserve Now"}
-          </button>
+            <p className="mt-3 text-sm text-white/75 font-inter">
+              Choose a location from suggestions or press Enter to search.
+            </p>
+          </motion.form>
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 }
-
