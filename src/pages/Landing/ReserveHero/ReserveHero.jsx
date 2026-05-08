@@ -122,23 +122,23 @@ export default function ReserveHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-agrandir font-bold text-white mb-6 tracking-tight"
+            className="text-4xl md:text-5xl font-agrandir font-bold text-white mb-4 tracking-tight"
           >
-            Find Your{" "}
+            Reservation Experience Across{" "}
             <span className="text-plum italic font-semibold drop-shadow-[0_2px_14px_rgba(0,0,0,0.5)]">
-              Perfect
+              <br />
+              Multiple 
             </span>{" "}
-            Table
+            Platforms
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-lg md:text-xl text-white/90 mb-12 max-w-2xl mx-auto font-light font-inter leading-relaxed"
+            className="text-lg md:text-xl text-white/90 mb-5 max-w-2xl mx-auto font-light font-inter leading-relaxed"
           >
-            Dine smarter, reserve faster. Discover the best culinary experiences
-            in your city and secure your spot in seconds.
+            Find and reserve tables across your favourite dining platforms
           </motion.p>
 
           <motion.form
