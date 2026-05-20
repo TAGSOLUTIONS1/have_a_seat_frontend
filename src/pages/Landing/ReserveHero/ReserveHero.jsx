@@ -166,7 +166,6 @@ export default function ReserveHero() {
               </div>
               <button
                 type="submit"
-                disabled={!location?.trim()}
                 className="inline-flex items-center justify-center gap-2 rounded-xl sm:rounded-r-[1rem] sm:rounded-l-none sm:min-h-[3rem] bg-plum text-white font-agrandir font-bold text-sm sm:text-base px-5 py-3 sm:px-6 shadow-md hover:bg-plum/90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none sm:shrink-0 w-full sm:w-auto border border-plum/30"
               >
                 <Search className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
