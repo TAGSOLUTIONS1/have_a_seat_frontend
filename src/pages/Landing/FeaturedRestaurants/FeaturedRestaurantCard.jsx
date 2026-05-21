@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { IoIosStar, IoIosStarOutline } from "react-icons/io";
+import { getInitialsOfName } from "@/lib/utils";
 
 function resyDetailSearch(restaurant) {
   const resyId = restaurant?.id?.resy;
@@ -27,9 +28,13 @@ function renderStars(rating) {
     if (i < full) {
       stars.push(<IoIosStar key={i} className="text-plum" size={14} />);
     } else if (i === full && half) {
-      stars.push(<IoIosStar key={i} className="text-plum opacity-70" size={14} />);
+      stars.push(
+        <IoIosStar key={i} className="text-plum opacity-70" size={14} />,
+      );
     } else {
-      stars.push(<IoIosStarOutline key={i} className="text-plum/40" size={14} />);
+      stars.push(
+        <IoIosStarOutline key={i} className="text-plum/40" size={14} />,
+      );
     }
   }
   return <div className="flex items-center gap-0.5">{stars}</div>;
@@ -71,8 +76,7 @@ export default function FeaturedRestaurantCard({ restaurant, index }) {
           border border-frenchPink/50 hover:border-plum/35
           transition-colors flex flex-row md:flex-col md:h-full"
         >
-       
-          <div className="w-[120px] md:w-full md:aspect-[4/3] flex-shrink-0 relative" >
+          <div className="w-[120px] md:w-full bg-gray-300 md:aspect-[4/3] flex-shrink-0 relative">
             {image ? (
               <img
                 src={image}
@@ -83,18 +87,19 @@ export default function FeaturedRestaurantCard({ restaurant, index }) {
                          transition-transform duration-300"
               />
             ) : (
-              <div className="w-full h-full flex bg-lightGrey items-center justify-center text-sm text-graysublabel">
-                No image
+              <div
+                className="w-14 h-14 rounded-full border-2 border-gray-400
+                          bg-gray-200 text-gray-600
+                          flex items-center justify-center
+                          text-xl font-semibold"
+              >
+                getInitialsOfName(restaurant?.name);
               </div>
             )}
           </div>
           <div className="flex-1 p-3 flex flex-col justify-between min-w-0">
-
-
             <div className="min-w-0 relative">
-              <h3
-                className="text-base mr-14 sm:text-lg font-bold font-agrandir text-shipGrey break-words truncate group-hover:text-plum transition-colors"
-              >
+              <h3 className="text-base mr-14 sm:text-lg font-bold font-agrandir text-shipGrey break-words truncate group-hover:text-plum transition-colors">
                 {restaurant?.name}
               </h3>
 
@@ -130,10 +135,11 @@ export default function FeaturedRestaurantCard({ restaurant, index }) {
             </div>
             <span
               className="xs:flex md:hidden -ml-[-5.625rem] bg-plum text-white py-0.5 px-1 rounded-full text-xs flex items-center justify-center hover:opacity-90 transition
-            [@media(max-width:320px)]:-ml-[-2.625rem]" >
+            [@media(max-width:320px)]:-ml-[-2.625rem]"
+            >
               Reserve Now
             </span>
- 
+
             <span
               className="hidden md:flex text-plum font-semibold text-[15px]
                  flex items-center gap-1"
@@ -143,7 +149,6 @@ export default function FeaturedRestaurantCard({ restaurant, index }) {
             </span>
           </div>
         </div>
-      
       </Link>
     </motion.article>
   );

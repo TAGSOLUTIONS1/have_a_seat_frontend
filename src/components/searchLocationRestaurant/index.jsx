@@ -620,7 +620,7 @@ const SearchLocationV2 = memo(
         </div>
       </div>
 
-      <div className="w-full hidden md:flex max-w-[1550px] mx-auto bg-white border-2 border-plum rounded-2xl md:rounded-[3rem] shadow-lg border border-gray-100 p-4 md:py-5 md:px-8 flex-col md:flex-row gap-4 md:gap-6 items-stretch md:items-center">
+      <div className="w-full hidden md:flex max-w-[1550px] mx-auto bg-white border-2 border-plum rounded-2xl md:rounded-[3rem] shadow-lg border border-gray-100 p-4 md:py-2 md:px-6 flex-col md:flex-row gap-4 md:gap-6 items-stretch md:items-center">
         {/* Location */}
         <div className="flex items-center border-b md:border-b-0 md:border-r border-gray-200 flex-1 min-w-0">
           <MdLocationOn size={24} color="#9235E2" className=" flex-shrink-0" />

@@ -3,6 +3,7 @@ import { IoIosStarOutline } from "react-icons/io";
 import { IoIosStar } from "react-icons/io";
 import { MapPin } from "lucide-react";
 import FavoriteButton from "@/components/common/FavoriteButton";
+import { getInitialsOfName } from "@/lib/utils";
 
 // components/SmallCard.jsx
 
@@ -192,7 +193,7 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
     const roundedRating = Math.round(rating * 2) / 2; // Round to nearest 0.5
     const fullStars = Math.floor(roundedRating);
     const hasHalfStar = roundedRating % 1 >= 0.5;
-    
+
     for (let i = 0; i < 5; i++) {
       if (i < fullStars) {
         stars.push(<IoIosStar key={i} className="text-plum" size={16} />);
@@ -221,45 +222,75 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
   const status = getStatus();
   const cuisine = getCuisine();
   const address = getAddress();
+  const imgsrc = data?.restraunt_type === "yelp"
+    ? data?.image_url
+    : data?.restraunt_type === "resy" &&
+      Array.isArray(data?.images) &&
+      data?.images.length > 0
+      ? data?.images[0]
+      : data?.restraunt_type === "tock"
+        ? data?.image_url
+        : data?.restraunt_type === "tableagent"
+          ? data?.image_url
+          : data?.restraunt_type === "thefork"
+            ? data?.image_url
+            : data?.photos?.gallery?.photos[0]?.thumbnails[0]?.url
 
   return (
-    <div className="group bg-white w-full rounded-2xl overflow-hidden shadow-cardshadow border border-[#ede7f4] hover:shadow-lg transition-all duration-300 h-full flex flex-col">
-      <div className="relative h-40 sm:h-44 overflow-hidden">
-        <img
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          src={
-            data?.restraunt_type === "yelp"
-              ? data?.image_url
-              : data?.restraunt_type === "resy" &&
-                Array.isArray(data?.images) &&
-                data?.images.length > 0
-              ? data?.images[0]
-              : data?.restraunt_type === "tock"
-              ? data?.image_url
-              : data?.restraunt_type === "tableagent"
-              ? data?.image_url
-              : data?.restraunt_type === "thefork"
-              ? data?.image_url
-              : data?.photos?.gallery?.photos[0]?.thumbnails[0]?.url
-          }
-          alt={data?.name}
-        />
-        <div className="absolute top-2 right-2">
-          <FavoriteButton
-            restaurantAlias={getRestaurantAlias()}
-            restaurantType={getRestaurantType()}
-            size={16}
-            favoritesList={favoritesList}
-            onFavoriteChange={onFavoriteChange}
-          />
-        </div>
-        <div className="absolute top-2 left-2 bg-white/90 rounded-full px-2 py-0.5 text-xs font-semibold text-plum">
-          {price || "$$"}
+    <div className="group bg-white w-full rounded-2xl overflow-hidden shadow-cardshadow border border-[#ede7f4] hover:shadow-lg transition-all duration-300 h-full flex sm:flex-row md:flex-col">
+      <div className="relative md:h-40 h-auto flex items-center justify-center">
+
+        {/* IMAGE WRAPPER */}
+        <div
+          className="
+    relative
+    w-20 h-20
+    md:w-full md:h-full
+    bg-white md:bg-gray-300
+    p-2 md:p-0
+    flex items-center justify-center
+    overflow-hidden
+    flex-shrink-0
+  "
+        >
+          {imgsrc ? (
+            <img
+              className="w-full h-full object-cover rounded-lg md:rounded-none
+                 transition-transform duration-500 group-hover:scale-105"
+              src={imgsrc}
+              alt={data?.name}
+            />
+          ) : (
+            <span
+              className="w-14 h-14 rounded-full border-2 border-gray-400
+                 bg-gray-200 text-gray-600
+                 flex items-center justify-center
+                 text-xl font-semibold"
+            >
+              {getInitialsOfName(data?.name)}
+            </span>
+          )}
+
+          {/* PRICE */}
+          <div className="absolute top-1 left-1 bg-white/90 rounded-full px-2 py-0.5 text-xs font-semibold text-plum">
+            {price || "$$"}
+          </div>
+
+          {/* FAVORITE */}
+          <div className="absolute top-1 right-1">
+            <FavoriteButton
+              restaurantAlias={getRestaurantAlias()}
+              restaurantType={getRestaurantType()}
+              size={16}
+              favoritesList={favoritesList}
+              onFavoriteChange={onFavoriteChange}
+            />
+          </div>
         </div>
       </div>
 
       <div className="p-3 sm:p-4 flex flex-col flex-1">
-        <div className="flex items-start justify-between gap-2 mb-2">
+        <div className="flex items-start justify-between gap-2 mb-0 sm:mb-2">
           <h3 className="text-sm sm:text-base font-bold font-agrandir text-shipGrey line-clamp-2">
             {data?.name}
           </h3>
@@ -269,16 +300,16 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
                 data.restraunt_type === "yelp"
                   ? "/assets/yelp_logo_new.png"
                   : data.restraunt_type === "open_table"
-                  ? "/assets/opentable.png"
-                  : data.restraunt_type === "resy"
-                  ? "/assets/resy_logo_new.png"
-                  : data.restraunt_type === "tock"
-                  ? "/assets/tock-logo.png"
-                  : data.restraunt_type === "tableagent"
-                  ? "/assets/tableagent.png"
-                  : data.restraunt_type === "thefork"
-                  ? "/assets/thefork.png"
-                  : ""
+                    ? "/assets/opentable.png"
+                    : data.restraunt_type === "resy"
+                      ? "/assets/resy_logo_new.png"
+                      : data.restraunt_type === "tock"
+                        ? "/assets/tock-logo.png"
+                        : data.restraunt_type === "tableagent"
+                          ? "/assets/tableagent.png"
+                          : data.restraunt_type === "thefork"
+                            ? "/assets/thefork.png"
+                            : ""
               }
               alt={`${data.restraunt_type} logo`}
               className="w-full h-auto object-contain"
@@ -287,7 +318,7 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
         </div>
 
         {rating && (
-          <div className="flex items-center gap-1.5 mb-2">
+          <div className="flex items-center gap-1.5 mb-1 sm:mb-2">
             <div className="flex items-center gap-0.5">{renderStars(rating)}</div>
             <span className="text-xs sm:text-sm font-semibold text-shipGrey">{rating.toFixed(1)}</span>
             {reviewCount && <span className="text-[11px] sm:text-xs text-gray-500">{formatReviewCount(reviewCount)}</span>}
