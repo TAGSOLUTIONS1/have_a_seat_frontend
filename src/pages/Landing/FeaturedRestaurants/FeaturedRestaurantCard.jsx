@@ -64,13 +64,13 @@ export default function FeaturedRestaurantCard({
 
   const image =
     Array.isArray(restaurant?.images) &&
-    restaurant.images.length > 0
+      restaurant.images.length > 0
       ? restaurant.images[0]
       : null;
 
   const cuisine =
     Array.isArray(restaurant?.cuisines) &&
-    restaurant.cuisines.length > 0
+      restaurant.cuisines.length > 0
       ? restaurant.cuisines.join(", ")
       : restaurant?.cuisine_type;
 
@@ -138,8 +138,13 @@ export default function FeaturedRestaurantCard({
                   {getInitialsOfName(restaurant?.name)}
                 </span>
               )}
-
-              
+              <div className="absolute top-1 right-3 hidden md:flex  rounded-full p-1">
+                <img
+                  src="/assets/resy_logo_new.png"
+                  alt="Resy"
+                  className="w-10 h-auto rounded-sm object-contain"
+                />
+              </div>
             </div>
           </div>
 
@@ -194,27 +199,27 @@ export default function FeaturedRestaurantCard({
             )}
 
             {/* ADDRESS */}
-            
+
 
             {/* FOOTER */}
             <div className="flex items-center justify-between">
-            {address && (
-              <p className="text-xs text-gray-500 line-clamp-2">
-                {address}
-              </p>
-            )}
-            <button className="rounded-full px-3 py-1 bg-plum text-white text-[11px] sm:text-xs font-medium">
-            Reserve
-          </button>
+              {address && (
+                <p className="text-xs text-gray-500 line-clamp-2">
+                  {address}
+                </p>
+              )}
+              <button className="rounded-full px-3 py-1 bg-plum text-white text-[11px] sm:text-xs font-medium">
+                Reserve
+              </button>
             </div>
             {/* RESY LOGO */}
-            <div className="absolute top-1 right-4 bg-white rounded-full p-1">
-                <img
-                  src="/assets/resy_logo_new.png"
-                  alt="Resy"
-                  className="w-10 h-auto rounded-sm object-contain"
-                />
-              </div>
+            <div className="md:hidden absolute top-1 right-3  bg-white rounded-full p-1">
+              <img
+                src="/assets/resy_logo_new.png"
+                alt="Resy"
+                className="w-10 h-auto rounded-sm object-contain"
+              />
+            </div>
           </div>
         </div>
       </Link>
