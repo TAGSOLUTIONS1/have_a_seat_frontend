@@ -243,15 +243,15 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
         {/* IMAGE WRAPPER */}
         <div
           className="
-    relative
-    w-20 h-20
-    md:w-full md:h-full
-    bg-white md:bg-gray-300
-    p-2 md:p-0
-    flex items-center justify-center
-    overflow-hidden
-    flex-shrink-0
-  "
+                      relative
+                      w-20 h-20
+                      md:w-full md:h-full
+                      bg-white md:bg-gray-300
+                      p-2 md:p-0
+                      flex items-center justify-center
+                      overflow-hidden
+                      flex-shrink-0
+                  "
         >
           {imgsrc ? (
             <img
@@ -263,7 +263,7 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
           ) : (
             <span
               className="w-14 h-14 rounded-full border-2 border-gray-400
-                 bg-gray-200 text-gray-600
+                 bg-gray-300 text-gray-600
                  flex items-center justify-center
                  text-xl font-semibold"
             >

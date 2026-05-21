@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import MakeReservation from "./MakeReservation";
 import MenuDetails from "./MenuDetails";
 import Reviews from "./Reviews";
+import { getInitialsOfName } from "@/lib/utils";
 
 export default function RestaurantDetailsV2({ restrauntDetail }) {
   const [activeTab, setActiveTab] = useState("overview");
@@ -42,12 +43,12 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
     (restrauntDetail?.price_range_id === 1
       ? "$"
       : restrauntDetail?.price_range_id === 2
-      ? "$$"
-      : restrauntDetail?.price_range_id === 3
-      ? "$$$"
-      : restrauntDetail?.price_range_id === 4
-      ? "$$$$"
-      : null);
+        ? "$$"
+        : restrauntDetail?.price_range_id === 3
+          ? "$$$"
+          : restrauntDetail?.price_range_id === 4
+            ? "$$$$"
+            : null);
 
   const cuisineText =
     (Array.isArray(restrauntDetail?.categories) &&
@@ -137,7 +138,7 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
     return [];
   }, [restrauntDetail]);
 
-  const heroImage = imageUrls[0] || "/assets/restaurant2.png";
+  const heroImage = imageUrls[0];
   const hasReviews =
     Boolean(reviewCount) ||
     Boolean(restrauntDetail?.reviews) ||
@@ -149,11 +150,24 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8 items-start">
         <div className="lg:col-span-3 self-start rounded-3xl overflow-hidden border border-[#ece7f4] bg-[#f4effa] h-full min-h-[220px] md:min-h-[260px]">
           <div className="relative h-full min-h-[220px] md:min-h-[260px]">
-            <img
-              src={heroImage}
-              alt={restaurantName}
-              className="w-full h-full object-cover object-center block"
-            />
+            {heroImage ? (
+              <img
+                src={heroImage}
+                alt={restaurantName}
+                className="w-full h-full object-cover object-center block"
+              />
+            ) : (
+              <div className="w-full h-full bg-lightGrey flex items-center justify-center">
+                <span
+                  className="
+                        text-gray-600
+                        flex items-center justify-center
+                        text-4xl font-bold"
+                >
+                  {getInitialsOfName(restaurantName)}
+                </span>
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">
               <h1 className="text-white font-agrandir font-bold text-3xl md:text-5xl leading-tight">
@@ -175,32 +189,29 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
         <div className="flex items-center gap-2 border-b border-[#e5e7eb]">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`px-4 py-3 font-roboto font-semibold text-sm md:text-base transition-colors ${
-              activeTab === "overview"
+            className={`px-4 py-3 font-roboto font-semibold text-sm md:text-base transition-colors ${activeTab === "overview"
                 ? "text-plum border-b-2 border-plum"
                 : "text-gray-500 hover:text-shipGrey"
-            }`}
+              }`}
           >
             Overview
           </button>
           <button
             onClick={() => setActiveTab("menu")}
-            className={`px-4 py-3 font-roboto font-semibold text-sm md:text-base transition-colors ${
-              activeTab === "menu"
+            className={`px-4 py-3 font-roboto font-semibold text-sm md:text-base transition-colors ${activeTab === "menu"
                 ? "text-plum border-b-2 border-plum"
                 : "text-gray-500 hover:text-shipGrey"
-            }`}
+              }`}
           >
             Menu
           </button>
           {hasReviews ? (
             <button
               onClick={() => setActiveTab("reviews")}
-              className={`px-4 py-3 font-roboto font-semibold text-sm md:text-base transition-colors ${
-                activeTab === "reviews"
+              className={`px-4 py-3 font-roboto font-semibold text-sm md:text-base transition-colors ${activeTab === "reviews"
                   ? "text-plum border-b-2 border-plum"
                   : "text-gray-500 hover:text-shipGrey"
-              }`}
+                }`}
             >
               Reviews
             </button>

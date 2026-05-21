@@ -11,9 +11,9 @@ export function getInitialsOfName(name=""){
   if(!name.trim()) return "";
   const words = name.trim().split(/\s+/);
   if(words.length>=2){
-    return words[0][0]+words[1][0];
+    return (words[0][0]+words[1][0]).toUpperCase();
   }
-  return words[0][0]+words[0][1];
+  return (words[0][0]+words[0][1]).toUpperCase();
 }
 
 export const fetchUserInfo = async () => {
