@@ -246,7 +246,7 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
                       relative
                       w-20 h-20
                       md:w-full md:h-full
-                      bg-white md:bg-gray-300
+                      bg-white md:bg-lightGrey
                       p-2 md:p-0
                       flex items-center justify-center
                       overflow-hidden
@@ -262,8 +262,8 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
             />
           ) : (
             <span
-              className="w-14 h-14 rounded-full border-2 border-gray-400
-                 bg-gray-300 text-gray-600
+              className="w-14 h-14 rounded-full border border-gray-300
+                 bg-frenchPink text-plum
                  flex items-center justify-center
                  text-xl font-semibold"
             >
@@ -321,7 +321,7 @@ const SmallCard = ({ data, distance, formData, children, favoritesList, onFavori
           <div className="flex items-center gap-1.5 mb-1 sm:mb-2">
             <div className="flex items-center gap-0.5">{renderStars(rating)}</div>
             <span className="text-xs sm:text-sm font-semibold text-shipGrey">{rating.toFixed(1)}</span>
-            {reviewCount && <span className="text-[11px] sm:text-xs text-gray-500">{formatReviewCount(reviewCount)}</span>}
+            {reviewCount?(<span className="text-[11px] sm:text-xs text-gray-500">{formatReviewCount(reviewCount)}</span>):(<span className="text-[11px] sm:text-xs text-gray-500">0 review</span>)}
           </div>
         )}
 

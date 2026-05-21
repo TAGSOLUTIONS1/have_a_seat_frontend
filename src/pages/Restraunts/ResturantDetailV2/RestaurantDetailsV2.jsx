@@ -160,8 +160,9 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
               <div className="w-full h-full bg-lightGrey flex items-center justify-center">
                 <span
                   className="
-                        text-gray-600
+                        text-plum bg-frenchPink border rounded-full border-gray-300
                         flex items-center justify-center
+                        w-20 h-20
                         text-4xl font-bold"
                 >
                   {getInitialsOfName(restaurantName)}

@@ -9,46 +9,68 @@ function resyDetailSearch(restaurant) {
   const locationSlug = restaurant?.location?.url_slug;
 
   let searchParams = `resy_alias=${encodeURIComponent(resyId)}`;
+
   if (urlSlug) {
     searchParams += `&url_slug=${encodeURIComponent(urlSlug)}`;
   }
+
   if (locationSlug) {
     searchParams += `&location=${encodeURIComponent(locationSlug)}`;
   }
+
   return `?${searchParams}`;
 }
 
 function renderStars(rating) {
   if (!rating || rating <= 0) return null;
+
   const rounded = Math.round(rating * 2) / 2;
   const full = Math.floor(rounded);
   const half = rounded % 1 >= 0.5;
+
   const stars = [];
+
   for (let i = 0; i < 5; i++) {
     if (i < full) {
-      stars.push(<IoIosStar key={i} className="text-plum" size={14} />);
+      stars.push(<IoIosStar key={i} className="text-plum" size={16} />);
     } else if (i === full && half) {
       stars.push(
-        <IoIosStar key={i} className="text-plum opacity-70" size={14} />,
+        <IoIosStar
+          key={i}
+          className="text-plum opacity-75"
+          size={16}
+        />,
       );
     } else {
       stars.push(
-        <IoIosStarOutline key={i} className="text-plum/40" size={14} />,
+        <IoIosStarOutline
+          key={i}
+          className="text-plum"
+          size={16}
+        />,
       );
     }
   }
-  return <div className="flex items-center gap-0.5">{stars}</div>;
+
+  return stars;
 }
 
-export default function FeaturedRestaurantCard({ restaurant, index }) {
+export default function FeaturedRestaurantCard({
+  restaurant,
+  index,
+}) {
   const rating = restaurant?.rating?.average;
   const reviewCount = restaurant?.rating?.count;
+
   const image =
-    Array.isArray(restaurant?.images) && restaurant.images.length > 0
+    Array.isArray(restaurant?.images) &&
+    restaurant.images.length > 0
       ? restaurant.images[0]
       : null;
+
   const cuisine =
-    Array.isArray(restaurant?.cuisines) && restaurant.cuisines.length > 0
+    Array.isArray(restaurant?.cuisines) &&
+    restaurant.cuisines.length > 0
       ? restaurant.cuisines.join(", ")
       : restaurant?.cuisine_type;
 
@@ -72,81 +94,127 @@ export default function FeaturedRestaurantCard({ restaurant, index }) {
     >
       <Link to={to} className="group block h-full">
         <div
-          className="bg-white rounded-[20px] shadow-cardshadow overflow-hidden
-          border border-frenchPink/50 hover:border-plum/35
-          transition-colors flex flex-row md:flex-col md:h-full"
+          className="
+            group bg-white w-full rounded-2xl overflow-hidden
+            shadow-cardshadow border border-[#ede7f4]
+            hover:shadow-lg transition-all duration-300
+            h-full flex sm:flex-row md:flex-col
+          "
         >
-          <div className="w-[120px] md:w-full bg-gray-300 md:aspect-[4/3] flex-shrink-0 relative">
-            {image ? (
-              <img
-                src={image}
-                alt={restaurant?.name}
-                className="w-full h-full object-cover
-                         md:rounded-none
-                         group-hover:scale-[1.03]
-                         transition-transform duration-300"
-              />
-            ) : (
-              <div
-                className="w-14 h-14 rounded-full border-2 border-gray-400
-                          bg-gray-200 text-gray-600
-                          flex items-center justify-center
-                          text-xl font-semibold"
-              >
-                getInitialsOfName(restaurant?.name);
-              </div>
-            )}
+          {/* IMAGE */}
+          <div className="relative md:h-40 h-auto flex items-center justify-center">
+            <div
+              className="
+                relative
+                w-20 h-20
+                md:w-full md:h-full
+                bg-white md:bg-lightGrey
+                p-2 md:p-0
+                flex items-center justify-center
+                overflow-hidden
+                flex-shrink-0
+              "
+            >
+              {image ? (
+                <img
+                  src={image}
+                  alt={restaurant?.name}
+                  className="
+                    w-full h-full object-cover
+                    rounded-lg md:rounded-none
+                    transition-transform duration-500
+                    group-hover:scale-105
+                  "
+                />
+              ) : (
+                <span
+                  className="
+                    w-14 h-14 rounded-full border border-gray-300
+                    bg-frenchPink text-plum
+                    flex items-center justify-center
+                    text-xl font-semibold
+                  "
+                >
+                  {getInitialsOfName(restaurant?.name)}
+                </span>
+              )}
+
+              
+            </div>
           </div>
-          <div className="flex-1 p-3 flex flex-col justify-between min-w-0">
-            <div className="min-w-0 relative">
-              <h3 className="text-base mr-14 sm:text-lg font-bold font-agrandir text-shipGrey break-words truncate group-hover:text-plum transition-colors">
+
+          {/* CONTENT */}
+          <div className="p-3 sm:p-4 flex flex-col flex-1 relative">
+            <div className="flex items-start justify-between gap-2 mb-1">
+              <h3
+                className="
+                  text-sm sm:text-base
+                  font-bold font-agrandir text-shipGrey
+                  line-clamp-2
+                  group-hover:text-plum
+                  transition-colors
+                "
+              >
                 {restaurant?.name}
               </h3>
-
-              <img
-                src="/assets/resy_logo_new.png"
-                alt="Resy"
-                className="absolute top-0 right-0 h-6 w-auto object-contain"
-              />
-
-              {(rating > 0 || reviewCount) && (
-                <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                  {rating > 0 && renderStars(rating)}
-
-                  {rating > 0 && (
-                    <span className="text-sm font-medium text-shipGrey">
-                      {rating.toFixed(1)}
-                    </span>
-                  )}
-
-                  {reviewCount ? (
-                    <span className="text-sm text-graysublabel">
-                      ({reviewCount} reviews)
-                    </span>
-                  ) : null}
-                </div>
-              )}
-
-              {address && (
-                <p className="text-sm text-graysublabel mt-1 truncate">
-                  {address}
-                </p>
-              )}
             </div>
-            <span
-              className="xs:flex md:hidden -ml-[-5.625rem] bg-plum text-white py-0.5 px-1 rounded-full text-xs flex items-center justify-center hover:opacity-90 transition
-            [@media(max-width:320px)]:-ml-[-2.625rem]"
-            >
-              Reserve Now
-            </span>
 
-            <span
-              className="hidden md:flex text-plum font-semibold text-[15px]
-                 flex items-center gap-1"
-            >
-              Reserve a table
-              <span aria-hidden>→</span>
-            </span>
+            {/* RATING */}
+            {(rating > 0 || reviewCount) && (
+              <div className="flex items-center gap-1.5 mb-2 flex-wrap">
+                {rating > 0 && (
+                  <div className="flex items-center gap-0.5">
+                    {renderStars(rating)}
+                  </div>
+                )}
+
+                {rating > 0 && (
+                  <span className="text-xs sm:text-sm font-semibold text-shipGrey">
+                    {rating.toFixed(1)}
+                  </span>
+                )}
+
+                {reviewCount ? (
+                  <span className="text-[11px] sm:text-xs text-gray-500">
+                    ({reviewCount} reviews)
+                  </span>
+                ) : (
+                  <span className="text-[11px] sm:text-xs text-gray-500">
+                    0 review
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* CUISINE */}
+            {cuisine && (
+              <p className="text-xs text-gray-600 line-clamp-1 mb-1">
+                {cuisine}
+              </p>
+            )}
+
+            {/* ADDRESS */}
+            
+
+            {/* FOOTER */}
+            <div className="flex items-center justify-between">
+            {address && (
+              <p className="text-xs text-gray-500 line-clamp-2">
+                {address}
+              </p>
+            )}
+            <button className="rounded-full px-3 py-1 bg-plum text-white text-[11px] sm:text-xs font-medium">
+            Reserve
+          </button>
+            </div>
+            {/* RESY LOGO */}
+            <div className="absolute top-1 right-4 bg-white rounded-full p-1">
+                <img
+                  src="/assets/resy_logo_new.png"
+                  alt="Resy"
+                  className="w-10 h-auto rounded-sm object-contain"
+                />
+              </div>
           </div>
         </div>
       </Link>
