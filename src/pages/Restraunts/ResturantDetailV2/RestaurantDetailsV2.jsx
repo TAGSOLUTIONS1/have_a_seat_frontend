@@ -178,7 +178,7 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
           </div>
         </div>
 
-        <div className="lg:col-span-2 rounded-3xl border border-[#ece7f4] bg-white p-5 md:p-6 shadow-sm">
+        <div className="lg:col-span-2 rounded-3xl border border-[#ece7f4] bg-[#f4effa] p-5 md:p-6 shadow-sm">
           <h2 className="font-agrandir text-2xl font-bold text-shipGrey mb-4">
             Make a Reservation
           </h2>
