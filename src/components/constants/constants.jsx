@@ -59,7 +59,7 @@ export const stats = [
     stat: "1k+",
   },
 ];
-export const hotels = [resy, eatable, open1, yelp, open2, resy];
+export const hotels = [resy, eatable, open1, yelp, open2];
 export const resturantsList = [
   "Effortless Comparisons",
   "Comprehensive Listings",

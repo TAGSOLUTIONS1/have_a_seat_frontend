@@ -12,13 +12,17 @@ import Slider from "./SuperFast/Slider";
 import JuglingSites from "./JugglingSites/JuglingSites";
 import ReserveHero from "./ReserveHero/ReserveHero";
 import Section2 from "./Section2/Section2";
+import HowWorks from "./HowWorks/HowWorks";
+import Featured from "./FeaturedRestaurants/Featured";
 
 export default function Landing() {
   return (
     <div>
       <ReserveHero />
       <Slider></Slider>
-      <JuglingSites></JuglingSites>
+      {/* <JuglingSites></JuglingSites> */}
+      <HowWorks />
+      <Featured />
       <WhyChooseUs />
       <Restaurants />
       <Stats />

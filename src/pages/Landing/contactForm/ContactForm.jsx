@@ -53,12 +53,14 @@ export default function ContactForm() {
     <BookRestaurant />
      <div className="flex items-center px-20 md:px-40 justify-center  p-6">       
       <div className="py-10 mx-auto">
-        <p className=" text-3xl sm:text-5xl md:text-6xl font-bold font-agrandir text-center text-shipGrey">  
-          Have <span className="text-plum">Queries</span> or <br></br> <span className="text-plum">Suggestions?</span>
-        </p>
-        <div className="flex flex-col items-center gap-1 my-3 sm:my-7 md:my-14">
-        <p className="text-center font-agrandir text-shipGrey font-bold text-xl sm:text-2xl md:text-5xl mt-9">Get in touch</p>
-        <p className="text-center font-roboto font-normal text-shipGrey text-sm sm:text-xl md:text-2xl">You can reach us at anytime.</p>
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10 md:mb-14">
+          <h2 className="text-3xl md:text-4xl font-agrandir font-bold text-shipGrey mb-4">
+            Have <span className="text-plum">Queries</span> or{" "}
+            <span className="text-plum">Suggestions?</span>
+          </h2>
+          <p className="text-graysublabel font-inter leading-relaxed">
+            Get in touch — you can reach us anytime.
+          </p>
         </div>
 
         <form className="space-y-2 sm:space-y-4" onSubmit={handleSubmit}>

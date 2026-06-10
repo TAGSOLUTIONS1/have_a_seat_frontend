@@ -15,7 +15,7 @@ import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { useNotificationToast } from '@/hooks/useNotificationToast';
 import { PostResyReservation } from "@/services/reservationwithemail";
-export default function MakeReservation({ restrauntDetail }) {
+export default function MakeReservation({ restrauntDetail, hideTitle = false }) {
   const { authState } = useAuth();
   const { toast } = useToast();
   const { showNotification } = useNotificationToast();
@@ -53,6 +53,7 @@ export default function MakeReservation({ restrauntDetail }) {
   const [selectedReservationType, setSelectedReservationType] = useState(null);
   const [timeSlots, setTimeSlots] = useState();
   const [openTableTimeSlots, setOpenTableTimeSlots] = useState();
+  const [showSlotsModal, setShowSlotsModal] = useState(false);
   
   // Conflict checking state
   const [showConflictModal, setShowConflictModal] = useState(false);
@@ -419,9 +420,11 @@ export default function MakeReservation({ restrauntDetail }) {
           response?.data?.data?.calendar?.offerings || {};
         // Tock returns open dates and open times; we surface available times directly.
         const openTimes = calendarOfferings?.openTime || [];
-        setTimeSlots(Array.isArray(openTimes) ? openTimes : []);
+        const normalizedTimes = Array.isArray(openTimes) ? openTimes : [];
+        setTimeSlots(normalizedTimes);
         setLoading(false);
         setIsDataLoaded(true);
+        if (normalizedTimes.length > 0) setShowSlotsModal(true);
       } else {
         setLoading(fasle);
         throw new Error("Network response was not ok.");
@@ -453,11 +456,12 @@ export default function MakeReservation({ restrauntDetail }) {
       );
 
       if (response.status === 200) {
-        setTimeSlots(
-          response?.data?.data?.availability_data[0]?.availability_list
-        );
+        const yelpSlots =
+          response?.data?.data?.availability_data[0]?.availability_list || [];
+        setTimeSlots(yelpSlots);
         setLoading(false);
         setIsDataLoaded(true);
+        if (yelpSlots.length > 0) setShowSlotsModal(true);
       } else {
         setLoading(fasle);
         throw new Error("Network response was not ok.");
@@ -505,6 +509,7 @@ export default function MakeReservation({ restrauntDetail }) {
         setTimeSlots(slots);
         setLoading(false);
         setIsDataLoaded(true);
+        if (slots.length > 0) setShowSlotsModal(true);
       } else {
         setLoading(false);
         throw new Error("Network response was not ok.");
@@ -531,9 +536,13 @@ export default function MakeReservation({ restrauntDetail }) {
         }
       );
       if (response.status === 200) {
-        setOpenTableTimeSlots(response?.data?.data?.data?.availability);
+        const openTableSlots = response?.data?.data?.data?.availability || [];
+        setOpenTableTimeSlots(openTableSlots);
         setIsDataLoaded(true);
         setLoading(false);
+        if (openTableSlots?.[0]?.availabilityDays?.[0]?.slots?.length > 0) {
+          setShowSlotsModal(true);
+        }
       } else {
         setLoading(false);
         throw new Error("Network response was not ok.");
@@ -746,23 +755,29 @@ export default function MakeReservation({ restrauntDetail }) {
   return (
     <>
     <div className="overflow-hidden">
-      <h1 className=" font-bold my-10 text-4xl font-agrandir text-shipGrey sm:text-3xl lg:text-4xl">
-        Make a Reservation
-      </h1>
+      {!hideTitle ? (
+        <h1 className=" font-bold my-10 text-4xl font-agrandir text-shipGrey sm:text-3xl lg:text-4xl">
+          Make a Reservation
+        </h1>
+      ) : null}
       <div className="w-full">
-    <div className="flex flex-col md:flex-row gap-4 items-center border-[0.4px] border-[#B9B9B9] bg-white px-4 py-4 md:px-5 md:py-2 rounded-2xl">
+    <div className={`flex gap-4 border-[0.4px] border-[#B9B9B9] bg-white rounded-2xl ${
+      hideTitle
+        ? "flex-col items-stretch px-4 py-4"
+        : "flex-col md:flex-row items-center px-4 py-4 md:px-5 md:py-2"
+    }`}>
       
-    <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
+    <div className={`flex-grow w-full ${hideTitle ? "pb-2 border-b border-gray-200" : "md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0"}`}>
         <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Date</span>
             <DatePicker setFormData={setFormData} initialDate={formData.reservation_date} />
           </div>
 
-          <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
+          <div className={`flex-grow w-full ${hideTitle ? "pb-2 border-b border-gray-200" : "md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0"}`}>
         <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Time</span>
             <Time setFormData={setFormData} initialTime={formData.reservation_time} />
           </div>
 
-          <div className="flex-grow w-full md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0">
+          <div className={`flex-grow w-full ${hideTitle ? "pb-2" : "md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0"}`}>
         <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Guests</span>
             <PersonCard setFormData={setFormData} initialGuests={formData.reservation_covers} />
           </div>
@@ -773,9 +788,9 @@ export default function MakeReservation({ restrauntDetail }) {
                 reservationCard?.restaurant_type === "open_table"
               ) ? handleTimeSlots : handlenotimeslots}
               // onClick={handleTimeSlots}
-              className="bg-plum px-4 py-2 text-white rounded-full w-full md:w-auto"
+              className={`bg-plum px-4 py-2 text-white rounded-full w-full ${hideTitle ? "" : "md:w-auto"}`}
             >
-              Find a Table
+              Select Slot
             </button>
         </div>
         </div>
@@ -788,7 +803,7 @@ export default function MakeReservation({ restrauntDetail }) {
             <LucideLoader className="w-6 h-6 justify-center animate-spin align-middle mx-auto" />
           ) : (
             <div className="py-3 sm:py-10 text-center">
-              {isDataLoaded ? (
+              {!hideTitle && isDataLoaded ? (
                   restrauntDetail?.restaurant_type === "yelp" ? (
                     Array.isArray(timeSlots) && timeSlots.length > 0 ? (
                       <>
@@ -893,11 +908,118 @@ export default function MakeReservation({ restrauntDetail }) {
               ) :  <p className="text-lg text-red-600">Couldnot get slots.</p>
                 ) : null}
 
+              {/* {hideTitle && isDataLoaded ? (
+                <p className="text-sm text-gray-500 font-roboto">
+                  Slots are available in the selection modal.
+                </p>
+              ) : null} */}
+
             </div>
           )}
         </div>
       </div>
       </div>
+
+      {showSlotsModal ? (
+        <div
+          className="fixed inset-0 z-[70] bg-black/50 flex items-center justify-center p-4"
+          onClick={() => setShowSlotsModal(false)}
+        >
+          <div
+            className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-5 md:p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-agrandir text-2xl font-bold text-shipGrey">Select Slot</h3>
+              <button
+                className="text-gray-500 hover:text-plum text-2xl leading-none"
+                onClick={() => setShowSlotsModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="max-h-[60vh] overflow-y-auto">
+              {restrauntDetail?.restaurant_type === "yelp" && Array.isArray(timeSlots) ? (
+                <div className="flex flex-wrap gap-2">
+                  {timeSlots.filter((data) => !isNaN(data.timestamp)).map((data, index) => (
+                    <button
+                      key={index}
+                      className={`bg-plum text-white font-semibold font-roboto text-sm px-3 py-2 rounded-lg ${isCheckingConflicts ? "opacity-50 cursor-not-allowed" : ""}`}
+                      onClick={() => {
+                        setShowSlotsModal(false);
+                        if (!isCheckingConflicts) handleYelpReservation(data);
+                      }}
+                      disabled={isCheckingConflicts}
+                    >
+                      {data.formatted_time}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+
+              {restrauntDetail?.restaurant_type === "open_table" &&
+              Array.isArray(openTableTimeSlots) &&
+              openTableTimeSlots[0]?.availabilityDays?.[0]?.slots?.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {openTableTimeSlots[0].availabilityDays[0].slots
+                    .filter((data) => !isNaN(data.timeOffsetMinutes))
+                    .map((data, index) => (
+                      <button
+                        key={index}
+                        className={`bg-plum text-white text-sm px-3 py-2 rounded-lg ${isCheckingConflicts ? "opacity-50 cursor-not-allowed" : ""}`}
+                        onClick={() => {
+                          setShowSlotsModal(false);
+                          if (!isCheckingConflicts) handleOpenTableReservation(data);
+                        }}
+                        disabled={isCheckingConflicts}
+                      >
+                        {convertOffsetToTime(data.timeOffsetMinutes, formData?.reservation_time)}
+                      </button>
+                    ))}
+                </div>
+              ) : null}
+
+              {restrauntDetail?.restaurant_type === "resy" &&
+              Array.isArray(timeSlots) &&
+              timeSlots.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {timeSlots.map((data, index) => (
+                    <button
+                      key={index}
+                      className="bg-plum text-white text-sm px-3 py-2 rounded-lg"
+                      onClick={() => {
+                        setShowSlotsModal(false);
+                        handleResyClick(data);
+                      }}
+                    >
+                      {formatTimeOnly(data.date.start)}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+
+              {restrauntDetail?.restaurant_type === "tock" &&
+              Array.isArray(timeSlots) &&
+              timeSlots.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {timeSlots.map((time, index) => (
+                    <button
+                      key={index}
+                      className="bg-plum text-white text-sm px-3 py-2 rounded-lg"
+                      onClick={() => {
+                        setShowSlotsModal(false);
+                        window.open(restrauntDetail?.url || reservationCard?.url, "_blank", "noopener,noreferrer");
+                      }}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       <ResyDetailsModal
         isOpen={showResyDetailsModal}
