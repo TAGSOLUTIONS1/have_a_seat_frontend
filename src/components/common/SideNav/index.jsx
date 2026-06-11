@@ -6,6 +6,12 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { User, History, Bell, LogOut, Gift, Heart, Search, ArrowLeft } from "lucide-react";
 import GeoApiAuto from "@/components/home/HomeAutoComplete";
+import { MdLocationOn } from "react-icons/md";
+import {
+  FooterLinks,
+  initialBookingState,
+  socialMediaLinks,
+} from "@/components/constants/constants";
 
 // Simple armchair icon SVG component - minimal line art style facing right
 const ArmchairIcon = () => (
@@ -104,7 +110,7 @@ const SideNav = () => {
 
     localStorage.setItem("searchFormData", JSON.stringify(formData));
     const route = `/restraunts?data=${encodeURIComponent(JSON.stringify(formData))}`;
-    
+
     // Close sidebar before navigation
     setIsOpen(false);
     navigate(route);
@@ -140,7 +146,7 @@ const SideNav = () => {
           </svg>
         </Button>
       </SheetTrigger>
-      <SheetContent 
+      <SheetContent
         side="right"
         className="w-[85%] max-w-[420px] p-0 overflow-hidden bg-white/90 backdrop-blur-xl border-0 shadow-2xl"
       >
@@ -155,7 +161,7 @@ const SideNav = () => {
                 </div>
                 <span className="text-xl font-semibold text-black">Have a Seat</span>
               </div>
-              
+
               {/* Welcome Back Heading - Centered and Large */}
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-black">Welcome Back</h2>
@@ -187,23 +193,59 @@ const SideNav = () => {
             </div>
 
             {/* Search Section */}
-            <div className="flex-1 px-6 pb-8 flex flex-col gap-6">
-
-              {/* Location Search */}
-              <div className="space-y-2 border bg-white border-gray-200 rounded-lg px-4">
-                <GeoApiAuto getLocationData={getLocationData} location={location} />
+            <div className="flex flex-col gap-2  sm:items-stretch bg-white/95 backdrop-blur-sm rounded-2xl p-2 sm:p-1.5 sm:pr-1.5 sm:pl-2 md:pl-2 shadow-2xl border-2 border-white/60 ring-1 ring-plum/15 focus-within:ring-plum/35 transition-shadow overflow-visible mx-4">
+              <div className="flex flex-1 min-w-0 items-center gap-2 sm:gap-3 py-1 sm:py-1.5 px-2 sm:px-0">
+                <MdLocationOn
+                  size={26}
+                  color="#9235E2"
+                  className="flex-shrink-0 sm:scale-110"
+                  aria-hidden
+                />
+                <div className="flex-1 min-w-0 text-left relative">
+                  <GeoApiAuto
+                    getLocationData={getLocationData}
+                    location={location}
+                    placeholder="City, neighborhood, or address"
+                  />
+                </div>
               </div>
-
-              {/* Search Button */}
-              <Button
+              <button
                 onClick={handleSearch}
-                className="bg-plum hover:bg-purple-800 w-[70%] mx-auto text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
-                disabled={!location.trim()}
+                className="inline-flex items-center justify-center gap-2 rounded-xl  sm:min-h-[3rem] bg-plum text-white font-agrandir font-bold text-sm sm:text-base px-5 py-1 shadow-md hover:bg-plum/90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none sm:shrink-0 w-full sm:w-auto border border-plum/30"
               >
-                <Search className="w-4 h-4 mr-2 text-xs"  />
-                Find Restaurants
-              </Button>
+                <Search className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
+                Search
+              </button>
             </div>
+            {/* <p className="mt-3 text-xs sm:text-sm text-white/80 font-inter px-1">
+              Pick a suggestion or enter a location, then tap Search (or press
+              Enter).
+            </p> */}
+            <div className="mt-auto py-4 px-4">
+              <div className=" border-t-2 border-black m-auto md:w-full">
+                <div className="text-center md:text-left flex flex-col gap-4 md:gap-0 md:flex-row text-sm sm:text-base justify-between items-center py-5">
+                  <div>
+                    <p className=" ">Copyright © HaveaSeat. All rights reserved. </p>
+                  </div>
+                  <ul>
+                    <li className="flex gap-[22px] ">
+                      {socialMediaLinks.map((item, index) => (
+                        <a
+                          key={item}
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center"
+                        >
+                          <img src={item.icon} alt="" />
+                        </a>
+                      ))}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
           </div>
         ) : (
           // Menu Screen
@@ -286,10 +328,10 @@ const SideNav = () => {
                     <span className="font-medium">Account Links</span>
                   </Link>
                 </li>
-                
+
                 {/* Divider */}
                 <div className="border-t border-gray-200 my-2"></div>
-                
+
                 {/* Logout */}
                 <li>
                   <button
