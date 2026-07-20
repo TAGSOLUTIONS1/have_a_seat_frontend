@@ -147,14 +147,14 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-6 md:py-10">
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8 items-start">
-        <div className="lg:col-span-3 self-start rounded-3xl overflow-hidden border border-[#ece7f4] bg-[#f4effa] h-full min-h-[220px] md:min-h-[260px]">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8 items-stretch">
+        <div className="lg:col-span-3 rounded-3xl overflow-hidden border border-[#ece7f4] bg-[#f4effa] min-h-[220px] md:min-h-[260px]">
           <div className="relative h-full min-h-[220px] md:min-h-[260px]">
             {heroImage ? (
               <img
                 src={heroImage}
                 alt={restaurantName}
-                className="w-full h-full object-cover object-center block"
+                className="absolute inset-0 w-full h-full object-cover object-center block"
               />
             ) : (
               <div className="w-full h-full bg-lightGrey flex items-center justify-center">
