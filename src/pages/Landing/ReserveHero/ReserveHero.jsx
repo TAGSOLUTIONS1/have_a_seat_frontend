@@ -48,13 +48,19 @@ export default function ReserveHero() {
       };
     }
 
-    if (effective.location) {
-      const firstWord = effective.location.split(",")[0].trim();
+    const trimmedLocation = effective.location?.trim();
+    if (trimmedLocation) {
+      const firstWord = trimmedLocation.split(",")[0].trim();
       formData = {
         ...formData,
         location: firstWord,
         latitude: effective.latitude ?? formData.latitude ?? "",
         longitude: effective.longitude ?? formData.longitude ?? "",
+      };
+    } else {
+      formData = {
+        ...formData,
+        location: initialBookingState.location,
       };
     }
 
@@ -93,7 +99,6 @@ export default function ReserveHero() {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (!locationRef.current.location?.trim()) return;
     goToRestaurants();
   };
 
