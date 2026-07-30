@@ -24,7 +24,6 @@ import NotificationsPage from "./pages/Notifications";
 import Favourites from "./pages/Favourites";
 import Demographics from "./pages/Demographics";
 import LeaveReview from "./pages/LeaveReview";
-import '../public/assets/fonts/fonts.css';
 import ChatBotWidget from "./components/ChatBotWidget";
 import NotificationToast from "./components/common/NotificationToast";
 import ResetPasswordOne from "./pages/ResetPasswordOne";
