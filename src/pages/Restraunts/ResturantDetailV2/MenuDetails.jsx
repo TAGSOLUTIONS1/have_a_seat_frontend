@@ -2,11 +2,38 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Base_Url } from "@/baseUrl";
 
+const SectionLabel = ({ children }) => (
+  <div className="flex items-center gap-2 mb-4">
+    <span className="w-1 h-4 rounded-full bg-plum" />
+    <p className="text-xs uppercase tracking-wider text-gray-500 font-roboto">
+      {children}
+    </p>
+  </div>
+);
+
+const NoMenuMessage = ({ websiteUrl }) => (
+  <p className="font-roboto text-[15px] md:text-base leading-7 text-gray-500">
+    At present, we do not have menu information for this restaurant.
+    {websiteUrl ? (
+      <>
+        {" "}Please see the{" "}
+        <a
+          href={websiteUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-plum underline hover:text-purple-800"
+        >
+          website
+        </a>{" "}
+        or wait to visit the restaurant to learn more.
+      </>
+    ) : null}
+  </p>
+);
+
 export default function MenuDetails({ restrauntDetail }) {
   const [menus, setMenus] = useState(restrauntDetail?.menus || []);
   const [activeTab, setActiveTab] = useState(0);
-
-  // console.log("details", menus);
 
   useEffect(() => {
     const fetchYelpMenu = async () => {
@@ -36,31 +63,21 @@ export default function MenuDetails({ restrauntDetail }) {
     }
   }, [restrauntDetail?.menus]);
 
-  if (restrauntDetail?.restaurant_type === "resy" || restrauntDetail?.restaurant_type === "tock" || restrauntDetail?.restaurant_type === "tableagent") {
+  if (
+    restrauntDetail?.restaurant_type === "resy" ||
+    restrauntDetail?.restaurant_type === "tock" ||
+    restrauntDetail?.restaurant_type === "tableagent"
+  ) {
     return (
-      <div className="py-10 text-center text-gray-500">
-        <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-4">
-          <strong>Menu</strong>
-        </h2>
-        <p className="text-gray-500 font-roboto">
-          {restrauntDetail?.restaurant_type === "tableagent" && restrauntDetail?.website ? (
-            <>
-              At present, we do not have menu information for this restaurant.
-              Please see the{" "}
-              <a
-                href={restrauntDetail?.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-plum underline hover:text-purple-800"
-              >
-                website
-              </a>{" "}
-              or wait to visit the restaurant to learn more.
-            </>
-          ) : (
-            "No menu available."
-          )}
-        </p>
+      <div>
+        <SectionLabel>Menu</SectionLabel>
+        {restrauntDetail?.restaurant_type === "tableagent" && restrauntDetail?.website ? (
+          <NoMenuMessage websiteUrl={restrauntDetail?.website} />
+        ) : (
+          <p className="font-roboto text-[15px] md:text-base leading-7 text-gray-500">
+            No menu available.
+          </p>
+        )}
       </div>
     );
   }
@@ -68,65 +85,29 @@ export default function MenuDetails({ restrauntDetail }) {
   // Handle TheFork restaurants with no menu
   if (restrauntDetail?.restaurant_type === "thefork" && (!menus || menus.length === 0)) {
     return (
-      <div className="py-10 text-center text-gray-500">
-        <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-4">
-          <strong>Menu</strong>
-        </h2>
-        <p className="text-gray-500 font-roboto">
-          At present, we do not have menu information for this restaurant.
-          {restrauntDetail?.url && (
-            <>
-              {" "}Please see the{" "}
-              <a
-                href={restrauntDetail?.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-plum underline hover:text-purple-800"
-              >
-                website
-              </a>{" "}
-              or wait to visit the restaurant to learn more.
-            </>
-          )}
-        </p>
+      <div>
+        <SectionLabel>Menu</SectionLabel>
+        <NoMenuMessage websiteUrl={restrauntDetail?.url} />
       </div>
     );
   }
 
-  if (restrauntDetail?.restaurant_type==="yelp" && menus.length<1){
-    return(
+  if (restrauntDetail?.restaurant_type === "yelp" && menus.length < 1) {
+    return (
       <div>
-        <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-4">
-          <strong>Menu</strong>
-        </h2>
-          <p className="text-gray-500">
-              At present, we do not have menu information for this restaurant.
-              Please see the{" "}
-              <a
-                href={restrauntDetail?.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-plum underline hover:text-purple-800"
-              >
-                website
-              </a>{" "}
-              or wait to visit the restaurant to learn more.
-            </p>
+        <SectionLabel>Menu</SectionLabel>
+        <NoMenuMessage websiteUrl={restrauntDetail?.url} />
       </div>
-    )
+    );
   }
-
-
 
   // For TheFork restaurants, each menu item is a section tab
   const isTheFork = restrauntDetail?.restaurant_type === "thefork";
 
   return (
-    <div className="py-6 sm:py-10 flex flex-col text-white space-y-8">
+    <div className="flex flex-col space-y-6">
       <div className="w-full">
-        <h2 className="text-4xl font-bold font-agrandir text-shipGrey mb-6">
-          Menu Details
-        </h2>
+        <SectionLabel>Menu</SectionLabel>
 
         <div className="overflow-x-auto scrollbar-hide">
           <div className="flex space-x-4 border-b border-gray-300 pb-2 snap-x snap-mandatory overflow-x-auto">
@@ -135,7 +116,7 @@ export default function MenuDetails({ restrauntDetail }) {
                 <button
                   key={index}
                   onClick={() => setActiveTab(index)}
-                  className={`snap-start shrink-0 whitespace-nowrap px-4 py-2 font-semibold rounded-t-md transition-all duration-200 ${
+                  className={`snap-start shrink-0 whitespace-nowrap px-4 py-2 font-roboto font-semibold text-sm md:text-base rounded-t-md transition-all duration-200 ${
                     index === activeTab
                       ? "bg-plum text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-blue-100"
@@ -156,9 +137,13 @@ export default function MenuDetails({ restrauntDetail }) {
         <div className="space-y-4 w-full lg:w-2/3">
           {!isTheFork && (
             <div>
-              <h3 className="text-2xl font-semibold text-black">{menus[activeTab].title}</h3>
+              <h3 className="text-lg md:text-xl font-agrandir font-bold text-shipGrey">
+                {menus[activeTab].title}
+              </h3>
               {menus[activeTab].description && (
-                <p className="text-black text-sm">{menus[activeTab].description}</p>
+                <p className="font-roboto text-sm text-gray-600 mt-1">
+                  {menus[activeTab].description}
+                </p>
               )}
             </div>
           )}
@@ -168,7 +153,9 @@ export default function MenuDetails({ restrauntDetail }) {
             menus[activeTab].sections?.[0] && (
               <div className="mt-4 space-y-2">
                 {menus[activeTab].sections[0].description && (
-                  <p className="text-black text-sm mb-4">{menus[activeTab].sections[0].description}</p>
+                  <p className="font-roboto text-sm text-gray-600 mb-4">
+                    {menus[activeTab].sections[0].description}
+                  </p>
                 )}
                 <div className="divide-y divide-gray-200 mt-2">
                   {menus[activeTab].sections[0].items?.map((item, itemIndex) => (
@@ -177,12 +164,16 @@ export default function MenuDetails({ restrauntDetail }) {
                       className="flex flex-col sm:flex-row sm:justify-between py-2"
                     >
                       <div>
-                        <p className="font-medium text-black">{item.title}</p>
+                        <p className="font-roboto font-medium text-[15px] md:text-base text-shipGrey">
+                          {item.title}
+                        </p>
                         {item.description && (
-                          <p className="text-sm text-black">{item.description}</p>
+                          <p className="font-roboto text-sm text-gray-600">
+                            {item.description}
+                          </p>
                         )}
                       </div>
-                      <div className="text-right text-sm text-black sm:pl-4">
+                      <div className="text-right font-roboto text-sm md:text-base text-shipGrey sm:pl-4">
                         {item.price ? `$${parseFloat(item.price).toFixed(2)}` : "N/A"}
                       </div>
                     </div>
@@ -194,9 +185,13 @@ export default function MenuDetails({ restrauntDetail }) {
             // For other restaurant types: Show sections within menu
             menus[activeTab].sections?.map((section, sectionIndex) => (
               <div key={sectionIndex} className="mt-4 space-y-2">
-                <h4 className="text-xl font-semibold text-black">{section.title}</h4>
+                <h4 className="text-base md:text-lg font-agrandir font-bold text-shipGrey">
+                  {section.title}
+                </h4>
                 {section.description && (
-                  <p className="text-black text-sm">{section.description}</p>
+                  <p className="font-roboto text-sm text-gray-600">
+                    {section.description}
+                  </p>
                 )}
                 <div className="divide-y divide-gray-200 mt-2">
                   {section.items?.map((item, itemIndex) => (
@@ -205,12 +200,16 @@ export default function MenuDetails({ restrauntDetail }) {
                       className="flex flex-col sm:flex-row sm:justify-between py-2"
                     >
                       <div>
-                        <p className="font-medium text-black">{item.title}</p>
+                        <p className="font-roboto font-medium text-[15px] md:text-base text-shipGrey">
+                          {item.title}
+                        </p>
                         {item.description && (
-                          <p className="text-sm text-black">{item.description}</p>
+                          <p className="font-roboto text-sm text-gray-600">
+                            {item.description}
+                          </p>
                         )}
                       </div>
-                      <div className="text-right text-sm text-black sm:pl-4">
+                      <div className="text-right font-roboto text-sm md:text-base text-shipGrey sm:pl-4">
                         {item.price ? `$${parseFloat(item.price).toFixed(2)}` : "N/A"}
                       </div>
                     </div>
@@ -225,20 +224,22 @@ export default function MenuDetails({ restrauntDetail }) {
       {restrauntDetail?.restaurant_type === "yelp" && menus["Popular Dishes"]?.itemListElement && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {menus["Popular Dishes"].itemListElement.map((photo, index) => (
-            <div key={index} className="bg-white rounded shadow p-2">
+            <div key={index} className="bg-white rounded-2xl border border-[#eee8f6] p-2">
               <img
                 src={photo.thumbnailUrl || photo.url}
                 alt={photo.caption || `Business Photo ${index + 1}`}
-                className="w-full h-48 object-cover rounded"
+                className="w-full h-48 object-cover rounded-xl"
               />
-              <div className="mt-2">
-                <p className="font-medium text-black">{photo.caption || "No Caption"}</p>
+              <div className="mt-2 px-1 pb-1">
+                <p className="font-roboto font-medium text-[15px] md:text-base text-shipGrey">
+                  {photo.caption || "No Caption"}
+                </p>
                 {photo.review?.reviewRating?.ratingValue && (
-                  <p className="text-sm text-gray-600">
+                  <p className="font-roboto text-sm text-gray-600">
                     Rating: {photo.review.reviewRating.ratingValue}/5
                   </p>
                 )}
-                <p className="text-sm text-gray-600">
+                <p className="font-roboto text-sm text-gray-600">
                   {photo.keywords.join(" , ")}
                 </p>
               </div>

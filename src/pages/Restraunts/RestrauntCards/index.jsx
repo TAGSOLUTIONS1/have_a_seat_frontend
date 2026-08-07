@@ -37,6 +37,67 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return `${miles.toFixed(1)} mi`;
   }
 };
+// Deterministic round-robin across sources — keeps the list varied without
+// reordering every time a source finishes loading or a filter changes
+const interleaveBySource = (restaurants) => {
+  const groups = {};
+  restaurants.forEach((restaurant) => {
+    const type = restaurant.restraunt_type || "unknown";
+    if (!groups[type]) groups[type] = [];
+    groups[type].push(restaurant);
+  });
+  const buckets = Object.values(groups);
+  const result = [];
+  for (let i = 0; buckets.some((bucket) => i < bucket.length); i++) {
+    buckets.forEach((bucket) => {
+      if (i < bucket.length) result.push(bucket[i]);
+    });
+  }
+  return result;
+};
+
+const normalizeSearchString = (str) =>
+  (str || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
+// Name matches go to the top (best match first); non-matches keep OpenTable's
+// relevance order followed by the other sources interleaved
+const rankBySearchRelevance = (restaurants, searchText) => {
+  const query = normalizeSearchString(searchText);
+
+  const scoreOf = (restaurant) => {
+    const name = normalizeSearchString(restaurant.name);
+    if (!query || !name) return 0;
+    if (name === query) return 3;
+    if (name.startsWith(query)) return 2;
+    if (name.includes(query) || query.includes(name)) return 1;
+    return 0;
+  };
+
+  const scored = restaurants.map((restaurant, index) => ({
+    restaurant,
+    index,
+    score: scoreOf(restaurant),
+  }));
+
+  const matches = scored
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score || a.index - b.index)
+    .map((entry) => entry.restaurant);
+
+  const rest = scored.filter((entry) => entry.score === 0).map((entry) => entry.restaurant);
+  const openTableRest = rest.filter((r) => r.restraunt_type === "open_table");
+  const otherRest = rest.filter((r) => r.restraunt_type !== "open_table");
+
+  return [...matches, ...openTableRest, ...interleaveBySource(otherRest)];
+};
+
+// Stable per-restaurant key so React doesn't recycle cards when the list changes
+const restaurantKey = (restaurant, index) => {
+  const rawId = restaurant?.id;
+  const id = typeof rawId === "object" && rawId !== null ? rawId.resy : rawId;
+  return `${restaurant?.restraunt_type || "unknown"}-${id ?? restaurant?.alias ?? restaurant?.name ?? index}`;
+};
+
 const initialTypes = ["open_table", "yelp", "resy", "tock", "tableagent", "thefork"];
 const ratingtypes = ["5" , "4" , "3" , "2" , "1"];
 const cuisinestypes=["Italian" , "Mediterranean" , "Mexican" , "Chinese" , "Thai"];
@@ -156,30 +217,17 @@ const RestaurantCards = memo(
                          (formData?.term && formData.term.trim().length > 0);
         
         let processedRestaurants = [];
-        
+
         if (hasSearch) {
-          // When searching, preserve OpenTable order and put them first
-          const openTableRestaurants = mergedRestaurants.filter(r => r.restraunt_type === "open_table");
-          const otherRestaurants = mergedRestaurants.filter(r => r.restraunt_type !== "open_table");
-          
-          // Shuffle only other restaurants, keep OpenTable in original order
-          const shuffledOthers = [...otherRestaurants];
-          for (let i = shuffledOthers.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffledOthers[i], shuffledOthers[j]] = [shuffledOthers[j], shuffledOthers[i]];
-          }
-          
-          // Put OpenTable first (in original order), then shuffled others
-          processedRestaurants = [...openTableRestaurants, ...shuffledOthers];
+          // When searching, bring name matches to the top; non-matches keep
+          // OpenTable's relevance order followed by the other sources
+          const searchText = formData?.restaurant_name || formData?.term || "";
+          processedRestaurants = rankBySearchRelevance(mergedRestaurants, searchText);
         } else {
-          // No search - shuffle all restaurants
-          processedRestaurants = [...mergedRestaurants];
-          for (let i = processedRestaurants.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [processedRestaurants[i], processedRestaurants[j]] = [processedRestaurants[j], processedRestaurants[i]];
-          }
+          // No search - deterministic mix of sources, stable across re-renders
+          processedRestaurants = interleaveBySource(mergedRestaurants);
         }
-        
+
         setShuffledRestaurants(processedRestaurants);
         // Reset visible count when restaurants change
         setVisibleCount(ITEMS_PER_PAGE);
@@ -434,42 +482,8 @@ const RestaurantCards = memo(
         });
       }
     
-      // Check if there's a search (cuisine filter or restaurant name or term)
-      const hasSearch = (cuisinefilter && cuisinefilter.length > 0) || 
-                       (formData?.restaurant_name && formData.restaurant_name.trim().length > 0) ||
-                       (formData?.term && formData.term.trim().length > 0);
-      
-      // If searching, prioritize OpenTable restaurants and preserve their order
-      if (hasSearch) {
-        // Separate OpenTable and other restaurants
-        const openTableRestaurants = updatedRestaurants.filter(r => r.restraunt_type === "open_table");
-        const otherRestaurants = updatedRestaurants.filter(r => r.restraunt_type !== "open_table");
-        
-        // Shuffle only other restaurants, keep OpenTable in original order
-        const shuffleArray = (array) => {
-          const shuffled = [...array];
-          for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-          }
-          return shuffled;
-        };
-        
-        // Put OpenTable first (in original order), then shuffled others
-        updatedRestaurants = [
-          ...openTableRestaurants, // Keep original order
-          ...shuffleArray(otherRestaurants)
-        ];
-      } else {
-        // No search - keep the shuffled order from shuffledRestaurants
-        // But we need to maintain the order from shuffledRestaurants for non-filtered items
-        // Since we're filtering, we'll just shuffle the filtered results
-        for (let i = updatedRestaurants.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [updatedRestaurants[i], updatedRestaurants[j]] = [updatedRestaurants[j], updatedRestaurants[i]];
-        }
-      }
-    
+      // Base order from shuffledRestaurants is already search-ranked and
+      // deterministic; filtering preserves it, so no reordering here
       setFilteredRestaurants(updatedRestaurants);
       // Reset visible count when filters change
       setVisibleCount(ITEMS_PER_PAGE);
@@ -483,6 +497,11 @@ const RestaurantCards = memo(
       setCopiedRestaurants(copiedRestaurantsData);
     }, [filteredRestaurants]);
     
+    // Bring the results back to the top whenever a new search is made
+    useEffect(() => {
+      window.scrollTo({ top: 0 });
+    }, [formData?.restaurant_name, formData?.term]);
+
     // Handle infinite scroll
     useEffect(() => {
       const handleScroll = () => {
@@ -1523,7 +1542,7 @@ const RestaurantCards = memo(
 
               return (
                 <Link
-                  key={index}
+                  key={restaurantKey(data, index)}
                   to={{
                     pathname: "/restaurant-detail",
                     search: getSearchParams(),
