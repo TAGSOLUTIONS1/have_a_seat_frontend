@@ -21,8 +21,24 @@ const PLATFORM_META = {
   thefork: { logo: "/assets/thefork.png", label: "TheFork" },
 };
 
+const CARD = "bg-white rounded-[18px] shadow-[0_2px_14px_rgba(31,27,46,0.06)]";
+
+const SectionLabel = ({ children }) => (
+  <div className="flex items-center gap-[9px] mb-2.5">
+    <span className="w-1 h-[15px] rounded-sm bg-[#8b2fd6]" />
+    <span className="text-[11px] font-extrabold tracking-[0.14em] uppercase text-[#6b6478] font-roboto">
+      {children}
+    </span>
+  </div>
+);
+
 export default function RestaurantDetailsV2({ restrauntDetail }) {
   const [activeTab, setActiveTab] = useState("overview");
+
+  const scrollToBook = () =>
+    document
+      .getElementById("book")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   const sanitizeText = (text) =>
     typeof text === "string"
@@ -54,12 +70,29 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
     restrauntDetail?.reviews?.total_reviews ||
     null;
 
+  // Last resort: average the ratings of the loaded platform reviews
+  const reviewsRatingAvg = (() => {
+    const arr = Array.isArray(restrauntDetail?.reviews)
+      ? restrauntDetail.reviews
+      : [];
+    const nums = arr
+      .map((r) => Number(r?.rating?.overall ?? r?.rating))
+      .filter((n) => Number.isFinite(n) && n > 0);
+    return nums.length
+      ? nums.reduce((sum, n) => sum + n, 0) / nums.length
+      : null;
+  })();
+
   const ratingCandidate =
     (typeof restrauntDetail?.rating === "number"
       ? restrauntDetail.rating
       : null) ??
     restrauntDetail?.restaurant?.aggregateRatings?.thefork?.ratingValue ??
     restrauntDetail?.results?.venues?.[0]?.venue?.rating?.average ??
+    restrauntDetail?.restaurant?.statistics?.reviews?.ratings?.overall?.rating ??
+    restrauntDetail?.reviews?.aggregate_rating ??
+    restrauntDetail?.rating?.average ??
+    reviewsRatingAvg ??
     null;
   const ratingValue = Number.isFinite(Number(ratingCandidate))
     ? Number(ratingCandidate)
@@ -90,8 +123,39 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
     restrauntDetail?.results?.venues?.[0]?.venue?.type ||
     "N/A";
 
-  const primaryCuisine =
-    cuisineText && cuisineText !== "N/A" ? cuisineText.split(",")[0].trim() : null;
+  const heroCuisine =
+    cuisineText && cuisineText !== "N/A"
+      ? cuisineText
+          .split(",")
+          .slice(0, 2)
+          .map((c) => c.trim())
+          .filter(Boolean)
+          .join(" · ")
+      : null;
+
+  // "Open until 11:30 PM" chip from Yelp-style hours (day: 0 = Monday)
+  const openChip = (() => {
+    const h = restrauntDetail?.hours?.[0];
+    if (h?.is_open_now !== true) return null;
+    const now = new Date();
+    const yelpDay = (now.getDay() + 6) % 7;
+    const nowHM = now.getHours() * 100 + now.getMinutes();
+    const windows = (Array.isArray(h.open) ? h.open : []).filter(
+      (w) => w?.day === yelpDay
+    );
+    const current =
+      windows.find(
+        (w) =>
+          w.is_overnight ||
+          (Number(w.start) <= nowHM && nowHM <= Number(w.end))
+      ) || windows[windows.length - 1];
+    if (!current?.end || current.end.length !== 4) return "Open now";
+    const hour24 = parseInt(current.end.slice(0, 2), 10);
+    const mins = current.end.slice(2);
+    const hour12 = hour24 % 12 || 12;
+    const period = hour24 >= 12 ? "PM" : "AM";
+    return `Open until ${hour12}${mins === "00" ? "" : `:${mins}`} ${period}`;
+  })();
 
   const locationText =
     (Array.isArray(restrauntDetail?.location?.display_address) &&
@@ -181,180 +245,203 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
   const tabs = [
     { key: "overview", label: "Overview" },
     { key: "menu", label: "Menu" },
-    ...(hasReviews ? [{ key: "reviews", label: "Reviews" }] : []),
+    ...(hasReviews
+      ? [
+          {
+            key: "reviews",
+            label: reviewCount ? `Reviews (${reviewCount})` : "Reviews",
+          },
+        ]
+      : []),
   ];
 
   const infoCards = [
     { label: "Reviews", value: reviewCount || "N/A", Icon: MessageSquare },
-    { label: "Price", value: priceDisplay || "N/A", Icon: Banknote },
-    { label: "Cuisine", value: cuisineText, Icon: UtensilsCrossed, clamp: "line-clamp-1" },
+    { label: "Price", value: priceDisplay || "Not listed", Icon: Banknote },
+    { label: "Cuisine", value: cuisineText, Icon: UtensilsCrossed, clamp: "line-clamp-2" },
     { label: "Location", value: locationText || "N/A", Icon: MapPin, small: true },
     { label: "Contact", value: contactText || "N/A", Icon: Phone, small: true },
   ];
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-6 md:py-10">
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8 items-stretch">
-        <div className="lg:col-span-3 rounded-3xl overflow-hidden border border-[#ece7f4] bg-[#f4effa] min-h-[220px] md:min-h-[260px] shadow-sm">
-          <div className="relative h-full min-h-[220px] md:min-h-[260px]">
-            {heroImage ? (
-              <img
-                src={heroImage}
-                alt={restaurantName}
-                className="absolute inset-0 w-full h-full object-cover object-center block"
-              />
-            ) : (
-              <div className="w-full h-full bg-lightGrey flex items-center justify-center">
-                <span
-                  className="
-                        text-plum bg-frenchPink border rounded-full border-gray-300
-                        flex items-center justify-center
-                        w-20 h-20
-                        text-4xl font-bold"
-                >
-                  {getInitialsOfName(restaurantName)}
-                </span>
-              </div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-            {platform ? (
-              <div className="absolute top-4 right-4 flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full pl-3 pr-2 py-1.5 shadow-md">
-                <span className="text-[11px] uppercase tracking-wide text-gray-500 font-roboto">
-                  Powered by
-                </span>
+    <div className="bg-[#f9f6fe] text-[#1f1b2e]">
+      <div className="max-w-[1160px] mx-auto px-4 md:px-6 pt-6 pb-24 lg:pb-10">
+        <div className="flex flex-wrap gap-6 items-start">
+          <div className="flex-[3_1_480px] min-w-0 order-2 lg:order-1">
+            <div className="relative rounded-[20px] overflow-hidden bg-[#ece7f3] h-[260px] md:h-[400px] shadow-[0_10px_34px_rgba(31,27,46,0.10)]">
+              {heroImage ? (
                 <img
-                  src={platform.logo}
-                  alt={`${platform.label} logo`}
-                  title={platform.label}
-                  className="h-5 w-auto max-w-[80px] object-contain"
+                  src={heroImage}
+                  alt={restaurantName}
+                  className="absolute inset-0 w-full h-full object-cover object-center block"
                 />
-              </div>
-            ) : null}
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="w-20 h-20 rounded-full bg-[#f2e9fd] text-[#7723bd] flex items-center justify-center text-4xl font-bold">
+                    {getInitialsOfName(restaurantName)}
+                  </span>
+                </div>
+              )}
+              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(180deg,rgba(31,27,46,0)_42%,rgba(31,27,46,0.78)_100%)]" />
 
-            <div className="absolute bottom-6 left-6 right-6">
-              <h1 className="text-white font-agrandir font-bold text-3xl md:text-5xl leading-tight drop-shadow-md">
-                {restaurantName}
-              </h1>
-              <div className="flex flex-wrap items-center gap-2 mt-3">
-                {ratingValue ? (
-                  <span className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs md:text-sm font-roboto px-3 py-1 rounded-full">
-                    <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-                    {ratingValue.toFixed(1)}
-                    {reviewCount ? (
-                      <span className="text-white/80">({reviewCount})</span>
-                    ) : null}
-                  </span>
-                ) : null}
-                {primaryCuisine ? (
-                  <span className="inline-flex items-center bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs md:text-sm font-roboto px-3 py-1 rounded-full">
-                    {primaryCuisine}
-                  </span>
-                ) : null}
-                {priceDisplay ? (
-                  <span className="inline-flex items-center bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs md:text-sm font-roboto px-3 py-1 rounded-full">
-                    {priceDisplay}
-                  </span>
-                ) : null}
+              <div className="absolute left-5 right-5 md:left-6 md:right-6 bottom-5 md:bottom-[22px] pointer-events-none">
+                <h1 className="text-white font-agrandir font-bold tracking-tight leading-none text-[30px] md:text-[48px] drop-shadow-[0_2px_18px_rgba(0,0,0,0.35)]">
+                  {restaurantName}
+                </h1>
+                <div className="flex flex-wrap items-center gap-2 mt-3">
+                  {ratingValue ? (
+                    <span className="inline-flex items-center gap-1.5 bg-white/[.16] backdrop-blur-md text-white text-[13px] font-roboto font-bold px-[13px] py-1.5 rounded-full">
+                      <Star className="w-3.5 h-3.5 fill-[#ffc531] text-[#ffc531]" />
+                      {ratingValue.toFixed(1)}
+                      {reviewCount ? (
+                        <span className="font-medium opacity-[.85]">({reviewCount})</span>
+                      ) : null}
+                    </span>
+                  ) : null}
+                  {heroCuisine ? (
+                    <span className="inline-flex items-center bg-white/[.16] backdrop-blur-md text-white text-[13px] font-roboto font-semibold px-[13px] py-1.5 rounded-full">
+                      {heroCuisine}
+                    </span>
+                  ) : null}
+                  {priceDisplay ? (
+                    <span className="inline-flex items-center bg-white/[.16] backdrop-blur-md text-white text-[13px] font-roboto font-semibold px-[13px] py-1.5 rounded-full">
+                      {priceDisplay}
+                    </span>
+                  ) : null}
+                  {openChip ? (
+                    <span className="inline-flex items-center gap-[7px] bg-white/[.16] backdrop-blur-md text-white text-[13px] font-roboto font-semibold px-[13px] py-1.5 rounded-full">
+                      <span className="w-[7px] h-[7px] rounded-full bg-[#4ade80]" />
+                      {openChip}
+                    </span>
+                  ) : null}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="lg:col-span-2 rounded-3xl border border-[#ece7f4] bg-[#f4effa] p-5 md:p-6 shadow-sm">
-          <div className="flex items-center justify-between gap-3 mb-4">
-            <h2 className="font-agrandir text-2xl font-bold text-shipGrey">
-              Make a Reservation
-            </h2>
-            {platform ? (
-              <img
-                src={platform.logo}
-                alt={`${platform.label} logo`}
-                title={`Reservations via ${platform.label}`}
-                className="h-6 w-auto max-w-[72px] object-contain shrink-0"
-              />
-            ) : null}
+            <div className="flex gap-2 my-5 p-[5px] bg-[#f1ecf9] rounded-full w-fit max-w-full overflow-x-auto no-scrollbar">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`shrink-0 whitespace-nowrap rounded-full px-5 py-[9px] font-roboto text-sm font-bold transition-all ${
+                    activeTab === tab.key
+                      ? "bg-white text-[#7723bd] shadow-[0_2px_8px_rgba(31,27,46,0.10)]"
+                      : "text-[#6b6478] hover:text-[#1f1b2e]"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {activeTab === "overview" ? (
+              <div key="overview" className="animate-fadeIn">
+                <div className={`${CARD} px-5 md:px-6 py-[22px]`}>
+                  <SectionLabel>Description</SectionLabel>
+                  <p className="font-roboto text-[15px] md:text-[17px] leading-[1.55] max-w-[64ch]">
+                    {overviewDescription}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(178px,1fr))] gap-3 mt-3.5">
+                  {infoCards.map(({ label, value, Icon, clamp, small }) => (
+                    <div
+                      key={label}
+                      className="bg-white rounded-2xl p-4 pb-[18px] shadow-[0_2px_12px_rgba(31,27,46,0.05)] transition-all duration-200 hover:-translate-y-[3px] hover:shadow-[0_10px_24px_rgba(31,27,46,0.10)]"
+                    >
+                      <div className="flex items-center gap-[9px]">
+                        <span className="inline-flex items-center justify-center w-[30px] h-[30px] rounded-[10px] bg-[#f2e9fd] text-[#7723bd] shrink-0">
+                          <Icon className="w-4 h-4" />
+                        </span>
+                        <span className="text-[10.5px] font-extrabold tracking-[0.12em] uppercase text-[#6b6478] font-roboto">
+                          {label}
+                        </span>
+                      </div>
+                      <div
+                        className={`mt-[11px] font-bold leading-snug ${
+                          small ? "text-sm line-clamp-2" : "text-base"
+                        } ${clamp || ""}`}
+                      >
+                        {value}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {needToKnowText ? (
+                  <div className={`${CARD} px-5 md:px-6 py-5 mt-3.5`}>
+                    <SectionLabel>Need To Know</SectionLabel>
+                    <p className="font-roboto text-[15px] leading-[1.65] text-[#37324a]">
+                      {needToKnowText}
+                    </p>
+                  </div>
+                ) : null}
+              </div>
+            ) : activeTab === "menu" ? (
+              <div key="menu" className={`animate-fadeIn ${CARD} px-5 md:px-6 py-[22px]`}>
+                <MenuDetails restrauntDetail={restrauntDetail} />
+              </div>
+            ) : (
+              <div key="reviews" className="animate-fadeIn">
+                <Reviews restrauntDetail={restrauntDetail} />
+              </div>
+            )}
+
+            <div className="mt-6 pt-[18px] border-t border-[#ece5f6] flex flex-wrap gap-2.5 justify-between text-[12.5px] text-[#6b6478] font-roboto">
+              <span>
+                Restaurant data via {platform?.label || "partner platforms"}
+              </span>
+              <span>Have a Seat</span>
+            </div>
           </div>
-          <MakeReservation restrauntDetail={restrauntDetail} hideTitle />
+
+          <div
+            id="book"
+            className="flex-[1_1_330px] min-w-0 w-full lg:max-w-[400px] lg:sticky lg:top-24 scroll-mt-24 order-1 lg:order-2"
+          >
+            <div className="bg-white rounded-[20px] shadow-[0_8px_30px_rgba(31,27,46,0.09)] overflow-hidden">
+              <div className="flex items-center justify-between gap-2.5 px-5 pt-[18px] pb-3.5">
+                <h2 className="font-agrandir text-xl font-bold tracking-tight">
+                  Make a Reservation
+                </h2>
+                {platform ? (
+                  <span
+                    className="inline-flex items-center shrink-0"
+                    title={`Reservations via ${platform.label}`}
+                  >
+                    <img
+                      src={platform.logo}
+                      alt={`${platform.label} logo`}
+                      className="h-4 w-auto max-w-[64px] object-contain"
+                    />
+                  </span>
+                ) : null}
+              </div>
+              <MakeReservation restrauntDetail={restrauntDetail} hideTitle />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="mt-8 md:mt-12">
-        <div className="inline-flex items-center gap-1 bg-[#f4effa] border border-[#ece7f4] rounded-full p-1.5">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`px-5 py-2 rounded-full font-roboto font-semibold text-sm md:text-base transition-all ${
-                activeTab === tab.key
-                  ? "bg-white text-plum shadow-sm"
-                  : "text-gray-500 hover:text-shipGrey"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+      <div
+        className="lg:hidden fixed bottom-0 inset-x-0 z-40 flex items-center gap-3 px-4 pt-3 bg-white/[.92] backdrop-blur-xl border-t border-[#ece5f6] shadow-[0_-8px_26px_rgba(31,27,46,0.09)]"
+        style={{ paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }}
+      >
+        <div className="flex-1 min-w-0">
+          <div className="text-[15px] font-extrabold truncate">
+            {restaurantName}
+          </div>
+          <div className="text-[12.5px] text-[#6b6478] font-roboto font-semibold">
+            Book a table{platform ? ` · via ${platform.label}` : ""}
+          </div>
         </div>
-
-        <div className="bg-white border border-[#ece7f4] rounded-3xl p-6 md:p-8 mt-4 shadow-sm">
-          {activeTab === "overview" ? (
-            <div className="space-y-7">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="w-1 h-4 rounded-full bg-plum" />
-                  <p className="text-xs uppercase tracking-wider text-gray-500 font-roboto">
-                    Description
-                  </p>
-                </div>
-                <p className="font-roboto text-[15px] md:text-base leading-7 text-shipGrey">
-                  {overviewDescription}
-                </p>
-              </div>
-
-              {needToKnowText ? (
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="w-1 h-4 rounded-full bg-plum" />
-                    <p className="text-xs uppercase tracking-wider text-gray-500 font-roboto">
-                      Need To Know
-                    </p>
-                  </div>
-                  <p className="font-roboto text-[15px] md:text-base leading-7 text-shipGrey">
-                    {needToKnowText}
-                  </p>
-                </div>
-              ) : null}
-
-            </div>
-          ) : activeTab === "menu" ? (
-            <MenuDetails restrauntDetail={restrauntDetail} />
-          ) : (
-            <Reviews restrauntDetail={restrauntDetail} />
-          )}
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 mt-4">
-          {infoCards.map(({ label, value, Icon, clamp, small }) => (
-            <div
-              key={label}
-              className="rounded-2xl border border-[#eee8f6] p-4 bg-white shadow-sm hover:shadow-md hover:border-[#ddd0ef] transition-all"
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-[#f4effa] text-plum flex items-center justify-center shrink-0">
-                  <Icon className="w-4 h-4" />
-                </span>
-                <p className="text-xs uppercase tracking-wider text-gray-500">{label}</p>
-              </div>
-              <p
-                className={`mt-2 font-semibold text-shipGrey ${
-                  small ? "text-sm line-clamp-2" : "text-lg"
-                } ${clamp || ""}`}
-              >
-                {value}
-              </p>
-            </div>
-          ))}
-        </div>
+        <button
+          type="button"
+          onClick={scrollToBook}
+          className="shrink-0 h-12 px-6 rounded-full bg-[#8b2fd6] hover:bg-[#7723bd] text-white font-roboto text-[15px] font-extrabold shadow-[0_8px_20px_rgba(139,47,214,0.3)] transition-all"
+        >
+          Reserve
+        </button>
       </div>
     </div>
   );

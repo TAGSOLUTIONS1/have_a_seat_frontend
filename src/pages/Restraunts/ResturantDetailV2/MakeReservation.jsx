@@ -3,10 +3,19 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { Base_Url } from "@/baseUrl";
-import { LucideLoader } from "lucide-react";
-import DatePicker from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Date";
-import Time from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Time";
-import PersonCard from "../RestrauntDetailPage/OverviewCards/OverviewCard2/Person";
+import {
+  LucideLoader,
+  Calendar as CalendarIcon,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import { format, addDays } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import GuestSignInModal from "@/components/common/GuestSignInModal";
 import ReservationConflictModal from "@/components/common/ReservationConflictModal";
 import ResyDetailsModal from "@/components/common/ResyDetailsModal";
@@ -15,6 +24,40 @@ import { useAuth } from "@/contexts/authContext/AuthProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { useNotificationToast } from '@/hooks/useNotificationToast';
 import { PostResyReservation } from "@/services/reservationwithemail";
+
+const PLATFORM_LABELS = {
+  yelp: "Yelp",
+  open_table: "OpenTable",
+  resy: "Resy",
+  tock: "Tock",
+  tableagent: "TableAgent",
+  thefork: "TheFork",
+};
+
+const DINNER_START = "17:00";
+const DINNER_END = "22:00";
+
+const buildTimeOptions = () => {
+  const out = [];
+  for (let h = 8; h < 24; h++) {
+    for (let m = 0; m < 60; m += 30) {
+      out.push(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
+    }
+  }
+  return out;
+};
+
+const fmt12 = (t) => {
+  if (!t) return "";
+  const [h, m] = t.split(":").map(Number);
+  const ampm = h >= 12 ? "PM" : "AM";
+  const hh = h % 12 === 0 ? 12 : h % 12;
+  return m === 0 ? `${hh} ${ampm}` : `${hh}:${String(m).padStart(2, "0")} ${ampm}`;
+};
+
+const FIELD_LABEL =
+  "text-[10.5px] font-extrabold tracking-[0.12em] uppercase text-[#6b6478] font-roboto";
+
 export default function MakeReservation({ restrauntDetail, hideTitle = false }) {
   const { authState } = useAuth();
   const { toast } = useToast();
@@ -24,27 +67,36 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
   
   // Initialize formData from localStorage if available (filter search data)
   const getInitialFormData = () => {
+    const todayStr = format(new Date(), "yyyy-MM-dd");
     const savedFormData = localStorage.getItem("searchFormData");
     if (savedFormData) {
       try {
         const parsed = JSON.parse(savedFormData);
+        const savedDate = parsed.reservation_date || parsed.date || null;
         return {
-          reservation_covers: parsed.reservation_covers || parsed.persons || 2,
-          reservation_date: parsed.reservation_date || parsed.date || null,
-          reservation_time: parsed.reservation_time || null,
+          reservation_covers:
+            Number(parsed.reservation_covers || parsed.persons) || 2,
+          reservation_date:
+            savedDate && savedDate >= todayStr ? savedDate : todayStr,
+          reservation_time: parsed.reservation_time || "19:00",
         };
       } catch (e) {
         console.error("Error parsing saved form data:", e);
       }
     }
     return {
-      reservation_covers: null,
-      reservation_date: null,
-      reservation_time: null,
+      reservation_covers: 2,
+      reservation_date: todayStr,
+      reservation_time: "19:00",
     };
   };
-  
-  const [formData, setFormData] = useState(getInitialFormData());
+
+  const [formData, setFormData] = useState(getInitialFormData);
+  const [showAllTimes, setShowAllTimes] = useState(() => {
+    const t = getInitialFormData().reservation_time;
+    return Boolean(t && (t < DINNER_START || t > DINNER_END));
+  });
+  const [moreGuestsOpen, setMoreGuestsOpen] = useState(false);
   const [error, setError] = useState("");
   const [nextData, setNextData] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -53,7 +105,6 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
   const [selectedReservationType, setSelectedReservationType] = useState(null);
   const [timeSlots, setTimeSlots] = useState();
   const [openTableTimeSlots, setOpenTableTimeSlots] = useState();
-  const [showSlotsModal, setShowSlotsModal] = useState(false);
   
   // Conflict checking state
   const [showConflictModal, setShowConflictModal] = useState(false);
@@ -424,9 +475,8 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
         setTimeSlots(normalizedTimes);
         setLoading(false);
         setIsDataLoaded(true);
-        if (normalizedTimes.length > 0) setShowSlotsModal(true);
       } else {
-        setLoading(fasle);
+        setLoading(false);
         throw new Error("Network response was not ok.");
       }
     } catch (error) {
@@ -461,9 +511,8 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
         setTimeSlots(yelpSlots);
         setLoading(false);
         setIsDataLoaded(true);
-        if (yelpSlots.length > 0) setShowSlotsModal(true);
       } else {
-        setLoading(fasle);
+        setLoading(false);
         throw new Error("Network response was not ok.");
       }
     } catch (error) {
@@ -509,7 +558,6 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
         setTimeSlots(slots);
         setLoading(false);
         setIsDataLoaded(true);
-        if (slots.length > 0) setShowSlotsModal(true);
       } else {
         setLoading(false);
         throw new Error("Network response was not ok.");
@@ -540,9 +588,6 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
         setOpenTableTimeSlots(openTableSlots);
         setIsDataLoaded(true);
         setLoading(false);
-        if (openTableSlots?.[0]?.availabilityDays?.[0]?.slots?.length > 0) {
-          setShowSlotsModal(true);
-        }
       } else {
         setLoading(false);
         throw new Error("Network response was not ok.");
@@ -752,274 +797,358 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
     };
 
 
-  return (
+  const restaurantType = reservationCard?.restaurant_type;
+  const platformLabel = PLATFORM_LABELS[restaurantType] || "the restaurant";
+  const canFetchInline =
+    restaurantType === "resy" || restaurantType === "open_table";
+
+  // Any change to the form invalidates previously fetched slots.
+  const updateForm = (patch) => {
+    setError("");
+    setIsDataLoaded(false);
+    setFormData((prev) => ({
+      ...(prev && typeof prev === "object" ? prev : {}),
+      ...patch,
+    }));
+  };
+
+  const selectedDate = formData?.reservation_date;
+  const selectedTime = formData?.reservation_time;
+  const selectedCovers = Number(formData?.reservation_covers) || null;
+
+  const dayChips = Array.from({ length: 5 }, (_, i) => {
+    const d = addDays(new Date(), i);
+    return {
+      value: format(d, "yyyy-MM-dd"),
+      dow: i === 0 ? "Today" : format(d, "EEE"),
+      day: format(d, "d"),
+    };
+  });
+
+  const customDateChip = (() => {
+    if (!selectedDate || dayChips.some((d) => d.value === selectedDate))
+      return null;
+    const d = new Date(`${selectedDate}T00:00:00`);
+    if (isNaN(d.getTime())) return null;
+    return { value: selectedDate, dow: format(d, "EEE"), day: format(d, "MMM d") };
+  })();
+
+  const allTimes = buildTimeOptions();
+  const collapsedTimes = allTimes.filter(
+    (t) => t >= DINNER_START && t <= DINNER_END
+  );
+  const visibleTimes = showAllTimes ? allTimes : collapsedTimes;
+
+  const slotChips = (() => {
+    if (restaurantType === "yelp") {
+      return (Array.isArray(timeSlots) ? timeSlots : [])
+        .filter((d) => !isNaN(d.timestamp))
+        .map((d, i) => ({
+          key: `yelp-${i}`,
+          label: d.formatted_time,
+          onClick: () => !isCheckingConflicts && handleYelpReservation(d),
+        }));
+    }
+    if (restaurantType === "open_table") {
+      const slots = openTableTimeSlots?.[0]?.availabilityDays?.[0]?.slots || [];
+      return slots
+        .filter((d) => !isNaN(d.timeOffsetMinutes))
+        .map((d, i) => ({
+          key: `ot-${i}`,
+          label: convertOffsetToTime(d.timeOffsetMinutes, selectedTime),
+          onClick: () => !isCheckingConflicts && handleOpenTableReservation(d),
+        }));
+    }
+    if (restaurantType === "resy") {
+      return (Array.isArray(timeSlots) ? timeSlots : [])
+        .filter((d) => d?.date?.start)
+        .map((d, i) => ({
+          key: `resy-${i}`,
+          label: formatTimeOnly(d.date.start),
+          onClick: () => handleResyClick(d),
+        }));
+    }
+    if (restaurantType === "tock") {
+      return (Array.isArray(timeSlots) ? timeSlots : []).map((t, i) => ({
+        key: `tock-${i}`,
+        label: t,
+        onClick: () =>
+          window.open(
+            restrauntDetail?.url || reservationCard?.url,
+            "_blank",
+            "noopener,noreferrer"
+          ),
+      }));
+    }
+    return [];
+  })();
+
+  const dayChipClass = (active) =>
+    `flex-1 min-w-0 py-[9px] rounded-[14px] border-[1.5px] text-center transition-all ${
+      active
+        ? "bg-[#8b2fd6] border-[#8b2fd6] text-white"
+        : "bg-white border-[#ece5f6] text-[#1f1b2e] hover:border-[#8b2fd6]"
+    }`;
+
+  const timeChipClass = (active) =>
+    `py-2.5 px-1 rounded-xl border-[1.5px] text-[13px] font-bold font-roboto whitespace-nowrap transition-all ${
+      active
+        ? "bg-[#8b2fd6] border-[#8b2fd6] text-white"
+        : "bg-white border-[#ece5f6] text-[#1f1b2e] hover:border-[#8b2fd6]"
+    }`;
+
+  const panelBody = (
     <>
-    <div className="overflow-hidden">
-      {!hideTitle ? (
-        <h1 className=" font-bold my-10 text-4xl font-agrandir text-shipGrey sm:text-3xl lg:text-4xl">
-          Make a Reservation
-        </h1>
-      ) : null}
-      <div className="w-full">
-    <div className={`flex gap-4 border-[0.4px] border-[#B9B9B9] bg-white rounded-2xl ${
-      hideTitle
-        ? "flex-col items-stretch px-4 py-4"
-        : "flex-col md:flex-row items-center px-4 py-4 md:px-5 md:py-2"
-    }`}>
-      
-    <div className={`flex-grow w-full ${hideTitle ? "pb-2 border-b border-gray-200" : "md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0"}`}>
-        <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Date</span>
-            <DatePicker setFormData={setFormData} initialDate={formData.reservation_date} />
-          </div>
-
-          <div className={`flex-grow w-full ${hideTitle ? "pb-2 border-b border-gray-200" : "md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0"}`}>
-        <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Time</span>
-            <Time setFormData={setFormData} initialTime={formData.reservation_time} />
-          </div>
-
-          <div className={`flex-grow w-full ${hideTitle ? "pb-2" : "md:w-auto border-b-2 md:border-b-0 md:border-r-2 pb-2 md:pb-0"}`}>
-        <span className="ml-4 font-roboto text-lg md:text-xl text-grayhead font-normal">Guests</span>
-            <PersonCard setFormData={setFormData} initialGuests={formData.reservation_covers} />
-          </div>
-
-          <div className="w-full md:w-auto">
+      <div className="px-5 pb-[18px]">
+        <div className={`${FIELD_LABEL} mb-[9px]`}>Date</div>
+        <div className="flex items-stretch gap-[7px]">
+          {dayChips.map((d) => (
             <button
-              onClick={(reservationCard?.restaurant_type === "resy" ||
-                reservationCard?.restaurant_type === "open_table"
-              ) ? handleTimeSlots : handlenotimeslots}
-              // onClick={handleTimeSlots}
-              className={`bg-plum px-4 py-2 text-white rounded-full w-full ${hideTitle ? "" : "md:w-auto"}`}
+              key={d.value}
+              type="button"
+              onClick={() => updateForm({ reservation_date: d.value })}
+              className={dayChipClass(selectedDate === d.value)}
             >
-              Select Slot
+              <span className="block text-[10.5px] font-bold tracking-[0.06em] uppercase opacity-75 font-roboto">
+                {d.dow}
+              </span>
+              <span className="block text-[19px] font-extrabold leading-tight">
+                {d.day}
+              </span>
             </button>
+          ))}
+          <Popover>
+            <PopoverTrigger asChild>
+              {customDateChip ? (
+                <button
+                  type="button"
+                  aria-label="Pick another date"
+                  className={`${dayChipClass(true)} px-1`}
+                >
+                  <span className="block text-[10.5px] font-bold tracking-[0.06em] uppercase opacity-75 font-roboto">
+                    {customDateChip.dow}
+                  </span>
+                  <span className="block text-[13px] font-extrabold leading-[1.85] whitespace-nowrap">
+                    {customDateChip.day}
+                  </span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  aria-label="Pick another date"
+                  className="flex-1 min-w-0 py-[9px] rounded-[14px] border-[1.5px] border-dashed border-[#d9cdec] bg-white text-[#7723bd] flex flex-col items-center justify-center gap-1 hover:border-[#8b2fd6] transition-all"
+                >
+                  <CalendarIcon className="w-4 h-4" />
+                  <span className="text-[10px] font-bold uppercase font-roboto">
+                    More
+                  </span>
+                </button>
+              )}
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <Calendar
+                mode="single"
+                selected={
+                  selectedDate
+                    ? new Date(`${selectedDate}T00:00:00`)
+                    : undefined
+                }
+                onSelect={(d) => {
+                  if (d)
+                    updateForm({ reservation_date: format(d, "yyyy-MM-dd") });
+                }}
+                disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
+              />
+            </PopoverContent>
+          </Popover>
         </div>
+
+        <div className={`${FIELD_LABEL} mt-4 mb-[9px]`}>Guests</div>
+        <div className="flex gap-1 p-1 bg-[#f4f0fa] rounded-full">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+            <button
+              key={n}
+              type="button"
+              onClick={() => updateForm({ reservation_covers: n })}
+              className={`flex-1 min-w-0 py-2 rounded-full text-sm font-bold font-roboto transition-all ${
+                selectedCovers === n
+                  ? "bg-white text-[#7723bd] shadow-[0_2px_8px_rgba(31,27,46,0.10)]"
+                  : "text-[#6b6478] hover:text-[#1f1b2e]"
+              }`}
+            >
+              {n}
+            </button>
+          ))}
+          <Popover open={moreGuestsOpen} onOpenChange={setMoreGuestsOpen}>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                aria-label="More than 8 guests"
+                className={`flex-1 min-w-0 py-2 rounded-full text-sm font-bold font-roboto whitespace-nowrap transition-all ${
+                  selectedCovers >= 9
+                    ? "bg-white text-[#7723bd] shadow-[0_2px_8px_rgba(31,27,46,0.10)]"
+                    : "text-[#6b6478] hover:text-[#1f1b2e]"
+                }`}
+              >
+                {selectedCovers >= 9 ? selectedCovers : "9+"}
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-2" align="end">
+              <div className={`${FIELD_LABEL} px-1 pb-2`}>Party size</div>
+              <div className="grid grid-cols-4 gap-1.5">
+                {Array.from({ length: 12 }, (_, i) => i + 9).map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => {
+                      updateForm({ reservation_covers: n });
+                      setMoreGuestsOpen(false);
+                    }}
+                    className={`w-10 py-2 rounded-xl border-[1.5px] text-sm font-bold font-roboto transition-all ${
+                      selectedCovers === n
+                        ? "bg-[#8b2fd6] border-[#8b2fd6] text-white"
+                        : "bg-white border-[#ece5f6] text-[#1f1b2e] hover:border-[#8b2fd6]"
+                    }`}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
-        <div>
-          {error && error !== null ? (
-            <p className="text-red-500 text-sm mt-1">{error}</p>
-          ) : null}
+
+        <div className="flex items-center justify-between mt-4 mb-[9px]">
+          <span className={FIELD_LABEL}>Time</span>
+          <button
+            type="button"
+            onClick={() => setShowAllTimes((v) => !v)}
+            className="inline-flex items-center gap-1 text-xs font-bold text-[#7723bd] hover:text-[#8b2fd6] font-roboto"
+          >
+            {showAllTimes ? "Fewer times" : "More times"}
+            {showAllTimes ? (
+              <ChevronUp className="w-3.5 h-3.5" />
+            ) : (
+              <ChevronDown className="w-3.5 h-3.5" />
+            )}
+          </button>
+        </div>
+        <div
+          className={`grid grid-cols-3 min-[380px]:grid-cols-4 gap-[7px] ${
+            showAllTimes ? "max-h-[236px] overflow-y-auto pr-1" : ""
+          }`}
+        >
+          {visibleTimes.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => updateForm({ reservation_time: t })}
+              className={timeChipClass(selectedTime === t)}
+            >
+              {fmt12(t)}
+            </button>
+          ))}
+        </div>
+
+        {error ? <p className="text-red-500 text-sm mt-3">{error}</p> : null}
+
+        <button
+          type="button"
+          onClick={canFetchInline ? handleTimeSlots : handlenotimeslots}
+          disabled={loading}
+          className="mt-[18px] w-full h-12 rounded-full bg-[#8b2fd6] hover:bg-[#7723bd] disabled:opacity-70 text-white font-roboto text-[15px] font-bold shadow-[0_6px_16px_rgba(139,47,214,0.28)] transition-all inline-flex items-center justify-center gap-2"
+        >
+          {loading ? (
+            <>
+              <LucideLoader className="w-4 h-4 animate-spin" />
+              Checking availability…
+            </>
+          ) : canFetchInline ? (
+            "Find a table"
+          ) : (
+            `Book on ${platformLabel}`
+          )}
+        </button>
+      </div>
+
+      {loading || isDataLoaded ? (
+        <div className="bg-[#faf7ff] border-t border-[#ece5f6] px-5 pt-3.5 pb-5">
+          <div className="flex items-center justify-between gap-2 mb-2.5">
+            <span className={FIELD_LABEL}>Available times</span>
+            <span className="text-[11px] font-extrabold tracking-[0.06em] uppercase font-roboto text-[#7723bd]">
+              {loading ? "Checking…" : `via ${platformLabel}`}
+            </span>
+          </div>
 
           {loading ? (
-            <LucideLoader className="w-6 h-6 justify-center animate-spin align-middle mx-auto" />
+            <div className="grid gap-2">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="h-11 rounded-[14px] bg-[linear-gradient(90deg,#ece5f6_0%,#f7f3fd_45%,#ece5f6_85%)] bg-[length:320px_100%] animate-[seatShimmer_1.1s_linear_infinite]"
+                  style={{ animationDelay: `${i * 0.14}s` }}
+                />
+              ))}
+            </div>
+          ) : slotChips.length > 0 ? (
+            <div className="animate-fadeIn">
+              <div className="grid grid-cols-3 min-[380px]:grid-cols-4 gap-[7px]">
+                {slotChips.map((s) => (
+                  <button
+                    key={s.key}
+                    type="button"
+                    onClick={s.onClick}
+                    disabled={isCheckingConflicts}
+                    className={`py-2.5 px-1 rounded-xl border-[1.5px] border-[#ece5f6] bg-white text-[13px] font-bold font-roboto text-[#1f1b2e] shadow-[0_1px_6px_rgba(31,27,46,0.05)] whitespace-nowrap transition-all hover:bg-[#8b2fd6] hover:border-[#8b2fd6] hover:text-white ${
+                      isCheckingConflicts ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+              <p className="text-[11.5px] text-[#6b6478] mt-3 leading-normal font-roboto">
+                One tap continues the booking — no re-entering details.
+              </p>
+            </div>
           ) : (
-            <div className="py-3 sm:py-10 text-center">
-              {!hideTitle && isDataLoaded ? (
-                  restrauntDetail?.restaurant_type === "yelp" ? (
-                    Array.isArray(timeSlots) && timeSlots.length > 0 ? (
-                      <>
-                        <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
-                        <div className="flex flex-wrap justify-center">
-                          {timeSlots
-                            .filter((data) => !isNaN(data.timestamp))
-                            .map((data, index) => (
-                              <button
-                                key={index}
-                                className={`bg-plum text-white font-semibold font-roboto text-base p-2 px-3 m-1 rounded-lg ${isCheckingConflicts ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                onClick={() => !isCheckingConflicts && handleYelpReservation(data)}
-                                disabled={isCheckingConflicts}
-                              >
-                                {/* {new Date(data.timestamp * 1000).toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                })} */}
-                                {/* {isCheckingConflicts ? "Checking..." : data.formatted_time} */}
-                                {data.formatted_time}
-                              </button>
-                            ))}
-                        </div>
-                      </>
-                    ) : (
-                      <p className="text-lg text-red-600">No slots available.</p>
-                    )
-                  ) : restrauntDetail?.restaurant_type === "open_table" ? (
-                    Array.isArray(openTableTimeSlots) &&
-                    openTableTimeSlots[0]?.availabilityDays[0]?.slots.length > 0 ? (
-                      <>
-                        <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
-                        <div className="flex flex-wrap justify-center">
-                          {openTableTimeSlots[0]?.availabilityDays[0]?.slots
-                            .filter((data) => !isNaN(data.timeOffsetMinutes))
-                            .map((data, index) => (
-                              <button
-                                key={index}
-                                className={`bg-purple-600 text-white p-3 m-1 rounded-lg ${isCheckingConflicts ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                onClick={() => !isCheckingConflicts && handleOpenTableReservation(data)}
-                                disabled={isCheckingConflicts}
-                              >
-                                {convertOffsetToTime(
-                                  data.timeOffsetMinutes,
-                                  formData?.reservation_time
-                                )}
-                                {/* {isCheckingConflicts ? "Checking..." : convertOffsetToTime(
-                                  data.timeOffsetMinutes,
-                                  formData?.reservation_time
-                                )} */}
-                              </button>
-                            ))}
-                        </div>
-                      </>
-                    ) : (
-                      <p className="text-lg text-red-600">No opentable slots available.</p>
-                    )
-                  ) : restrauntDetail?.restaurant_type === "resy" ? (
-                    timeSlots.length > 0 ? (
-                      <>
-                        <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
-                        <div className="flex flex-wrap justify-center">
-                          {timeSlots
-                            // .filter((data) => !isNaN(data.timeOffsetMinutes))
-                            .map((data, index) => (
-                              <button
-                                key={index}
-                                className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                                onClick={() => handleResyClick(data)}
-                              >
-                                {/* {convertOffsetToTime(
-                                  data.date.start,
-                                  formData?.reservation_time
-                                )} */}
-                                {formatTimeOnly(data.date.start)}
-                              </button>
-                            ))}
-                        </div>
-                      </>
-                    ) : (
-                      <p className="text-lg text-red-600">No resy slots available.</p>
-                    )
-              ) : restrauntDetail?.restaurant_type === "tock" ? (
-                Array.isArray(timeSlots) && timeSlots.length > 0 ? (
-                  <>
-                    <p className="text-2xl font-bold text-shipGrey font-agrandir mb-4">Time Slots</p>
-                    <div className="flex flex-wrap justify-center">
-                      {timeSlots.map((time, index) => (
-                        <button
-                          key={index}
-                          className="bg-purple-600 text-white p-3 m-1 rounded-lg"
-                          onClick={() => window.open(restrauntDetail?.url || reservationCard?.url, "_blank", "noopener,noreferrer")}
-                        >
-                          {time}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-lg text-red-600">No tock slots available.</p>
-                )
-              ) :  <p className="text-lg text-red-600">Couldnot get slots.</p>
-                ) : null}
-
-              {/* {hideTitle && isDataLoaded ? (
-                <p className="text-sm text-gray-500 font-roboto">
-                  Slots are available in the selection modal.
-                </p>
-              ) : null} */}
-
+            <div className="border-[1.5px] border-dashed border-[#cfc3e4] rounded-[14px] bg-white px-4 py-[18px] animate-fadeIn">
+              <div className="text-base font-extrabold">
+                Nothing at {fmt12(selectedTime)}
+              </div>
+              <p className="text-[13px] text-[#6b6478] mt-1.5 leading-normal font-roboto">
+                No tables for {selectedCovers || 2}{" "}
+                {selectedCovers === 1 ? "guest" : "guests"} then. Try a
+                different time, or book directly on {platformLabel}.
+              </p>
+              <button
+                type="button"
+                onClick={handlenotimeslots}
+                className="mt-3 h-10 px-4 rounded-full border-[1.5px] border-[#ece5f6] bg-white text-sm font-bold font-roboto text-[#1f1b2e] hover:border-[#8b2fd6] hover:text-[#7723bd] transition-all"
+              >
+                Open {platformLabel}
+              </button>
             </div>
           )}
         </div>
-      </div>
-      </div>
+      ) : null}
+    </>
+  );
 
-      {showSlotsModal ? (
-        <div
-          className="fixed inset-0 z-[70] bg-black/50 flex items-center justify-center p-4"
-          onClick={() => setShowSlotsModal(false)}
-        >
-          <div
-            className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-5 md:p-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-agrandir text-2xl font-bold text-shipGrey">Select Slot</h3>
-              <button
-                className="text-gray-500 hover:text-plum text-2xl leading-none"
-                onClick={() => setShowSlotsModal(false)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="max-h-[60vh] overflow-y-auto">
-              {restrauntDetail?.restaurant_type === "yelp" && Array.isArray(timeSlots) ? (
-                <div className="flex flex-wrap gap-2">
-                  {timeSlots.filter((data) => !isNaN(data.timestamp)).map((data, index) => (
-                    <button
-                      key={index}
-                      className={`bg-plum text-white font-semibold font-roboto text-sm px-3 py-2 rounded-lg ${isCheckingConflicts ? "opacity-50 cursor-not-allowed" : ""}`}
-                      onClick={() => {
-                        setShowSlotsModal(false);
-                        if (!isCheckingConflicts) handleYelpReservation(data);
-                      }}
-                      disabled={isCheckingConflicts}
-                    >
-                      {data.formatted_time}
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-
-              {restrauntDetail?.restaurant_type === "open_table" &&
-              Array.isArray(openTableTimeSlots) &&
-              openTableTimeSlots[0]?.availabilityDays?.[0]?.slots?.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {openTableTimeSlots[0].availabilityDays[0].slots
-                    .filter((data) => !isNaN(data.timeOffsetMinutes))
-                    .map((data, index) => (
-                      <button
-                        key={index}
-                        className={`bg-plum text-white text-sm px-3 py-2 rounded-lg ${isCheckingConflicts ? "opacity-50 cursor-not-allowed" : ""}`}
-                        onClick={() => {
-                          setShowSlotsModal(false);
-                          if (!isCheckingConflicts) handleOpenTableReservation(data);
-                        }}
-                        disabled={isCheckingConflicts}
-                      >
-                        {convertOffsetToTime(data.timeOffsetMinutes, formData?.reservation_time)}
-                      </button>
-                    ))}
-                </div>
-              ) : null}
-
-              {restrauntDetail?.restaurant_type === "resy" &&
-              Array.isArray(timeSlots) &&
-              timeSlots.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {timeSlots.map((data, index) => (
-                    <button
-                      key={index}
-                      className="bg-plum text-white text-sm px-3 py-2 rounded-lg"
-                      onClick={() => {
-                        setShowSlotsModal(false);
-                        handleResyClick(data);
-                      }}
-                    >
-                      {formatTimeOnly(data.date.start)}
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-
-              {restrauntDetail?.restaurant_type === "tock" &&
-              Array.isArray(timeSlots) &&
-              timeSlots.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {timeSlots.map((time, index) => (
-                    <button
-                      key={index}
-                      className="bg-plum text-white text-sm px-3 py-2 rounded-lg"
-                      onClick={() => {
-                        setShowSlotsModal(false);
-                        window.open(restrauntDetail?.url || reservationCard?.url, "_blank", "noopener,noreferrer");
-                      }}
-                    >
-                      {time}
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-            </div>
+  return (
+    <>
+      {hideTitle ? (
+        <div>{panelBody}</div>
+      ) : (
+        <div>
+          <h1 className="font-bold my-10 text-4xl font-agrandir text-shipGrey sm:text-3xl lg:text-4xl">
+            Make a Reservation
+          </h1>
+          <div className="bg-white rounded-[20px] shadow-[0_8px_30px_rgba(31,27,46,0.09)] overflow-hidden pt-4">
+            {panelBody}
           </div>
         </div>
-      ) : null}
+      )}
 
       <ResyDetailsModal
         isOpen={showResyDetailsModal}

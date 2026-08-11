@@ -6,8 +6,59 @@ import { Base_Url } from "@/baseUrl";
 import DetailRating from "../RestrauntDetailPage/Reviews/Rating";
 import Comments from "../RestrauntDetailPage/Reviews/Comments";
 import StarRating from "@/components/common/StarRating";
+import { getInitialsOfName } from "@/lib/utils";
 import { getReviewsByRestaurant } from "@/services/reviewsService";
 import { useAuth } from "@/contexts/authContext/AuthProvider";
+
+const RATING_PLATFORM_LABELS = {
+  yelp: "Yelp",
+  open_table: "OpenTable",
+  resy: "Resy",
+  tock: "Tock",
+  tableagent: "TableAgent",
+  thefork: "TheFork",
+};
+
+const RatingSummary = ({ rating, total, distribution, platformLabel }) => {
+  const hasBars = distribution.some((d) => d.count > 0);
+  const max = Math.max(...distribution.map((d) => d.count), 1);
+  return (
+    <div className="rounded-2xl bg-white px-5 py-5 shadow-[0_2px_12px_rgba(31,27,46,0.05)] flex flex-col sm:flex-row gap-5 sm:items-center mb-5">
+      <div className="shrink-0 text-center sm:text-left sm:w-[150px]">
+        <div className="text-[46px] leading-none font-extrabold tracking-[-0.03em] text-[#1f1b2e] font-agrandir">
+          {rating.toFixed(1)}
+        </div>
+        <div className="mt-2 flex justify-center sm:justify-start">
+          <StarRating rating={rating} size={16} />
+        </div>
+        <p className="text-[13px] text-[#6b6478] font-semibold font-roboto mt-1.5">
+          {total} {platformLabel ? `${platformLabel} ` : ""}
+          {Number(total) === 1 ? "review" : "reviews"}
+        </p>
+      </div>
+      {hasBars ? (
+        <div className="flex-1 min-w-0 grid gap-[7px]">
+          {distribution.map((d) => (
+            <div key={d.stars} className="flex items-center gap-2.5">
+              <span className="w-3 text-right text-xs font-bold text-[#6b6478] font-roboto">
+                {d.stars}
+              </span>
+              <div className="flex-1 h-2 rounded-full bg-[#f1ecf9] overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-[#8b2fd6] transition-all"
+                  style={{ width: `${(d.count / max) * 100}%` }}
+                />
+              </div>
+              <span className="w-8 text-right text-xs font-semibold text-[#6b6478] font-roboto">
+                {d.count}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+};
 
 const formatReviewDate = (review) => {
   const raw = review?.created_at || review?.reservation_date;
@@ -33,21 +84,24 @@ const EmptyState = ({ children, hint }) => (
 );
 
 const ReviewCard = ({ name, rating, date, text, extra }) => (
-  <div className="rounded-2xl border border-[#eee8f6] bg-white p-4 hover:border-[#ddd0ef] transition-colors">
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-      <span className="font-semibold text-shipGrey font-roboto text-sm md:text-base">
+  <div className="rounded-2xl bg-white px-5 py-[18px] shadow-[0_2px_12px_rgba(31,27,46,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(31,27,46,0.09)]">
+    <div className="flex flex-wrap items-center gap-x-[11px] gap-y-1">
+      <span className="w-[38px] h-[38px] rounded-full bg-[#f2e9fd] text-[#7723bd] inline-flex items-center justify-center font-extrabold text-sm shrink-0">
+        {getInitialsOfName(name || "Anonymous").slice(0, 2)}
+      </span>
+      <span className="font-bold text-[#1f1b2e] font-roboto text-[15px]">
         {name || "Anonymous"}
       </span>
-      <StarRating rating={rating} />
+      <StarRating rating={rating} size={14} />
       {date ? (
-        <span className="ml-auto text-xs md:text-sm text-gray-500 font-roboto">
+        <span className="ml-auto text-xs text-[#6b6478] font-semibold font-roboto">
           {date}
         </span>
       ) : null}
     </div>
     {extra}
     {text ? (
-      <p className="mt-2 font-roboto text-[15px] md:text-base leading-7 text-shipGrey">
+      <p className="mt-3 font-roboto text-[15px] leading-relaxed text-[#37324a]">
         {text}
       </p>
     ) : null}
@@ -183,14 +237,92 @@ export default function Reviews({ restrauntDetail }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restaurantKey, restrauntDetail?.restaurant_type]);
 
+  // Every numeric rating we have loaded, across sources
+  const allRatings = [
+    ...haveASeatReviews.map((r) => Number(r?.star_rating)),
+    ...(Array.isArray(restrauntDetail?.reviews)
+      ? restrauntDetail.reviews.map((r) => Number(r?.rating?.overall ?? r?.rating))
+      : Array.isArray(restrauntDetail?.reviews?.reviews)
+        ? restrauntDetail.reviews.reviews.map((r) => Number(r?.rating))
+        : []),
+    ...(yelpReviews?.reviews || []).map((r) => Number(r?.rating)),
+  ].filter((n) => Number.isFinite(n) && n > 0);
+
+  const distribution = [5, 4, 3, 2, 1].map((stars) => ({
+    stars,
+    count: allRatings.filter(
+      (n) => Math.round(Math.min(5, Math.max(1, n))) === stars
+    ).length,
+  }));
+
+  const aggregateCandidate =
+    (typeof restrauntDetail?.rating === "number"
+      ? restrauntDetail.rating
+      : null) ??
+    restrauntDetail?.restaurant?.aggregateRatings?.thefork?.ratingValue ??
+    restrauntDetail?.reviews?.aggregate_rating ??
+    restrauntDetail?.rating?.average ??
+    null;
+  const summaryRating =
+    Number.isFinite(Number(aggregateCandidate)) && Number(aggregateCandidate) > 0
+      ? Number(aggregateCandidate)
+      : allRatings.length
+        ? allRatings.reduce((sum, n) => sum + n, 0) / allRatings.length
+        : null;
+  const summaryTotal =
+    restrauntDetail?.review_count ||
+    restrauntDetail?.reviews?.total_reviews ||
+    restrauntDetail?.reviewSearchResults?.totalCount ||
+    restrauntDetail?.restaurant?.statistics?.reviews?.allTimeTextReviewCount ||
+    allRatings.length;
+
+  const platformLabel = RATING_PLATFORM_LABELS[restrauntDetail?.restaurant_type];
+
+  // Restaurant's page on its platform — mirrors the booking fallback URLs
+  const platformReviewsUrl = (() => {
+    const type = restrauntDetail?.restaurant_type;
+    if (type === "yelp") {
+      return (
+        restrauntDetail?.url ||
+        (restrauntDetail?.alias
+          ? `https://www.yelp.com/biz/${restrauntDetail.alias}`
+          : null)
+      );
+    }
+    if (type === "open_table") {
+      const mapUrl = new URLSearchParams(window.location.search).get("map_url");
+      const slug =
+        mapUrl?.match(/opentable\.com\/r\/([^/?]+)/)?.[1] ||
+        restrauntDetail?.alias;
+      return slug ? `https://www.opentable.com/r/${slug}` : null;
+    }
+    if (type === "resy") return restrauntDetail?.links?.web || null;
+    if (type === "tock" || type === "tableagent")
+      return restrauntDetail?.url || restrauntDetail?.website || null;
+    if (type === "thefork")
+      return restrauntDetail?.slug && restrauntDetail?.legacyId
+        ? `https://www.thefork.com/restaurant/${restrauntDetail.slug}-r${restrauntDetail.legacyId}`
+        : null;
+    return null;
+  })();
+
   return (
     <div>
-      <div className="flex items-center gap-2 mb-4">
-        <span className="w-1 h-4 rounded-full bg-plum" />
-        <p className="text-xs uppercase tracking-wider text-gray-500 font-roboto">
+      <div className="flex items-center gap-[9px] mb-2.5">
+        <span className="w-1 h-[15px] rounded-sm bg-[#8b2fd6]" />
+        <span className="text-[11px] font-extrabold tracking-[0.14em] uppercase text-[#6b6478] font-roboto">
           Reviews
-        </p>
+        </span>
       </div>
+
+      {summaryRating ? (
+        <RatingSummary
+          rating={summaryRating}
+          total={summaryTotal}
+          distribution={distribution}
+          platformLabel={RATING_PLATFORM_LABELS[restrauntDetail?.restaurant_type]}
+        />
+      ) : null}
 
       {/* Tabs */}
       <div className="inline-flex items-center gap-1 bg-[#f4effa] border border-[#ece7f4] rounded-full p-1 mb-5">
@@ -253,14 +385,16 @@ export default function Reviews({ restrauntDetail }) {
               <div className="space-y-4">
                 {/* TableAgent reviews */}
                 {restrauntDetail.reviews.aggregate_rating && (
-                  <div className="flex flex-wrap items-center gap-2 mb-4">
-                    <span className="text-2xl font-bold text-shipGrey font-agrandir">
+                  <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_2px_12px_rgba(31,27,46,0.05)] flex flex-wrap items-center gap-x-4 gap-y-1 mb-4">
+                    <span className="text-[40px] leading-none font-extrabold tracking-[-0.03em] text-[#1f1b2e] font-agrandir">
                       {Number(restrauntDetail.reviews.aggregate_rating).toFixed(1)}
                     </span>
-                    <StarRating rating={restrauntDetail.reviews.aggregate_rating} size={18} />
-                    <span className="text-sm text-gray-500 font-roboto">
-                      ({restrauntDetail.reviews.total_reviews || 0} reviews)
-                    </span>
+                    <div>
+                      <StarRating rating={restrauntDetail.reviews.aggregate_rating} size={18} />
+                      <p className="text-[13px] text-[#6b6478] font-semibold font-roboto mt-1">
+                        {restrauntDetail.reviews.total_reviews || 0} reviews
+                      </p>
+                    </div>
                   </div>
                 )}
                 {restrauntDetail.reviews.reviews && restrauntDetail.reviews.reviews.length > 0 ? (
@@ -377,6 +511,20 @@ export default function Reviews({ restrauntDetail }) {
           </>
         )}
       </div>
+
+      {platformLabel && platformReviewsUrl ? (
+        <p className="mt-5 text-[12.5px] text-[#6b6478] font-roboto">
+          Reviews shown as returned by {platformLabel}.{" "}
+          <a
+            href={platformReviewsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-[#7723bd] underline underline-offset-2 hover:text-[#8b2fd6] transition-colors"
+          >
+            Read all on {platformLabel}
+          </a>
+        </p>
+      ) : null}
     </div>
   );
 }

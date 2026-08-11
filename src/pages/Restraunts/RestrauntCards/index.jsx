@@ -59,36 +59,23 @@ const interleaveBySource = (restaurants) => {
 const normalizeSearchString = (str) =>
   (str || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 
-// Name matches go to the top (best match first); non-matches keep OpenTable's
-// relevance order followed by the other sources interleaved
+// Trust each platform's own relevance ranking: round-robin the sources in the
+// order their APIs returned them, so every platform's top result appears in
+// the first rows. Only an exact name match is pinned above that.
 const rankBySearchRelevance = (restaurants, searchText) => {
   const query = normalizeSearchString(searchText);
 
-  const scoreOf = (restaurant) => {
-    const name = normalizeSearchString(restaurant.name);
-    if (!query || !name) return 0;
-    if (name === query) return 3;
-    if (name.startsWith(query)) return 2;
-    if (name.includes(query) || query.includes(name)) return 1;
-    return 0;
-  };
+  const exactMatches = [];
+  const rest = [];
+  restaurants.forEach((restaurant) => {
+    if (query && normalizeSearchString(restaurant.name) === query) {
+      exactMatches.push(restaurant);
+    } else {
+      rest.push(restaurant);
+    }
+  });
 
-  const scored = restaurants.map((restaurant, index) => ({
-    restaurant,
-    index,
-    score: scoreOf(restaurant),
-  }));
-
-  const matches = scored
-    .filter((entry) => entry.score > 0)
-    .sort((a, b) => b.score - a.score || a.index - b.index)
-    .map((entry) => entry.restaurant);
-
-  const rest = scored.filter((entry) => entry.score === 0).map((entry) => entry.restaurant);
-  const openTableRest = rest.filter((r) => r.restraunt_type === "open_table");
-  const otherRest = rest.filter((r) => r.restraunt_type !== "open_table");
-
-  return [...matches, ...openTableRest, ...interleaveBySource(otherRest)];
+  return [...interleaveBySource(exactMatches), ...interleaveBySource(rest)];
 };
 
 // Stable per-restaurant key so React doesn't recycle cards when the list changes

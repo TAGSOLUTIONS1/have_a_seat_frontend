@@ -114,3 +114,12 @@
 .animate-fade-in {
   animation: fade-in 0.3s ease-out forwards;
 }
+
+@keyframes seatShimmer {
+  0% {
+    background-position: -220px 0;
+  }
+  100% {
+    background-position: 320px 0;
+  }
+}

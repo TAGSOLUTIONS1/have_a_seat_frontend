@@ -1,5 +1,25 @@
 import { useEffect, useState } from "react";
 import StarRating from "@/components/common/StarRating";
+import { getInitialsOfName } from "@/lib/utils";
+
+const CommentCard = ({ name, initials, rating, text }) => (
+  <div className="rounded-2xl bg-white px-5 py-[18px] shadow-[0_2px_12px_rgba(31,27,46,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(31,27,46,0.09)]">
+    <div className="flex flex-wrap items-center gap-x-[11px] gap-y-1">
+      <span className="w-[38px] h-[38px] rounded-full bg-[#f2e9fd] text-[#7723bd] inline-flex items-center justify-center font-extrabold text-sm shrink-0">
+        {(initials || getInitialsOfName(name || "Guest")).slice(0, 2)}
+      </span>
+      <span className="font-bold text-[#1f1b2e] font-roboto text-[15px]">
+        {name || "Guest"}
+      </span>
+      <StarRating rating={rating} size={14} />
+    </div>
+    {text ? (
+      <p className="mt-3 font-roboto text-[15px] leading-relaxed text-[#37324a]">
+        {text}
+      </p>
+    ) : null}
+  </div>
+);
 
 const Comments = ({ reviewsData, yelpReviews }) => {
 
@@ -26,37 +46,22 @@ const Comments = ({ reviewsData, yelpReviews }) => {
     <div className="flex flex-col gap-3">
       {reviewsData &&
         displayedReviews.map((data, index) => (
-          <div
-            className="rounded-2xl border border-[#eee8f6] bg-white p-4 hover:border-[#ddd0ef] transition-colors"
+          <CommentCard
             key={index}
-          >
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <p className="font-semibold text-shipGrey font-roboto text-sm md:text-base">
-                {data?.user?.initials || data?.author}
-              </p>
-              <StarRating rating={data?.rating?.overall || data?.rating} />
-            </div>
-            <p className="mt-2 font-roboto text-[15px] md:text-base leading-7 text-shipGrey">
-              {truncateText(data.text)}
-            </p>
-          </div>
+            name={data?.author || data?.user?.initials}
+            initials={data?.user?.initials}
+            rating={data?.rating?.overall || data?.rating}
+            text={truncateText(data.text)}
+          />
         ))}
       {reviewsData?.alias &&
         yelpReviews?.reviews?.map((data, index) => (
-          <div
-            className="rounded-2xl border border-[#eee8f6] bg-white p-4 hover:border-[#ddd0ef] transition-colors"
+          <CommentCard
             key={index}
-          >
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <p className="font-semibold text-shipGrey font-roboto text-sm md:text-base">
-                {data.user.name}
-              </p>
-              <StarRating rating={data?.rating} />
-            </div>
-            <p className="mt-2 font-roboto text-[15px] md:text-base leading-7 text-shipGrey">
-              {truncateText(data.text)}
-            </p>
-          </div>
+            name={data.user.name}
+            rating={data?.rating}
+            text={truncateText(data.text)}
+          />
         ))}
     </div>
   );

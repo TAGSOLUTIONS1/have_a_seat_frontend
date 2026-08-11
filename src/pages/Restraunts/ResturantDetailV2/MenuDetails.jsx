@@ -3,11 +3,11 @@ import axios from "axios";
 import { Base_Url } from "@/baseUrl";
 
 const SectionLabel = ({ children }) => (
-  <div className="flex items-center gap-2 mb-4">
-    <span className="w-1 h-4 rounded-full bg-plum" />
-    <p className="text-xs uppercase tracking-wider text-gray-500 font-roboto">
+  <div className="flex items-center gap-[9px] mb-2.5">
+    <span className="w-1 h-[15px] rounded-sm bg-[#8b2fd6]" />
+    <span className="text-[11px] font-extrabold tracking-[0.14em] uppercase text-[#6b6478] font-roboto">
       {children}
-    </p>
+    </span>
   </div>
 );
 
@@ -97,6 +97,16 @@ export default function MenuDetails({ restrauntDetail }) {
       <div>
         <SectionLabel>Menu</SectionLabel>
         <NoMenuMessage websiteUrl={restrauntDetail?.url} />
+      </div>
+    );
+  }
+
+  // Any other platform (e.g. open_table) with no menu data
+  if (Array.isArray(menus) && menus.length === 0) {
+    return (
+      <div>
+        <SectionLabel>Menu</SectionLabel>
+        <NoMenuMessage websiteUrl={restrauntDetail?.website || restrauntDetail?.url} />
       </div>
     );
   }
