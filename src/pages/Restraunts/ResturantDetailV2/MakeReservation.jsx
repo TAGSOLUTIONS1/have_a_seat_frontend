@@ -98,6 +98,7 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
   });
   const [moreGuestsOpen, setMoreGuestsOpen] = useState(false);
   const [error, setError] = useState("");
+  const [fetchError, setFetchError] = useState("");
   const [nextData, setNextData] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [showGuestModal, setShowGuestModal] = useState(false);
@@ -485,13 +486,28 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
     }
   };
 
+  // Pull the backend's actionable message out of its error payload, if any
+  const slotFetchErrorMessage = (error) => {
+    const detail = error?.response?.data?.detail;
+    const message =
+      typeof detail?.error === "string"
+        ? detail.error
+        : typeof detail === "string"
+          ? detail
+          : "";
+    return message.trim().replace(/:$/, "").trim()
+      ? message
+      : "We couldn't check live availability right now.";
+  };
+
   const fetchYelpTimeSlots = async () => {
     setLoading(true);
+    setFetchError("");
     const yelpTimeParams = {
       restaurant_id: reservationCard?.id,
       restaurat_alias: reservationCard?.alias,
-      longitude: reservationCard.coordinates.longitude,
-      latitude: reservationCard.coordinates.latitude,
+      longitude: reservationCard?.coordinates?.longitude,
+      latitude: reservationCard?.coordinates?.latitude,
       date: formData?.reservation_date,
       time: formData?.reservation_time,
       search_option: "SAME_WEEK_SEARCH",
@@ -517,12 +533,14 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
       }
     } catch (error) {
       setLoading(false);
+      setFetchError(slotFetchErrorMessage(error));
       console.error("Error fetching data:", error);
     }
   };
 
     const fetchResyTimeSlots = async () => {
     setLoading(true);
+    setFetchError("");
     
     // Extract parameters from reservationCard - support both old and new structure
     const venueId = reservationCard?.results?.resy2?.id?.resy || 
@@ -564,12 +582,14 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
       }
     } catch (error) {
       setLoading(false);
+      setFetchError(slotFetchErrorMessage(error));
       console.error("Error fetching data:", error);
     }
   };
 
   const fetchOpenTableTimeSlots = async () => {
     setLoading(true);
+    setFetchError("");
     const openTableTimeParams = {
       date: formData?.reservation_date,
       time: formData?.reservation_time,
@@ -594,6 +614,7 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
       }
     } catch (error) {
       setLoading(false);
+      setFetchError(slotFetchErrorMessage(error));
       console.error("Error fetching data:", error);
     }
   };
@@ -800,11 +821,14 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
   const restaurantType = reservationCard?.restaurant_type;
   const platformLabel = PLATFORM_LABELS[restaurantType] || "the restaurant";
   const canFetchInline =
-    restaurantType === "resy" || restaurantType === "open_table";
+    restaurantType === "resy" ||
+    restaurantType === "open_table" ||
+    restaurantType === "yelp";
 
   // Any change to the form invalidates previously fetched slots.
   const updateForm = (patch) => {
     setError("");
+    setFetchError("");
     setIsDataLoaded(false);
     setFormData((prev) => ({
       ...(prev && typeof prev === "object" ? prev : {}),
@@ -1071,7 +1095,7 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
         </button>
       </div>
 
-      {loading || isDataLoaded ? (
+      {loading || isDataLoaded || fetchError ? (
         <div className="bg-[#faf7ff] border-t border-[#ece5f6] px-5 pt-3.5 pb-5">
           <div className="flex items-center justify-between gap-2 mb-2.5">
             <span className={FIELD_LABEL}>Available times</span>
@@ -1089,6 +1113,22 @@ export default function MakeReservation({ restrauntDetail, hideTitle = false }) 
                   style={{ animationDelay: `${i * 0.14}s` }}
                 />
               ))}
+            </div>
+          ) : fetchError ? (
+            <div className="border-[1.5px] border-dashed border-[#cfc3e4] rounded-[14px] bg-white px-4 py-[18px] animate-fadeIn">
+              <div className="text-base font-extrabold">
+                Couldn&apos;t check availability
+              </div>
+              <p className="text-[13px] text-[#6b6478] mt-1.5 leading-normal font-roboto">
+                {fetchError}
+              </p>
+              <button
+                type="button"
+                onClick={handlenotimeslots}
+                className="mt-3 h-10 px-4 rounded-full border-[1.5px] border-[#ece5f6] bg-white text-sm font-bold font-roboto text-[#1f1b2e] hover:border-[#8b2fd6] hover:text-[#7723bd] transition-all"
+              >
+                Book on {platformLabel} instead
+              </button>
             </div>
           ) : slotChips.length > 0 ? (
             <div className="animate-fadeIn">

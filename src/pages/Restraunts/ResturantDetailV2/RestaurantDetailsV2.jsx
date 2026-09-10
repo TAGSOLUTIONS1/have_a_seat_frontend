@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Star,
   MapPin,
@@ -6,6 +6,7 @@ import {
   Banknote,
   UtensilsCrossed,
   MessageSquare,
+  X,
 } from "lucide-react";
 import MakeReservation from "./MakeReservation";
 import MenuDetails from "./MenuDetails";
@@ -34,11 +35,17 @@ const SectionLabel = ({ children }) => (
 
 export default function RestaurantDetailsV2({ restrauntDetail }) {
   const [activeTab, setActiveTab] = useState("overview");
+  const [showReserveSheet, setShowReserveSheet] = useState(false);
 
-  const scrollToBook = () =>
-    document
-      .getElementById("book")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Lock background scroll while the mobile reservation sheet is open
+  useEffect(() => {
+    if (!showReserveSheet) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [showReserveSheet]);
 
   const sanitizeText = (text) =>
     typeof text === "string"
@@ -267,7 +274,7 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
     <div className="bg-[#f9f6fe] text-[#1f1b2e]">
       <div className="max-w-[1160px] mx-auto px-4 md:px-6 pt-6 pb-24 lg:pb-10">
         <div className="flex flex-wrap gap-6 items-start">
-          <div className="flex-[3_1_480px] min-w-0 order-2 lg:order-1">
+          <div className="flex-[3_1_480px] min-w-0">
             <div className="relative rounded-[20px] overflow-hidden bg-[#ece7f3] h-[260px] md:h-[400px] shadow-[0_10px_34px_rgba(31,27,46,0.10)]">
               {heroImage ? (
                 <img
@@ -397,7 +404,7 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
 
           <div
             id="book"
-            className="flex-[1_1_330px] min-w-0 w-full lg:max-w-[400px] lg:sticky lg:top-24 scroll-mt-24 order-1 lg:order-2"
+            className="hidden lg:block flex-[1_1_330px] min-w-0 w-full lg:max-w-[400px] lg:sticky lg:top-24 scroll-mt-24"
           >
             <div className="bg-white rounded-[20px] shadow-[0_8px_30px_rgba(31,27,46,0.09)] overflow-hidden">
               <div className="flex items-center justify-between gap-2.5 px-5 pt-[18px] pb-3.5">
@@ -437,12 +444,62 @@ export default function RestaurantDetailsV2({ restrauntDetail }) {
         </div>
         <button
           type="button"
-          onClick={scrollToBook}
+          onClick={() => setShowReserveSheet(true)}
           className="shrink-0 h-12 px-6 rounded-full bg-[#8b2fd6] hover:bg-[#7723bd] text-white font-roboto text-[15px] font-extrabold shadow-[0_8px_20px_rgba(139,47,214,0.3)] transition-all"
         >
           Reserve
         </button>
       </div>
+
+      {showReserveSheet ? (
+        <div className="lg:hidden fixed inset-0 z-50">
+          <div
+            className="absolute inset-0 bg-[#1f1b2e]/[.55] backdrop-blur-[2px]"
+            onClick={() => setShowReserveSheet(false)}
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Make a Reservation"
+            className="absolute inset-x-0 bottom-0 max-h-[88dvh] flex flex-col bg-white rounded-t-[22px] shadow-[0_-12px_40px_rgba(31,27,46,0.25)] animate-slide-up"
+          >
+            <div className="mx-auto mt-2.5 w-10 h-1 rounded-full bg-[#e4ddf0] shrink-0" />
+            <div className="flex items-center justify-between gap-2.5 px-5 pt-3 pb-3.5 shrink-0">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <h2 className="font-agrandir text-xl font-bold tracking-tight truncate">
+                  Make a Reservation
+                </h2>
+                {platform ? (
+                  <span
+                    className="inline-flex items-center shrink-0"
+                    title={`Reservations via ${platform.label}`}
+                  >
+                    <img
+                      src={platform.logo}
+                      alt={`${platform.label} logo`}
+                      className="h-4 w-auto max-w-[64px] object-contain"
+                    />
+                  </span>
+                ) : null}
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowReserveSheet(false)}
+                aria-label="Close reservation"
+                className="shrink-0 w-8 h-8 rounded-full bg-[#f1ecf9] text-[#6b6478] hover:text-[#1f1b2e] flex items-center justify-center transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div
+              className="overflow-y-auto overscroll-contain"
+              style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+            >
+              <MakeReservation restrauntDetail={restrauntDetail} hideTitle />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

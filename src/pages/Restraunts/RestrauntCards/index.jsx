@@ -59,23 +59,35 @@ const interleaveBySource = (restaurants) => {
 const normalizeSearchString = (str) =>
   (str || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 
+// A query counts as a name lookup when it clearly targets one restaurant:
+// it contains the restaurant's whole name, or it has 2+ words and every word
+// appears in the name. Generic terms ("sushi") never match, so those results
+// keep the platforms' own ranking.
+const matchesRestaurantName = (restaurant, rawQuery) => {
+  const query = normalizeSearchString(rawQuery);
+  const name = normalizeSearchString(restaurant.name);
+  if (!query || !name) return false;
+  if (name === query || query.includes(name)) return true;
+  const words = (rawQuery || "")
+    .split(/\s+/)
+    .map(normalizeSearchString)
+    .filter(Boolean);
+  return words.length >= 2 && words.every((word) => name.includes(word));
+};
+
 // Trust each platform's own relevance ranking: round-robin the sources in the
 // order their APIs returned them, so every platform's top result appears in
-// the first rows. Only an exact name match is pinned above that.
+// the first rows. Name-lookup matches are pinned above that.
 const rankBySearchRelevance = (restaurants, searchText) => {
-  const query = normalizeSearchString(searchText);
-
-  const exactMatches = [];
+  const matches = [];
   const rest = [];
   restaurants.forEach((restaurant) => {
-    if (query && normalizeSearchString(restaurant.name) === query) {
-      exactMatches.push(restaurant);
-    } else {
-      rest.push(restaurant);
-    }
+    (matchesRestaurantName(restaurant, searchText) ? matches : rest).push(
+      restaurant
+    );
   });
 
-  return [...interleaveBySource(exactMatches), ...interleaveBySource(rest)];
+  return [...interleaveBySource(matches), ...interleaveBySource(rest)];
 };
 
 // Stable per-restaurant key so React doesn't recycle cards when the list changes
