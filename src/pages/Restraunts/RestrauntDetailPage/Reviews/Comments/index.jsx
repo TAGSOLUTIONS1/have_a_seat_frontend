@@ -1,6 +1,25 @@
 import { useEffect, useState } from "react";
-import { ResyRestrauntDetail } from "@/mockData";
-import { ArrowLeft, ArrowRight, Star } from "lucide-react";
+import StarRating from "@/components/common/StarRating";
+import { getInitialsOfName } from "@/lib/utils";
+
+const CommentCard = ({ name, initials, rating, text }) => (
+  <div className="rounded-2xl bg-white px-5 py-[18px] shadow-[0_2px_12px_rgba(31,27,46,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(31,27,46,0.09)]">
+    <div className="flex flex-wrap items-center gap-x-[11px] gap-y-1">
+      <span className="w-[38px] h-[38px] rounded-full bg-[#f2e9fd] text-[#7723bd] inline-flex items-center justify-center font-extrabold text-sm shrink-0">
+        {(initials || getInitialsOfName(name || "Guest")).slice(0, 2)}
+      </span>
+      <span className="font-bold text-[#1f1b2e] font-roboto text-[15px]">
+        {name || "Guest"}
+      </span>
+      <StarRating rating={rating} size={14} />
+    </div>
+    {text ? (
+      <p className="mt-3 font-roboto text-[15px] leading-relaxed text-[#37324a]">
+        {text}
+      </p>
+    ) : null}
+  </div>
+);
 
 const Comments = ({ reviewsData, yelpReviews }) => {
 
@@ -14,18 +33,6 @@ const Comments = ({ reviewsData, yelpReviews }) => {
     }
   }, [reviewsData]);
 
-  const handleNext = () => {
-    const lastIndex = reviews.length - 1;
-    const newIndex = currentIndex === lastIndex ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
-  };
-
-  const handlePrev = () => {
-    const lastIndex = reviews.length - 1;
-    const newIndex = currentIndex === 0 ? lastIndex : currentIndex - 1;
-    setCurrentIndex(newIndex);
-  };
-
   const displayedReviews = reviews.slice(
     currentIndex,
     currentIndex + reviewsPerPage
@@ -36,59 +43,26 @@ const Comments = ({ reviewsData, yelpReviews }) => {
   };
 
   return (
-    <div>
-      <div className=" flex flex-col gap-5">
-        {reviewsData &&
-          displayedReviews.map((data, index) => (
-            <div className="rounded-lg border" key={index}>
-                <div className=" flex justify-between items-center p-3 ">
-                <p className="text-shipGrey text-base font-agrandir font-bold">
-                  {data?.user?.initials || data?.author}
-                </p>
-                <div className="flex justify-center">
-                  {[...Array(data?.rating?.overall || data?.rating)].map((_, starIndex) => (
-                    <Star
-                      key={starIndex}
-                      className="mx-1 my-2"
-                      fill="	#FFD700"
-                      size={20}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <div className="px-3 py-5">
-                <p>{truncateText(data.text)}</p>
-              </div>
-            </div>
-          ))}
-        {reviewsData?.alias &&
-          yelpReviews?.reviews?.map((data, index) => (
-            <div>
-              <div className="rounded-lg border" key={index}>
-                <div className=" flex justify-between items-center p-3 ">
-                <p className="text-shipGrey text-base font-agrandir font-bold">
-                    {data.user.name}
-                  </p>
-                  <div className="flex justify-center">
-                    {[...Array(data?.rating)].map((_, starIndex) => (
-                      <Star
-                        key={starIndex}
-                        className="mx-1 my-2"
-                        fill="	#FFD700"
-                        size={20}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <hr />
-                <div className="px-3 py-5">
-                  <p className="text-shipGrey text-sm font-agrandir font-normal">{truncateText(data.text)}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-      </div>
+    <div className="flex flex-col gap-3">
+      {reviewsData &&
+        displayedReviews.map((data, index) => (
+          <CommentCard
+            key={index}
+            name={data?.author || data?.user?.initials}
+            initials={data?.user?.initials}
+            rating={data?.rating?.overall || data?.rating}
+            text={truncateText(data.text)}
+          />
+        ))}
+      {reviewsData?.alias &&
+        yelpReviews?.reviews?.map((data, index) => (
+          <CommentCard
+            key={index}
+            name={data.user.name}
+            rating={data?.rating}
+            text={truncateText(data.text)}
+          />
+        ))}
     </div>
   );
 };

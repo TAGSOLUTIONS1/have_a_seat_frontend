@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaComments, FaTimes, FaUtensils, FaStar } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function ChatBotWidget() {
+  const location = useLocation();
+  // The details page has a sticky Reserve bar on mobile — hide the chat
+  // bubble there so they don't overlap
+  const hiddenOnMobile = location.pathname === "/restaurant-detail";
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -88,7 +92,11 @@ export default function ChatBotWidget() {
   };
     console.log(messages);
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div
+      className={`fixed bottom-5 right-5 z-50 ${
+        hiddenOnMobile ? "hidden lg:block" : ""
+      }`}
+    >
       {!open ? (
         <button
           onClick={() => setOpen(true)}
