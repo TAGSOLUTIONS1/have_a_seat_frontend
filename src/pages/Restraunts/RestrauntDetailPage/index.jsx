@@ -834,7 +834,7 @@ const RestrauntDetail = () => {
     randomTemplateKey && restrauntDetail?.templates[randomTemplateKey];
 
   return (
-    <div className="mb-24 bg-bgGray">
+    <div className="bg-bgGray">
       {loading ? (
         <Loader />
       ) : (

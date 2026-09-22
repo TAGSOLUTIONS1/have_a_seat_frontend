@@ -90,17 +90,17 @@ const Slider = () => {
   };
 
   return (
-    <section className="mx-auto overflow-hidden relative px-4 sm:px-6 lg:px-8" id="superfast">
+    <section className="mx-auto overflow-hidden relative z-10 mt-32 px-4 sm:px-6 lg:px-8" id="superfast">
       <div className="max-w-[1600px] mx-auto items-center relative">
         
-        <div className='flex flex-col gap-4 mx-auto text-center p-6 sm:p-0 w-full sm:w-2/3 lg:w-1/2'>
-          <p className='text-shipGrey font-bold text-xl sm:text-4xl md:text-5xl font-agrandir'>
+        <div className="flex flex-col gap-4 mx-auto text-center p-6 sm:p-0 w-full sm:w-2/3 lg:w-1/2">
+          <h2 className="text-3xl md:text-4xl font-agrandir font-bold text-shipGrey mb-2">
             Search smartly & reserve your table across top platforms
-          </p>
-          <p className='text-plum text-4xl sm:text-6xl md:text-7xl font-agrandirWide font-black italic'>
+          </h2>
+          <p className="text-2xl md:text-3xl font-agrandir font-bold text-plum italic mb-2">
             Super fast
           </p>
-          <p className='text-shipGrey font-normal text-sm sm:text-xl md:text-2xl font-roboto'>
+          <p className="text-graysublabel font-inter leading-relaxed max-w-2xl mx-auto text-base md:text-lg">
             One search = All your favorite restaurants
           </p>
         </div>

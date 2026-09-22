@@ -32,16 +32,16 @@ function BookRestaurant() {
 
         {/* Content Over Video */}
         <div className="relative px-[75px] py-[100px] z-10 h-full bg-black/50">
-          <div className="text-center flex gap-4 flex-col p-10">
-            <p className="text-7xl font-bold font-agrandir text-white uppercase">
+          <div className="text-center flex gap-4 flex-col p-10 max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-agrandir font-bold text-white mb-4 tracking-tight uppercase">
               Dine Smarter, <br /> Reserve Faster
-            </p>
-            <p className="text-xl font-roboto font-normal text-white">
+            </h2>
+            <ul className="text-white/90 font-inter leading-relaxed text-base md:text-lg space-y-2 list-none">
               <li>Compare the options, pick the one you love, and just book your table</li>
               <li>Tons of listings and endless options</li>
-            </p>
-            <p className="text-xl font-roboto font-normal text-white">
-            So let’s get seated, greeted, and treated with great food because you’ve <br></br> got better things to do than wait.
+            </ul>
+            <p className="text-white/90 font-inter leading-relaxed text-base md:text-lg">
+              So let’s get seated, greeted, and treated with great food because you’ve got better things to do than wait.
             </p>
             <div className="flex items-center mx-auto my-4">
               <button
