@@ -1,0 +1,369 @@
+import React, { memo, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import SearchLocationV2 from "@/components/searchLocationRestaurant";
+import { FaCheck } from "react-icons/fa6";
+import { ImFilter } from "react-icons/im";
+import { IoIosStarOutline } from "react-icons/io";
+import { IoIosStar } from "react-icons/io";
+import FavoriteButton from "@/components/common/FavoriteButton";
+
+// components/RestaurantCard.jsx
+
+const RestaurantCard = ({ data, distance, formData, children, favoritesList, onFavoriteChange }) => {
+  // Get restaurant alias and type for favorite button
+  // For Resy: id.resy (number) gets saved as string in restaurant_alias
+  // For TableAgent: id.tableagent (string slug) gets saved as string in restaurant_alias
+  const getRestaurantAlias = () => {
+    if (data?.restraunt_type === "yelp") {
+      return data?.alias;
+    } else if (data?.restraunt_type === "open_table") {
+      return data?.urls?.profileLink?.link || data?.restaurant_alias;
+    } else if (data?.restraunt_type === "resy") {
+      // Resy: id.resy is a number, MUST be converted to string for API
+      const resyId = data?.id?.resy || data?.restaurant_alias;
+      return resyId ? String(resyId) : undefined;
+    } else if (data?.restraunt_type === "tock") {
+      return data?.tock_domain || data?.tock_business_id?.toString() || data?.id;
+    } else if (data?.restraunt_type === "tableagent") {
+      // TableAgent: id.tableagent is a string slug, saved as string in restaurant_alias (like Resy)
+      return String(data?.id?.tableagent || data?.tableagent_slug || data?.slug || "");
+    } else if (data?.restraunt_type === "thefork") {
+      return data?.thefork_slug || data?.alias || data?.id;
+    }
+    return data?.restaurant_alias || data?.alias;
+  };
+
+  const getRestaurantType = () => {
+    return data?.restraunt_type || data?.restaurant_type || "yelp";
+  };
+
+  // Helpers specific to TheFork display
+  const getTheForkCuisine = () => {
+    // Prefer the 3rd tag name if present, otherwise fallback to first category title
+    const tagCuisine = data?.tags?.[2]?.name || data?.tags?.[0]?.name;
+    if (tagCuisine) return tagCuisine;
+    if (Array.isArray(data?.categories) && data.categories.length > 0) {
+      return data.categories[0]?.title || data.categories[0];
+    }
+    return null;
+  };
+
+  // const getTheForkPrice = () => {
+  //   if (data?.price) return data.price; // already mapped to $/$$...
+  //   if (typeof data?.avgPriceValue === "number") {
+  //     // convert cents to approximate dollars and bucket
+  //     const dollars = data.avgPriceValue / 100;
+  //     if (dollars < 20) return "$";
+  //     if (dollars < 50) return "$$";
+  //     if (dollars < 80) return "$$$";
+  //     return "$$$$";
+  //   }
+  //   return null;
+  // };
+
+  return (
+    <div className="bg-white w-full p-4 sm:p-6 md:p-8 lg:p-10 shadow-cardshadow rounded-[20px] sm:rounded-[30px] flex flex-col md:flex-row">
+      {/* Restaurant Image */}
+      <div className="w-full md:w-1/3 lg:w-2/5 h-48 sm:h-56 md:h-64 lg:h-72 mb-4 md:mb-0 md:mr-6 relative">
+        <img
+          className="w-full h-full rounded-xl sm:rounded-2xl object-cover"
+          src={
+            data?.restraunt_type === "yelp"
+              ? data?.image_url
+              : data?.restraunt_type === "resy" &&
+                Array.isArray(data?.images) &&
+                data?.images.length > 0
+              ? data?.images[0]
+              : data?.restraunt_type === "tock"
+              ? data?.image_url
+              : data?.restraunt_type === "tableagent"
+              ? data?.image_url
+            : data?.restraunt_type === "thefork"
+              ? data?.image_url
+              : data?.photos?.gallery?.photos[0]?.thumbnails[0]?.url
+              // : data?.photos?.profile?.medium?.url
+          }
+          alt={data?.name}
+        />
+        <FavoriteButton
+          restaurantAlias={getRestaurantAlias()}
+          restaurantType={getRestaurantType()}
+          size={20}
+          favoritesList={favoritesList}
+          onFavoriteChange={onFavoriteChange}
+        />
+      </div>
+
+      {/* Restaurant Info */}
+      <div className="flex-1 flex flex-col">
+        <div className="flex-1">
+          <p className="text-2xl sm:text-3xl md:text-4xl font-agrandir mb-1 sm:mb-2 font-bold text-shipGrey">
+            {data?.name?.length > 50
+              ? `${data?.name?.slice(0, 50)}...`
+              : data?.name}
+          </p>
+
+          <div className="text-grey-darkest py-4 sm:py-6 flex flex-col space-y-3 sm:space-y-4">
+            {/* For Tock: Show Price Range, Cuisine, and Address */}
+            {data.restraunt_type === "tock" ? (
+              <>
+                {/* Price Range */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/ratings.png"
+                      alt="price range logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Price Range:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.tock_price_range || data?.price || "N/A"}
+                  </p>
+                </div>
+
+                {/* Cuisine */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/address.png"
+                      alt="cuisine logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Cuisine:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.tock_cuisines || data?.categories?.map(cat => cat.title).join(", ") || "N/A"}
+                  </p>
+                </div>
+
+                {/* Address */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/address.png"
+                      alt="address logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Address:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.location?.display_address?.join(" ") || `${data?.location?.address1 || ""} ${data?.location?.city || ""}`.trim() || "N/A"}
+                  </p>
+                </div>
+              </>
+            ) : data.restraunt_type === "tableagent" ? (
+              <>
+                {/* Price Range */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/ratings.png"
+                      alt="price range logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Price Range:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.tableagent_price_range || data?.price || "N/A"}
+                  </p>
+                </div>
+
+                {/* Ratings */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/ratings.png"
+                      alt="ratings logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Ratings:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.rating?.toFixed(2) ?? data?.tableagent_rating?.toFixed(2) ?? "N/A"}
+                    <span className="text-sm sm:text-base">/5</span>
+                  </p>
+                </div>
+
+                {/* Address */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/address.png"
+                      alt="address logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Address:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data?.location?.display_address?.join(" ") || data?.location?.address1 || data?.address || "N/A"}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Ratings */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/ratings.png"
+                      alt="ratings logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      {data.restraunt_type === "thefork" ? "Average Price:" : "Ratings:"}
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data.restraunt_type === "yelp"
+                      ? (data?.rating?.toFixed(2) ?? "N/A")
+                      : data.restraunt_type === "open_table"
+                      ? (data?.statistics?.reviews?.ratings?.overall?.rating?.toFixed(2) ?? "N/A")
+                      : data.restraunt_type === "resy"
+                      ? (data?.rating?.average?.toFixed(2) ?? "N/A")
+                      : data.restraunt_type === "thefork"
+                      ? `$ ${data?.avgPriceValue ?? "N/A"}`
+                      : null}
+                    {data.restraunt_type !== "thefork" && (
+                      <span className="text-sm sm:text-base">/5</span>
+                    )}
+                  </p>
+                </div>
+
+                {/* Address */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/address.png"
+                      alt="address logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      Address:
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data.restraunt_type === "yelp" ? (
+                      data?.location?.display_address?.join(" ")
+                    ) : data?.restraunt_type === "open_table" ? (
+                      <>
+                        {data?.address?.line1 && `${data?.address?.line1} `}
+                        <span> {data?.address?.city}</span>
+                      </>
+                    ) : data?.restraunt_type === "resy" ? (
+                      <>
+                        {data?.locality && `${data?.locality} `}
+                        <span> {data?.location?.name}</span>
+                      </>
+                    ) : data?.restraunt_type === "thefork" ? (
+                      <>
+                        {data?.location?.display_address?.join(" ") ||
+                          `${data?.location?.address1 || ""} ${data?.location?.city || ""}`.trim()}
+                      </>
+                    ) : null}
+                  </p>
+                </div>
+
+                {/* Contact */}
+                <div>
+                  <p className="font-semibold flex gap-2 sm:gap-3 items-center text-lg sm:text-xl">
+                    <img
+                      src="/assets/contact.png"
+                      alt="contact logo"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
+                    />
+                    <span className="font-roboto font-semibold text-lg sm:text-xl text-shipGrey">
+                      {data.restraunt_type === "thefork" ? "Cuisine:" : "Contact:"}
+                    </span>
+                  </p>
+                  <p className="pl-6 sm:pl-8 font-roboto font-normal text-base text-shipGrey">
+                    {data.restraunt_type === "yelp"
+                      ? data?.display_phone
+                      : data.restraunt_type === "open_table"
+                      ? data?.contactInformation?.formattedPhoneNumber
+                      : data.restraunt_type === "resy"
+                      ? data?.contact?.phone_number
+                      : data.restraunt_type === "thefork"
+                      ? getTheForkCuisine() || "N/A"
+                      : null}
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Reserve Button and Logo - Mobile */}
+        <div className="md:hidden flex justify-between items-center mt-4">
+          <img
+            src={
+              data.restraunt_type === "yelp"
+                ? "/assets/yelp_logo_new.png"
+                : data.restraunt_type === "open_table"
+                ? "/assets/opentable.png"
+                : data.restraunt_type === "resy"
+                ? "/assets/resy_logo_new.png"
+                : data.restraunt_type === "tock"
+                ? "/assets/tock-logo.png"
+                : data.restraunt_type === "tableagent"
+                ? "/assets/tableagent-logo.png"
+              : data.restraunt_type === "thefork"
+                ? "/assets/thefork.png"
+                : ""
+            }
+            alt={`${data.restraunt_type} logo`}
+            className="h-8 sm:h-10"
+          />
+          <button className="rounded-full px-4 py-2 sm:px-5 sm:py-3 bg-plum text-white text-sm sm:text-base">
+            Reserve a Table
+          </button>
+        </div>
+      </div>
+
+      {/* Reserve Button and Logo - Desktop */}
+      <div className="hidden md:flex flex-col justify-between items-center w-24 lg:w-32 ml-4 lg:ml-6">
+        <img
+          src={
+            data.restraunt_type === "yelp"
+              ? "/assets/yelp_logo_new.png"
+              : data.restraunt_type === "open_table"
+              ? "/assets/opentable.png"
+              : data.restraunt_type === "resy"
+              ? "/assets/resy_logo_new.png"
+              : data.restraunt_type === "tock"
+              ? "/assets/tock-logo.png"
+              : data.restraunt_type === "tableagent"
+              ? "/assets/tableagent.png"
+            : data.restraunt_type === "thefork"
+              ? "/assets/thefork.png"
+              : ""
+          }
+          alt={`${data.restraunt_type} logo`}
+          className="h-10 lg:h-14 mb-4"
+        />
+          <div>
+          <span className="bg-[#e8d3f5] relative rounded-full text-plum px-2 py-1 text-sm">
+              {distance || "See on map"}
+            </span>
+          </div>
+         <button className="rounded-full px-3 py-1.5 lg:px-5 lg:py-2 bg-plum text-white text-sm lg:text-base whitespace-nowrap">
+          Reserve a Table
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default RestaurantCard;

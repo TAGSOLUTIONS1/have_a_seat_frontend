@@ -1,0 +1,190 @@
+.notification-toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.notification-toast {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 16px;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 4px solid #3b82f6;
+}
+
+.notification-toast.visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.notification-toast.hidden {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.toast-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
+.toast-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.toast-type {
+  flex: 1;
+  font-size: 12px;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-close:hover {
+  background-color: #f3f4f6;
+}
+
+.close-icon {
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+}
+
+.toast-content {
+  margin-bottom: 12px;
+}
+
+.toast-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+.toast-message {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  /* -webkit-line-clamp: 2; */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.toast-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.toast-action-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.toast-action-button:hover {
+  background: #2563eb;
+}
+
+.action-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Animation for different notification types */
+.notification-toast[data-type="reservation_confirmation"] {
+  border-left-color: #10b981;
+}
+
+.notification-toast[data-type="reservation_reminder"] {
+  border-left-color: #f59e0b;
+}
+
+.notification-toast[data-type="reservation_cancellation"] {
+  border-left-color: #ef4444;
+}
+
+.notification-toast[data-type="reservation_modification"] {
+  border-left-color: #8b5cf6;
+}
+
+.notification-toast[data-type="restaurant_updates"] {
+  border-left-color: #06b6d4;
+}
+
+.notification-toast[data-type="special_offers"] {
+  border-left-color: #ec4899;
+}
+
+.notification-toast[data-type="system_announcement"] {
+  border-left-color: #f97316;
+}
+
+.notification-toast[data-type="account_updates"] {
+  border-left-color: #64748b;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .notification-toast-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+  
+  .notification-toast {
+    padding: 12px;
+  }
+  
+  .toast-title {
+    font-size: 13px;
+  }
+  
+  .toast-message {
+    font-size: 12px;
+  }
+  
+  .toast-action-button {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+} 
